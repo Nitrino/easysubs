@@ -1,7 +1,5 @@
 import { log } from 'util';
 
-const axios = require('axios');
-
 class Subtitles {
   constructor(language) {
     this.language = language;
