@@ -1,3 +1,11 @@
 /**
  * Place your custom CSS styles here.
  **/
+
+#ext-subs {
+  position: absolute;
+  bottom: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+}

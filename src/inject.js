@@ -11,6 +11,13 @@ chrome.extension.sendMessage({}, function (response) {
       console.log("Hello. This message was sent from scripts/inject.js1");
       // ----------------------------------------------------------
 
+      const playerElement = document.querySelector(".fp-ui")
+      let pTag = document.createElement("p");
+      pTag.id = "ext-subs";
+      const textNode = document.createTextNode("Loading subtitles ...");
+      pTag.appendChild(textNode);
+      playerElement.appendChild(pTag);
+
       Subtitles.getSubs("eng")
         .then(function (data) {
           console.log(data);
