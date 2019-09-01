@@ -1,5 +1,5 @@
 import { ready } from './ready.js';
-import Subtitles from './subtitles.js';
+import Onvix from './onvix.js';
 
 chrome.extension.sendMessage({}, function (response) {
   var readyStateCheckInterval = setInterval(function () {
@@ -18,7 +18,7 @@ chrome.extension.sendMessage({}, function (response) {
       pTag.appendChild(textNode);
       playerElement.appendChild(pTag);
 
-      Subtitles.getSubs("eng")
+      Onvix.getSubs("eng")
         .then(function (data) {
           console.log(data);
         })
