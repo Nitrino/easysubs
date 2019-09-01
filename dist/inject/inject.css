@@ -8,4 +8,6 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 18px;
+  text-align: center;
+  user-select: all;
 }

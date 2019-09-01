@@ -20,6 +20,16 @@ class Onvix {
         return Subtitle.parse(text)
       })
   }
+
+  static createSubsElement() {
+    const playerElement = document.querySelector(".fp-ui");
+    let pTag = document.createElement("p");
+    pTag.id = "ext-subs";
+    const textNode = document.createTextNode("Loading subtitles ...");
+    pTag.appendChild(textNode);
+    playerElement.appendChild(pTag);
+    return pTag;
+  }
 }
 
 export default Onvix;

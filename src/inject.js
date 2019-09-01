@@ -1,5 +1,6 @@
 import { ready } from './ready.js';
 import Onvix from './onvix.js';
+import Subs from './subs.js';
 
 chrome.extension.sendMessage({}, function (response) {
   var readyStateCheckInterval = setInterval(function () {
@@ -11,24 +12,18 @@ chrome.extension.sendMessage({}, function (response) {
       console.log("Hello. This message was sent from scripts/inject.js1");
       // ----------------------------------------------------------
 
-      const playerElement = document.querySelector(".fp-ui")
-      let pTag = document.createElement("p");
-      pTag.id = "ext-subs";
-      const textNode = document.createTextNode("Loading subtitles ...");
-      pTag.appendChild(textNode);
-      playerElement.appendChild(pTag);
+      const subsElement = Onvix.createSubsElement();
+      const video = document.querySelector('video');
 
       Onvix.getSubs("eng")
-        .then(function (data) {
-          console.log(data);
+        .then(function (subs) {
+          subsElement.textContent = ""; // Clear subs loading text
+          ready('video', function (element) {
+            element.ontimeupdate = (event) => {
+              Subs.updateSubs(element, subs, subsElement);
+            };
+          });
         })
-
-      const video = document.querySelector('video');
-      ready('video', function (element) {
-        element.ontimeupdate = (event) => {
-          console.log(element.currentTime);
-        };
-      });
     }
   }, 1000);
 });
