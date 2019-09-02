@@ -12,10 +12,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.6.2",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
+    "@types/chrome": "0.0.88",
+    "@types/subtitle": "^2.0.2",
     "subtitle": "^2.0.3"
   }
 }

@@ -1,8 +1,8 @@
-import { ready } from './ready.js';
-import Onvix from './onvix.js';
-import Subs from './subs.js';
+import { ready } from "./ready"
+import Onvix from './onvix';
+import Subs from './subs';
 
-chrome.extension.sendMessage({}, function (response) {
+chrome.runtime.sendMessage({}, function (response) {
   var readyStateCheckInterval = setInterval(function () {
     if (document.readyState === "complete") {
       clearInterval(readyStateCheckInterval);
@@ -18,7 +18,7 @@ chrome.extension.sendMessage({}, function (response) {
       Onvix.getSubs("eng")
         .then(function (subs) {
           subsElement.textContent = ""; // Clear subs loading text
-          ready('video', function (element) {
+          ready('video', function (element: HTMLVideoElement) {
             element.ontimeupdate = (event) => {
               Subs.updateSubs(element, subs, subsElement);
             };

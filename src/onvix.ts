@@ -1,7 +1,7 @@
-const Subtitle = require('subtitle')
+import { parse } from "subtitle";
 
 class Onvix {
-  static getSubs(language) {
+  static getSubs(language: string) {
     const base_path = "https://ageofultron.site/api/v1/streaming/serials/"
     const serial = window.location.pathname.split("/")[2]
     const stream = window.location.search.split("&")[0].split("=")[1]
@@ -13,11 +13,11 @@ class Onvix {
     return fetch(url)
       .then((resp) => resp.json())
       .then(function (data) {
-        const subs_url = data.media_files.vtt.find(el => el.srclang === language).src
+        const subs_url = data.media_files.vtt.find((el: { srclang: string }) => el.srclang === language).src
         return fetch(subs_url).then((resp) => resp.text())
       })
       .then(function (text) {
-        return Subtitle.parse(text)
+        return parse(text)
       })
   }
 
