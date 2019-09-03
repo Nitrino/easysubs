@@ -13,7 +13,7 @@ chrome.runtime.sendMessage({}, function (response) {
       // ----------------------------------------------------------
 
       const subsElement = Onvix.createSubsElement();
-      const video = document.querySelector('video');
+      const video: HTMLVideoElement = document.querySelector('video');
 
       Onvix.getSubs("eng")
         .then(function (subs) {
@@ -22,6 +22,13 @@ chrome.runtime.sendMessage({}, function (response) {
             element.ontimeupdate = (event) => {
               Subs.updateSubs(element, subs, subsElement);
             };
+
+            subsElement.addEventListener("mouseenter", () => {
+              element.pause();
+            });
+            subsElement.addEventListener("mouseleave", () => {
+              element.play();
+            });
           });
         })
     }
