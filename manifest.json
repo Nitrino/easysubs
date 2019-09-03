@@ -12,27 +12,26 @@
   "default_locale": "en",
   "background": {
     "scripts": [
-      "dist/bg/background.js"
+      "dist/background.js"
     ],
     "persistent": true
   },
-  "options_page": "dist/options/index.html",
+  "options_page": "dist/index.html",
   "browser_action": {
     "default_icon": "icons/icon19.png",
     "default_title": "browser action demo",
-    "default_popup": "dist/browser_action/browser_action.html"
+    "default_popup": "dist/browser_action.html"
   },
   "permissions": [
     "contextMenus",
     "https://*/*"
   ],
-  "content_scripts": [
-    {
+  "content_scripts": [{
       "matches": [
         "https://*.ageofultron.site/*"
       ],
       "css": [
-        "dist/inject/inject.css"
+        "dist/inject.css"
       ]
     },
     {
@@ -40,7 +39,7 @@
         "https://*.ageofultron.site/*"
       ],
       "js": [
-        "dist/inject/inject.js"
+        "dist/inject.js"
       ]
     }
   ]

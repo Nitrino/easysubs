@@ -1,12 +1,37 @@
 import { subTitleType } from "subtitle";
+import Video from "./video";
 class Subs {
   static updateSubs(video: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement) {
-    let currentTime = Math.round(video.currentTime * 1000)
-    let currentSub = subs.find(sub => sub.start <= currentTime && sub.end >= currentTime)
+    let currentTime = Video.getCurrentTime(video);
+    let currentSub = this.getCurrentSub(subs, currentTime);
     if (currentSub) {
       subsElement.textContent = currentSub.text;
     } else {
       subsElement.textContent = "";
+    }
+  }
+
+  static getCurrentSub(subs: subTitleType[], currentTime: number) {
+    return subs.find((sub: subTitleType) => sub.start <= currentTime && sub.end >= currentTime)
+  }
+
+  static getPrevSub(subs: subTitleType[], currentTime: number): subTitleType {
+    let currentSub = Subs.getCurrentSub(subs, currentTime);
+    if (currentSub) {
+      let indexCurrentSub = subs.findIndex(sub => sub == currentSub)
+      return subs[indexCurrentSub - 1]
+    } else {
+      return subs.find((sub, index) => sub.end <= currentTime && subs[index + 1].start >= currentTime)
+    }
+  }
+
+  static getNextSub(subs: subTitleType[], currentTime: number): subTitleType {
+    let currentSub = Subs.getCurrentSub(subs, currentTime);
+    if (currentSub) {
+      let indexCurrentSub = subs.findIndex(sub => sub == currentSub)
+      return subs[indexCurrentSub + 1]
+    } else {
+      return subs.find((sub, index) => sub.start > currentTime && subs[index - 1].end >= currentTime)
     }
   }
 }

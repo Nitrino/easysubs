@@ -1,6 +1,7 @@
 import { ready } from "./ready"
 import Onvix from './onvix';
 import Subs from './subs';
+import Video from './video';
 
 chrome.runtime.sendMessage({}, function (response) {
   var readyStateCheckInterval = setInterval(function () {
@@ -18,17 +19,28 @@ chrome.runtime.sendMessage({}, function (response) {
       Onvix.getSubs("eng")
         .then(function (subs) {
           subsElement.textContent = ""; // Clear subs loading text
-          ready('video', function (element: HTMLVideoElement) {
-            element.ontimeupdate = (event) => {
-              Subs.updateSubs(element, subs, subsElement);
+          ready('video', function (videoElement: HTMLVideoElement) {
+            videoElement.ontimeupdate = (event) => {
+              Subs.updateSubs(videoElement, subs, subsElement);
             };
 
             subsElement.addEventListener("mouseenter", () => {
-              element.pause();
+              videoElement.pause();
             });
             subsElement.addEventListener("mouseleave", () => {
-              element.play();
+              videoElement.play();
             });
+
+            document.addEventListener("keyup", (event) => {
+              event.stopPropagation();
+              console.log(event);
+
+              if (event.code == "ArrowLeft") {
+                Video.moveToPrevSub(videoElement, subs);
+              } if (event.code == "ArrowRight") {
+                Video.moveToNextSub(videoElement, subs);
+              }
+            }, true);
           });
         })
     }
