@@ -3,13 +3,18 @@
  **/
 
 #ext-subs {
+  max-width: 650px;
   position: absolute;
   bottom: 55px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
+  font-size: 22px;
   text-align: center;
   user-select: all;
   background-color: rgba(0, 0, 0, 0.5);
   line-height: 1.25;
+}
+
+.flowplayer.is-fullscreen #ext-subs {
+  font-size: 40px
 }
