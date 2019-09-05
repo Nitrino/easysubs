@@ -5,9 +5,9 @@ class Subs {
     let currentTime = Video.getCurrentTime(video);
     let currentSub = this.getCurrentSub(subs, currentTime);
     if (currentSub) {
-      subsElement.textContent = currentSub.text;
+      subsElement.innerHTML = currentSub.text.split(" ").map(m => { return `<span>${m}</span>` }).join(" ");
     } else {
-      subsElement.textContent = "";
+      subsElement.innerHTML = "";
     }
   }
 
