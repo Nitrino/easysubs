@@ -33,16 +33,45 @@ chrome.runtime.sendMessage({}, function (response) {
 
             document.addEventListener("keyup", (event) => {
               event.stopPropagation();
-              console.log(event);
-
               if (event.code == "ArrowLeft") {
                 Video.moveToPrevSub(videoElement, subs);
               } if (event.code == "ArrowRight") {
                 Video.moveToNextSub(videoElement, subs);
               }
             }, true);
+
+
+            document.addEventListener("mouseover", (event) => {
+              let element = <HTMLSpanElement>event.target;
+
+              if (element.className === 'ext-subs-word') {
+                if (element.getElementsByClassName("ext-subs-word-translate").length != 0) {
+                  return;
+                }
+
+                chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: element.textContent, lang: "ru" }, (response) => {
+                  removeElements(document.querySelectorAll(".ext-subs-word-translate"));
+                  Onvix.createSubsTranslateElement(element, element.textContent, response.data[0]);
+                });
+              }
+            });
+
+            document.addEventListener("mouseout", (event) => {
+              let element = <HTMLSpanElement>event.target;
+              if (element.className === 'ext-subs-word') {
+                if (element.getElementsByClassName("ext-subs-word-translate").length === 0) {
+                  return;
+                }
+
+                removeElements(document.querySelectorAll(".ext-subs-word-translate"));
+              }
+            });
           });
         })
+
+      function removeElements(elms: NodeListOf<Element>) {
+        elms.forEach(el => el.remove());
+      }
     }
   }, 1000);
 });

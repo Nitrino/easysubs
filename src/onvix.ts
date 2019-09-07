@@ -30,6 +30,15 @@ class Onvix {
     playerElement.appendChild(pTag);
     return pTag;
   }
+
+  static createSubsTranslateElement(subs: HTMLElement, originalText: string, translatedText: string) {
+    let translateTag = document.createElement("div");
+    translateTag.className = "ext-subs-word-translate";
+    translateTag.innerHTML = "<span class='ext-subs-word-original'>" + originalText + "</span>" +
+      "<hr>" + "<span class='ext-subs-word-translated'>" + translatedText + "</span>"
+    subs.appendChild(translateTag);
+    return translateTag;
+  }
 }
 
 export default Onvix;

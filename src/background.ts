@@ -1,14 +1,15 @@
-// if you checked "fancy-settings" in extensionizr.com, uncomment this lines
+import translate from 'google-translate-open-api';
 
-// var settings = new Store("settings", {
-//     "sample_setting": "This is how you use Store.js to remember values"
-// });
-
-
-//example of using a message handler from the inject scripts
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
-    chrome.pageAction.show(sender.tab.id);
-    sendResponse();
+    if (request.contentScriptQuery == 'translate') {
+      translate(request.text, { to: request.lang, raw: true })
+        .then((response: object) => { sendResponse(response) })
+        .catch((err: Error) => console.error(err));
+    } else {
+      chrome.pageAction.show(sender.tab.id);
+      sendResponse();
+    }
+    return true;  // Will respond asynchronously.
   }
 );
