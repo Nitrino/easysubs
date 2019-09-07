@@ -19,3 +19,7 @@
 .flowplayer.is-fullscreen #ext-subs {
   font-size: 40px
 }
+
+.flowplayer .fp-captions .fp-captions-normal {
+  display: none;
+}
