@@ -10,16 +10,16 @@ chrome.runtime.sendMessage({}, function (response) {
 
       // ----------------------------------------------------------
       // This part of the script triggers when page is done loading
-      console.log("Hello. This message was sent from scripts/inject.js1");
+      console.log("EasySubs initialized");
       // ----------------------------------------------------------
 
-      const subsElement = Onvix.createSubsElement();
-      const video: HTMLVideoElement = document.querySelector('video');
+      const video: HTMLVideoElement = document.querySelector('.fp-player video');
+      ready('video', function (videoElement: HTMLVideoElement) {
+        const subsElement = Onvix.createSubsElement();
 
-      Onvix.getSubs("eng")
-        .then(function (subs) {
-          subsElement.textContent = ""; // Clear subs loading text
-          ready('video', function (videoElement: HTMLVideoElement) {
+        Onvix.getSubs("eng")
+          .then(function (subs) {
+            subsElement.textContent = ""; // Clear subs loading text
             videoElement.ontimeupdate = (event) => {
               Subs.updateSubs(videoElement, subs, subsElement);
             };
@@ -66,8 +66,8 @@ chrome.runtime.sendMessage({}, function (response) {
                 removeElements(document.querySelectorAll(".ext-subs-word-translate"));
               }
             });
-          });
-        })
+          })
+      });
 
       function removeElements(elms: NodeListOf<Element>) {
         elms.forEach(el => el.remove());
