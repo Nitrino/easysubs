@@ -16,6 +16,43 @@
   white-space: pre;
 }
 
+#ext-subs .ext-subs-word .ext-subs-word-translate {
+  padding: 10px 25px;
+  position: absolute;
+  top: -90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  border-radius: .4em;
+  font-size: 16px;
+}
+
+#ext-subs .ext-subs-word .ext-subs-word-translate:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: #1e1e1e;
+  border-bottom: 0;
+  margin-left: -10px;
+  margin-bottom: -10px;
+}
+
+#ext-subs .ext-subs-word .ext-subs-word-translated {
+  color: #6b6b6b;
+  font-weight: bold;
+}
+
+#ext-subs .ext-subs-word .ext-subs-word-translate hr {
+  margin: 5px auto 3px auto;
+  height: 1px;
+  background-color: #666;
+  width: 60%;
+}
+
 .flowplayer.is-fullscreen #ext-subs {
   font-size: 40px
 }
