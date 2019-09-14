@@ -44,13 +44,13 @@ chrome.runtime.sendMessage({}, function (response) {
             document.addEventListener("mouseover", (event) => {
               let element = <HTMLSpanElement>event.target;
 
-              if (element.className === 'ext-subs-word') {
-                if (element.getElementsByClassName("ext-subs-word-translate").length != 0) {
+              if (element.className === 'easysubs-word') {
+                if (element.getElementsByClassName("easysubs-word-translate").length != 0) {
                   return;
                 }
 
                 chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: element.textContent, lang: "ru" }, (response) => {
-                  removeElements(document.querySelectorAll(".ext-subs-word-translate"));
+                  removeElements(document.querySelectorAll(".easysubs-word-translate"));
                   Onvix.createSubsTranslateElement(element, element.textContent, response.data[0]);
                 });
               }
@@ -58,12 +58,12 @@ chrome.runtime.sendMessage({}, function (response) {
 
             document.addEventListener("mouseout", (event) => {
               let element = <HTMLSpanElement>event.target;
-              if (element.className === 'ext-subs-word') {
-                if (element.getElementsByClassName("ext-subs-word-translate").length === 0) {
+              if (element.className === 'easysubs-word') {
+                if (element.getElementsByClassName("easysubs-word-translate").length === 0) {
                   return;
                 }
 
-                removeElements(document.querySelectorAll(".ext-subs-word-translate"));
+                removeElements(document.querySelectorAll(".easysubs-word-translate"));
               }
             });
           })

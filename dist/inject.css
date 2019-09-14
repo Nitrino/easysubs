@@ -2,7 +2,7 @@
  * Place your custom CSS styles here.
  **/
 
-#ext-subs {
+#easysubs {
   max-width: 650px;
   position: absolute;
   bottom: 55px;
@@ -16,7 +16,7 @@
   white-space: pre;
 }
 
-#ext-subs .ext-subs-word .ext-subs-word-translate {
+#easysubs .easysubs-word .easysubs-word-translate {
   padding: 10px 25px;
   position: absolute;
   top: -90px;
@@ -27,7 +27,7 @@
   font-size: 16px;
 }
 
-#ext-subs .ext-subs-word .ext-subs-word-translate:after {
+#easysubs .easysubs-word .easysubs-word-translate:after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -41,19 +41,19 @@
   margin-bottom: -10px;
 }
 
-#ext-subs .ext-subs-word .ext-subs-word-translated {
+#easysubs .easysubs-word .easysubs-word-translated {
   color: #6b6b6b;
   font-weight: bold;
 }
 
-#ext-subs .ext-subs-word .ext-subs-word-translate hr {
+#easysubs .easysubs-word .easysubs-word-translate hr {
   margin: 5px auto 3px auto;
   height: 1px;
   background-color: #666;
   width: 60%;
 }
 
-.flowplayer.is-fullscreen #ext-subs {
+.flowplayer.is-fullscreen #easysubs {
   font-size: 40px
 }
 

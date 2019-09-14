@@ -24,7 +24,7 @@ class Onvix {
   static createSubsElement() {
     const playerElement = document.querySelector(".fp-ui");
     let pTag = document.createElement("p");
-    pTag.id = "ext-subs";
+    pTag.id = "easysubs";
     const textNode = document.createTextNode("Loading subtitles ...");
     pTag.appendChild(textNode);
     playerElement.appendChild(pTag);
@@ -33,9 +33,9 @@ class Onvix {
 
   static createSubsTranslateElement(subs: HTMLElement, originalText: string, translatedText: string) {
     let translateTag = document.createElement("div");
-    translateTag.className = "ext-subs-word-translate";
-    translateTag.innerHTML = "<span class='ext-subs-word-original'>" + originalText + "</span>" +
-      "<hr>" + "<span class='ext-subs-word-translated'>" + translatedText + "</span>"
+    translateTag.className = "easysubs-word-translate";
+    translateTag.innerHTML = "<span class='easysubs-word-original'>" + originalText + "</span>" +
+      "<hr>" + "<span class='easysubs-word-translated'>" + translatedText + "</span>"
     subs.appendChild(translateTag);
     return translateTag;
   }
