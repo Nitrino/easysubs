@@ -17,7 +17,7 @@ chrome.runtime.sendMessage({}, function (response) {
       ready('video', function (videoElement: HTMLVideoElement) {
         const subsElement = Onvix.createSubsElement();
         const subsProgressBarElement = Onvix.createSubsProgressBarElement();
-        
+
         Onvix.getSubs("eng")
           .then(function (subs) {
             subsElement.textContent = ""; // Clear subs loading text

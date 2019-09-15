@@ -1,6 +1,7 @@
 import { subTitleType } from "subtitle";
 import Video from "./video";
 import Utils from "./utils";
+import anime from "animejs"
 
 class Subs {
   static updateSubs(video: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement) {
@@ -41,8 +42,6 @@ class Subs {
   }
 
   static updateSubsProgressBar(subsProgressBarElement: HTMLElement, video: HTMLVideoElement, subs: subTitleType[]) {
-    document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => el.remove());
-
     const timePeriod = 30000; // 30 seconds
     const progressBarWidth = subsProgressBarElement.clientWidth;
     const msInPx = (progressBarWidth / timePeriod)
@@ -55,14 +54,38 @@ class Subs {
       (sub.start > rightBorder && sub.start < leftBorder)
     );
 
+    let currentSubsIds: list<string> = []
     subsInDuration.forEach(sub => {
-      const subWidth = msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start))
-      let subDiv = document.createElement("div");
-      subDiv.className = "easysubs-progress-bar-element"
-      subDiv.style.width = subWidth + "px"
-      subDiv.style.left = msInPx * (Utils.castSubTime(sub.start) - rightBorder) + "px"
-      subsProgressBarElement.appendChild(subDiv)
+      const subId = sub.start + "-" + sub.end
+      currentSubsIds.push(subId)
+      const currentSub = document.getElementById(subId)
+
+      if (currentSub) {
+        anime({
+          targets: currentSub,
+          translateX: msInPx * ((Utils.castSubTime(sub.start) - rightBorder) - 150),
+          easing: 'linear',
+          duration: 300
+        });
+      } else {
+        const subWidth = msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start))
+        let subDiv = document.createElement("div");
+        subDiv.className = "easysubs-progress-bar-element"
+        subDiv.id = subId
+        subDiv.style.width = subWidth.toFixed(0) + "px"
+        subDiv.style.transform = 'translateX(' + msInPx * (Utils.castSubTime(sub.start) - rightBorder) + 'px)';
+        subsProgressBarElement.appendChild(subDiv)
+      }
     });
+
+    async function removeOldProgressBarElements(subsInDuration: subTitleType[]) {
+      document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => {
+        if (currentSubsIds.includes(el.id) == false) {
+          el.remove()
+        }
+      });
+    }
+    removeOldProgressBarElements(subsInDuration);
   }
 }
 export default Subs;
