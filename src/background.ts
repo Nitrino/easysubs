@@ -7,7 +7,6 @@ chrome.runtime.onMessage.addListener(
         .then((response: object) => { sendResponse(response) })
         .catch((err: Error) => console.error(err));
     } else {
-      chrome.pageAction.show(sender.tab.id);
       sendResponse();
     }
     return true;  // Will respond asynchronously.
