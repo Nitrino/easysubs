@@ -2,10 +2,14 @@
  * Place your custom CSS styles here.
  **/
 
+i>span {
+  font-style: italic !important;
+}
+
 #easysubs {
   max-width: 650px;
   position: absolute;
-  bottom: 55px;
+  bottom: 70px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 22px;
@@ -59,4 +63,38 @@
 
 .flowplayer .fp-captions .fp-captions-normal {
   display: none;
+}
+
+.main-player .fp-ui .easysubs-progress-bar {
+  position: absolute;
+  bottom: 0;
+  height: 15px;
+  width: 100%;
+  z-index: 11;
+  background-color: #171717;
+}
+
+.main-player .fp-ui .easysubs-progress-bar:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  height: 15px;
+  width: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1296ba;
+}
+
+.easysubs-progress-bar-element {
+  background-color: #707070;
+  position: absolute;
+  will-change: left;
+  height: 7px;
+  bottom: 4px;
+  border-radius: 7px;
+}
+
+#footer {
+  bottom: 15px !important;
 }
