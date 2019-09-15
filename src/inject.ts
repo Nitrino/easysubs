@@ -16,12 +16,14 @@ chrome.runtime.sendMessage({}, function (response) {
       const video: HTMLVideoElement = document.querySelector('.fp-player video');
       ready('video', function (videoElement: HTMLVideoElement) {
         const subsElement = Onvix.createSubsElement();
-
+        const subsProgressBarElement = Onvix.createSubsProgressBarElement();
+        
         Onvix.getSubs("eng")
           .then(function (subs) {
             subsElement.textContent = ""; // Clear subs loading text
             videoElement.ontimeupdate = (event) => {
               Subs.updateSubs(videoElement, subs, subsElement);
+              Subs.updateSubsProgressBar(subsProgressBarElement, videoElement, subs);
             };
 
             subsElement.addEventListener("mouseenter", () => {

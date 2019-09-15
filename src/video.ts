@@ -1,5 +1,7 @@
 import Subs from "./subs";
 import { subTitleType } from "subtitle";
+import Utils from "./utils";
+
 class Video {
   static getCurrentTime(video: HTMLVideoElement) {
     return Math.round(video.currentTime * 1000)
@@ -18,11 +20,7 @@ class Video {
   }
 
   static moveToTime(video: HTMLVideoElement, time: number | string) {
-    if (typeof time == "number") {
-      video.currentTime = time / 1000
-    } else {
-      video.currentTime = parseInt(time) / 1000
-    }
+    video.currentTime = Utils.castSubTime(time) / 1000
   }
 }
 export default Video;

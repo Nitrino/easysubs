@@ -39,6 +39,14 @@ class Onvix {
     subs.appendChild(translateTag);
     return translateTag;
   }
+
+  static createSubsProgressBarElement() {
+    let progressBarTag = document.createElement("div");
+    progressBarTag.className = "easysubs-progress-bar";
+    let playerContainerElement = document.querySelector(".fp-ui")
+    playerContainerElement.appendChild(progressBarTag)
+    return progressBarTag
+  }
 }
 
 export default Onvix;
