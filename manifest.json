@@ -26,13 +26,12 @@
     "contextMenus",
     "https://*/*"
   ],
-  "content_scripts": [
-    {
+  "content_scripts": [{
       "matches": [
         "https://*.ageofultron.site/*"
       ],
       "css": [
-        "dist/inject.css"
+        "dist/styles.css"
       ]
     },
     {
