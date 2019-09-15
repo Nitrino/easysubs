@@ -24,11 +24,11 @@
   },
   "permissions": [
     "contextMenus",
-    "https://*/*"
+    "activeTab"
   ],
   "content_scripts": [{
       "matches": [
-        "https://*.ageofultron.site/*"
+        "https://*/*"
       ],
       "css": [
         "dist/styles.css"
@@ -36,7 +36,7 @@
     },
     {
       "matches": [
-        "https://*.ageofultron.site/*"
+        "https://*/*"
       ],
       "js": [
         "dist/inject.js"
