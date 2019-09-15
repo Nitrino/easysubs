@@ -1,6 +1,6 @@
 {
-  "name": "ext",
-  "version": "1.0.0",
+  "name": "easysubs",
+  "version": "0.1.0",
   "description": "",
   "main": "inject.js",
   "scripts": {
