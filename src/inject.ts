@@ -34,10 +34,11 @@ chrome.runtime.sendMessage({}, function (response) {
             });
 
             document.addEventListener("keyup", (event) => {
-              event.stopPropagation();
               if (event.code == "ArrowLeft") {
+                event.stopPropagation();
                 Video.moveToPrevSub(videoElement, subs);
               } if (event.code == "ArrowRight") {
+                event.stopPropagation();
                 Video.moveToNextSub(videoElement, subs);
               }
             }, true);
