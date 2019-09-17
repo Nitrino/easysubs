@@ -27,7 +27,10 @@ class Subs {
       let indexCurrentSub = subs.findIndex(sub => sub == currentSub)
       return subs[indexCurrentSub - 1]
     } else {
-      return subs.find((sub, index) => sub.end <= currentTime && subs[index + 1].start >= currentTime)
+      return subs.find((sub, index) => {
+        if (subs[index + 1] == null) { return null }
+        sub.end <= currentTime && subs[index + 1].start >= currentTime
+      })
     }
   }
 
@@ -37,7 +40,7 @@ class Subs {
       let indexCurrentSub = subs.findIndex(sub => sub == currentSub)
       return subs[indexCurrentSub + 1]
     } else {
-      return subs.find((sub, index) => sub.start > currentTime && subs[index - 1].end >= currentTime)
+      return subs.find(sub => sub.start >= currentTime)
     }
   }
 
