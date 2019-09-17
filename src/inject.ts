@@ -13,63 +13,59 @@ chrome.runtime.sendMessage({}, function (response) {
       console.log("EasySubs initialized");
       // ----------------------------------------------------------
 
-      const video: HTMLVideoElement = document.querySelector('.fp-player video');
       ready('video', function (videoElement: HTMLVideoElement) {
-        const subsElement = Onvix.createSubsElement();
-        const subsProgressBarElement = Onvix.createSubsProgressBarElement();
+        videoElement.addEventListener("loadstart", () => {
+          let subsElement = Onvix.createSubsElement();
+          let subsProgressBarElement = Onvix.createSubsProgressBarElement();
 
-        Onvix.getSubs("eng")
-          .then(function (subs) {
-            subsElement.textContent = ""; // Clear subs loading text
-            videoElement.ontimeupdate = (event) => {
-              Subs.updateSubs(videoElement, subs, subsElement);
-              Subs.updateSubsProgressBar(subsProgressBarElement, videoElement, subs);
-            };
-
-            subsElement.addEventListener("mouseenter", () => {
-              videoElement.pause();
-            });
-            subsElement.addEventListener("mouseleave", () => {
-              videoElement.play();
-            });
-
-            document.addEventListener("keyup", (event) => {
-              if (event.code == "ArrowLeft") {
-                event.stopPropagation();
-                Video.moveToPrevSub(videoElement, subs);
-              } if (event.code == "ArrowRight") {
-                event.stopPropagation();
-                Video.moveToNextSub(videoElement, subs);
-              }
-            }, true);
-
-
-            document.addEventListener("mouseover", (event) => {
-              let element = <HTMLSpanElement>event.target;
-
-              if (element.className === 'easysubs-word') {
-                if (element.getElementsByClassName("easysubs-word-translate").length != 0) {
-                  return;
+          Onvix.getSubs("eng")
+            .then(function (subs) {
+              subsElement.textContent = ""; // Clear subs loading text
+              videoElement.ontimeupdate = () => {
+                Subs.updateSubs(videoElement, subs, subsElement);
+                Subs.updateSubsProgressBar(subsProgressBarElement, videoElement, subs);
+              };
+  
+              subsElement.addEventListener("mouseenter", () => {
+                videoElement.pause();
+              });
+              subsElement.addEventListener("mouseleave", () => {
+                videoElement.play();
+              });
+  
+              document.addEventListener("keyup", (event) => {
+                if (event.code == "ArrowLeft") {
+                  event.stopPropagation();
+                  Video.moveToPrevSub(videoElement, subs);
+                } if (event.code == "ArrowRight") {
+                  event.stopPropagation();
+                  Video.moveToNextSub(videoElement, subs);
                 }
-                const word = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)[0]
-                chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: word, lang: "ru" }, (response) => {
+              }, true);
+  
+  
+              document.addEventListener("mouseover", (event) => {
+                let element = <HTMLSpanElement>event.target;
+  
+                if (element.className === 'easysubs-word') {
+                  if (element.getElementsByClassName("easysubs-word-translate").length != 0) { return; }
+                  const word = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)[0]
+                  chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: word, lang: "ru" }, (response) => {
+                    removeElements(document.querySelectorAll(".easysubs-word-translate"));
+                    Onvix.createSubsTranslateElement(element, word, response.data[0]);
+                  });
+                }
+              });
+  
+              document.addEventListener("mouseout", (event) => {
+                let element = <HTMLSpanElement>event.target;
+                if (element.className === 'easysubs-word') {
+                  if (element.getElementsByClassName("easysubs-word-translate").length === 0) { return; }
                   removeElements(document.querySelectorAll(".easysubs-word-translate"));
-                  Onvix.createSubsTranslateElement(element, word, response.data[0]);
-                });
-              }
-            });
-
-            document.addEventListener("mouseout", (event) => {
-              let element = <HTMLSpanElement>event.target;
-              if (element.className === 'easysubs-word') {
-                if (element.getElementsByClassName("easysubs-word-translate").length === 0) {
-                  return;
                 }
-
-                removeElements(document.querySelectorAll(".easysubs-word-translate"));
-              }
-            });
-          })
+              });
+            })
+        });
       });
 
       function removeElements(elms: NodeListOf<Element>) {

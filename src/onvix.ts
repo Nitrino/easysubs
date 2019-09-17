@@ -22,9 +22,15 @@ class Onvix {
   }
 
   static createSubsElement() {
+    const subsElementId = "easysubs";
+    const prevSubsElement = document.getElementById(subsElementId)
+    if (prevSubsElement != null) {
+      prevSubsElement.remove()
+    }
+
     const playerElement = document.querySelector(".fp-ui");
     let pTag = document.createElement("p");
-    pTag.id = "easysubs";
+    pTag.id = subsElementId;
     const textNode = document.createTextNode("Loading subtitles ...");
     pTag.appendChild(textNode);
     playerElement.appendChild(pTag);
@@ -41,8 +47,14 @@ class Onvix {
   }
 
   static createSubsProgressBarElement() {
+    let progressBarClass = "easysubs-progress-bar"
+    const prevProgressBarElement = document.querySelector("." + progressBarClass)
+    if (prevProgressBarElement != null) {
+      prevProgressBarElement.remove()
+    }
+
     let progressBarTag = document.createElement("div");
-    progressBarTag.className = "easysubs-progress-bar";
+    progressBarTag.className = progressBarClass;
     let playerContainerElement = document.querySelector(".fp-ui")
     playerContainerElement.appendChild(progressBarTag)
     return progressBarTag
