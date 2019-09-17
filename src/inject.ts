@@ -51,10 +51,10 @@ chrome.runtime.sendMessage({}, function (response) {
                 if (element.getElementsByClassName("easysubs-word-translate").length != 0) {
                   return;
                 }
-
-                chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: element.textContent, lang: "ru" }, (response) => {
+                const word = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)[0]
+                chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: word, lang: "ru" }, (response) => {
                   removeElements(document.querySelectorAll(".easysubs-word-translate"));
-                  Onvix.createSubsTranslateElement(element, element.textContent, response.data[0]);
+                  Onvix.createSubsTranslateElement(element, word, response.data[0]);
                 });
               }
             });
