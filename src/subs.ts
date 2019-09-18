@@ -28,8 +28,10 @@ class Subs {
       return subs[indexCurrentSub - 1]
     } else {
       return subs.find((sub, index) => {
-        if (subs[index + 1] == null) { return null }
-        sub.end <= currentTime && subs[index + 1].start >= currentTime
+        if (subs[index + 1] == null) { 
+          return null 
+        }
+        return sub.end <= currentTime && subs[index + 1].start >= currentTime
       })
     }
   }
