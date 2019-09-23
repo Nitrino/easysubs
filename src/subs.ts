@@ -3,7 +3,7 @@ import Video from "./video";
 import Utils from "./utils";
 import anime from "animejs"
 
-const subsAnimateDuration: number = 300; 
+const subsAnimateDuration: number = 300;
 const subsAnimateCompensationGap: number = subsAnimateDuration / 2 // Motion animation compensation
 
 class Subs {
@@ -31,8 +31,8 @@ class Subs {
       return subs[indexCurrentSub - 1]
     } else {
       return subs.find((sub, index) => {
-        if (subs[index + 1] == null) { 
-          return null 
+        if (subs[index + 1] == null) {
+          return null
         }
         return sub.end <= currentTime && subs[index + 1].start >= currentTime
       })
@@ -62,7 +62,7 @@ class Subs {
       (sub.start > rightBorder && sub.start < leftBorder)
     );
 
-    let currentSubsIds: list<string> = []
+    let currentSubsIds: string[] = []
     if (hardMove) {
       document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => el.remove())
     }
