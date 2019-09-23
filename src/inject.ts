@@ -10,7 +10,7 @@ chrome.runtime.sendMessage({}, function (response) {
 
       // ----------------------------------------------------------
       // This part of the script triggers when page is done loading
-      console.log("EasySubs initialized!");
+      console.log("EasySubs initialized");
       // ----------------------------------------------------------
 
       ready('video', function (videoElement: HTMLVideoElement) {
@@ -64,6 +64,11 @@ chrome.runtime.sendMessage({}, function (response) {
                   removeElements(document.querySelectorAll(".easysubs-word-translate"));
                 }
               });
+
+              const resizeObserver = new ResizeObserver(() => {
+                Subs.updateSubsProgressBar(subsProgressBarElement, videoElement, subs, true);
+              });
+              resizeObserver.observe(subsProgressBarElement);
             })
         });
       });
