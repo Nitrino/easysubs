@@ -10,7 +10,7 @@ chrome.runtime.sendMessage({}, function (response) {
 
       // ----------------------------------------------------------
       // This part of the script triggers when page is done loading
-      console.log("EasySubs initialized");
+      console.log("EasySubs initialized!");
       // ----------------------------------------------------------
 
       ready('video', function (videoElement: HTMLVideoElement) {
@@ -36,10 +36,10 @@ chrome.runtime.sendMessage({}, function (response) {
               document.addEventListener("keyup", (event) => {
                 if (event.code == "ArrowLeft") {
                   event.stopPropagation();
-                  Video.moveToPrevSub(videoElement, subs);
+                  Video.moveToPrevSub(videoElement, subs, subsProgressBarElement);
                 } if (event.code == "ArrowRight") {
                   event.stopPropagation();
-                  Video.moveToNextSub(videoElement, subs);
+                  Video.moveToNextSub(videoElement, subs, subsProgressBarElement);
                 }
               }, true);
   

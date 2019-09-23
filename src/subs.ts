@@ -3,6 +3,9 @@ import Video from "./video";
 import Utils from "./utils";
 import anime from "animejs"
 
+const subsAnimateDuration: number = 300; 
+const subsAnimateCompensationGap: number = subsAnimateDuration / 2 // Motion animation compensation
+
 class Subs {
   static updateSubs(video: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement) {
     let currentTime = Video.getCurrentTime(video);
@@ -46,7 +49,7 @@ class Subs {
     }
   }
 
-  static updateSubsProgressBar(subsProgressBarElement: HTMLElement, video: HTMLVideoElement, subs: subTitleType[]) {
+  static updateSubsProgressBar(subsProgressBarElement: HTMLElement, video: HTMLVideoElement, subs: subTitleType[], hardMove: boolean = false) {
     const timePeriod = 30000; // 30 seconds
     const progressBarWidth = subsProgressBarElement.clientWidth;
     const msInPx = (progressBarWidth / timePeriod)
@@ -60,6 +63,9 @@ class Subs {
     );
 
     let currentSubsIds: list<string> = []
+    if (hardMove) {
+      document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => el.remove())
+    }
     subsInDuration.forEach(sub => {
       const subId = sub.start + "-" + sub.end
       currentSubsIds.push(subId)
@@ -68,9 +74,9 @@ class Subs {
       if (currentSub) {
         anime({
           targets: currentSub,
-          translateX: msInPx * ((Utils.castSubTime(sub.start) - rightBorder) - 150),
+          translateX: msInPx * ((Utils.castSubTime(sub.start) - rightBorder) - subsAnimateCompensationGap),
           easing: 'linear',
-          duration: 300
+          duration: subsAnimateDuration
         });
       } else {
         const subWidth = msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start))
