@@ -1,7 +1,7 @@
 import { parse } from "subtitle";
 
 class Onvix {
-  static getSubs(language: string) {
+  getSubs(language: string) {
     const base_path = "https://ageofultron.site/api/v1/streaming/serials/"
     const serial = window.location.pathname.split("/")[2]
     const stream = window.location.search.split("&")[0].split("=")[1]
@@ -21,7 +21,7 @@ class Onvix {
       })
   }
 
-  static createSubsElement() {
+  createSubsElement() {
     const subsElementId = "easysubs";
     const prevSubsElement = document.getElementById(subsElementId)
     if (prevSubsElement != null) {
@@ -37,7 +37,7 @@ class Onvix {
     return pTag;
   }
 
-  static createSubsTranslateElement(subs: HTMLElement, originalText: string, translatedText: string) {
+  createSubsTranslateElement(subs: HTMLElement, originalText: string, translatedText: string) {
     let translateTag = document.createElement("div");
     translateTag.className = "easysubs-word-translate";
     translateTag.innerHTML = "<span class='easysubs-word-original'>" + originalText + "</span>" +
@@ -46,7 +46,7 @@ class Onvix {
     return translateTag;
   }
 
-  static createSubsProgressBarElement() {
+  createSubsProgressBarElement() {
     let progressBarClass = "easysubs-progress-bar"
     const prevProgressBarElement = document.querySelector("." + progressBarClass)
     if (prevProgressBarElement != null) {
