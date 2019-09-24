@@ -9,7 +9,7 @@ class Video {
     return Math.round(video.currentTime * 1000)
   }
 
-  static moveToPrevSub(video: HTMLVideoElement, subs: subTitleType[], subsProgressBarElement: HTMLDivElement) {
+  static moveToPrevSub(video: HTMLVideoElement, subs: subTitleType[], subsProgressBarElement: HTMLElement) {
     let currentTime = this.getCurrentTime(video);
     let prevSub: subTitleType = Subs.getPrevSub(subs, currentTime);
     if (prevSub) {
@@ -18,7 +18,7 @@ class Video {
     }
   }
 
-  static moveToNextSub(video: HTMLVideoElement, subs: subTitleType[], subsProgressBarElement: HTMLDivElement) {
+  static moveToNextSub(video: HTMLVideoElement, subs: subTitleType[], subsProgressBarElement: HTMLElement) {
     let currentTime = this.getCurrentTime(video);
     let nextSub: subTitleType = Subs.getNextSub(subs, currentTime);
     if (nextSub) {
