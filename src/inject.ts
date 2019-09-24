@@ -22,15 +22,15 @@ chrome.runtime.sendMessage({}, function (response) {
           subsElement.textContent = ""; // Clear subs loading text
 
           EventsHandlers.resizeSubsProgressBarElement(subsProgressBarElement, videoElement, subs)
-          EventsHandlers.videoOntimeupdate(subs, videoElement, subsElement, subsProgressBarElement)
+          EventsHandlers.videoOnTimeUpdate(subs, videoElement, subsElement, subsProgressBarElement)
 
-          subsElement.addEventListener("mouseenter", () => { videoElement.pause() });
-          subsElement.addEventListener("mouseleave", () => { videoElement.play() });
+          EventsHandlers.subsElementMouseEnter(subsElement, videoElement)
+          EventsHandlers.subsElementMouseLeave(subsElement, videoElement)
 
-          document.addEventListener("keyup", event => EventsHandlers.keyup(event, videoElement, subs, subsProgressBarElement), true);
+          EventsHandlers.keyUp(videoElement, subs, subsProgressBarElement)
 
-          document.addEventListener("mouseover", EventsHandlers.mouseover);
-          document.addEventListener("mouseout", EventsHandlers.mouseout);
+          EventsHandlers.subsWordMouseOver()
+          EventsHandlers.subsWordMouseOut()
         })
     });
   });
