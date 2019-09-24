@@ -7,15 +7,7 @@ class KinoPub implements Service {
     });
   }
 
-  createSubsElement() {
-    return document.createElement("p")
-  }
-
-  createSubsTranslateElement(subs: HTMLElement, originalText: string, translatedText: string) {
-    return document.createElement("div")
-  }
-
-  createSubsProgressBarElement() {
+  playerContainerElement(): HTMLElement {
     return document.createElement("div")
   }
 }
