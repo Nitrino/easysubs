@@ -2,7 +2,7 @@
  * Place your custom CSS styles here.
  **/
 
-i>span {
+i > span {
   font-style: italic !important;
 }
 
@@ -20,6 +20,8 @@ i>span {
   white-space: pre;
 
   .easysubs-word {
+    color: #fff;
+
     &-translate {
       padding: 10px 25px;
       position: absolute;
@@ -27,11 +29,11 @@ i>span {
       left: 50%;
       transform: translateX(-50%);
       background: #1e1e1e;
-      border-radius: .4em;
+      border-radius: 0.4em;
       font-size: 16px;
 
       &:after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         left: 50%;
@@ -60,7 +62,7 @@ i>span {
 }
 
 .flowplayer.is-fullscreen #easysubs {
-  font-size: 40px
+  font-size: 40px;
 }
 
 .flowplayer .fp-captions .fp-captions-normal {
