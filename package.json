@@ -1,7 +1,7 @@
 {
   "name": "easysubs",
   "version": "0.1.0",
-  "description": "",
+  "description": "Learn languages with fun",
   "main": "inject.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,6 +22,7 @@
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
+    "@cospired/i18n-iso-languages": "^2.0.5",
     "@types/animejs": "^3.1.0",
     "@types/chrome": "0.0.88",
     "@types/resize-observer-browser": "^0.1.2",
@@ -30,6 +31,7 @@
     "css-loader": "^3.2.0",
     "google-translate-open-api": "^1.3.1",
     "mini-css-extract-plugin": "^0.8.0",
-    "subtitle": "^2.0.3"
+    "subtitle": "^2.0.3",
+    "youtube-captions-scraper": "^1.0.3"
   }
 }

@@ -19,6 +19,8 @@ chrome.runtime.sendMessage({}, function (response) {
 
       service.getSubs("eng")
         .then(subs => {
+          console.log("Subtitles loaded. subs count: " + subs.length)
+
           subsElement.textContent = ""; // Clear subs loading text
 
           EventsHandlers.resizeSubsProgressBarElement(subsProgressBarElement, videoElement, subs)
