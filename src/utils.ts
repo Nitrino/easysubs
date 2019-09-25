@@ -10,11 +10,25 @@ class Utils {
 
   static detectService(): YouTube | Netflix | Onvix | KinoPub {
     const titleContent = document.querySelector('title').textContent
-    if (titleContent.includes("YouTube") || window.location.host == "www.youtube.com") { return new YouTube }
-    else if (titleContent.includes("Netflix") || window.location.host == "www.netflix.com") { return new Netflix }
-    else if (titleContent.includes("Onvix") || document.querySelector('meta[content="ONVIX"]')) { return new Onvix }
-    else if (titleContent.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]')) { return new KinoPub }
-    else { return null }
+    if (titleContent.includes("YouTube") || window.location.host == "www.youtube.com") {
+      document.querySelector('html').id = "youtube"
+      return new YouTube
+    }
+    else if (titleContent.includes("Netflix") || window.location.host == "www.netflix.com") {
+      document.querySelector('html').id = "netflix"
+      return new Netflix
+    }
+    else if (titleContent.includes("Onvix") || document.querySelector('meta[content="ONVIX"]')) {
+      document.querySelector('html').id = "onvix"
+      return new Onvix
+    }
+    else if (titleContent.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]')) {
+      document.querySelector('html').id = "kinopub"
+      return new KinoPub
+    }
+    else {
+      return null
+    }
   }
 
   static removeAllElements(elms: NodeListOf<Element>) {

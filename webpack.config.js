@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     inject: './src/inject.ts',
     background: './src/background.ts',
-    styles: './src/styles.scss'
+    styles: './src/css/styles.scss'
   },
   resolve: {
     extensions: ['.ts', '.js', '.scss']
