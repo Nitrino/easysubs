@@ -3,6 +3,15 @@
     display: none !important;
   }
 
+  .ytp-chrome-bottom,
+  .ytp-gradient-bottom {
+    bottom: 15px;
+  }
+
+  .html5-video-player {
+    padding-bottom: 15px;
+  }
+
   #easysubs {
     z-index: 10;
   }
