@@ -6,15 +6,17 @@ import { subTitleType } from "subtitle";
 
 class EventsHandlers {
   static keyUp(videoElement: HTMLVideoElement, subs: subTitleType[], subsProgressBarElement: HTMLElement) {
-    document.addEventListener("keyup", (event) => {
-      if (event.code == "ArrowLeft") {
-        event.stopPropagation();
-        Video.moveToPrevSub(videoElement, subs, subsProgressBarElement);
-      } if (event.code == "ArrowRight") {
-        event.stopPropagation();
-        Video.moveToNextSub(videoElement, subs, subsProgressBarElement);
-      }
-    }, true);
+    ["keyup", "keydown", "keypress"].forEach(eventType => {
+      document.addEventListener(eventType, (event: KeyboardEvent) => {
+        if (event.code == "ArrowLeft") {
+          event.stopPropagation();
+          if (event.type == "keydown") { Video.moveToPrevSub(videoElement, subs, subsProgressBarElement) }
+        } if (event.code == "ArrowRight") {
+          event.stopPropagation();
+          if (event.type == "keydown") { Video.moveToNextSub(videoElement, subs, subsProgressBarElement) }
+        }
+      }, true);
+    })
   }
 
   static subsElementMouseEnter(subsElement: HTMLElement, videoElement: HTMLVideoElement) {
