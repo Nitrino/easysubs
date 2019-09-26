@@ -67,7 +67,7 @@ class Subs {
       document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => el.remove())
     }
     subsInDuration.forEach(sub => {
-      const subId = sub.start + "-" + sub.end
+      const subId = "id" + sub.start + "-" + sub.end
       currentSubsIds.push(subId)
       const currentSub = document.getElementById(subId)
 

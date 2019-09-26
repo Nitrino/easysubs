@@ -2,6 +2,10 @@ import { ready } from "./ready"
 import Utils from './utils';
 import UI from "./ui"
 import EventsHandlers from "./events_handlers"
+import YouTube from "./services/youtube";
+import Netflix from "./services/netflix";
+import Onvix from "./services/onvix";
+import KinoPub from "./services/kinopub";
 
 chrome.runtime.sendMessage({}, function (response) {
   const service = Utils.detectService()
@@ -11,9 +15,24 @@ chrome.runtime.sendMessage({}, function (response) {
   // ----------------------------------------------------------
 
   ready('video', function (videoElement: HTMLVideoElement) {
-    const playerContainerElement = service.playerContainerElement()
+    initialize(service, videoElement)
+    let eventsHandler: EventsHandlers = null
+    let oldHref = document.location.href;
+    let observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (oldHref != document.location.href) {
+          eventsHandler.removeEvents();
+          initialize(service, videoElement)
+          oldHref = document.location.href;
+        }
+      });
+    });
+    var config = { childList: true, subtree: true };
+    observer.observe(document.querySelector("body"), config);
 
-    videoElement.addEventListener("loadeddata", () => {
+    function initialize(service: YouTube | Netflix | Onvix | KinoPub, videoElement: HTMLVideoElement) {
+      const playerContainerElement = service.playerContainerElement()
+
       let subsElement = UI.createSubsElement(playerContainerElement);
       let subsProgressBarElement = UI.createSubsProgressBarElement(playerContainerElement);
 
@@ -22,18 +41,9 @@ chrome.runtime.sendMessage({}, function (response) {
           console.log("Subtitles loaded. subs count: " + subs.length)
 
           subsElement.textContent = ""; // Clear subs loading text
-
-          EventsHandlers.resizeSubsProgressBarElement(subsProgressBarElement, videoElement, subs)
-          EventsHandlers.videoOnTimeUpdate(subs, videoElement, subsElement, subsProgressBarElement)
-
-          EventsHandlers.subsElementMouseEnter(subsElement, videoElement)
-          EventsHandlers.subsElementMouseLeave(subsElement, videoElement)
-
-          EventsHandlers.keyUp(videoElement, subs, subsProgressBarElement)
-
-          EventsHandlers.subsWordMouseOver()
-          EventsHandlers.subsWordMouseOut()
+          eventsHandler = new EventsHandlers(videoElement, subs, subsElement, subsProgressBarElement)
+          eventsHandler.addEvents();
         })
-    });
+    }
   });
 });

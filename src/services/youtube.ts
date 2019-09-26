@@ -14,7 +14,6 @@ class YouTube implements Service {
       fmt: "vtt"
     });
     const url = base_path + "?" + params.toString()
-    console.log(url);
 
     return fetch(url)
       .then((resp) => resp.text())
