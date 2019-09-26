@@ -10,6 +10,7 @@ class YouTube implements Service {
     const params = new URLSearchParams({
       v: videoId,
       lang: alpha3TToAlpha2(language),
+      name: alpha3TToAlpha2(language),
       fmt: "vtt"
     });
     const url = base_path + "?" + params.toString()
