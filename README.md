@@ -7,7 +7,7 @@
 
 ### Features
 
-- Support [onvix](http://onvix.co) serials
+- Support [onvix](http://onvix.co) serials and films
 - Support Youtube videos and premium
 - Word translation when cursor hover
 - Rewind to previous and next sub

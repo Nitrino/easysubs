@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+— Load subtitles for Onvix films
+— Add extension icon
+
 ## v0.1.0
 
 This is the first release and the beginning of a long journey.  
