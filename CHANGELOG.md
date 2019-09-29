@@ -1,13 +1,14 @@
 # Changelog
 
-## Unreleased
+## v0.1.0
 
 This is the first release and the beginning of a long journey.  
 MVP is already working but may contain many bug and limitations.
 
 ### Features
 
-- Support [onvix](http://onvix.co)
+- Support [onvix](http://onvix.co) serials
+- Support Youtube videos and premium
 - Word translation when cursor hover
 - Rewind to previous and next sub
 - Subtitles progress bar
