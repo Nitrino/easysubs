@@ -4,9 +4,9 @@
 
 ### Enhancements
 
-— Add translate full sentence by click
-— Load subtitles for Onvix films
-— Add extension icon
+- Add translate full sentence by click
+- Load subtitles for Onvix films
+- Add extension icon
 
 ## v0.1.0
 
