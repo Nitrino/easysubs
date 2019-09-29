@@ -10,6 +10,9 @@ class EventsHandlers {
   subsProgressBarElement: HTMLElement;
   subsElement: HTMLElement;
   resizeObserver: ResizeObserver;
+  translateOriginalElement: HTMLElement;
+  translateResultElement: HTMLElement;
+  translateContainerElement: HTMLElement;
 
   constructor(videoElement: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement, subsProgressBarElement: HTMLElement) {
     this.videoElement = videoElement;
@@ -19,10 +22,15 @@ class EventsHandlers {
     this.resizeObserver = this.createResizeObserver()
     this.keyboardHandler = this.keyboardHandler.bind(this)
     this.subsWordMouseOver = this.subsWordMouseOver.bind(this)
+    this.subsWordMouseOut = this.subsWordMouseOut.bind(this)
     this.videoOnTimeUpdate = this.videoOnTimeUpdate.bind(this)
     this.createResizeObserver = this.createResizeObserver.bind(this)
     this.subsMouseEnter = this.subsMouseEnter.bind(this)
     this.subsMouseLeave = this.subsMouseLeave.bind(this)
+    this.subsClick = this.subsClick.bind(this)
+    this.translateOriginalElement = document.querySelector(".easysubs-translate-original")
+    this.translateResultElement = document.querySelector(".easysubs-translate-result")
+    this.translateContainerElement = document.querySelector(".easysubs-translate-container")
   }
 
   addEvents() {
@@ -35,6 +43,7 @@ class EventsHandlers {
     document.addEventListener("mouseout", this.subsWordMouseOut);
     this.videoElement.addEventListener("timeupdate", this.videoOnTimeUpdate);
     this.resizeObserver.observe(this.subsProgressBarElement);
+    this.subsElement.addEventListener("click", this.subsClick);
   }
 
   removeEvents() {
@@ -47,6 +56,7 @@ class EventsHandlers {
     document.removeEventListener("mouseout", this.subsWordMouseOut);
     this.videoElement.removeEventListener("timeupdate", this.videoOnTimeUpdate);
     this.resizeObserver.unobserve(this.subsProgressBarElement);
+    this.subsElement.removeEventListener("click", this.subsClick);
   }
 
   private keyboardHandler(event: KeyboardEvent) {
@@ -71,21 +81,22 @@ class EventsHandlers {
     let element = <HTMLSpanElement>event.target;
 
     if (element.className === 'easysubs-word') {
-      if (element.getElementsByClassName("easysubs-word-translate").length != 0) { return; }
+      if (element.getElementsByClassName("easysubs-translate-container").length != 0) { return; }
       const word = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)[0]
       chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: word, lang: "ru" }, (response) => {
-        Utils.removeAllElements(document.querySelectorAll(".easysubs-word-translate"));
-        UI.createSubsTranslateElement(element, word, response.data[0]);
+        UI.setTranslation(
+          this.translateContainerElement,
+          this.translateOriginalElement,
+          this.translateResultElement,
+          word,
+          response.data[0]
+        )
       });
     }
   }
 
   private subsWordMouseOut(event: MouseEvent) {
-    let element = <HTMLSpanElement>event.target;
-    if (element.className === 'easysubs-word') {
-      if (element.getElementsByClassName("easysubs-word-translate").length === 0) { return; }
-      Utils.removeAllElements(document.querySelectorAll(".easysubs-word-translate"));
-    }
+    this.translateContainerElement.style.display = "none";
   }
 
   private videoOnTimeUpdate(event: Event) {
@@ -96,6 +107,23 @@ class EventsHandlers {
   private createResizeObserver() {
     return new ResizeObserver(() => {
       Subs.updateSubsProgressBar(this.subsProgressBarElement, this.videoElement, this.subs, true);
+    });
+  }
+
+  private subsClick(event: Event) {
+    const text = this.subsElement.textContent
+    const element = <HTMLSpanElement>event.target;
+
+    if (element.getElementsByClassName("easysubs-word-translate").length != 0) { return; }
+    chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: text, lang: "ru" }, (response) => {
+      Utils.removeAllElements(document.querySelectorAll(".easysubs-word-translate"));
+      UI.setTranslation(
+        this.translateContainerElement,
+        this.translateOriginalElement,
+        this.translateResultElement,
+        text,
+        response.data[0]
+      )
     });
   }
 }

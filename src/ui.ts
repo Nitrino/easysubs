@@ -1,26 +1,36 @@
 class UI {
   static createSubsElement(playerContainerElement: HTMLElement) {
-    const subsElementId = "easysubs";
-    const prevSubsElement = document.getElementById(subsElementId)
-    if (prevSubsElement != null) {
-      prevSubsElement.remove()
+    const subsContainerElementId = "easysubs";
+    const prevSubsContainerElement = document.getElementById(subsContainerElementId)
+    if (prevSubsContainerElement != null) {
+      prevSubsContainerElement.remove()
     }
+    let subsContainerElement = document.createElement("div");
+    subsContainerElement.id = subsContainerElementId;
+
+    let subsInnerElement = document.createElement("div");
+    subsInnerElement.id = "easysubs-subtitles"
+    subsContainerElement.appendChild(subsInnerElement);
 
     const textNode = document.createTextNode("Loading subtitles ...");
-    let subsElement = document.createElement("div");
-    subsElement.id = subsElementId;
-    subsElement.appendChild(textNode);
-    playerContainerElement.appendChild(subsElement);
-    return subsElement;
+    subsInnerElement.appendChild(textNode);
+
+    playerContainerElement.appendChild(subsContainerElement);
+    this.createSubsTranslateElement(subsContainerElement)
+    return subsInnerElement;
   }
 
-  static createSubsTranslateElement(subsElement: HTMLElement, originalText: string, translatedText: string) {
+  static createSubsTranslateElement(subsElement: HTMLElement) {
     let translateTag = document.createElement("div");
-    translateTag.className = "easysubs-word-translate";
-    translateTag.innerHTML = "<span class='easysubs-word-original'>" + originalText + "</span>" +
-      "<hr>" + "<span class='easysubs-word-translated'>" + translatedText + "</span>"
+    translateTag.className = "easysubs-translate-container";
+    translateTag.innerHTML = "<span class='easysubs-translate-original'>test</span><hr><span class='easysubs-translate-result'>test translate</span>"
     subsElement.appendChild(translateTag);
-    return translateTag;
+  }
+
+  static setTranslation(translateContainerElement: HTMLElement, originalElement: HTMLElement, resultElement: HTMLElement, originalText: string, resultText: string) {
+    translateContainerElement.style.display = "block";
+    originalElement.innerHTML = originalText
+    resultElement.innerHTML = resultText
   }
 
   static createSubsProgressBarElement(playerContainerElement: HTMLElement) {

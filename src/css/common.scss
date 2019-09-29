@@ -14,11 +14,16 @@ i > span {
   background-color: rgba(0, 0, 0, 0.5);
   line-height: 1.25;
   white-space: pre;
+  cursor: pointer;
+  user-select: none;
 
   .easysubs-word {
     color: #fff;
+  }
 
-    &-translate {
+  .easysubs-translate {
+    &-container {
+      display: none;
       padding: 10px 25px;
       position: absolute;
       top: -90px;
@@ -42,17 +47,17 @@ i > span {
         margin-bottom: -10px;
       }
 
-      &-translated {
-        color: #6b6b6b;
-        font-weight: bold;
-      }
-
       hr {
         margin: 5px auto 3px auto;
         height: 1px;
         background-color: #666;
         width: 60%;
       }
+    }
+
+    &-result {
+      color: #6b6b6b;
+      font-weight: bold;
     }
   }
 }

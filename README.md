@@ -10,6 +10,7 @@
 - Support [onvix](http://onvix.co) serials and films
 - Support Youtube videos and premium
 - Word translation when cursor hover
+- Translate full sentence by click
 - Rewind to previous and next sub
 - Subtitles progress bar
 
