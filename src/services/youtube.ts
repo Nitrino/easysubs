@@ -3,23 +3,25 @@ import { subTitleType, parse } from 'subtitle'
 import { alpha3TToAlpha2 } from "@cospired/i18n-iso-languages";
 import UI from "../ui"
 
-class YouTube implements Service {
-  getSubs(language: string) {
-    const base_path = "https://www.youtube.com/api/timedtext"
-    const videoId = this.getVideoId()
-    const params = new URLSearchParams({
-      v: videoId,
-      lang: alpha3TToAlpha2(language),
-      name: alpha3TToAlpha2(language),
-      fmt: "vtt"
-    });
-    const url = base_path + "?" + params.toString()
+interface Subtitle {
+  baseUrl: string
+  isTranslatable: boolean
+  languageCode: string
+  name: { simpleText: string }
+  vssId: string
+}
 
-    return fetch(url)
-      .then((resp) => resp.text())
-      .then(function (text) {
-        return parse(text)
-      })
+class YouTube implements Service {
+  async getSubs(language: string) {
+    const videoId = this.getVideoId()
+    const lang = alpha3TToAlpha2(language)
+
+    const subItem = await this.getVideoInfo(videoId, lang);
+    const subUri: string = subItem.baseUrl + "&fmt=vtt";
+
+    const resp = await fetch(subUri);
+    const text = await resp.text();
+    return parse(text);
   }
 
   playerContainerElement(): HTMLElement {
@@ -34,6 +36,28 @@ class YouTube implements Service {
     } else {
       console.error("Can't get youtube video id");
     }
+  }
+
+  private async getVideoInfo(videoId: string, lang: string) {
+    const resp = await fetch(`https://youtube.com/get_video_info?video_id=${videoId}`);
+    const text = await resp.text();
+    const data = decodeURIComponent(text);
+
+    if (!data.includes('captionTracks'))
+      throw new Error(`Could not find captions for video: ${videoId}`);
+
+    const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
+    const [match] = regex.exec(data);
+    const { captionTracks } = JSON.parse(`${match}}`);
+
+    const subtitle: Subtitle = captionTracks.find((track: any) => { return track.vssId == `.${lang}`; }) ||
+      captionTracks.find((track: any) => { return track.vssId == `a.${lang}`; }) ||
+      captionTracks.find((track: any) => { return track.vssId.match(`.${lang}`); });
+
+    if (!subtitle || (subtitle && !subtitle.baseUrl))
+      throw new Error(`Could not find ${lang} captions for ${videoId}`);
+
+    return subtitle;
   }
 }
 
