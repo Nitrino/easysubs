@@ -1,46 +1,36 @@
 {
   "name": "EasySubs",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "manifest_version": 2,
   "description": "EasySubs extension",
   "homepage_url": "https://github.com/Nitrino/easysubs",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
+    "32": "icons/icon32.png",
+    "64": "icons/icon64.png",
     "128": "icons/icon128.png"
   },
   "default_locale": "en",
   "background": {
-    "scripts": [
-      "dist/background.js"
-    ],
+    "scripts": ["dist/background.js"],
     "persistent": false
   },
   "options_page": "dist/index.html",
   "browser_action": {
-    "default_icon": "icons/icon19.png",
+    "default_icon": "icons/icon128.png",
     "default_title": "browser action demo",
     "default_popup": "dist/browser_action.html"
   },
-  "permissions": [
-    "contextMenus",
-    "activeTab"
-  ],
-  "content_scripts": [{
-      "matches": [
-        "https://*/*"
-      ],
-      "css": [
-        "dist/styles.css"
-      ]
+  "permissions": ["contextMenus", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "css": ["dist/styles.css"]
     },
     {
-      "matches": [
-        "https://*/*"
-      ],
-      "js": [
-        "dist/inject.js"
-      ]
+      "matches": ["https://*/*"],
+      "js": ["dist/inject.js"]
     }
   ]
 }
