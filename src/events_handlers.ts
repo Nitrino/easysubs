@@ -85,13 +85,15 @@ class EventsHandlers {
 
     if (element.className === 'easysubs-word') {
       if (element.getElementsByClassName("easysubs-translate-container").length != 0) { return; }
-      const word = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)[0]
-      chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: word, lang: "ru" }, (response) => {
+      const words = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)
+      if (words == null) { return }
+
+      chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: words[0], lang: "ru" }, (response) => {
         UI.setTranslation(
           this.translateContainerElement,
           this.translateOriginalElement,
           this.translateResultElement,
-          word,
+          words[0],
           response.data[0]
         )
       });
