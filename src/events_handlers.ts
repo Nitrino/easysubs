@@ -24,6 +24,7 @@ class EventsHandlers {
     this.subsWordMouseOver = this.subsWordMouseOver.bind(this)
     this.subsWordMouseOut = this.subsWordMouseOut.bind(this)
     this.videoOnTimeUpdate = this.videoOnTimeUpdate.bind(this)
+    this.videoPause = this.videoPause.bind(this)
     this.createResizeObserver = this.createResizeObserver.bind(this)
     this.subsMouseEnter = this.subsMouseEnter.bind(this)
     this.subsMouseLeave = this.subsMouseLeave.bind(this)
@@ -42,6 +43,7 @@ class EventsHandlers {
     document.addEventListener("mouseover", this.subsWordMouseOver);
     document.addEventListener("mouseout", this.subsWordMouseOut);
     this.videoElement.addEventListener("timeupdate", this.videoOnTimeUpdate);
+    this.videoElement.addEventListener("pause", this.videoPause);
     this.resizeObserver.observe(this.subsProgressBarElement);
     this.subsElement.addEventListener("click", this.subsClick);
   }
@@ -55,6 +57,7 @@ class EventsHandlers {
     document.removeEventListener("mouseover", this.subsWordMouseOver);
     document.removeEventListener("mouseout", this.subsWordMouseOut);
     this.videoElement.removeEventListener("timeupdate", this.videoOnTimeUpdate);
+    this.videoElement.removeEventListener("pause", this.videoPause);
     this.resizeObserver.unobserve(this.subsProgressBarElement);
     this.subsElement.removeEventListener("click", this.subsClick);
   }
@@ -108,6 +111,10 @@ class EventsHandlers {
     if (currentSub == null && this.translateContainerElement.style.display != "none") {
       this.translateContainerElement.style.display = "none";
     }
+  }
+
+  private videoPause(event: Event) {
+    Subs.updateSubsProgressBar(this.subsProgressBarElement, this.videoElement, this.subs, true);
   }
 
   private createResizeObserver() {
