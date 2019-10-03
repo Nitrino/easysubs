@@ -103,8 +103,11 @@ class EventsHandlers {
   }
 
   private videoOnTimeUpdate(event: Event) {
-    Subs.updateSubs(this.videoElement, this.subs, this.subsElement);
+    const currentSub = Subs.updateSubs(this.videoElement, this.subs, this.subsElement);
     Subs.updateSubsProgressBar(this.subsProgressBarElement, this.videoElement, this.subs);
+    if (currentSub == null && this.translateContainerElement.style.display != "none") {
+      this.translateContainerElement.style.display = "none";
+    }
   }
 
   private createResizeObserver() {

@@ -18,6 +18,7 @@ class Subs {
     } else {
       subsElement.innerHTML = "";
     }
+    return currentSub
   }
 
   static getCurrentSub(subs: subTitleType[], currentTime: number) {
