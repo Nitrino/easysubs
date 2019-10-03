@@ -96,7 +96,10 @@ class EventsHandlers {
   }
 
   private subsWordMouseOut(event: MouseEvent) {
-    this.translateContainerElement.style.display = "none";
+    let element = <HTMLSpanElement>event.target;
+    if (element.className === 'easysubs-word') {
+      this.translateContainerElement.style.display = "none";
+    }
   }
 
   private videoOnTimeUpdate(event: Event) {
