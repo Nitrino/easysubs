@@ -2449,8 +2449,8 @@ class Onvix {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var subtitle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! subtitle */ "./node_modules/subtitle/lib/index.js");
-/* harmony import */ var _cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @cospired/i18n-iso-languages */ "./node_modules/@cospired/i18n-iso-languages/index.js");
-/* harmony import */ var _cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @cospired/i18n-iso-languages */ "./node_modules/@cospired/i18n-iso-languages/index.js");
+/* harmony import */ var _cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_2__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -2466,7 +2466,7 @@ class YouTube {
     getSubs(language) {
         return __awaiter(this, void 0, void 0, function* () {
             const videoId = this.getVideoId();
-            const lang = Object(_cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_1__["alpha3TToAlpha2"])(language);
+            const lang = Object(_cospired_i18n_iso_languages__WEBPACK_IMPORTED_MODULE_2__["alpha3TToAlpha2"])(language);
             const subItem = yield this.getVideoInfo(videoId, lang);
             const subUri = subItem.baseUrl + "&fmt=vtt";
             const resp = yield fetch(subUri);

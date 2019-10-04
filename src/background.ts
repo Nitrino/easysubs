@@ -1,5 +1,4 @@
 import translate from 'google-translate-open-api';
-import { getSubtitles } from 'youtube-captions-scraper';
 import translateToken from "./token";
 import { stringify } from "querystring";
 
@@ -38,9 +37,6 @@ chrome.runtime.onMessage.addListener(
             .then(data => sendResponse(data))
         })
         .catch((err: Error) => console.error(err));
-    } else if (request.contentScriptQuery == 'getYoutubeSubs') {
-      getSubtitles({ videoID: request.id, lang: "en" })
-        .then((response: object) => { sendResponse(response) });
     } else {
       sendResponse();
     }
