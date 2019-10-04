@@ -88,13 +88,15 @@ class EventsHandlers {
       const words = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)
       if (words == null) { return }
 
-      chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: words[0], lang: "ru" }, (response) => {
+      chrome.runtime.sendMessage({ contentScriptQuery: 'getSingleTranslation', text: words[0], lang: "ru" }, (response) => {
+        const translates = response[5][0][2] //[null,null,"en",null,null,[["my",null,[["мой",1000,true,false],["моего",0,true,false],["мои",0,true,false],["моим",0,true,false],["мое",0,true,false]],[[0,2]],"my",0,1]]]
+
         UI.setTranslation(
           this.translateContainerElement,
           this.translateOriginalElement,
           this.translateResultElement,
           words[0],
-          response.data[0]
+          translates[0][0]
         )
       });
     }
@@ -131,6 +133,7 @@ class EventsHandlers {
 
     if (element.getElementsByClassName("easysubs-word-translate").length != 0) { return; }
     chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: text, lang: "ru" }, (response) => {
+      console.log("TCL: subsClick -> response", response)
       Utils.removeAllElements(document.querySelectorAll(".easysubs-word-translate"));
       UI.setTranslation(
         this.translateContainerElement,
