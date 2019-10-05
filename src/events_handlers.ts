@@ -84,12 +84,26 @@ class EventsHandlers {
     let element = <HTMLSpanElement>event.target;
 
     if (element.className === 'easysubs-word') {
-      if (element.getElementsByClassName("easysubs-translate-container").length != 0) { return; }
       const words = element.textContent.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/)
       if (words == null) { return }
 
+      window.showTranslation = true
+
       chrome.runtime.sendMessage({ contentScriptQuery: 'getSingleTranslation', text: words[0], lang: "ru" }, (response) => {
-        const translates = response[5][0][2] //[null,null,"en",null,null,[["my",null,[["мой",1000,true,false],["моего",0,true,false],["мои",0,true,false],["моим",0,true,false],["мое",0,true,false]],[[0,2]],"my",0,1]]]
+        //format response:
+        // [null,null,"en",null,null,
+        //   [
+        //     ["my",null,
+        //       [
+        //         ["мой",1000,true,false],
+        //         ["моего",0,true,false],
+        //         ["мои",0,true,false]
+        //       ],
+        //       [[0,2]],"my",0,1
+        //     ]
+        //   ]
+        // ]
+        const translates = response[5][0][2]
 
         UI.setTranslation(
           this.translateContainerElement,
@@ -104,7 +118,8 @@ class EventsHandlers {
 
   private subsWordMouseOut(event: MouseEvent) {
     let element = <HTMLSpanElement>event.target;
-    if (element.className === 'easysubs-word') {
+    if (element.className === "easysubs-word" || element.id === "easysubs") {
+      window.showTranslation = false
       this.translateContainerElement.style.display = "none";
     }
   }

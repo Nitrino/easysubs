@@ -28,7 +28,9 @@ class UI {
   }
 
   static setTranslation(translateContainerElement: HTMLElement, originalElement: HTMLElement, resultElement: HTMLElement, originalText: string, resultText: string) {
-    translateContainerElement.style.display = "block";
+    if (window.showTranslation) {
+      translateContainerElement.style.display = "block";
+    }
     originalElement.innerHTML = originalText
     resultElement.innerHTML = resultText
   }

@@ -31,6 +31,8 @@ chrome.runtime.sendMessage({}, function (response) {
     observer.observe(document.querySelector("body"), config);
 
     function initialize(service: YouTube | Netflix | Onvix | KinoPub, videoElement: HTMLVideoElement) {
+      window.showTranslation = true
+
       const playerContainerElement = service.playerContainerElement()
 
       let subsElement = UI.createSubsElement(playerContainerElement);
