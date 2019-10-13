@@ -13,6 +13,7 @@ class EventsHandlers {
   translateOriginalElement: HTMLElement;
   translateResultElement: HTMLElement;
   translateContainerElement: HTMLElement;
+  translateAlternativeElement: HTMLElement;
 
   constructor(videoElement: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement, subsProgressBarElement: HTMLElement) {
     this.videoElement = videoElement;
@@ -31,6 +32,7 @@ class EventsHandlers {
     this.subsClick = this.subsClick.bind(this)
     this.translateOriginalElement = document.querySelector(".easysubs-translate-original")
     this.translateResultElement = document.querySelector(".easysubs-translate-result")
+    this.translateAlternativeElement = document.querySelector(".easysubs-translate-alternative")
     this.translateContainerElement = document.querySelector(".easysubs-translate-container")
   }
 
@@ -90,27 +92,18 @@ class EventsHandlers {
       window.showTranslation = true
 
       chrome.runtime.sendMessage({ contentScriptQuery: 'getSingleTranslation', text: words[0], lang: "ru" }, (response) => {
-        //format response:
-        // [null,null,"en",null,null,
-        //   [
-        //     ["my",null,
-        //       [
-        //         ["мой",1000,true,false],
-        //         ["моего",0,true,false],
-        //         ["мои",0,true,false]
-        //       ],
-        //       [[0,2]],"my",0,1
-        //     ]
-        //   ]
-        // ]
-        const translates = response[5][0][2]
+        console.log(response);
+        const mainTranslation = response[0][0][0]
+        const alternativeTranslations = response[1] || []
 
         UI.setTranslation(
           this.translateContainerElement,
           this.translateOriginalElement,
           this.translateResultElement,
           words[0],
-          translates[0][0]
+          mainTranslation,
+          this.translateAlternativeElement,
+          alternativeTranslations
         )
       });
     }
@@ -155,7 +148,9 @@ class EventsHandlers {
         this.translateOriginalElement,
         this.translateResultElement,
         text,
-        response.data[0]
+        response.data[0],
+        this.translateAlternativeElement,
+        []
       )
     });
   }

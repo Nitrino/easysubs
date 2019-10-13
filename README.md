@@ -13,6 +13,7 @@
 - Translate full sentence by click
 - Rewind to previous and next sub
 - Subtitles progress bar
+- Show alternative translations
 
 ### Limitations
 

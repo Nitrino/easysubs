@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Show alternative translations
 - Add translate full sentence by click
 - Load subtitles for Onvix films
 - Add extension icon

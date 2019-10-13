@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener(
             sl: "en",
             tl: request.lang,
             hl: "en",
-            dt: ["at"],
+            dt: ['bd', 'ex', 'md', 'ss', 't'],
             ie: "UTF-8",
             oe: "UTF-8",
             otf: 1,

@@ -23,16 +23,57 @@ class UI {
   static createSubsTranslateElement(subsElement: HTMLElement) {
     let translateTag = document.createElement("div");
     translateTag.className = "easysubs-translate-container";
-    translateTag.innerHTML = "<span class='easysubs-translate-original'>test</span><hr><span class='easysubs-translate-result'>test translate</span>"
+    translateTag.innerHTML = `
+      <div class='easysubs-translate-result'>
+        test translate
+      </div>
+      <hr>
+      <div class='easysubs-translate-original'>
+        test
+      </div>
+      <div class='easysubs-translate-alternative'>
+        alternative translations
+      </div>
+    `
     subsElement.appendChild(translateTag);
   }
 
-  static setTranslation(translateContainerElement: HTMLElement, originalElement: HTMLElement, resultElement: HTMLElement, originalText: string, resultText: string) {
+  static setTranslation(translateContainerElement: HTMLElement, originalElement: HTMLElement, resultElement: HTMLElement, originalText: string, resultText: string, translateAlternativeElement: HTMLElement, alternativeTranslations: Array<any>) {
     if (window.showTranslation) {
       translateContainerElement.style.display = "block";
     }
     originalElement.innerHTML = originalText
     resultElement.innerHTML = resultText
+
+    let alternativeTranslationsHtml = ""
+    if (alternativeTranslations.length != 0) {
+      alternativeTranslations.forEach(elem => {
+        console.log(elem[0]);
+
+        alternativeTranslationsHtml += `
+          <p class='easysubs-translate-alternative-part-speech'>
+            ${elem[0]}
+          </p>
+        `
+        elem[2].slice(0, 5).forEach((alternative: any) => {
+          alternativeTranslationsHtml += `
+            <div class="easysubs-translate-alternative-item">
+              <div class="easysubs-translate-alternative-item-translate">
+                ${alternative[0]}
+              </div>
+              <div class="easysubs-translate-alternative-item-original">
+                ${alternative[1].slice(0, 3).join(', ')}
+              </div>
+              <div class="easysubs-translate-alternative-item-frequency">
+                ${this.frequencyToDots(alternative[3])}
+              </div>
+            </div>
+          `
+        });
+      })
+    }
+
+    translateAlternativeElement.innerHTML = alternativeTranslationsHtml
   }
 
   static createSubsProgressBarElement(playerContainerElement: HTMLElement) {
@@ -46,6 +87,29 @@ class UI {
     progressBarElement.className = progressBarClass;
     playerContainerElement.appendChild(progressBarElement)
     return progressBarElement
+  }
+
+  static frequencyToDots(frequency: number) {
+    const rate = frequency * 10000
+    if (rate >= 500) {
+      return `
+        <div class="easysubs-translate-alternative-item-frequency-dot -fill"></div>
+        <div class="easysubs-translate-alternative-item-frequency-dot -fill"></div>
+        <div class="easysubs-translate-alternative-item-frequency-dot -fill"></div>
+      `
+    } else if (rate < 500 && rate >= 30) {
+      return `
+        <div class="easysubs-translate-alternative-item-frequency-dot -fill"></div>
+        <div class="easysubs-translate-alternative-item-frequency-dot -fill"></div>
+        <div class="easysubs-translate-alternative-item-frequency-dot -empty"></div>
+      `
+    } else {
+      return `
+        <div class="easysubs-translate-alternative-item-frequency-dot -fill"></div>
+        <div class="easysubs-translate-alternative-item-frequency-dot -empty"></div>
+        <div class="easysubs-translate-alternative-item-frequency-dot -empty"></div>
+      `
+    }
   }
 }
 

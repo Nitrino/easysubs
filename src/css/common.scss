@@ -1,3 +1,6 @@
+$gray: #6b6b6b;
+$white: #fff;
+
 i > span {
   font-style: italic !important;
 }
@@ -12,15 +15,16 @@ i > span {
   user-select: all;
   background-color: rgba(0, 0, 0, 0.5);
   line-height: 1.25;
-  white-space: pre;
   cursor: pointer;
   user-select: none;
 
   .easysubs-word {
-    color: #fff;
+    color: $white;
   }
 
   .easysubs-translate {
+    white-space: pre;
+
     &-container {
       display: none;
       padding: 10px 25px;
@@ -31,6 +35,7 @@ i > span {
       background: #1e1e1e;
       border-radius: 0.4em;
       font-size: 16px;
+      max-width: 290px;
 
       &:after {
         content: "";
@@ -55,8 +60,65 @@ i > span {
     }
 
     &-result {
-      color: #6b6b6b;
+      color: $white;
+    }
+    &-original {
       font-weight: bold;
+      color: $gray;
+    }
+
+    &-alternative {
+      text-align: left;
+      color: $gray;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 14px;
+
+      &-part-speech {
+        margin-top: 15px;
+        font-weight: bold;
+      }
+      &-item {
+        display: flex;
+        margin-top: 5px;
+
+        &-translate {
+          color: $white;
+          flex: 0 100px;
+          margin-right: 10px;
+        }
+
+        &-original {
+          min-width: 120px;
+          flex: 1 150px;
+          text-align: left;
+          margin-right: 10px;
+        }
+
+        &-frequency {
+          flex: 0 0 32px;
+          display: flex;
+          margin-top: 4px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &-dot {
+            display: inline-block;
+            width: 10px;
+            height: 6px;
+            margin-right: 2px;
+
+            &.-empty {
+              background-color: $gray;
+            }
+            &.-fill {
+              background-color: #c6c6c6;
+            }
+          }
+        }
+      }
     }
   }
 }
