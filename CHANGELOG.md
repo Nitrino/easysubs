@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Enhancements
+
+### Bugs
+
+- Fix styles sentence translation and subs wrap
+- Fix bug with frequent translation requests
+
 ## v0.2.0
 
 ### Enhancements

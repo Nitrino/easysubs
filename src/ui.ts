@@ -9,7 +9,7 @@ class UI {
     subsContainerElement.id = subsContainerElementId;
 
     let subsInnerElement = document.createElement("div");
-    subsInnerElement.id = "easysubs-subtitles"
+    subsInnerElement.className = "easysubs-subtitles"
     subsContainerElement.appendChild(subsInnerElement);
 
     const textNode = document.createTextNode("Loading subtitles ...");

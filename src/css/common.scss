@@ -22,6 +22,10 @@ i > span {
     color: $white;
   }
 
+  .easysubs-subtitles {
+    white-space: pre;
+  }
+
   .easysubs-translate {
     white-space: pre;
 
@@ -61,10 +65,13 @@ i > span {
 
     &-result {
       color: $white;
+      white-space: pre;
     }
+
     &-original {
       font-weight: bold;
       color: $gray;
+      white-space: pre;
     }
 
     &-alternative {

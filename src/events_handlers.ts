@@ -92,7 +92,6 @@ class EventsHandlers {
       window.showTranslation = true
 
       chrome.runtime.sendMessage({ contentScriptQuery: 'getSingleTranslation', text: words[0], lang: "ru" }, (response) => {
-        console.log(response);
         const mainTranslation = response[0][0][0]
         const alternativeTranslations = response[1] || []
 
@@ -141,7 +140,6 @@ class EventsHandlers {
 
     if (element.getElementsByClassName("easysubs-word-translate").length != 0) { return; }
     chrome.runtime.sendMessage({ contentScriptQuery: 'translate', text: text, lang: "ru" }, (response) => {
-      console.log("TCL: subsClick -> response", response)
       Utils.removeAllElements(document.querySelectorAll(".easysubs-word-translate"));
       UI.setTranslation(
         this.translateContainerElement,
