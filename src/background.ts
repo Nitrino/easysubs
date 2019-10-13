@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(
         .then((token: { name: string, value: string }) => {
           const url = "https://translate.google.com/translate_a/single";
           const data = {
-            client: "gtx",
+            client: "webapp",
             sl: "en",
             tl: request.lang,
             hl: "en",
@@ -23,10 +23,11 @@ chrome.runtime.onMessage.addListener(
             otf: 1,
             ssel: 0,
             tsel: 0,
-            kc: 7,
-            q: request.text,
-            [token.name]: token.value
+            kc: 1,
+            [token.name]: token.value,
+            q: request.text
           };
+
           var fullUrl = url + "?" + stringify(data);
           fetch(fullUrl, {
             headers: {
