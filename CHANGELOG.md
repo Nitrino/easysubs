@@ -2,12 +2,22 @@
 
 ## Unreleased
 
+## v0.2.0
+
 ### Enhancements
 
 - Show alternative translations
 - Add translate full sentence by click
 - Load subtitles for Onvix films
 - Add extension icon
+
+### Bugs
+
+- Fix long subtitles background
+- Fix translation position with multiline subtitles
+- Fix slow stop progress bar
+- Fix error when trying to translate non-text symbols
+- Fix hide translation when subtitle ended
 
 ## v0.1.0
 
