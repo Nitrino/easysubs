@@ -4,6 +4,8 @@
 
 ### Enhancements
 
+## v0.2.1
+
 ### Bugs
 
 - Fix styles sentence translation and subs wrap
