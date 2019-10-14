@@ -4,6 +4,8 @@
 
 ### Enhancements
 
+- Rewind only 5 seconds if the next phrase is more than 5 seconds
+
 ## v0.2.1
 
 ### Bugs
