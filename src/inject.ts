@@ -14,6 +14,8 @@ chrome.runtime.sendMessage({}, function (response) {
   console.log("EasySubs initialized. Service: " + service.constructor.name);
   // ----------------------------------------------------------
 
+  window.initializeInProgress = false
+
   ready('video', function (videoElement: HTMLVideoElement) {
     initialize(service, videoElement)
     let eventsHandler: EventsHandlers = null
@@ -21,7 +23,7 @@ chrome.runtime.sendMessage({}, function (response) {
     let observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         if (oldHref != document.location.href) {
-          eventsHandler.removeEvents();
+          if (eventsHandler) { eventsHandler.removeEvents(); }
           initialize(service, videoElement)
           oldHref = document.location.href;
         }
@@ -31,6 +33,8 @@ chrome.runtime.sendMessage({}, function (response) {
     observer.observe(document.querySelector("body"), config);
 
     function initialize(service: YouTube | Netflix | Onvix | KinoPub, videoElement: HTMLVideoElement) {
+      if (window.initializeInProgress) { return }
+      window.initializeInProgress = true
       window.showTranslation = true
 
       const playerContainerElement = service.playerContainerElement()
@@ -45,6 +49,7 @@ chrome.runtime.sendMessage({}, function (response) {
           subsElement.textContent = ""; // Clear subs loading text
           eventsHandler = new EventsHandlers(videoElement, subs, subsElement, subsProgressBarElement)
           eventsHandler.addEvents();
+          window.initializeInProgress = false
         })
     }
   });

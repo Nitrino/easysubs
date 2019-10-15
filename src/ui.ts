@@ -48,8 +48,6 @@ class UI {
     let alternativeTranslationsHtml = ""
     if (alternativeTranslations.length != 0) {
       alternativeTranslations.forEach(elem => {
-        console.log(elem[0]);
-
         alternativeTranslationsHtml += `
           <p class='easysubs-translate-alternative-part-speech'>
             ${elem[0]}
