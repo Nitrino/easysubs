@@ -7,8 +7,9 @@
 
 ### Features
 
-- Support [onvix](http://onvix.co) serials and films
 - Support Youtube videos and premium
+- Support [onvix](http://onvix.co) serials and films
+- Support [kino.pub](https://kino.pub) serials and films
 - Word translation when cursor hover
 - Translate full sentence by click
 - Rewind to previous and next sub
