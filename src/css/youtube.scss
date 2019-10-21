@@ -10,6 +10,14 @@
 
   .html5-video-player {
     padding-bottom: 15px;
+
+    &.ytp-fullscreen {
+      padding-bottom: 0;
+
+      #easysubs {
+        font-size: 40px;
+      }
+    }
   }
 
   #easysubs {

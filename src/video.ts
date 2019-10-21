@@ -34,6 +34,7 @@ class Video {
   }
 
   static moveToTime(video: HTMLVideoElement, time: number | string) {
+
     video.currentTime = Utils.castSubTime(time) / 1000
   }
 }
