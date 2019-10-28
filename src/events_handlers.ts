@@ -2,6 +2,7 @@ import Video from "./video"
 import Utils from "./utils"
 import UI from "./ui"
 import Subs from "./subs"
+import Netflix from "./services/netflix"
 import { subTitleType } from "subtitle";
 
 class EventsHandlers {
@@ -65,6 +66,9 @@ class EventsHandlers {
   }
 
   private keyboardHandler(event: KeyboardEvent) {
+    // TODO: Refactor to service method
+    if (Utils.detectService().constructor.name == "Netflix") { return }
+
     if (event.code == "ArrowLeft") {
       event.stopPropagation();
       if (event.type == "keydown") { Video.moveToPrevSub(this.videoElement, this.subs, this.subsProgressBarElement) }
