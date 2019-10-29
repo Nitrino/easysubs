@@ -14,7 +14,6 @@ i > span {
   font-size: 22px;
   text-align: center;
   user-select: all;
-  background-color: rgba(0, 0, 0, 0.5);
   line-height: 1.25;
   cursor: pointer;
   user-select: none;
@@ -25,16 +24,24 @@ i > span {
 
   .easysubs-subtitles {
     white-space: pre;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   .easysubs-translate {
     white-space: pre;
 
+    &-ui-compensation {
+      width: 100%;
+      position: absolute;
+      height: 4%;
+      bottom: -4%;
+    }
+
     &-container {
       display: none;
       padding: 10px 25px;
-      position: absolute;
-      bottom: 135%;
+      position: relative;
+      margin-bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       background: #1e1e1e;
