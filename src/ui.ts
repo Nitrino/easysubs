@@ -35,7 +35,7 @@ class UI {
         alternative translations
       </div>
     `
-    subsElement.appendChild(translateTag);
+    subsElement.prepend(translateTag);
   }
 
   static setTranslation(translateContainerElement: HTMLElement, originalElement: HTMLElement, resultElement: HTMLElement, originalText: string, resultText: string, translateAlternativeElement: HTMLElement, alternativeTranslations: Array<any>) {

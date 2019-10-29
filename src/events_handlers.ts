@@ -15,6 +15,7 @@ class EventsHandlers {
   translateResultElement: HTMLElement;
   translateContainerElement: HTMLElement;
   translateAlternativeElement: HTMLElement;
+  subsContainer: HTMLElement;
 
   constructor(videoElement: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement, subsProgressBarElement: HTMLElement) {
     this.videoElement = videoElement;
@@ -24,7 +25,6 @@ class EventsHandlers {
     this.resizeObserver = this.createResizeObserver()
     this.keyboardHandler = this.keyboardHandler.bind(this)
     this.subsWordMouseOver = this.subsWordMouseOver.bind(this)
-    this.subsWordMouseOut = this.subsWordMouseOut.bind(this)
     this.videoOnTimeUpdate = this.videoOnTimeUpdate.bind(this)
     this.videoPause = this.videoPause.bind(this)
     this.createResizeObserver = this.createResizeObserver.bind(this)
@@ -35,16 +35,17 @@ class EventsHandlers {
     this.translateResultElement = document.querySelector(".easysubs-translate-result")
     this.translateAlternativeElement = document.querySelector(".easysubs-translate-alternative")
     this.translateContainerElement = document.querySelector(".easysubs-translate-container")
+    this.subsContainer = document.querySelector("#easysubs");
   }
 
   addEvents() {
+    const subsContainer = document.querySelector("#easysubs");
     ["keyup", "keydown", "keypress"].forEach(eventType => {
       document.addEventListener(eventType, this.keyboardHandler, true);
     })
-    this.subsElement.addEventListener("mouseenter", this.subsMouseEnter);
-    this.subsElement.addEventListener("mouseleave", this.subsMouseLeave);
-    document.addEventListener("mouseover", this.subsWordMouseOver);
-    document.addEventListener("mouseout", this.subsWordMouseOut);
+    this.subsContainer.addEventListener("mouseenter", this.subsMouseEnter);
+    this.subsContainer.addEventListener("mouseleave", this.subsMouseLeave);
+    this.subsContainer.addEventListener("mouseover", this.subsWordMouseOver);
     this.videoElement.addEventListener("timeupdate", this.videoOnTimeUpdate);
     this.videoElement.addEventListener("pause", this.videoPause);
     this.resizeObserver.observe(this.subsProgressBarElement);
@@ -55,10 +56,9 @@ class EventsHandlers {
     ["keyup", "keydown", "keypress"].forEach(eventType => {
       document.removeEventListener(eventType, this.keyboardHandler, true);
     })
-    this.subsElement.removeEventListener("mouseenter", this.subsMouseEnter);
-    this.subsElement.removeEventListener("mouseleave", this.subsMouseLeave);
-    document.removeEventListener("mouseover", this.subsWordMouseOver);
-    document.removeEventListener("mouseout", this.subsWordMouseOut);
+    this.subsContainer.removeEventListener("mouseenter", this.subsMouseEnter);
+    this.subsContainer.removeEventListener("mouseleave", this.subsMouseLeave);
+    this.subsContainer.removeEventListener("mouseover", this.subsWordMouseOver);
     this.videoElement.removeEventListener("timeupdate", this.videoOnTimeUpdate);
     this.videoElement.removeEventListener("pause", this.videoPause);
     this.resizeObserver.unobserve(this.subsProgressBarElement);
@@ -84,6 +84,8 @@ class EventsHandlers {
 
   private subsMouseLeave() {
     this.videoElement.play()
+    window.showTranslation = false
+    this.translateContainerElement.style.display = "none";
   }
 
   private subsWordMouseOver(event: MouseEvent) {
@@ -109,14 +111,6 @@ class EventsHandlers {
           alternativeTranslations
         )
       });
-    }
-  }
-
-  private subsWordMouseOut(event: MouseEvent) {
-    let element = <HTMLSpanElement>event.target;
-    if (element.className === "easysubs-word" || element.id === "easysubs") {
-      window.showTranslation = false
-      this.translateContainerElement.style.display = "none";
     }
   }
 
