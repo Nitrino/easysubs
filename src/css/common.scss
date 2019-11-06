@@ -47,7 +47,7 @@ i > span {
       background: #1e1e1e;
       border-radius: 0.4em;
       font-size: 16px;
-      max-width: 290px;
+      max-width: fit-content;
 
       &:after {
         content: "";
