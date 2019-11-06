@@ -33,7 +33,9 @@ class Netflix implements Service {
 
   getSubs(language: string) {
     const languageAlpha2 = alpha3TToAlpha2(language)
-    const langKey = Object.keys(this.subCache).find(key => key.includes(languageAlpha2))
+    const ccLanguageAlpha2 = languageAlpha2 + SUB_TYPES['closedcaptions']
+    const langKey = Object.keys(this.subCache).find(key => key == languageAlpha2 || key == ccLanguageAlpha2)
+
     const subUri = this.subCache[langKey]
     return fetch(subUri)
       .then(resp => resp.text())
@@ -71,13 +73,10 @@ class Netflix implements Service {
   };
 
   private processSubData(event: any) {
-    console.log("++++++++++++");
-
     if (event.detail.viewableType != "EPISODE") { return }
     const tracks: Track[] = event.detail.timedtexttracks;
 
     for (const track of tracks) {
-
       if (track.isNoneTrack) { continue }
 
       let type = SUB_TYPES[track.rawTrackType];
