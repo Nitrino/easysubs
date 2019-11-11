@@ -15,6 +15,7 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 - Support Youtube videos and premium
 - Support [onvix](http://onvix.co) serials and films
 - Support [kino.pub](https://kino.pub) serials and films
+- Partial Support Netflix (to work you need to reload the video page and don't work rewind by sub)
 - Word translation when cursor hover
 - Translate full sentence by click
 - Rewind to previous and next sub
