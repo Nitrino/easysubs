@@ -8,29 +8,17 @@ interface Parser {
 
 class KinoPub implements Service {
   async getSubs(language: string) {
-    const seasonAndEpisode = document.location.pathname
-      .match(new RegExp("/item/view/.*/" + "(.*)"))[1]
-      .match(new RegExp("s([0-9]+)e([0-9]+)"))
+    const xpath = "//a[text()='HLS4 плейлист']";
+    const HLS4Playlistnode = <HTMLLinkElement>document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+    if (!HLS4Playlistnode) { return Promise.resolve(parse("")) }
 
-    // Prevent exceptions on loader video page
-    if (seasonAndEpisode == null) { return Promise.resolve(parse("")) }
-    const season = seasonAndEpisode[1]
-    const episode = seasonAndEpisode[2]
-
-    const script = document.querySelector("#content").querySelector("script")
-    const playlist = eval(script.innerHTML.split("var playlist = ")[1]);
-    const currentEpisode = playlist.find((ep: { snumber: number, vnumber: number }) => {
-      return ep.snumber.toString() == season && ep.vnumber.toString() == episode
-    })
-
-    const resp = await fetch(currentEpisode.file);
+    const resp = await fetch(HLS4Playlistnode.href);
     const data = await resp.text();
-
     var parser = new (<any>Parser)();
     parser.push(data);
     parser.end;
     const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub;
-    const key = Object.keys(subsSegments).find(key_1 => key_1.toLowerCase().includes(language));
+
     const uri = "https://cdn.streambox.in" + subsSegments[key].uri;
 
     const subsSegmentsResp = await fetch(uri);
@@ -41,6 +29,7 @@ class KinoPub implements Service {
     subsSegmentsParser.end;
     const subPath = subsSegmentsParser.manifest.segments[0].uri.match(/.*\/hls\/(.*)\/seg.*/)[1];
     const subUri = "https://cdn.streambox.in/pd/" + subPath;
+    const key = Object.keys(subsSegments).find(key_1 => key_1.toLowerCase().includes(language));
 
     const subsResp = await fetch(subUri);
     const subsData = await subsResp.text();
