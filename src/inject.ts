@@ -6,6 +6,7 @@ import YouTube from "./services/youtube";
 import Netflix from "./services/netflix";
 import Onvix from "./services/onvix";
 import KinoPub from "./services/kinopub";
+import Settings from "./settings";
 
 chrome.runtime.sendMessage({}, function (response) {
   const service = Utils.detectService()
@@ -36,6 +37,9 @@ chrome.runtime.sendMessage({}, function (response) {
       if (window.initializeInProgress) { return }
       window.initializeInProgress = true
       window.showTranslation = true
+
+      const settings = new Settings()
+      settings.render(service.settingSelector())
 
       const playerContainerElement = service.playerContainerElement()
 

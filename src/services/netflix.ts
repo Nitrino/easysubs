@@ -46,6 +46,10 @@ class Netflix implements Service {
     return document.querySelector(".VideoContainer")
   }
 
+  settingSelector(): string {
+    return ""
+  }
+
   private injection = () => {
     const WEBVTT = "webvtt-lssdh-ios8";
     // hijack JSON.parse and JSON.stringify functions

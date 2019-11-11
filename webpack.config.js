@@ -14,7 +14,8 @@ module.exports = {
     extensions: ['.ts', '.js', '.scss']
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.ts$/,
         use: 'ts-loader',
         exclude: /node_modules/
@@ -32,6 +33,13 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader',
+        options: {
+          removeSVGTagAttrs: false
+        }
+      }
     ],
   },
   output: {
