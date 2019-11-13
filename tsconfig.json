@@ -3,6 +3,7 @@
     "outDir": "./dist/",
     "noImplicitAny": true,
     "sourceMap": true,
+    "jsx": "preserve",
     "module": "es6",
     "target": "es2016",
     "allowJs": true,

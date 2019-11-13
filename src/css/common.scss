@@ -5,7 +5,12 @@ i > span {
   font-style: italic !important;
 }
 
+.easysubs-enable #easysubs {
+  display: block;
+}
+
 #easysubs {
+  display: none;
   z-index: 1;
   position: absolute;
   bottom: 70px;
@@ -135,34 +140,5 @@ i > span {
         }
       }
     }
-  }
-}
-
-.easysubs-progress-bar {
-  position: absolute;
-  bottom: 0;
-  height: 15px;
-  width: 100%;
-  z-index: 11;
-  background-color: #171717;
-
-  &:after {
-    content: " ";
-    display: block;
-    position: absolute;
-    bottom: 0;
-    height: 15px;
-    width: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1296ba;
-  }
-
-  &-element {
-    background-color: #707070;
-    position: absolute;
-    height: 7px;
-    bottom: 4px;
-    border-radius: 7px;
   }
 }
