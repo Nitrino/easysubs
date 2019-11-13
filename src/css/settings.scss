@@ -1,0 +1,34 @@
+.easysubs-settings {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+    svg .st0 {
+      fill: rgba(255, 255, 255, 1);
+    }
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+
+    .st0 {
+      fill: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  &-content {
+    position: absolute;
+    bottom: 57px;
+    height: 200px;
+    width: 250px;
+    right: 0;
+    background: #22252a;
+    padding: 10px;
+  }
+}

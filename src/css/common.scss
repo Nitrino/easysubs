@@ -166,28 +166,3 @@ i > span {
     border-radius: 7px;
   }
 }
-
-.easysubs-settings {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-
-  &:hover {
-    svg .st0 {
-      fill: rgba(255, 255, 255, 1);
-    }
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-
-    .st0 {
-      fill: rgba(255, 255, 255, 0.8);
-    }
-  }
-}
