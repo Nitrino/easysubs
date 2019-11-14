@@ -24,6 +24,7 @@ function Toggle() {
 
   return (
     <label className="easysubs-label">
+      <div className="easysubs-label-text">Enable extension:</div>
       <div className="toggle">
         <input
           className="toggle-state setting-toggle"
@@ -38,7 +39,6 @@ function Toggle() {
         </div>
         <div className="active-bg"></div>
       </div>
-      <div className="easysubs-label-text">{isEnable ? "On" : "Off"}</div>
     </label>
   );
 }

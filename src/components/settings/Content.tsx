@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Toggle from "./Toggle";
-import logo from "../images/logo.svg";
+import Language from "./Language";
 
 function Content(props: any) {
-  console.log(props);
-
+  function closeSettings() {
+    props.toggleShowSettings(false);
+  }
   return (
     <div
-      className="easysubs-settings-content"
+      className="easysubs-settings-wrapper"
       style={{ display: props.display }}
     >
-      <Toggle />
+      <div className="easysubs-settings-close" onClick={closeSettings}></div>
+      <div className="easysubs-settings-header">EasySubs settings</div>
+      <div className="easysubs-settings-content">
+        <Toggle />
+        <Language />
+      </div>
     </div>
   );
 }

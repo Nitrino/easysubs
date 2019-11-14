@@ -7,6 +7,10 @@
   position: relative;
   cursor: pointer;
 
+  select {
+    color: #000;
+  }
+
   &:hover {
     svg .st0 {
       fill: rgba(255, 255, 255, 1);
@@ -22,13 +26,58 @@
     }
   }
 
-  &-content {
+  &-wrapper {
     position: absolute;
     bottom: 57px;
-    height: 200px;
-    width: 250px;
+    height: 220px;
+    width: 280px;
     right: 0;
-    background: #22252a;
-    padding: 10px;
+    background: #262a32;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  &-header {
+    padding: 15px;
+    background: #21252b;
+  }
+
+  &-content {
+    padding: 15px;
+  }
+
+  &-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+    opacity: 0.3;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:before,
+    &:after {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      content: " ";
+      height: 18px;
+      width: 2px;
+      background-color: #fff;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &-language {
+    margin-top: 20px;
   }
 }

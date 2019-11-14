@@ -11,7 +11,10 @@ function Settings() {
         dangerouslySetInnerHTML={{ __html: logo }}
         onClick={() => toggleShowSettings(!showSettings)}
       ></div>
-      <Content display={showSettings ? "block" : "none"} />
+      <Content
+        display={showSettings ? "block" : "none"}
+        toggleShowSettings={toggleShowSettings}
+      />
     </div>
   );
 }
