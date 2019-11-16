@@ -1,0 +1,140 @@
+.easysubs-settings {
+  line-height: 1.5;
+
+  #youtube & {
+    width: 36px;
+    height: 36px;
+
+    &-container {
+      svg {
+        height: 36px;
+      }
+    }
+  }
+
+  #youtube .ytp-fullscreen & {
+    width: 54px;
+    height: 54px;
+
+    &-container {
+      svg {
+        height: 54px;
+        width: 28px;
+      }
+    }
+  }
+
+  #netflix & {
+    height: 3.4em;
+    width: 3.6em;
+    font-size: 2.8em;
+
+    &-container {
+      svg {
+        height: 1.6em;
+        width: 1.6em;
+        margin-top: -0.45em;
+        font-size: 1.1em;
+      }
+    }
+  }
+
+  width: 44px;
+  height: 44px;
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+
+  &-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    &-logo {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+
+      .st0 {
+        fill: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  select {
+    color: #000;
+  }
+
+  &:hover {
+    svg .st0 {
+      fill: rgba(255, 255, 255, 1);
+    }
+  }
+
+  &-wrapper {
+    position: absolute;
+    bottom: 57px;
+    height: 220px;
+    width: 280px;
+    right: 0;
+    background: #262a32;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 100;
+    font-size: 16px;
+  }
+
+  &-header {
+    padding: 15px;
+    background: #21252b;
+  }
+
+  &-content {
+    padding: 15px;
+  }
+
+  &-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+    opacity: 0.3;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:before,
+    &:after {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      content: " ";
+      height: 18px;
+      width: 2px;
+      background-color: #fff;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &-language {
+    margin-top: 20px;
+  }
+}

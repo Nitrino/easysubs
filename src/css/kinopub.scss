@@ -1,4 +1,4 @@
-#kinopub {
+#kinopub.easysubs-enable {
   .jw-captions.jw-captions-enabled {
     display: none;
   }
@@ -7,7 +7,10 @@
     font-size: 44px;
   }
 
-  .jw-button-container {
-    margin-bottom: 15px;
+  .jw-controlbar {
+    bottom: 15px;
+  }
+  .jw-settings-menu {
+    bottom: 72px;
   }
 }

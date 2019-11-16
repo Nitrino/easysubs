@@ -22,7 +22,7 @@
     "default_title": "browser action demo",
     "default_popup": "dist/browser_action.html"
   },
-  "permissions": ["contextMenus", "activeTab"],
+  "permissions": ["contextMenus", "activeTab", "storage"],
   "content_scripts": [
     {
       "matches": ["https://*/*"],

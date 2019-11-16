@@ -38,6 +38,10 @@ class YouTube implements Service {
     }
   }
 
+  settingSelector(): string {
+    return ".ytp-right-controls > .ytp-size-button"
+  }
+
   private async getVideoInfo(videoId: string, lang: string) {
     const resp = await fetch(`https://youtube.com/get_video_info?video_id=${videoId}`);
     const text = await resp.text();

@@ -39,6 +39,10 @@ class KinoPub implements Service {
   playerContainerElement(): HTMLElement {
     return document.querySelector("#player")
   }
+
+  settingSelector(): string {
+    return ".jw-button-container > div:last-child"
+  }
 }
 
 export default KinoPub;

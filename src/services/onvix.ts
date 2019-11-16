@@ -24,6 +24,10 @@ class Onvix {
   playerContainerElement(): HTMLElement {
     return document.querySelector(".fp-ui")
   }
+
+  settingSelector(): string {
+    return ""
+  }
 }
 
 export default Onvix;

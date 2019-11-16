@@ -11,13 +11,14 @@ module.exports = {
     styles: './src/css/styles.scss'
   },
   resolve: {
-    extensions: ['.ts', '.js', '.scss']
+    extensions: ['.ts', '.tsx', '.js', '.scss']
   },
   module: {
-    rules: [{
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /(node_modules)/,
+        use: ['babel-loader', 'ts-loader']
       },
       {
         test: /\.js$/,
@@ -32,6 +33,10 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      }
     ],
   },
   output: {
