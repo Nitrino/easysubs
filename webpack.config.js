@@ -35,10 +35,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        loader: 'svg-inline-loader',
-        options: {
-          removeSVGTagAttrs: false
-        }
+        use: ['@svgr/webpack'],
       }
     ],
   },

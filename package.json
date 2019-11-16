@@ -28,7 +28,6 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
-    "svg-inline-loader": "^0.8.0",
     "ts-loader": "^6.0.4",
     "typescript": "^3.7.2",
     "webpack": "^4.40.2",
@@ -37,6 +36,7 @@
   "dependencies": {
     "@babel/runtime": "^7.7.2",
     "@cospired/i18n-iso-languages": "^2.0.5",
+    "@svgr/webpack": "^4.3.3",
     "@types/animejs": "^3.1.0",
     "@types/chrome": "0.0.88",
     "@types/hls.js": "^0.12.5",

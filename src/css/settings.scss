@@ -1,11 +1,38 @@
 .easysubs-settings {
-  width: 44px;
-  height: 44px;
-  display: flex;
+  $height: 44px;
+  $width: 44px;
+  $icon-height: 24px;
+
+  #youtube & {
+    $height: 36px;
+    $width: 36px;
+    $icon-height: 36px;
+  }
+
+  width: $height;
+  height: $width;
+  display: inline-block;
   justify-content: center;
   align-items: center;
   position: relative;
   cursor: pointer;
+
+  &-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    svg {
+      width: 24px;
+      height: $icon-height;
+
+      .st0 {
+        fill: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
 
   select {
     color: #000;
@@ -14,15 +41,6 @@
   &:hover {
     svg .st0 {
       fill: rgba(255, 255, 255, 1);
-    }
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-
-    .st0 {
-      fill: rgba(255, 255, 255, 0.8);
     }
   }
 
@@ -35,6 +53,7 @@
     background: #262a32;
     border-radius: 5px;
     overflow: hidden;
+    z-index: 100;
   }
 
   &-header {

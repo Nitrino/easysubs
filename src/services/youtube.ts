@@ -39,7 +39,7 @@ class YouTube implements Service {
   }
 
   settingSelector(): string {
-    return ""
+    return ".ytp-right-controls > .ytp-size-button"
   }
 
   private async getVideoInfo(videoId: string, lang: string) {
