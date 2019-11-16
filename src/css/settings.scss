@@ -1,16 +1,32 @@
 .easysubs-settings {
-  $height: 44px;
-  $width: 44px;
-  $icon-height: 24px;
-
   #youtube & {
-    $height: 36px;
-    $width: 36px;
-    $icon-height: 36px;
+    width: 36px;
+    height: 36px;
+
+    &-container {
+      svg {
+        height: 36px;
+      }
+    }
   }
 
-  width: $height;
-  height: $width;
+  #netflix & {
+    height: 3.4em;
+    width: 3.6em;
+    font-size: 2.8em;
+
+    &-container {
+      svg {
+        height: 1.6em;
+        width: 1.6em;
+        margin-top: -8px;
+        font-size: 1.1em;
+      }
+    }
+  }
+
+  width: 44px;
+  height: 44px;
   display: inline-block;
   justify-content: center;
   align-items: center;
@@ -26,7 +42,7 @@
 
     svg {
       width: 24px;
-      height: $icon-height;
+      height: 24px;
 
       .st0 {
         fill: rgba(255, 255, 255, 0.8);
@@ -54,6 +70,7 @@
     border-radius: 5px;
     overflow: hidden;
     z-index: 100;
+    font-size: 16px;
   }
 
   &-header {

@@ -6,15 +6,13 @@ function Settings() {
   const [showSettings, toggleShowSettings] = useState(false);
 
   return (
-    <div
-      className="easysubs-settings-container"
-      onClick={() => toggleShowSettings(!showSettings)}
-    >
-      <Logo />
-      {/* <div
-        dangerouslySetInnerHTML={{ __html: logo }}
+    <div className="easysubs-settings-container">
+      <div
+        className="easysubs-settings-container-logo"
         onClick={() => toggleShowSettings(!showSettings)}
-      ></div> */}
+      >
+        <Logo />
+      </div>
       <Content
         display={showSettings ? "block" : "none"}
         toggleShowSettings={toggleShowSettings}

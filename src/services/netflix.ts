@@ -47,7 +47,7 @@ class Netflix implements Service {
   }
 
   settingSelector(): string {
-    return ""
+    return ".button-nfplayerFullscreen"
   }
 
   private injection = () => {
