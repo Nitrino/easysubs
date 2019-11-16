@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Enhancements
+
+- Add ability to choose translation language
+- Add enable/disable button to settings page
+- Add settings page
+
 ## 0.3.0
 
 ### Enhancements

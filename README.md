@@ -24,6 +24,5 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 ### Limitations
 
-- Support for translation only from English into Russian
+- Support for translation only from English
 - You must manually select the original soundtrack
-- The extension cannot be turned off and shows endless loading of subtitles on other audio tracks
