@@ -1,4 +1,6 @@
 .easysubs-settings {
+  line-height: 1.5;
+
   #youtube & {
     width: 36px;
     height: 36px;
@@ -6,6 +8,18 @@
     &-container {
       svg {
         height: 36px;
+      }
+    }
+  }
+
+  #youtube .ytp-fullscreen & {
+    width: 54px;
+    height: 54px;
+
+    &-container {
+      svg {
+        height: 54px;
+        width: 28px;
       }
     }
   }
@@ -19,7 +33,7 @@
       svg {
         height: 1.6em;
         width: 1.6em;
-        margin-top: -8px;
+        margin-top: -0.45em;
         font-size: 1.1em;
       }
     }
@@ -39,6 +53,13 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+
+    &-logo {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     svg {
       width: 24px;
