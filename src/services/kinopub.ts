@@ -7,21 +7,29 @@ interface Parser {
 }
 
 class KinoPub implements Service {
-  async getSubs(language: string) {
-    const xpath = "//a[text()='HLS4 плейлист']";
-    const HLS4Playlistnode = <HTMLLinkElement>document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
-    if (!HLS4Playlistnode) { return Promise.resolve(parse("")) }
+  videoPlaylistUrl: string
+  subsName: string
+  constructor() {
+    this.videoPlaylistUrl = null
+    this.subsName = null
+    this.handleEasysubsChangePlaylist = this.handleEasysubsChangePlaylist.bind(this)
+    this.injectScript()
 
-    const resp = await fetch(HLS4Playlistnode.href);
+    window.addEventListener('easysubsChangePlaylist', this.handleEasysubsChangePlaylist)
+    window.addEventListener('easysubsSubtitlesChanged', (event: any) => { this.subsName = event.detail })
+  }
+
+  async getSubs(label: string) {
+    if (!this.videoPlaylistUrl) return parse("");
+
+    const resp = await fetch(this.videoPlaylistUrl);
     const data = await resp.text();
     var parser = new (<any>Parser)();
     parser.push(data);
     parser.end;
     const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub;
 
-    const key = Object.keys(subsSegments).find(key_1 => key_1.toLowerCase().includes(language) && !key_1.toLowerCase().includes("forced"));
-    const uri = "https://cdn.streambox.in" + subsSegments[key].uri;
-
+    const uri = "https://cdn.streambox.in" + subsSegments[label].uri;
     const subsSegmentsResp = await fetch(uri);
     const subsSegmentsData = await subsSegmentsResp.text();
 
@@ -33,6 +41,7 @@ class KinoPub implements Service {
 
     const subsResp = await fetch(subUri);
     const subsData = await subsResp.text();
+
     return parse(subsData);
   }
 
@@ -42,6 +51,35 @@ class KinoPub implements Service {
 
   settingSelector(): string {
     return ".jw-button-container > div:last-child"
+  }
+
+  private injectScript() {
+    const sc = document.createElement('script');
+    sc.innerHTML = '(' + this.injection.toString() + ')()';
+    document.head.appendChild(sc);
+    document.head.removeChild(sc);
+  }
+
+  private injection = () => {
+    window.playerInstance.on('captionsChanged', (event: any) => {
+      const track = window.playerInstance.getConfig().captionsTrack
+      const label = !!track ? track.label : null
+      window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: label }));
+    })
+
+    window.playerInstance.on('ready', (event: any) => {
+      window.dispatchEvent(new CustomEvent('easysubsVideoReady'));
+    })
+
+    window.playerInstance.on('firstFrame', (event: any) => {
+      const playlistUrl = window.playerInstance.getConfig().playlistItem.file
+      window.dispatchEvent(new CustomEvent('easysubsChangePlaylist', { detail: playlistUrl }));
+    })
+  }
+
+  private handleEasysubsChangePlaylist(event: any) {
+    this.videoPlaylistUrl = event.detail
+    window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: this.subsName }));
   }
 }
 

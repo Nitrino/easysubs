@@ -8,53 +8,69 @@ import Onvix from "./services/onvix";
 import KinoPub from "./services/kinopub";
 import Settings from "./settings";
 
-chrome.runtime.sendMessage({}, function (response) {
-  const service = Utils.detectService()
-  if (service == null) { return }
+const service = <KinoPub>Utils.detectService()
+console.log("EasySubs initialized. Service: " + service.constructor.name);
 
-  console.log("EasySubs initialized. Service: " + service.constructor.name);
-  // ----------------------------------------------------------
+window.addEventListener('easysubsVideoReady', () => {
+  const settings = new Settings()
+  settings.render(service.settingSelector())
 
-  window.initializeInProgress = false
+  const playerContainerElement = service.playerContainerElement()
+  let eventsHandler: EventsHandlers = null
+  const videoElement = document.querySelector("video")
 
-  ready('video', function (videoElement: HTMLVideoElement) {
+  window.addEventListener('easysubsSubtitlesChanged', (event: any) => {
+    console.log(event.detail);
+
+    const label = event.detail
+    if (!label) {
+      UI.createSubsElement(playerContainerElement).textContent = "";
+      UI.createSubsProgressBarElement(playerContainerElement);
+      return;
+    }
     initialize(service, videoElement)
-    let eventsHandler: EventsHandlers = null
-    let oldHref = document.location.href;
-    let observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (oldHref != document.location.href) {
-          if (eventsHandler) { eventsHandler.removeEvents(); }
-          initialize(service, videoElement)
-          oldHref = document.location.href;
-        }
-      });
-    });
-    var config = { childList: true, subtree: true };
-    observer.observe(document.querySelector("body"), config);
+
+
+    // window.initializeInProgress = false
+    // const videoElement = document.querySelector("video")
+    // initialize(service, videoElement)
+    // let eventsHandler: EventsHandlers = null
+    // if (eventsHandler) { eventsHandler.removeEvents(); }
+    // let oldHref = document.location.href;
+    // let observer = new MutationObserver(function (mutations) {
+    //   mutations.forEach(function (mutation) {
+    //     if (oldHref != document.location.href) {
+    //       if (eventsHandler) { eventsHandler.removeEvents(); }
+    //       initialize(service, videoElement)
+    //       oldHref = document.location.href;
+    //     }
+    //   });
+    // });
+    // var config = { childList: true, subtree: true };
+    // observer.observe(document.querySelector("body"), config);
 
     function initialize(service: YouTube | Netflix | Onvix | KinoPub, videoElement: HTMLVideoElement) {
-      if (window.initializeInProgress) { return }
-      window.initializeInProgress = true
-      window.showTranslation = true
+      // if (window.initializeInProgress) { return }
+      // window.initializeInProgress = true
+      // window.showTranslation = true
 
-      const settings = new Settings()
-      settings.render(service.settingSelector())
+      // const settings = new Settings()
+      // settings.render(service.settingSelector())
 
-      const playerContainerElement = service.playerContainerElement()
+      // const playerContainerElement = service.playerContainerElement()
 
-      let subsElement = UI.createSubsElement(playerContainerElement);
-      let subsProgressBarElement = UI.createSubsProgressBarElement(playerContainerElement);
+      const subsElement = UI.createSubsElement(playerContainerElement);
+      const subsProgressBarElement = UI.createSubsProgressBarElement(playerContainerElement);
+      subsElement.textContent = ""; // Clear subs loading text
 
-      service.getSubs("eng")
+      service.getSubs(label)
         .then(subs => {
           console.log("Subtitles loaded. subs count: " + subs.length)
-
-          subsElement.textContent = ""; // Clear subs loading text
+          if (eventsHandler) { eventsHandler.removeEvents(); }
           eventsHandler = new EventsHandlers(videoElement, subs, subsElement, subsProgressBarElement)
           eventsHandler.addEvents();
           window.initializeInProgress = false
         })
     }
-  });
+  })
 });
