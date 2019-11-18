@@ -6,9 +6,8 @@ Global change of the extension initialization model. Now initialization occurs b
 
 ### Enhancements
 
-- Add support subtitle selection on a KinoPub
+- KinoPub: add support subtitle selection
 - Add automatic reload Netflix video page for load subtitles
-- Add ability to choose translation language
 - Add enable/disable button to settings page
 - Add settings page
 
