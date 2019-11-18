@@ -2,13 +2,12 @@ import Service from 'service'
 import { subTitleType, parse } from 'subtitle'
 import Hls from "hls.js"
 import { Parser } from 'm3u8-parser';
-
-interface Parser {
-}
+interface Parser { }
 
 class KinoPub implements Service {
   videoPlaylistUrl: string
   subsName: string
+
   constructor() {
     this.videoPlaylistUrl = null
     this.subsName = null

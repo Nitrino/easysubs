@@ -2,6 +2,7 @@ import { parse, subTitleType } from "subtitle";
 import UI from "../ui"
 
 class Onvix {
+  init() { }
   async getSubs(language: string): Promise<subTitleType[]> {
     const videoType = window.location.pathname.split("/")[1]
     const base_pathname = "/api/v1/streaming/"

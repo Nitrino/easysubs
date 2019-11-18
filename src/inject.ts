@@ -7,7 +7,7 @@ import Onvix from "./services/onvix";
 import KinoPub from "./services/kinopub";
 import Settings from "./settings";
 
-const service = <YouTube>Utils.detectService()
+const service = Utils.detectService()
 console.log("EasySubs initialized. Service: " + service.constructor.name);
 
 window.addEventListener('easysubsVideoReady', () => {
