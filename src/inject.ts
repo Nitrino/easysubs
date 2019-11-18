@@ -30,36 +30,7 @@ window.addEventListener('easysubsVideoReady', () => {
       return;
     }
     initialize(service, videoElement)
-
-
-    // window.initializeInProgress = false
-    // const videoElement = document.querySelector("video")
-    // initialize(service, videoElement)
-    // let eventsHandler: EventsHandlers = null
-    // if (eventsHandler) { eventsHandler.removeEvents(); }
-    // let oldHref = document.location.href;
-    // let observer = new MutationObserver(function (mutations) {
-    //   mutations.forEach(function (mutation) {
-    //     if (oldHref != document.location.href) {
-    //       if (eventsHandler) { eventsHandler.removeEvents(); }
-    //       initialize(service, videoElement)
-    //       oldHref = document.location.href;
-    //     }
-    //   });
-    // });
-    // var config = { childList: true, subtree: true };
-    // observer.observe(document.querySelector("body"), config);
-
     function initialize(service: YouTube | Netflix | Onvix | KinoPub, videoElement: HTMLVideoElement) {
-      // if (window.initializeInProgress) { return }
-      // window.initializeInProgress = true
-      // window.showTranslation = true
-
-      // const settings = new Settings()
-      // settings.render(service.settingSelector())
-
-      // const playerContainerElement = service.playerContainerElement()
-
       const subsElement = UI.createSubsElement(playerContainerElement);
       const subsProgressBarElement = UI.createSubsProgressBarElement(playerContainerElement);
       subsElement.textContent = ""; // Clear subs loading text
