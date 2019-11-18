@@ -1,6 +1,7 @@
 import Service from 'service'
 import { subTitleType, parse } from 'subtitle'
 import { alpha3TToAlpha2 } from "@cospired/i18n-iso-languages";
+import { ready } from "../ready"
 
 const WEBVTT = 'webvtt-lssdh-ios8';
 const MAIN_TITLE = '.player-status-main-title, .ellipsize-text>h4, .video-title>h4';
@@ -23,18 +24,45 @@ interface Track {
 
 class Netflix implements Service {
   subCache: any;
+  currentPathName: string;
 
   constructor() {
     this.subCache = {}
+    this.currentPathName = location.pathname
     this.processSubData = this.processSubData.bind(this)
     this.injectScript()
     window.addEventListener('easysubs_data', this.processSubData)
   }
 
+  init() {
+    ready('video', (videoElement: HTMLVideoElement) => {
+      if (location.pathname.split("/")[1] == "watch") {
+        if (this.subCache == {} || this.currentPathName != location.pathname) {
+          this.currentPathName = localStorage.href
+          location.reload(true)
+        }
+
+        window.dispatchEvent(new CustomEvent('easysubsVideoReady'));
+        window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: "en" }));
+      }
+    })
+
+    let oldHref = document.location.href;
+    let observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (oldHref != document.location.href) {
+          window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: "en" }));
+          oldHref = document.location.href;
+        }
+      });
+    });
+    var config = { childList: true, subtree: true };
+    observer.observe(document.querySelector("body"), config);
+  }
+
   getSubs(language: string) {
-    const languageAlpha2 = alpha3TToAlpha2(language)
-    const ccLanguageAlpha2 = languageAlpha2 + SUB_TYPES['closedcaptions']
-    const langKey = Object.keys(this.subCache).find(key => key == languageAlpha2 || key == ccLanguageAlpha2)
+    const ccLanguage = language + SUB_TYPES['closedcaptions']
+    const langKey = Object.keys(this.subCache).find(key => key == language || key == ccLanguage)
 
     const subUri = this.subCache[langKey]
     return fetch(subUri)
@@ -57,7 +85,9 @@ class Netflix implements Service {
       JSON.parse = function (text) {
         const data = parse(text);
         if (data && data.result && data.result.timedtexttracks && data.result.movieId) {
-          window.dispatchEvent(new CustomEvent('easysubs_data', { detail: data.result }));
+          if (location.pathname.split("/")[1] == "watch") {
+            window.dispatchEvent(new CustomEvent('easysubs_data', { detail: data.result }));
+          }
         }
         return data;
       };

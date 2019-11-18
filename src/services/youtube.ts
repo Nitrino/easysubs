@@ -12,11 +12,6 @@ interface Subtitle {
 }
 
 class YouTube implements Service {
-  subs: object
-  constructor() {
-    this.subs = {}
-  }
-
   init() {
     ready('video', (videoElement: HTMLVideoElement) => {
       videoElement.addEventListener("loadeddata", (event: any) => {
