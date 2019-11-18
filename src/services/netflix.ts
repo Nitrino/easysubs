@@ -37,7 +37,7 @@ class Netflix implements Service {
   init() {
     ready('video', (videoElement: HTMLVideoElement) => {
       if (location.pathname.split("/")[1] == "watch") {
-        if (this.subCache == {} || this.currentPathName != location.pathname) {
+        if (Object.keys(this.subCache).length === 0 || this.currentPathName != location.pathname) {
           this.currentPathName = localStorage.href
           location.reload(true)
         }
@@ -46,18 +46,6 @@ class Netflix implements Service {
         window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: "en" }));
       }
     })
-
-    let oldHref = document.location.href;
-    let observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        if (oldHref != document.location.href) {
-          window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: "en" }));
-          oldHref = document.location.href;
-        }
-      });
-    });
-    var config = { childList: true, subtree: true };
-    observer.observe(document.querySelector("body"), config);
   }
 
   getSubs(language: string) {
@@ -107,7 +95,8 @@ class Netflix implements Service {
   };
 
   private processSubData(event: any) {
-    if (event.detail.viewableType != "EPISODE") { return }
+    if (!["EPISODE", "MOVIE"].includes(event.detail.viewableType)) { return }
+
     const tracks: Track[] = event.detail.timedtexttracks;
 
     for (const track of tracks) {
