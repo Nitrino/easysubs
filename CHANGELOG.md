@@ -2,15 +2,20 @@
 
 ## Unreleased
 
+Global change of the extension initialization model. Now initialization occurs by sending custom events from services.
+
 ### Enhancements
 
+- Add support subtitle selection on a KinoPub
+- Add automatic reload Netflix video page for load subtitles
 - Add ability to choose translation language
 - Add enable/disable button to settings page
 - Add settings page
 
 ### Bugs
 
-- Fixed bug with subtitles containing `<c>` tag
+- Fix Netflix movies subtitles
+- Fix bug with subtitles containing `<c>` tag
 
 ## 0.3.0
 
