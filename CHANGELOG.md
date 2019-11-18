@@ -8,6 +8,10 @@
 - Add enable/disable button to settings page
 - Add settings page
 
+### Bugs
+
+- Fixed bug with subtitles containing `<c>` tag
+
 ## 0.3.0
 
 ### Enhancements
