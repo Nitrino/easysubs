@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.0
 
 Global change of the extension initialization model. Now initialization occurs by sending custom events from services.
 
