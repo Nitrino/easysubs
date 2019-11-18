@@ -11,10 +11,10 @@ class Subs {
     let currentTime = Video.getCurrentTime(video);
     let currentSub = this.getCurrentSub(subs, currentTime);
     if (currentSub) {
-      subsElement.innerHTML = currentSub.text.replace(
-        /(^|<\/?[^>]+>|\s+)([^\s<]+)/g,
-        '$1<span class="easysubs-word">$2</span>'
-      );
+      subsElement.innerHTML = currentSub.text
+        .replace(/<\d+:\d+:\d+.\d+><c>/g, '')
+        .replace(/<\/c>/g, '')
+        .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="easysubs-word">$2</span>');
     } else {
       subsElement.innerHTML = "";
     }
