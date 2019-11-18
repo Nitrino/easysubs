@@ -14,7 +14,7 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 #### Common
 
-- Support services: Youtube (videos and origins), Netflix, [KinoPub](https://kino.pub), [Onvix](http://onvix.co)
+- Support services: Youtube (videos and originals), Netflix, [KinoPub](https://kino.pub), [Onvix](http://onvix.co)
 - Word translation when cursor hover
 - Translate full sentence by click
 - Rewind to previous and next sub
@@ -23,19 +23,19 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 ### Limitations
 
-##### Youtube
+#### Youtube
 
-- Support for translation only from English [#45]
+- Support for translation only from English [[#45](https://github.com/Nitrino/easysubs/issues/45)]
 
 #### Netflix
 
-- Support for translation only from English [#47]
-- Disabled rewind to previous and next sub [#31]
-- The watch page once automatically reloads after first loading [#48]
+- Support for translation only from English [[#47](https://github.com/Nitrino/easysubs/issues/47)]
+- Disabled rewind to previous and next sub [[#31](https://github.com/Nitrino/easysubs/issues/31)]
+- The watch page once automatically reloads after first loading [[#48](https://github.com/Nitrino/easysubs/issues/48)]
 
 #### Onvix
 
-- Currently the service is not working
+- Currently the service is not working. Most likely is dead. [[#32](https://github.com/Nitrino/easysubs/issues/32)]
 
 #### KinoPub
 
