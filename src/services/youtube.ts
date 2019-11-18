@@ -1,7 +1,7 @@
 import Service from 'service'
 import { subTitleType, parse } from 'subtitle'
 import { alpha3TToAlpha2 } from "@cospired/i18n-iso-languages";
-import UI from "../ui"
+import { ready } from "../ready"
 
 interface Subtitle {
   baseUrl: string
@@ -12,11 +12,35 @@ interface Subtitle {
 }
 
 class YouTube implements Service {
+  subs: object
+  constructor() {
+    this.subs = {}
+  }
+
+  init() {
+    ready('video', (videoElement: HTMLVideoElement) => {
+      videoElement.addEventListener("loadeddata", (event: any) => {
+        window.dispatchEvent(new CustomEvent('easysubsVideoReady'));
+        window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: "en" }));
+      })
+    })
+
+    let oldHref = document.location.href;
+    let observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (oldHref != document.location.href) {
+          window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: "en" }));
+          oldHref = document.location.href;
+        }
+      });
+    });
+    var config = { childList: true, subtree: true };
+    observer.observe(document.querySelector("body"), config);
+  }
+
   async getSubs(language: string) {
     const videoId = this.getVideoId()
-    const lang = alpha3TToAlpha2(language)
-
-    const subItem = await this.getVideoInfo(videoId, lang);
+    const subItem = await this.getVideoInfo(videoId, language);
     const subUri: string = subItem.baseUrl + "&fmt=vtt";
 
     const resp = await fetch(subUri);

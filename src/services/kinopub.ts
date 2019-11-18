@@ -13,8 +13,10 @@ class KinoPub implements Service {
     this.videoPlaylistUrl = null
     this.subsName = null
     this.handleEasysubsChangePlaylist = this.handleEasysubsChangePlaylist.bind(this)
-    this.injectScript()
+  }
 
+  init() {
+    this.injectScript()
     window.addEventListener('easysubsChangePlaylist', this.handleEasysubsChangePlaylist)
     window.addEventListener('easysubsSubtitlesChanged', (event: any) => { this.subsName = event.detail })
   }
@@ -61,6 +63,7 @@ class KinoPub implements Service {
   }
 
   private injection = () => {
+    if (!window.playerInstance) return;
     window.playerInstance.on('captionsChanged', (event: any) => {
       const track = window.playerInstance.getConfig().captionsTrack
       const label = !!track ? track.label : null

@@ -1,4 +1,3 @@
-import { ready } from "./ready"
 import Utils from './utils';
 import UI from "./ui"
 import EventsHandlers from "./events_handlers"
@@ -8,10 +7,11 @@ import Onvix from "./services/onvix";
 import KinoPub from "./services/kinopub";
 import Settings from "./settings";
 
-const service = <KinoPub>Utils.detectService()
+const service = <YouTube>Utils.detectService()
 console.log("EasySubs initialized. Service: " + service.constructor.name);
 
 window.addEventListener('easysubsVideoReady', () => {
+  console.log("TCL: EVENT", "easysubsVideoReady")
   const settings = new Settings()
   settings.render(service.settingSelector())
 
@@ -20,6 +20,7 @@ window.addEventListener('easysubsVideoReady', () => {
   const videoElement = document.querySelector("video")
 
   window.addEventListener('easysubsSubtitlesChanged', (event: any) => {
+    console.log("TCL: EVENT", "easysubsSubtitlesChanged")
     console.log(event.detail);
 
     const label = event.detail
@@ -74,3 +75,6 @@ window.addEventListener('easysubsVideoReady', () => {
     }
   })
 });
+
+service.init();
+
