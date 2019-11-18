@@ -12,10 +12,9 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 ### Features
 
-- Support Youtube videos and premium
-- Support [onvix](http://onvix.co) serials and films
-- Support [kino.pub](https://kino.pub) serials and films
-- Partial Support Netflix (to work you need to reload the video page and don't work rewind by sub)
+#### Common
+
+- Support services: Youtube (videos and origins), Netflix, [KinoPub](https://kino.pub), [Onvix](http://onvix.co)
 - Word translation when cursor hover
 - Translate full sentence by click
 - Rewind to previous and next sub
@@ -24,5 +23,20 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 ### Limitations
 
-- Support for translation only from English
-- You must manually select the original soundtrack
+##### Youtube
+
+- Support for translation only from English [#45]
+
+#### Netflix
+
+- Support for translation only from English [#47]
+- Disabled rewind to previous and next sub [#31]
+- The watch page once automatically reloads after first loading [#48]
+
+#### Onvix
+
+- Currently the service is not working
+
+#### KinoPub
+
+All features are fully supported
