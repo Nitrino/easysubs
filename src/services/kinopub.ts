@@ -63,14 +63,12 @@ class KinoPub implements Service {
 
   private injection = () => {
     if (!window.playerInstance) return;
+    window.dispatchEvent(new CustomEvent('easysubsVideoReady'));
+
     window.playerInstance.on('captionsChanged', (event: any) => {
       const track = window.playerInstance.getConfig().captionsTrack
       const label = !!track ? track.label : null
       window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: label }));
-    })
-
-    window.playerInstance.on('ready', (event: any) => {
-      window.dispatchEvent(new CustomEvent('easysubsVideoReady'));
     })
 
     window.playerInstance.on('firstFrame', (event: any) => {

@@ -22,7 +22,6 @@ if (service) {
 
     window.addEventListener('easysubsSubtitlesChanged', (event: any) => {
       console.log("TCL: EVENT", "easysubsSubtitlesChanged")
-      console.log(event.detail);
 
       const label = event.detail
       if (!label) {
