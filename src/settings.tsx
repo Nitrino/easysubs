@@ -7,7 +7,7 @@ class Settings {
     const prevNode = document.querySelector(".easysubs-settings");
     if (prevNode) prevNode.remove();
     const referenceNode = document.querySelector(settingSelector);
-    const parentNode = document.querySelector(settingSelector).parentNode;
+    const parentNode = referenceNode.parentNode;
     const settingNode = document.createElement("div");
     settingNode.className = "easysubs-settings";
     parentNode.insertBefore(settingNode, referenceNode);

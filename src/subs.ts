@@ -7,18 +7,42 @@ const subsAnimateDuration: number = 300;
 const subsAnimateCompensationGap: number = subsAnimateDuration / 2 // Motion animation compensation
 
 class Subs {
-  static updateSubs(video: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement) {
+  static getCurrentSubText(video: HTMLVideoElement, subs: subTitleType[]): string {
     let currentTime = Video.getCurrentTime(video);
     let currentSub = this.getCurrentSub(subs, currentTime);
+    return currentSub?.text || "";
+  }
+
+  static subTextToChildNodeList(text: string): ChildNode[] {
+    const tmpDiv = <HTMLDivElement>document.createElement("div")
+    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, '').replace(/<\/c>/g, '')
+    return Array.from(tmpDiv.childNodes)
+  }
+
+  static getCurrentSubInnerHtml(video: HTMLVideoElement, subs: subTitleType[]): string {
+    let currentTime = Video.getCurrentTime(video);
+    let currentSub = this.getCurrentSub(subs, currentTime);
+    let sub = ""
     if (currentSub) {
-      subsElement.innerHTML = currentSub.text
+      sub = currentSub.text
         .replace(/<\d+:\d+:\d+.\d+><c>/g, '')
         .replace(/<\/c>/g, '')
         .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="easysubs-word">$2</span>');
-    } else {
-      subsElement.innerHTML = "";
     }
-    return currentSub
+    return sub
+  }
+
+  static updateSubs(video: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement) {
+    let currentTime = Video.getCurrentTime(video);
+    let currentSub = this.getCurrentSub(subs, currentTime);
+    let sub = ""
+    if (currentSub) {
+      sub = currentSub.text
+        .replace(/<\d+:\d+:\d+.\d+><c>/g, '')
+        .replace(/<\/c>/g, '')
+        .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="easysubs-word">$2</span>');
+    }
+    return sub
   }
 
   static getCurrentSub(subs: subTitleType[], currentTime: number) {

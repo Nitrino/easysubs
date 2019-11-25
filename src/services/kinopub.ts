@@ -2,6 +2,8 @@ import Service from 'service'
 import { subTitleType, parse } from 'subtitle'
 import Hls from "hls.js"
 import { Parser } from 'm3u8-parser';
+import { updateSubs } from "../event"
+
 interface Parser { }
 
 class KinoPub implements Service {
@@ -21,6 +23,7 @@ class KinoPub implements Service {
   }
 
   async getSubs(label: string) {
+    if (!label) return parse("");
     if (!this.videoPlaylistUrl) return parse("");
 
     const resp = await fetch(this.videoPlaylistUrl);
@@ -43,11 +46,16 @@ class KinoPub implements Service {
     const subsResp = await fetch(subUri);
     const subsData = await subsResp.text();
 
-    return parse(subsData);
+    const subs = parse(subsData);
+    return subs;
   }
 
   playerContainerElement(): HTMLElement {
     return document.querySelector("#player")
+  }
+
+  playerContainerSelector(): string {
+    return "#player"
   }
 
   settingSelector(): string {
