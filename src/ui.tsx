@@ -7,6 +7,9 @@ class UI {
     const playerContainerElement = document.querySelector(
       playerContainerElementSelector
     );
+    const prevSubsContainerElement = document.getElementById("easysubs");
+    if (prevSubsContainerElement != null) return;
+
     let subsContainerElement = document.createElement("div");
     subsContainerElement.id = "easysubs";
     playerContainerElement.appendChild(subsContainerElement);

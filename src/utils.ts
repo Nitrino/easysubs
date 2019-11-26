@@ -34,6 +34,10 @@ class Utils {
   static removeAllElements(elms: NodeListOf<Element>) {
     elms.forEach(el => el.remove());
   }
+
+  static clearWord(word: string): string {
+    return word.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/g)?.shift() || ""
+  }
 }
 
 export default Utils

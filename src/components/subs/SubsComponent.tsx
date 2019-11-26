@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Word from "./Word";
 import { subsStore } from "../../store";
 import Subs from "../../subs";
 import { useStore } from "effector-react";
@@ -23,6 +24,8 @@ function SubsComponent() {
     setCurrentSubs(getSubsItems(subText));
   }
 
+  function handleOnMouseEnter(event: any) {}
+
   function getSubsItems(subText: string) {
     return Subs.subTextToChildNodeList(subText)
       .map((node: any, nodeIndex: number) => {
@@ -32,10 +35,13 @@ function SubsComponent() {
             const tagName = !!node.tagName
               ? node.tagName.toLowerCase()
               : "span";
-            return React.createElement(
-              tagName,
-              { key: word + nodeIndex + wordIndex, className: "easysubs-word" },
-              word + " "
+            return (
+              <Word
+                tagName={tagName}
+                word={word}
+                key={word + nodeIndex + wordIndex}
+                keyName={word + nodeIndex + wordIndex}
+              />
             );
           });
       })
