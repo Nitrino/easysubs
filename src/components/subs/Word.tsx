@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import TranslatePopup from "./TranslatePopup";
+import TranslateWordPopup from "./TranslateWordPopup";
 import { userLanguageStore } from "../../store";
 import { useStore } from "effector-react";
 
@@ -21,11 +21,14 @@ function Word(props: Props) {
       },
       onMouseLeave: () => {
         toggleShowTranslation(false);
+      },
+      onClick: () => {
+        toggleShowTranslation(false);
       }
     },
     props.word,
     <span key={"space" + props.keyName}> </span>,
-    showTranslation ? <TranslatePopup word={props.word} /> : null
+    showTranslation ? <TranslateWordPopup word={props.word} /> : null
   );
 }
 

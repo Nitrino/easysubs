@@ -14,7 +14,7 @@ interface Translate {
   alternatives: [];
 }
 
-function TranslatePopup(props: Props) {
+function TranslateWordPopup(props: Props) {
   const [translation, changeTranslation] = useState<Translate>({
     original: "",
     main: "",
@@ -58,4 +58,4 @@ function TranslatePopup(props: Props) {
   }
 }
 
-export default TranslatePopup;
+export default TranslateWordPopup;

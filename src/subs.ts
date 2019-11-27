@@ -13,10 +13,16 @@ class Subs {
     return currentSub?.text || "";
   }
 
-  static subTextToChildNodeList(text: string): ChildNode[] {
+  static subTextToChildNodesArray(text: string): ChildNode[] {
     const tmpDiv = <HTMLDivElement>document.createElement("div")
     tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, '').replace(/<\/c>/g, '')
     return Array.from(tmpDiv.childNodes)
+  }
+
+  static getCleanSubText(text: string): string {
+    const tmpDiv = <HTMLDivElement>document.createElement("div")
+    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, '').replace(/<\/c>/g, '')
+    return tmpDiv.textContent
   }
 
   static getCurrentSubInnerHtml(video: HTMLVideoElement, subs: subTitleType[]): string {

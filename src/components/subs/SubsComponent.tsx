@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Word from "./Word";
+import TranslateFullSubPopup from "./TranslateFullSubPopup";
 import { subsStore } from "../../store";
 import Subs from "../../subs";
 import { useStore } from "effector-react";
@@ -10,6 +11,9 @@ function SubsComponent() {
     document.querySelector("video")
   );
   const [currentSubs, setCurrentSubs] = useState([]);
+  const [subText, setSubText] = useState("");
+  const [showTranslation, toggleShowTranslation] = useState(false);
+  const subsContainer = useRef(null);
 
   useEffect(() => {
     videoElement.addEventListener("timeupdate", handleTimeUpdate);
@@ -20,19 +24,27 @@ function SubsComponent() {
   }, [subs]);
 
   function handleTimeUpdate(event: any) {
-    const subText = Subs.getCurrentSubText(videoElement, subs);
-    setCurrentSubs(getSubsItems(subText));
+    const subTextVtt = Subs.getCurrentSubText(videoElement, subs);
+    setSubText(Subs.getCleanSubText(subTextVtt));
+    setCurrentSubs(getSubsItems(subTextVtt));
+    toggleShowTranslation(false);
   }
 
-  function handleOnMouseEnter(event: any) {
+  function handleOnMouseEnter() {
     videoElement.pause();
   }
-  function handleOnMouseLeave(event: any) {
+
+  function handleOnMouseLeave() {
     videoElement.play();
+    toggleShowTranslation(false);
+  }
+
+  function handleOnClick() {
+    toggleShowTranslation(true);
   }
 
   function getSubsItems(subText: string) {
-    return Subs.subTextToChildNodeList(subText)
+    return Subs.subTextToChildNodesArray(subText)
       .map((node: any, nodeIndex: number) => {
         return node.textContent
           .match(/[^ ]+/g)
@@ -58,8 +70,11 @@ function SubsComponent() {
       className="easysubs-subtitles"
       onMouseEnter={handleOnMouseEnter}
       onMouseLeave={handleOnMouseLeave}
+      onClick={handleOnClick}
+      ref={subsContainer}
     >
       {currentSubs}
+      {showTranslation ? <TranslateFullSubPopup text={subText} /> : null}
     </div>
   );
 }
