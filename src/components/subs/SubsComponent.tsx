@@ -24,7 +24,12 @@ function SubsComponent() {
     setCurrentSubs(getSubsItems(subText));
   }
 
-  function handleOnMouseEnter(event: any) {}
+  function handleOnMouseEnter(event: any) {
+    videoElement.pause();
+  }
+  function handleOnMouseLeave(event: any) {
+    videoElement.play();
+  }
 
   function getSubsItems(subText: string) {
     return Subs.subTextToChildNodeList(subText)
@@ -48,7 +53,15 @@ function SubsComponent() {
       .flat();
   }
 
-  return <div className="easysubs-subtitles">{currentSubs}</div>;
+  return (
+    <div
+      className="easysubs-subtitles"
+      onMouseEnter={handleOnMouseEnter}
+      onMouseLeave={handleOnMouseLeave}
+    >
+      {currentSubs}
+    </div>
+  );
 }
 
 export default SubsComponent;
