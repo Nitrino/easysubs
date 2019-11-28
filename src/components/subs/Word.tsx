@@ -1,4 +1,8 @@
+import { useStore } from "effector-react";
 import React, { useEffect, useState } from "react";
+import { toggleShowFullSubTranslatePopup } from "../../event";
+import { showFullSubTranslatePopupStore, subsStore } from "../../store";
+
 import TranslateWordPopup from "./TranslateWordPopup";
 
 interface Props {
@@ -8,6 +12,7 @@ interface Props {
 }
 
 function Word(props: Props) {
+  const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [showTranslation, toggleShowTranslation] = useState(false);
 
   return React.createElement(
@@ -18,7 +23,9 @@ function Word(props: Props) {
         toggleShowTranslation(false);
       },
       onMouseEnter: () => {
-        toggleShowTranslation(true);
+        if (!showFullSubTranslatePopup) {
+          toggleShowTranslation(true);
+        }
       },
       onMouseLeave: () => {
         toggleShowTranslation(false);

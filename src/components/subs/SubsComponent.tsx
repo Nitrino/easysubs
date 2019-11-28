@@ -1,16 +1,17 @@
 import { useStore } from "effector-react";
 import React, { useEffect, useRef, useState } from "react";
-import { subsStore } from "../../store";
+import { toggleShowFullSubTranslatePopup } from "../../event";
+import { showFullSubTranslatePopupStore, subsStore } from "../../store";
 import Subs from "../../subs";
 import TranslateFullSubPopup from "./TranslateFullSubPopup";
 import Word from "./Word";
 
 function SubsComponent() {
   const subs = useStore(subsStore);
+  const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [videoElement, setVideoElement] = useState(document.querySelector("video"));
   const [currentSubs, setCurrentSubs] = useState([]);
   const [subText, setSubText] = useState("");
-  const [showTranslation, toggleShowTranslation] = useState(false);
   const subsContainer = useRef(null);
 
   useEffect(
@@ -28,7 +29,7 @@ function SubsComponent() {
     const subTextVtt = Subs.getCurrentSubText(videoElement, subs);
     setSubText(Subs.getCleanSubText(subTextVtt));
     setCurrentSubs(getSubsItems(subTextVtt));
-    toggleShowTranslation(false);
+    toggleShowFullSubTranslatePopup(false);
   }
 
   function handleOnMouseEnter() {
@@ -37,11 +38,11 @@ function SubsComponent() {
 
   function handleOnMouseLeave() {
     videoElement.play();
-    toggleShowTranslation(false);
+    toggleShowFullSubTranslatePopup(false);
   }
 
   function handleOnClick() {
-    toggleShowTranslation(true);
+    toggleShowFullSubTranslatePopup(!showFullSubTranslatePopup);
   }
 
   function getSubsItems(subtitleText: string) {
@@ -71,9 +72,11 @@ function SubsComponent() {
       ref={subsContainer}
     >
       {currentSubs}
-      {showTranslation ? <TranslateFullSubPopup text={subText} /> : null}
+      {showFullSubTranslatePopup ? <TranslateFullSubPopup text={subText} /> : null}
     </div>
   );
 }
+
+showFullSubTranslatePopupStore.on(toggleShowFullSubTranslatePopup, (state: any, isShow: boolean) => isShow);
 
 export default SubsComponent;
