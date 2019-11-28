@@ -44,7 +44,7 @@ i > span {
     }
 
     &-container {
-      top: 0;
+      top: -5px;
       left: 50%;
       transform: translate3d(-50%, -100%, 0);
       padding: 10px 25px;
@@ -54,6 +54,8 @@ i > span {
       border-radius: 0.4em;
       font-size: 16px;
       max-width: fit-content;
+      font-style: normal;
+      white-space: normal;
 
       &:after {
         content: "";
