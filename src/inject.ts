@@ -1,7 +1,6 @@
-import { subTitleType } from 'subtitle'
+import { subTitleType } from "subtitle";
 import { updateSubs } from "./event";
 import { subsStore } from "./store";
-
 
 import KinoPub from "./services/kinopub";
 import Netflix from "./services/netflix";
@@ -18,7 +17,7 @@ if (service) {
     console.log("TCL: EVENT", "easysubsVideoReady");
 
     window.addEventListener("easysubsSubtitlesChanged", (event: any) => {
-      UI.renderSettings(service.settingSelector())
+      UI.renderSettings(service.settingSelector());
       console.log("TCL: EVENT", "easysubsSubtitlesChanged");
 
       const label = event.detail;
@@ -39,20 +38,19 @@ if (service) {
       // const subsProgressBarElement = UI.createSubsProgressBarElement(playerContainerElement);
       // subsElement.textContent = ""; // Clear subs loading text
 
-      service.getSubs(label)
-        .then(subs => {
-          updateSubs(subs)
+      service.getSubs(label).then(subs => {
+        updateSubs(subs);
 
-          //     console.log("Subtitles loaded. subs count: " + subs.length)
-          //     if (eventsHandler) { eventsHandler.removeEvents(); }
-          //     eventsHandler = new EventsHandlers(videoElement, subs, subsElement, subsProgressBarElement)
-          //     eventsHandler.addEvents();
-          //     window.initializeInProgress = false
-        })
+        //     console.log("Subtitles loaded. subs count: " + subs.length)
+        //     if (eventsHandler) { eventsHandler.removeEvents(); }
+        //     eventsHandler = new EventsHandlers(videoElement, subs, subsElement, subsProgressBarElement)
+        //     eventsHandler.addEvents();
+        //     window.initializeInProgress = false
+      });
       // }
     });
   });
   service.init();
 
-  subsStore.on(updateSubs, (state: subTitleType[], subs: subTitleType[]) => subs)
+  (subsStore as any).on(updateSubs, (state: subTitleType[], subs: subTitleType[]) => subs);
 }

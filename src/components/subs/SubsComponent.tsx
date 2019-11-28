@@ -77,6 +77,6 @@ function SubsComponent() {
   );
 }
 
-showFullSubTranslatePopupStore.on(toggleShowFullSubTranslatePopup, (state: any, isShow: boolean) => isShow);
+(showFullSubTranslatePopupStore as any).on(toggleShowFullSubTranslatePopup, (state: any, isShow: boolean) => isShow);
 
 export default SubsComponent;
