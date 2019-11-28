@@ -1,3 +1,4 @@
+import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
 import Onvix from './services/onvix';
@@ -8,7 +9,7 @@ class Utils {
     return typeof time === "number" ? time : parseInt(time, 10)
   }
 
-  public static detectService(): YouTube | Netflix | Onvix | KinoPub {
+  public static detectService(): YouTube | Netflix | Onvix | KinoPub | EnglishWithFun {
     const titleContent = document.querySelector('title').textContent
     if (titleContent.includes("YouTube") || window.location.host === "www.youtube.com") {
       document.querySelector('html').id = "youtube"
@@ -26,9 +27,11 @@ class Utils {
       document.querySelector('html').id = "kinopub"
       return new KinoPub
     }
-    {
-      return null
+    if (titleContent.includes("English-With-Fun") || window.location.host === "english-with-fun.com") {
+      document.querySelector('html').id = "english-with-fun"
+      return new EnglishWithFun
     }
+    return null
   }
 
   public static clearWord(word: string): string {
