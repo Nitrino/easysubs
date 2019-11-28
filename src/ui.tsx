@@ -9,9 +9,7 @@ class UI {
     const prevSubsContainerElement = document.getElementById("easysubs");
     if (prevSubsContainerElement != null) return;
 
-    const playerContainerElement = document.querySelector(
-      playerContainerElementSelector
-    );
+    const playerContainerElement = document.querySelector(playerContainerElementSelector);
     const subsContainerElement = document.createElement("div");
     subsContainerElement.id = "easysubs";
     playerContainerElement.appendChild(subsContainerElement);
@@ -20,22 +18,15 @@ class UI {
   }
 
   public static renderProgressBar(playerContainerElementSelector: string) {
-    const prevProgressBarElement = document.querySelector(
-      ".easysubs-progress-bar"
-    );
+    const prevProgressBarElement = document.querySelector(".easysubs-progress-bar");
     if (prevProgressBarElement != null) return;
 
-    const playerContainerElement = document.querySelector(
-      playerContainerElementSelector
-    );
+    const playerContainerElement = document.querySelector(playerContainerElementSelector);
     const progressBarElement = document.createElement("div");
     progressBarElement.className = "easysubs-progress-bar";
     playerContainerElement.appendChild(progressBarElement);
 
-    ReactDOM.render(
-      <ProgressBar />,
-      document.querySelector(".easysubs-progress-bar")
-    );
+    ReactDOM.render(<ProgressBar />, document.querySelector(".easysubs-progress-bar"));
   }
 
   public static renderSettings(settingSelector: string) {
@@ -47,10 +38,7 @@ class UI {
     settingNode.className = "easysubs-settings";
     parentNode.insertBefore(settingNode, referenceNode);
 
-    ReactDOM.render(
-      <SettingsComponent />,
-      document.querySelector(".easysubs-settings")
-    );
+    ReactDOM.render(<SettingsComponent />, document.querySelector(".easysubs-settings"));
   }
 }
 
