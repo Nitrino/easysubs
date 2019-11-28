@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import SubsComponent from "./components/subs/SubsComponent";
+import ProgressBar from "./components/progress/ProgressBar";
 
 class UI {
   static renderSubs(playerContainerElementSelector: string) {
@@ -17,29 +18,24 @@ class UI {
     ReactDOM.render(<SubsComponent />, document.querySelector("#easysubs"));
   }
 
-  static createSubsElement(playerContainerElement: HTMLElement) {
-    const subsContainerElementId = "easysubs";
-    const prevSubsContainerElement = document.getElementById(
-      subsContainerElementId
+  static renderProgressBar(playerContainerElementSelector: string) {
+    const playerContainerElement = document.querySelector(
+      playerContainerElementSelector
     );
-    if (prevSubsContainerElement != null) {
-      prevSubsContainerElement.remove();
-    }
-    let subsContainerElement = document.createElement("div");
-    subsContainerElement.id = subsContainerElementId;
-    playerContainerElement.appendChild(subsContainerElement);
+    let progressBarClass = "easysubs-progress-bar";
+    const prevProgressBarElement = document.querySelector(
+      "." + progressBarClass
+    );
+    if (prevProgressBarElement != null) return;
 
-    ReactDOM.render(<SubsComponent />, subsContainerElement);
-    // let subsInnerElement = document.createElement("div");
-    // subsInnerElement.className = "easysubs-subtitles"
-    // subsContainerElement.appendChild(subsInnerElement);
+    let progressBarElement = document.createElement("div");
+    progressBarElement.className = progressBarClass;
+    playerContainerElement.appendChild(progressBarElement);
 
-    // const textNode = document.createTextNode("Loading subtitles ...");
-    // subsInnerElement.appendChild(textNode);
-
-    // playerContainerElement.appendChild(subsContainerElement);
-    // this.createSubsTranslateElement(subsContainerElement)
-    // return subsInnerElement;
+    ReactDOM.render(
+      <ProgressBar />,
+      document.querySelector("." + progressBarClass)
+    );
   }
 
   static createSubsTranslateElement(subsElement: HTMLElement) {

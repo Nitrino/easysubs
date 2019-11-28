@@ -38,6 +38,10 @@ class Utils {
   static clearWord(word: string): string {
     return word.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/g)?.shift() || ""
   }
+
+  static getVideoCurrentTime(video: HTMLVideoElement) {
+    return Math.round(video.currentTime * 1000)
+  }
 }
 
 export default Utils

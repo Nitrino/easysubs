@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import SubsComponent from "./components/subs/SubsComponent";
 import { updateSubs } from "./event";
 import { subsStore } from "./store";
 import { subTitleType, parse } from 'subtitle'
@@ -8,7 +7,6 @@ import { subTitleType, parse } from 'subtitle'
 
 import Utils from "./utils";
 import UI from "./ui";
-import EventsHandlers from "./events_handlers";
 import YouTube from "./services/youtube";
 import Netflix from "./services/netflix";
 import Onvix from "./services/onvix";
@@ -22,9 +20,6 @@ if (service) {
   window.addEventListener("easysubsVideoReady", () => {
     console.log("TCL: EVENT", "easysubsVideoReady");
     const settings = new Settings()
-
-    let eventsHandler: EventsHandlers = null;
-    const videoElement = document.querySelector("video");
 
     window.addEventListener("easysubsSubtitlesChanged", (event: any) => {
       settings.render(service.settingSelector())
@@ -44,6 +39,7 @@ if (service) {
 
       // function initialize(service: YouTube | Netflix | Onvix | KinoPub, videoElement: HTMLVideoElement) {
       UI.renderSubs(service.playerContainerSelector());
+      UI.renderProgressBar(service.playerContainerSelector());
       // ReactDOM.render(<SubsComponent />, subsContainerElement);
       // const subsProgressBarElement = UI.createSubsProgressBarElement(playerContainerElement);
       // subsElement.textContent = ""; // Clear subs loading text
