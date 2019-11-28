@@ -1,27 +1,28 @@
-import React, { useEffect, useState, useRef } from "react";
-import Word from "./Word";
-import TranslateFullSubPopup from "./TranslateFullSubPopup";
+import { useStore } from "effector-react";
+import React, { useEffect, useRef, useState } from "react";
 import { subsStore } from "../../store";
 import Subs from "../../subs";
-import { useStore } from "effector-react";
+import TranslateFullSubPopup from "./TranslateFullSubPopup";
+import Word from "./Word";
 
 function SubsComponent() {
   const subs = useStore(subsStore);
-  const [videoElement, setVideoElement] = useState(
-    document.querySelector("video")
-  );
+  const [videoElement, setVideoElement] = useState(document.querySelector("video"));
   const [currentSubs, setCurrentSubs] = useState([]);
   const [subText, setSubText] = useState("");
   const [showTranslation, toggleShowTranslation] = useState(false);
   const subsContainer = useRef(null);
 
-  useEffect(() => {
-    videoElement.addEventListener("timeupdate", handleTimeUpdate);
+  useEffect(
+    () => {
+      videoElement.addEventListener("timeupdate", handleTimeUpdate);
 
-    return () => {
-      videoElement.removeEventListener("timeupdate", handleTimeUpdate);
-    };
-  }, [subs]);
+      return () => {
+        videoElement.removeEventListener("timeupdate", handleTimeUpdate);
+      };
+    },
+    [subs]
+  );
 
   function handleTimeUpdate(event: any) {
     const subTextVtt = Subs.getCurrentSubText(videoElement, subs);
@@ -43,24 +44,20 @@ function SubsComponent() {
     toggleShowTranslation(true);
   }
 
-  function getSubsItems(subText: string) {
-    return Subs.subTextToChildNodesArray(subText)
+  function getSubsItems(subtitleText: string) {
+    return Subs.subTextToChildNodesArray(subtitleText)
       .map((node: any, nodeIndex: number) => {
-        return node.textContent
-          .match(/[^ ]+/g)
-          .map((word: string, wordIndex: number) => {
-            const tagName = !!node.tagName
-              ? node.tagName.toLowerCase()
-              : "span";
-            return (
-              <Word
-                tagName={tagName}
-                word={word}
-                key={word + nodeIndex + wordIndex}
-                keyName={word + nodeIndex + wordIndex}
-              />
-            );
-          });
+        return node.textContent.match(/[^ ]+/g).map((word: string, wordIndex: number) => {
+          const tagName = !!node.tagName ? node.tagName.toLowerCase() : "span";
+          return (
+            <Word
+              tagName={tagName}
+              word={word}
+              key={word + nodeIndex + wordIndex}
+              keyName={word + nodeIndex + wordIndex}
+            />
+          );
+        });
       })
       .flat();
   }

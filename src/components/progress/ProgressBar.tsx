@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { useStore } from "effector-react";
+import React, { useEffect, useState } from "react";
 import { subsStore } from "../../store";
 
 import { subTitleType } from "subtitle";
@@ -13,14 +13,12 @@ function ProgressBar() {
   const subs = useStore(subsStore);
 
   const [videoElement] = useState(document.querySelector("video"));
-  const [progressBarElement] = useState(
-    document.querySelector(".easysubs-progress-bar")
-  );
+  const [progressBarElement] = useState(document.querySelector(".easysubs-progress-bar"));
   const [elements, updateElements] = useState([]);
   const animateRef: any = React.useRef(null);
 
   const animate = () => {
-    if (subs.length == 0) return;
+    if (subs.length === 0) return;
     updateProgressBar();
     animateRef.current = requestAnimationFrame(animate);
   };
@@ -33,60 +31,65 @@ function ProgressBar() {
 
     const subsInDuration = subs.filter(
       (sub: subTitleType) =>
-        (sub.end > rightBorder && sub.end < leftBorder) ||
-        (sub.start > rightBorder && sub.start < leftBorder)
+        (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder)
     );
 
-    const elements = subsInDuration.map((sub: subTitleType) => {
-      const subWidth =
-        msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start));
-      const x = msInPx * (Utils.castSubTime(sub.start) - rightBorder);
-      return (
-        <div
-          className="easysubs-progress-bar-element"
-          style={{ width: subWidth + "px", transform: `translateX(${x}px)` }}
-          key={"id" + sub.start + "-" + sub.end}
-        />
-      );
-    });
-
-    updateElements(elements);
+    updateElements(
+      subsInDuration.map((sub: subTitleType) => {
+        const subWidth = msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start));
+        const x = msInPx * (Utils.castSubTime(sub.start) - rightBorder);
+        return (
+          <div
+            className="easysubs-progress-bar-element"
+            style={{ width: `${subWidth}px`, transform: `translateX(${x}px)` }}
+            key={`id${sub.start}-${sub.end}`}
+          />
+        );
+      })
+    );
   }
 
   function keyboardHandler(event: KeyboardEvent) {
-    if (Utils.detectService().constructor.name == "Netflix") {
+    if (Utils.detectService().constructor.name === "Netflix") {
       return;
     }
 
-    if (event.code == "ArrowLeft") {
+    if (event.code === "ArrowLeft") {
       event.stopPropagation();
-      if (event.type == "keydown") {
+      if (event.type === "keydown") {
         Video.moveToPrevSub(videoElement, subs);
       }
     }
-    if (event.code == "ArrowRight") {
+    if (event.code === "ArrowRight") {
       event.stopPropagation();
-      if (event.type == "keydown") {
+      if (event.type === "keydown") {
         Video.moveToNextSub(videoElement, subs);
       }
     }
   }
 
-  useEffect(() => {
-    animateRef.current = requestAnimationFrame(animate);
-    keyboardEvents.forEach(eventType => {
-      document.addEventListener(eventType, keyboardHandler, true);
-    });
-
-    return () => {
-      cancelAnimationFrame(animateRef.current);
+  useEffect(
+    () => {
+      animateRef.current = requestAnimationFrame(animate);
       keyboardEvents.forEach(eventType => {
-        document.removeEventListener(eventType, keyboardHandler, true);
+        document.addEventListener(eventType, keyboardHandler, true);
       });
-    };
-  }, [subs]);
 
-  return <div>{elements}</div>;
+      return () => {
+        cancelAnimationFrame(animateRef.current);
+        keyboardEvents.forEach(eventType => {
+          document.removeEventListener(eventType, keyboardHandler, true);
+        });
+      };
+    },
+    [subs]
+  );
+
+  return (
+    <div>
+      {elements}
+    </div>
+  );
 }
 
 export default ProgressBar;

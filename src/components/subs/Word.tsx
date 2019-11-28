@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import TranslateWordPopup from "./TranslateWordPopup";
-import { userLanguageStore } from "../../store";
-import { useStore } from "effector-react";
 
 interface Props {
   tagName: string;
@@ -16,18 +14,18 @@ function Word(props: Props) {
     props.tagName,
     {
       className: "easysubs-word",
+      onClick: () => {
+        toggleShowTranslation(false);
+      },
       onMouseEnter: () => {
         toggleShowTranslation(true);
       },
       onMouseLeave: () => {
         toggleShowTranslation(false);
-      },
-      onClick: () => {
-        toggleShowTranslation(false);
       }
     },
     props.word,
-    <span key={"space" + props.keyName}> </span>,
+    <span key={`space${props.keyName}`} />,
     showTranslation ? <TranslateWordPopup word={props.word} /> : null
   );
 }

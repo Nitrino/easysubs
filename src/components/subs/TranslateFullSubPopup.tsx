@@ -1,6 +1,6 @@
+import { useStore } from "effector-react";
 import React, { useEffect, useState } from "react";
 import { userLanguageStore } from "../../store";
-import { useStore } from "effector-react";
 
 interface Props {
   text: string;
@@ -13,8 +13,8 @@ interface Translate {
 
 function TranslateFullSubPopup(props: Props) {
   const [translation, changeTranslation] = useState<Translate>({
-    original: "",
-    main: ""
+    main: "",
+    original: ""
   });
   const language = useStore(userLanguageStore);
 
@@ -22,32 +22,33 @@ function TranslateFullSubPopup(props: Props) {
     chrome.runtime.sendMessage(
       {
         contentScriptQuery: "translate",
-        text: props.text,
-        lang: language
+        lang: language,
+        text: props.text
       },
       response => {
         const main: string = response.data[0];
         changeTranslation({
-          original: props.text,
-          main: main
+          main: main,
+          original: props.text
         });
       }
     );
   }, []);
 
-  if (translation.original != "") {
+  if (translation.original !== "") {
     return (
       <div className="easysubs-translate-container">
-        <div className="easysubs-translate-result">{translation.main}</div>
+        <div className="easysubs-translate-result">
+          {translation.main}
+        </div>
         <hr />
         <div className="easysubs-translate-original">
           {translation.original}
         </div>
       </div>
     );
-  } else {
-    return null;
   }
+  return null;
 }
 
 export default TranslateFullSubPopup;

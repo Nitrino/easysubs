@@ -1,27 +1,20 @@
-import React, { useEffect } from "react";
-import { useStore } from "effector-react";
-import { userLanguageStore } from "../../store";
-import { setUserLanguage } from "../../event";
 import * as locale from "@cospired/i18n-iso-languages/langs/en.json";
+import { useStore } from "effector-react";
+import React, { useEffect } from "react";
+import { setUserLanguage } from "../../event";
+import { userLanguageStore } from "../../store";
 
-const options: Array<object> = Object.keys(locale.languages).map(
-  (key: string) => {
-    return { value: key, label: locale.languages[key] };
-  }
-);
+const options: object[] = Object.keys(locale.languages).map((key: string) => {
+  return { value: key, label: locale.languages[key] };
+});
 
 function Language() {
   const userLanguage = useStore(userLanguageStore);
 
-  useEffect(() => {});
-
   return (
     <div className="easysubs-settings-language">
       <span>Language: </span>
-      <select
-        value={userLanguage}
-        onChange={e => setUserLanguage(e.target.value)}
-      >
+      <select value={userLanguage} onChange={e => setUserLanguage(e.target.value)}>
         {options.map((language: { value: string; label: string }, index) => {
           return (
             <option value={language.value} key={index}>
@@ -33,9 +26,6 @@ function Language() {
     </div>
   );
 }
-userLanguageStore.on(
-  setUserLanguage,
-  (state: any, language: object) => language
-);
+userLanguageStore.on(setUserLanguage, (state: any, language: object) => language);
 
 export default Language;

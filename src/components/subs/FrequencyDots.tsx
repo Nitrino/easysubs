@@ -5,50 +5,23 @@ function FrequencyDots(props: { frequency: number }): any {
 
   if (rate >= 500) {
     return [
-      <div
-        key="1"
-        className="easysubs-translate-alternative-item-frequency-dot -fill"
-      />,
-      <div
-        key="2"
-        className="easysubs-translate-alternative-item-frequency-dot -fill"
-      />,
-      <div
-        key="3"
-        className="easysubs-translate-alternative-item-frequency-dot -fill"
-      />
-    ];
-  } else if (rate < 500 && rate >= 30) {
-    return [
-      <div
-        key="1"
-        className="easysubs-translate-alternative-item-frequency-dot -fill"
-      />,
-      <div
-        key="2"
-        className="easysubs-translate-alternative-item-frequency-dot -fill"
-      />,
-      <div
-        key="3"
-        className="easysubs-translate-alternative-item-frequency-dot -empty"
-      />
-    ];
-  } else {
-    return [
-      <div
-        key="1"
-        className="easysubs-translate-alternative-item-frequency-dot -fill"
-      />,
-      <div
-        key="2"
-        className="easysubs-translate-alternative-item-frequency-dot -empty"
-      />,
-      <div
-        key="3"
-        className="easysubs-translate-alternative-item-frequency-dot -empty"
-      />
+      <div key="1" className="easysubs-translate-alternative-item-frequency-dot -fill" />,
+      <div key="2" className="easysubs-translate-alternative-item-frequency-dot -fill" />,
+      <div key="3" className="easysubs-translate-alternative-item-frequency-dot -fill" />
     ];
   }
+  if (rate < 500 && rate >= 30) {
+    return [
+      <div key="1" className="easysubs-translate-alternative-item-frequency-dot -fill" />,
+      <div key="2" className="easysubs-translate-alternative-item-frequency-dot -fill" />,
+      <div key="3" className="easysubs-translate-alternative-item-frequency-dot -empty" />
+    ];
+  }
+  return [
+    <div key="1" className="easysubs-translate-alternative-item-frequency-dot -fill" />,
+    <div key="2" className="easysubs-translate-alternative-item-frequency-dot -empty" />,
+    <div key="3" className="easysubs-translate-alternative-item-frequency-dot -empty" />
+  ];
 }
 
 export default FrequencyDots;

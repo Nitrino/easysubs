@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Utils from "../../utils";
-import { userLanguageStore } from "../../store";
 import { useStore } from "effector-react";
+import React, { useEffect, useState } from "react";
+import { userLanguageStore } from "../../store";
+import Utils from "../../utils";
 import TranslateAlternatives from "./TranslateAlternatives";
 
 interface Props {
@@ -16,9 +16,9 @@ interface Translate {
 
 function TranslateWordPopup(props: Props) {
   const [translation, changeTranslation] = useState<Translate>({
-    original: "",
+    alternatives: [],
     main: "",
-    alternatives: []
+    original: ""
   });
   const language = useStore(userLanguageStore);
 
@@ -26,26 +26,28 @@ function TranslateWordPopup(props: Props) {
     chrome.runtime.sendMessage(
       {
         contentScriptQuery: "getSingleTranslation",
-        text: Utils.clearWord(props.word),
-        lang: language
+        lang: language,
+        text: Utils.clearWord(props.word)
       },
       response => {
         const main: string = response[0][0][0];
         const alternatives: [] = response[1] || [];
 
         changeTranslation({
-          original: Utils.clearWord(props.word),
+          alternatives: alternatives,
           main: main,
-          alternatives: alternatives
+          original: Utils.clearWord(props.word)
         });
       }
     );
   }, []);
 
-  if (translation.original != "") {
+  if (translation.original !== "") {
     return (
       <div className="easysubs-translate-container">
-        <div className="easysubs-translate-result">{translation.main}</div>
+        <div className="easysubs-translate-result">
+          {translation.main}
+        </div>
         <hr />
         <div className="easysubs-translate-original">
           {translation.original}
@@ -53,9 +55,8 @@ function TranslateWordPopup(props: Props) {
         <TranslateAlternatives alternativesGroups={translation.alternatives} />
       </div>
     );
-  } else {
-    return null;
   }
+  return null;
 }
 
 export default TranslateWordPopup;

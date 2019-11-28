@@ -1,29 +1,24 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import { subTitleType } from 'subtitle'
 import { updateSubs } from "./event";
 import { subsStore } from "./store";
-import { subTitleType, parse } from 'subtitle'
 
 
-import Utils from "./utils";
-import UI from "./ui";
-import YouTube from "./services/youtube";
+import KinoPub from "./services/kinopub";
 import Netflix from "./services/netflix";
 import Onvix from "./services/onvix";
-import KinoPub from "./services/kinopub";
-import Settings from "./settings";
+import YouTube from "./services/youtube";
+import UI from "./ui";
+import Utils from "./utils";
 
-const service = <KinoPub>Utils.detectService();
+const service = Utils.detectService() as KinoPub;
 if (service) {
-  console.log("EasySubs initialized. Service: " + service.constructor.name);
+  console.log("EasySubs initialized. Service:", service.constructor.name);
 
   window.addEventListener("easysubsVideoReady", () => {
     console.log("TCL: EVENT", "easysubsVideoReady");
-    const settings = new Settings()
 
     window.addEventListener("easysubsSubtitlesChanged", (event: any) => {
-      settings.render(service.settingSelector())
-
+      UI.renderSettings(service.settingSelector())
       console.log("TCL: EVENT", "easysubsSubtitlesChanged");
 
       const label = event.detail;
