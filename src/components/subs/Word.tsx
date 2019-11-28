@@ -25,7 +25,8 @@ function Word(props: Props) {
       }
     },
     props.word,
-    <span key={`space${props.keyName}`} />,
+    // tslint:disable-next-line: jsx-self-close
+    <span key={`space${props.keyName}`}> </span>,
     showTranslation ? <TranslateWordPopup word={props.word} /> : null
   );
 }
