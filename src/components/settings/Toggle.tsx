@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
 import { useStore } from "effector-react";
-import { enableState } from "../../store";
+import React, { useEffect } from "react";
 import { toggleEnableState } from "../../event";
+import { enableState } from "../../store";
 
 function Toggle() {
   enableState.watch(console.log);
-  let isEnable = useStore(enableState);
+  const isEnable = useStore(enableState);
   addEnableClass(isEnable);
 
   useEffect(() => {
@@ -32,19 +32,17 @@ function Toggle() {
           name="check"
           value="check"
           defaultChecked={isEnable}
+          // tslint:disable-next-line: jsx-no-lambda
           onChange={() => changeEnableState(!isEnable)}
         />
         <div className="toggle-inner">
-          <div className="indicator"></div>
+          <div className="indicator" />
         </div>
-        <div className="active-bg"></div>
+        <div className="active-bg" />
       </div>
     </label>
   );
 }
-enableState.on(
-  toggleEnableState,
-  (state: any, isEnabled: boolean) => isEnabled
-);
+enableState.on(toggleEnableState, (state: any, isEnabled: boolean) => isEnabled);
 
 export default Toggle;

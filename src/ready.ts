@@ -1,3 +1,4 @@
+/* tslint:disable */
 interface Listener {
   selector: string;
   fn: Function;

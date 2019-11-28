@@ -24,6 +24,7 @@ i > span {
   user-select: none;
 
   .easysubs-word {
+    position: relative;
     color: $white;
   }
 
@@ -43,16 +44,18 @@ i > span {
     }
 
     &-container {
-      display: none;
-      padding: 10px 25px;
-      position: relative;
-      margin-bottom: 20px;
+      top: -5px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate3d(-50%, -100%, 0);
+      padding: 10px 25px;
+      position: absolute;
+      margin-bottom: 20px;
       background: #1e1e1e;
       border-radius: 0.4em;
       font-size: 16px;
       max-width: fit-content;
+      font-style: normal;
+      white-space: normal;
 
       &:after {
         content: "";

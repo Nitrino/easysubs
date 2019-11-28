@@ -7,6 +7,14 @@
     "module": "es6",
     "target": "es2016",
     "allowJs": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": [
+      "dom",
+      "es6",
+      "es2017",
+      "dom.iterable",
+      "scripthost",
+      "esnext.array"
+    ]
   }
 }

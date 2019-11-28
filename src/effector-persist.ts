@@ -1,6 +1,6 @@
 import { createEvent } from "effector";
 
-type PersistConfig = {
+type IPersistConfig = {
   key?: string;
 }
 
@@ -8,12 +8,12 @@ const defaultConfig = {
   key: 'persist'
 };
 
-export const withPersist = <State>(store: any, config: PersistConfig = defaultConfig) => {
+export const withPersist = <State>(store: any, config: IPersistConfig = defaultConfig) => {
   const name = store.shortName;
   const persistKey = `${config.key}:${name}`;
   const rehydrate = createEvent('@PERSIST/REHYDRATE');
 
-  chrome.storage.sync.get([persistKey], function (result) {
+  chrome.storage.sync.get([persistKey], (result) => {
     if (result[persistKey]) {
       store.on(rehydrate, () => JSON.parse(result[persistKey]));
       rehydrate();
@@ -21,8 +21,8 @@ export const withPersist = <State>(store: any, config: PersistConfig = defaultCo
   });
 
   store.watch((state: any) => {
-    chrome.storage.sync.set({ [persistKey]: JSON.stringify(state) }, function () {
-      console.log('Value is set to ' + JSON.stringify(state));
+    chrome.storage.sync.set({ [persistKey]: JSON.stringify(state) }, () => {
+      console.log('Value is set to ', JSON.stringify(state));
     });
   });
 

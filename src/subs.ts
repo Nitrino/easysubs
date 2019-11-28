@@ -1,103 +1,52 @@
 import { subTitleType } from "subtitle";
 import Video from "./video";
-import Utils from "./utils";
-import anime from "animejs"
-
-const subsAnimateDuration: number = 300;
-const subsAnimateCompensationGap: number = subsAnimateDuration / 2 // Motion animation compensation
 
 class Subs {
-  static updateSubs(video: HTMLVideoElement, subs: subTitleType[], subsElement: HTMLElement) {
-    let currentTime = Video.getCurrentTime(video);
-    let currentSub = this.getCurrentSub(subs, currentTime);
-    if (currentSub) {
-      subsElement.innerHTML = currentSub.text
-        .replace(/<\d+:\d+:\d+.\d+><c>/g, '')
-        .replace(/<\/c>/g, '')
-        .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="easysubs-word">$2</span>');
-    } else {
-      subsElement.innerHTML = "";
-    }
-    return currentSub
+  public static getCurrentSubText(video: HTMLVideoElement, subs: subTitleType[]): string {
+    const currentTime = Video.getCurrentTime(video);
+    const currentSub = this.getCurrentSub(subs, currentTime);
+    return currentSub?.text || "";
   }
 
-  static getCurrentSub(subs: subTitleType[], currentTime: number) {
+  public static subTextToChildNodesArray(text: string): ChildNode[] {
+    const tmpDiv = document.createElement("div") as HTMLDivElement
+    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, '').replace(/<\/c>/g, '')
+    return Array.from(tmpDiv.childNodes)
+  }
+
+  public static getCleanSubText(text: string): string {
+    const tmpDiv = document.createElement("div") as HTMLDivElement
+    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, '').replace(/<\/c>/g, '')
+    return tmpDiv.textContent
+  }
+
+  public static getCurrentSub(subs: subTitleType[], currentTime: number) {
     return subs.find((sub: subTitleType) => sub.start <= currentTime && sub.end >= currentTime)
   }
 
-  static getPrevSub(subs: subTitleType[], currentTime: number): subTitleType {
-    let currentSub = Subs.getCurrentSub(subs, currentTime);
+  public static getPrevSub(subs: subTitleType[], currentTime: number): subTitleType {
+    const currentSub = Subs.getCurrentSub(subs, currentTime);
     if (currentSub) {
-      let indexCurrentSub = subs.findIndex(sub => sub == currentSub)
+      const indexCurrentSub = subs.findIndex(sub => sub === currentSub)
       return subs[indexCurrentSub - 1]
-    } else {
-      return subs.find((sub, index) => {
-        if (subs[index + 1] == null) {
-          return null
-        }
-        return sub.end <= currentTime && subs[index + 1].start >= currentTime
-      })
-    }
-  }
+    } 
 
-  static getNextSub(subs: subTitleType[], currentTime: number): subTitleType {
-    let currentSub = Subs.getCurrentSub(subs, currentTime);
-    if (currentSub) {
-      let indexCurrentSub = subs.findIndex(sub => sub == currentSub)
-      return subs[indexCurrentSub + 1]
-    } else {
-      return subs.find(sub => sub.start >= currentTime)
-    }
-  }
-
-  static updateSubsProgressBar(subsProgressBarElement: HTMLElement, video: HTMLVideoElement, subs: subTitleType[], hardMove: boolean = false) {
-    const timePeriod = 30000; // 30 seconds
-    const progressBarWidth = subsProgressBarElement.clientWidth;
-    const msInPx = (progressBarWidth / timePeriod)
-    const currentTime = Video.getCurrentTime(video);
-    const leftBorder = currentTime + timePeriod / 2;
-    const rightBorder = currentTime - timePeriod / 2;
-
-    const subsInDuration = subs.filter(sub =>
-      (sub.end > rightBorder && sub.end < leftBorder) ||
-      (sub.start > rightBorder && sub.start < leftBorder)
-    );
-
-    let currentSubsIds: string[] = []
-    if (hardMove) {
-      document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => el.remove())
-    }
-    subsInDuration.forEach(sub => {
-      const subId = "id" + sub.start + "-" + sub.end
-      currentSubsIds.push(subId)
-      const currentSub = document.getElementById(subId)
-
-      if (currentSub) {
-        anime({
-          targets: currentSub,
-          translateX: msInPx * ((Utils.castSubTime(sub.start) - rightBorder) - subsAnimateCompensationGap),
-          easing: 'linear',
-          duration: subsAnimateDuration
-        });
-      } else {
-        const subWidth = msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start))
-        let subDiv = document.createElement("div");
-        subDiv.className = "easysubs-progress-bar-element"
-        subDiv.id = subId
-        subDiv.style.width = subWidth.toFixed(0) + "px"
-        subDiv.style.transform = 'translateX(' + msInPx * (Utils.castSubTime(sub.start) - rightBorder) + 'px)';
-        subsProgressBarElement.appendChild(subDiv)
+    return subs.find((sub, index) => {
+      if (subs[index + 1] == null) {
+        return null
       }
-    });
+      return sub.end <= currentTime && subs[index + 1].start >= currentTime
+    })
+  }
 
-    async function removeOldProgressBarElements(subsInDuration: subTitleType[]) {
-      document.querySelectorAll(".easysubs-progress-bar-element").forEach(el => {
-        if (currentSubsIds.includes(el.id) == false) {
-          el.remove()
-        }
-      });
+  public static getNextSub(subs: subTitleType[], currentTime: number): subTitleType {
+    const currentSub = Subs.getCurrentSub(subs, currentTime);
+    if (currentSub) {
+      const indexCurrentSub = subs.findIndex(sub => sub === currentSub)
+      return subs[indexCurrentSub + 1]
     }
-    removeOldProgressBarElements(subsInDuration);
+    
+    return subs.find(sub => sub.start >= currentTime)
   }
 }
 export default Subs;
