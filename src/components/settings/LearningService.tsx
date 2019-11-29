@@ -10,13 +10,13 @@ const services = [
     value: ""
   },
   {
-    label: "Quizlet",
-    value: "quizlet"
-  },
-  {
     label: "LinguaLeo",
     value: "lingualeo"
   }
+  // {
+  //   label: "Quizlet",
+  //   value: "quizlet"
+  // }
 ];
 
 function LearningService() {
