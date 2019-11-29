@@ -52,7 +52,7 @@ function TranslateWordPopup(props: Props) {
         <div className="easysubs-translate-original">
           {translation.original}
         </div>
-        <TranslateAlternatives alternativesGroups={translation.alternatives} />
+        <TranslateAlternatives alternativesGroups={translation.alternatives} word={props.word} />
       </div>
     );
   }

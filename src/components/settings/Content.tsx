@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Language from "./Language";
+import LearningService from "./LearningService";
 import Toggle from "./Toggle";
 
 function Content(props: any) {
@@ -13,6 +14,7 @@ function Content(props: any) {
       <div className="easysubs-settings-content">
         <Toggle />
         <Language />
+        <LearningService />
       </div>
     </div>
   );

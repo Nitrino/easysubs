@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Notification from "./components/notification/Notification";
 import ProgressBar from "./components/progress/ProgressBar";
 import SettingsComponent from "./components/settings/Settings";
 import SubsComponent from "./components/subs/SubsComponent";
@@ -19,9 +20,7 @@ class UI {
 
   public static renderProgressBar(playerContainerElementSelector: string) {
     const prevProgressBarElement = document.querySelector(".easysubs-progress-bar");
-    if (prevProgressBarElement != null) {
-      prevProgressBarElement.remove();
-    }
+    if (prevProgressBarElement != null) return;
 
     const playerContainerElement = document.querySelector(playerContainerElementSelector);
     const progressBarElement = document.createElement("div");
@@ -41,6 +40,17 @@ class UI {
     parentNode.insertBefore(settingNode, referenceNode);
 
     ReactDOM.render(<SettingsComponent />, document.querySelector(".easysubs-settings"));
+  }
+  public static renderNotifications() {
+    const prevNode = document.querySelector(".easysubs-notifications");
+    if (prevNode) return;
+    const referenceNode = document.querySelector("body");
+    const parentNode = referenceNode.parentNode;
+    const settingNode = document.createElement("div");
+    settingNode.className = "easysubs-notifications";
+    parentNode.insertBefore(settingNode, referenceNode);
+
+    ReactDOM.render(<Notification />, document.querySelector(".easysubs-notifications"));
   }
 }
 
