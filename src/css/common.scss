@@ -114,6 +114,13 @@ i > span {
       &-item {
         word-break: break-word;
 
+        &-add-to-learn {
+          padding-right: 10px;
+          svg {
+            width: 12px;
+          }
+        }
+
         &-translate {
           color: $white;
           max-width: 100px;

@@ -64,14 +64,15 @@ function SubsComponent() {
   }
 
   return (
-    <div
-      className="easysubs-subtitles"
-      onMouseEnter={handleOnMouseEnter}
-      onMouseLeave={handleOnMouseLeave}
-      onClick={handleOnClick}
-      ref={subsContainer}
-    >
-      {currentSubs}
+    <div className="easysubs-subtitles">
+      <div
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+        onClick={handleOnClick}
+        ref={subsContainer}
+      >
+        {currentSubs}
+      </div>
       {showFullSubTranslatePopup ? <TranslateFullSubPopup text={subText} /> : null}
     </div>
   );

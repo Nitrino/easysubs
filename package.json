@@ -59,6 +59,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-select": "^3.0.8",
+    "react-toastify": "^5.4.1",
     "subtitle": "^2.0.3"
   }
 }

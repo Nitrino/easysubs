@@ -41,6 +41,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           .then(respData => sendResponse(respData));
       })
       .catch((err: Error) => console.error(err));
+  } else if (request.contentScriptQuery === "getRequest") {
+    fetch(request.url).then(resp => resp.json()).then(data => sendResponse(data));
   } else {
     sendResponse();
   }
