@@ -19,9 +19,7 @@ class UI {
 
   public static renderProgressBar(playerContainerElementSelector: string) {
     const prevProgressBarElement = document.querySelector(".easysubs-progress-bar");
-    if (prevProgressBarElement != null) {
-      prevProgressBarElement.remove();
-    }
+    if (prevProgressBarElement != null) return;
 
     const playerContainerElement = document.querySelector(playerContainerElementSelector);
     const progressBarElement = document.createElement("div");

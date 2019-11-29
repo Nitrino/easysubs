@@ -80,6 +80,7 @@ function ProgressBar() {
         keyboardEvents.forEach(eventType => {
           document.removeEventListener(eventType, keyboardHandler, true);
         });
+        updateElements([]);
       };
     },
     [subs]
