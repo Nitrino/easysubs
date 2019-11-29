@@ -9,7 +9,7 @@ import Word from "./Word";
 function SubsComponent() {
   const subs = useStore(subsStore);
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
-  const [videoElement, setVideoElement] = useState(document.querySelector("video"));
+  const [videoElement] = useState(document.querySelector("video"));
   const [currentSubs, setCurrentSubs] = useState([]);
   const [subText, setSubText] = useState("");
   const subsContainer = useRef(null);

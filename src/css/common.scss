@@ -93,6 +93,7 @@ i > span {
     &-alternative {
       text-align: left;
       color: $gray;
+      width: max-content;
       max-height: 200px;
       overflow-y: auto;
       font-size: 14px;
@@ -100,32 +101,34 @@ i > span {
       &-part-speech {
         margin-top: 15px;
         font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-bottom: 0;
+      }
+
+      table {
+        width: max-content;
+        border-collapse: separate;
+        border-spacing: 0 5px;
       }
       &-item {
-        display: flex;
-        margin-top: 5px;
+        word-break: break-word;
 
         &-translate {
           color: $white;
-          flex: 0 100px;
-          margin-right: 10px;
+          max-width: 100px;
+          min-width: 50px;
+          padding-right: 10px;
         }
 
         &-original {
-          min-width: 120px;
-          flex: 1 150px;
-          text-align: left;
-          margin-right: 10px;
+          max-width: 120px;
+          min-width: 50px;
+          padding-right: 10px;
         }
 
         &-frequency {
-          flex: 0 0 32px;
-          display: flex;
-          margin-top: 4px;
-
-          &:last-child {
-            margin-right: 0;
-          }
+          width: 34px;
 
           &-dot {
             display: inline-block;
@@ -138,6 +141,9 @@ i > span {
             }
             &.-fill {
               background-color: #c6c6c6;
+            }
+            &:last-child {
+              margin-right: 0;
             }
           }
         }
