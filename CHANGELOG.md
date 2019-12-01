@@ -7,7 +7,9 @@ Global change: template rendering rewritten to React
 ### Enhancements
 
 - Remove Onvix. Service no longer works.
-- Add support words learning services and support LinguaLeo
+- Add support words learning services
+- Add support Puzzle English learning service
+- Add support LinguaLeo learning service
 - Add support English With Fun
 - Translate popup now appears near the word, and not on top of the subtitles
 - Rewrite template rendering to React

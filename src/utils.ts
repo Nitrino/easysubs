@@ -1,7 +1,10 @@
+import { learningServiceStore } from "./store";
 import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
 import YouTube from './services/youtube';
+import Lingualeo from "./learning-services/lingualeo";
+import PuzzleEnglish from "./learning-services/PuzzleEnglish";
 
 class Utils {
   public static castSubTime(time: number | string) {
@@ -35,6 +38,19 @@ class Utils {
 
   public static getVideoCurrentTime(video: HTMLVideoElement) {
     return Math.round(video.currentTime * 1000)
+  }
+
+  public static getCurrentLearningService() {
+    const currentServiceName = learningServiceStore.getState()
+    switch (currentServiceName) { 
+      case "lingualeo": 
+        return new Lingualeo()
+      case "puzzle-english":
+        return new PuzzleEnglish()
+      default:
+        console.error("Call add word for unknown learning service");
+        break;
+    }
   }
 }
 

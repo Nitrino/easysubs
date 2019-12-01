@@ -16,7 +16,11 @@
       "interface-over-type-literal": [false],
       "interface-name": [false],
       "object-literal-shorthand": [false],
-      "jsx-no-lambda": [false]
+      "jsx-no-lambda": [false],
+      "object-literal-sort-keys": [false],
+      "ordered-imports": [false],
+      "forin": [false],
+      "prefer-template": [false]
     },
     "rulesDirectory": []
 }
