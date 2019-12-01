@@ -1,7 +1,6 @@
 import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
-import Onvix from './services/onvix';
 import YouTube from './services/youtube';
 
 class Utils {
@@ -9,7 +8,7 @@ class Utils {
     return typeof time === "number" ? time : parseInt(time, 10)
   }
 
-  public static detectService(): YouTube | Netflix | Onvix | KinoPub | EnglishWithFun {
+  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun {
     const titleContent = document.querySelector('title').textContent
     if (titleContent.includes("YouTube") || window.location.host === "www.youtube.com") {
       document.querySelector('html').id = "youtube"
@@ -18,10 +17,6 @@ class Utils {
     if (titleContent.includes("Netflix") || window.location.host === "www.netflix.com") {
       document.querySelector('html').id = "netflix"
       return new Netflix
-    }
-    if (titleContent.includes("Onvix") || document.querySelector('meta[content="ONVIX"]')) {
-      document.querySelector('html').id = "onvix"
-      return new Onvix
     }
     if (titleContent.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]')) {
       document.querySelector('html').id = "kinopub"
