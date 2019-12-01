@@ -14,8 +14,9 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 #### Common
 
-- Support services: Youtube (videos and originals), Netflix, [KinoPub](https://kino.pub), [Onvix](http://onvix.co)
+- Support services: Youtube (videos and originals), Netflix, [KinoPub](https://kino.pub), [Onvix](http://onvix.co), [English With Fun](https://english-with-fun.com)
 - Word translation when cursor hover
+- Adding words to language learning services. Support: [LinguaLeo](https://lingualeo.com/ru/dashboard)
 - Translate full sentence by click
 - Rewind to previous and next sub
 - Subtitles progress bar
@@ -38,5 +39,9 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 - Currently the service is not working. Most likely is dead. [[#32](https://github.com/Nitrino/easysubs/issues/32)]
 
 #### KinoPub
+
+All features are fully supported
+
+#### English With Fun
 
 All features are fully supported

@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+Global change: template rendering rewritten to React
+
+### Enhancements
+
+- Add support words learning services and support LinguaLeo
+- Add support English With Fun
+- Translate popup now appears near the word, and not on top of the subtitles
+- Rewrite template rendering to React
+
+### Bugs
+
 ## 0.4.0
 
 Global change of the extension initialization model. Now initialization occurs by sending custom events from services.
