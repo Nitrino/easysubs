@@ -16,7 +16,7 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 
 - Support services: Youtube (videos and originals), Netflix, [KinoPub](https://kino.pub), [English With Fun](https://english-with-fun.com)
 - Word translation when cursor hover
-- Adding words to language learning services. Support: [LinguaLeo](https://lingualeo.com/ru/dashboard)
+- Adding words to language learning services. Support: [LinguaLeo](https://lingualeo.com), [Puzzle English](https://puzzle-english.com)
 - Translate full sentence by click
 - Rewind to previous and next sub
 - Subtitles progress bar
