@@ -2,7 +2,7 @@ class Lingualeo {
   public color: string;
 
   constructor() {
-    this.color = "#FFAA52";
+    this.color = "#FFC900";
   }
   public addWord(word: string, translate: string, _: string) {
     const url = new URL("https://api.lingualeo.com/addword");
