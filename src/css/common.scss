@@ -44,12 +44,11 @@ i > span {
     }
 
     &-container {
-      top: -5px;
+      top: 0;
       left: 50%;
       transform: translate3d(-50%, -100%, 0);
       padding: 10px 25px;
       position: absolute;
-      margin-bottom: 20px;
       background: #1e1e1e;
       border-radius: 0.4em;
       font-size: 16px;
@@ -99,11 +98,10 @@ i > span {
       font-size: 14px;
 
       &-part-speech {
-        margin-top: 15px;
+        padding-top: 15px;
         font-weight: bold;
         text-transform: uppercase;
         font-size: 12px;
-        margin-bottom: 0;
       }
 
       table {

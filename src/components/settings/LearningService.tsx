@@ -12,6 +12,10 @@ const services = [
   {
     label: "LinguaLeo",
     value: "lingualeo"
+  },
+  {
+    label: "Puzzle English",
+    value: "puzzle-english"
   }
   // {
   //   label: "Quizlet",
