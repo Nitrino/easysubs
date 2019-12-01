@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.5.0
 
-Global change: template rendering rewritten to React
+Global change: template rendering rewritten to React.
 
 ### Enhancements
 
@@ -12,9 +12,16 @@ Global change: template rendering rewritten to React
 - Add support LinguaLeo learning service
 - Add support English With Fun
 - Translate popup now appears near the word, and not on top of the subtitles
+- Improve subtitles position
 - Rewrite template rendering to React
 
 ### Bugs
+
+- Fix frequency points are not always displayed on the right
+- Fix blocks of different parts of speech may not be aligned evenly
+- Fix impossible to move the cursor to the pop-up translation of a word from the second line
+- Fix injecting js when supported service is not detected
+- Kinopub: Fix start when player loads before extension
 
 ## 0.4.0
 

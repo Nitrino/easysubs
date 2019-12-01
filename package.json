@@ -1,6 +1,6 @@
 {
   "name": "easysubs",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Learn languages with fun",
   "main": "inject.js",
   "scripts": {
