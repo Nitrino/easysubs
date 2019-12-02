@@ -36,11 +36,6 @@ class Netflix implements Service {
   public init() {
     ready("video", (videoElement: HTMLVideoElement) => {
       if (location.pathname.split("/")[1] === "watch") {
-        if (Object.keys(this.subCache).length === 0 || this.currentPathName !== location.pathname) {
-          this.currentPathName = localStorage.href;
-          location.reload(true);
-        }
-
         window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
         window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "en" }));
       }
@@ -64,27 +59,36 @@ class Netflix implements Service {
   }
 
   private injection = () => {
-    // tslint:disable-next-line: no-shadowed-variable
-    const WEBVTT = "webvtt-lssdh-ios8";
-    // hijack JSON.parse and JSON.stringify functions
-    // tslint:disable-next-line: no-shadowed-variable
-    ((parse, stringify) => {
-      JSON.parse = text => {
-        const data = parse(text);
-        if (data && data.result && data.result.timedtexttracks && data.result.movieId) {
-          if (location.pathname.split("/")[1] === "watch") {
-            window.dispatchEvent(new CustomEvent("easysubs_data", { detail: data.result }));
-          }
-        }
-        return data;
-      };
-      JSON.stringify = (data: any) => {
-        if (data && data.params && data.params.profiles) {
-          data.params.profiles.unshift(WEBVTT);
-        }
-        return stringify(data);
-      };
-    })(JSON.parse, JSON.stringify);
+    const parseMock = JSON.parse;
+    const stringifyMock = JSON.stringify;
+
+    JSON.parse = function() {
+      const data = parseMock.apply(this, arguments);
+      if (data && data.result && data.result.timedtexttracks) {
+        window.dispatchEvent(new CustomEvent("easysubs_data", { detail: data.result }));
+      }
+      return data;
+    };
+
+    JSON.stringify = function(response: any) {
+      if (!response) return stringifyMock.apply(this, arguments);
+      const data = parseMock(stringifyMock.apply(this, arguments));
+
+      if (data && data.languages) {
+        window.__NF_languages = data.languages;
+      }
+      let modified = false;
+      if (data && data.params && data.params.showAllSubDubTracks != null) {
+        data.params.showAllSubDubTracks = true;
+        modified = true;
+      }
+      if (data && data.params && data.params.profiles) {
+        data.params.profiles.push("webvtt-lssdh-ios8");
+        modified = true;
+      }
+
+      return modified ? stringifyMock(data) : stringifyMock.apply(this, arguments);
+    };
   };
 
   private randomProperty = (obj: any) => {
@@ -108,7 +112,6 @@ class Netflix implements Service {
       let type = SUB_TYPES[track.rawTrackType];
       if (typeof type === "undefined") type = `[${track.rawTrackType}]`;
       const lang = track.language + type + (track.isForcedNarrative ? "-forced" : "");
-
       this.subCache[lang] = this.randomProperty(track.ttDownloadables[WEBVTT].downloadUrls);
     }
   }

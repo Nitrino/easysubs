@@ -48,8 +48,7 @@ class Utils {
       case "puzzle-english":
         return new PuzzleEnglish()
       default:
-        console.error("Call add word for unknown learning service");
-        break;
+        return null;
     }
   }
 }
