@@ -68,6 +68,14 @@ function ProgressBar() {
     }
   }
 
+  function handleClick(event: any) {
+    const time = Utils.getVideoCurrentTime(videoElement);
+    const leftBorder = time - timePeriod / 2;
+    const msInPx = timePeriod / progressBarElement.clientWidth;
+    const moveTime = leftBorder + event.nativeEvent.offsetX * msInPx;
+    Video.moveToTime(videoElement, moveTime);
+  }
+
   useEffect(
     () => {
       animateRef.current = requestAnimationFrame(animate);
@@ -87,7 +95,7 @@ function ProgressBar() {
   );
 
   return (
-    <div>
+    <div className="easysubs-progress-bar-container" onClick={handleClick}>
       {elements}
     </div>
   );
