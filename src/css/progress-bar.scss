@@ -23,11 +23,18 @@
     background: #1296ba;
   }
 
+  &-container {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
   &-element {
     background-color: #707070;
     position: absolute;
     height: 7px;
     bottom: 4px;
     border-radius: 7px;
+    pointer-events: none;
   }
 }

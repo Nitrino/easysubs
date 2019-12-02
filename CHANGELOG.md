@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.5.0
+## Unreleased
+
+### Enhancements
+
+- Rewind by click on the subtitles progress bar
+
+## v0.5.0
 
 Global change: template rendering rewritten to React.
 
@@ -23,7 +29,7 @@ Global change: template rendering rewritten to React.
 - Fix injecting js when supported service is not detected
 - Kinopub: Fix start when player loads before extension
 
-## 0.4.0
+## v0.4.0
 
 Global change of the extension initialization model. Now initialization occurs by sending custom events from services.
 
@@ -39,7 +45,7 @@ Global change of the extension initialization model. Now initialization occurs b
 - Fix Netflix movies subtitles
 - Fix bug with subtitles containing `<c>` tag
 
-## 0.3.0
+## v0.3.0
 
 ### Enhancements
 
