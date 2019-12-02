@@ -25,6 +25,7 @@
   "permissions": ["contextMenus", "activeTab", "storage"],
   "content_scripts": [
     {
+      "all_frames": true,
       "matches": ["https://*/*"],
       "css": ["dist/styles.css"]
     },

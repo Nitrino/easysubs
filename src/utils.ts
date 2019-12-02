@@ -3,6 +3,7 @@ import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
 import YouTube from './services/youtube';
+import Kinopoisk from './services/kinopoisk';
 import Lingualeo from "./learning-services/lingualeo";
 import PuzzleEnglish from "./learning-services/PuzzleEnglish";
 
@@ -11,7 +12,7 @@ class Utils {
     return typeof time === "number" ? time : parseInt(time, 10)
   }
 
-  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun {
+  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun | Kinopoisk {
     const titleContent = document.querySelector('title').textContent
     if (titleContent.includes("YouTube") || window.location.host === "www.youtube.com") {
       document.querySelector('html').id = "youtube"
@@ -25,9 +26,13 @@ class Utils {
       document.querySelector('html').id = "kinopub"
       return new KinoPub
     }
-    if (titleContent.includes("English-With-Fun") || window.location.host === "english-with-fun.com") {
+    if (window.location.host === "english-with-fun.com" || titleContent.includes("English-With-Fun")) {
       document.querySelector('html').id = "english-with-fun"
       return new EnglishWithFun
+    }
+    if (window.location.host === "hd.kinopoisk.ru" || titleContent.includes("КиноПоиск HD")) {
+      document.querySelector('html').id = "kinopoisk"
+      return new Kinopoisk
     }
     return null
   }
