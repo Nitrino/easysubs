@@ -4,7 +4,13 @@
 
 ### Enhancements
 
+- Netflix: show all available audio tracks and subtitles regardless of region
+- Netflix: load subtitles without reloading page
 - Rewind by click on the subtitles progress bar
+
+### Bugs
+
+- Netflix: Fix freezes after rewind page
 
 ## v0.5.0
 

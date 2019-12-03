@@ -21,6 +21,7 @@ Current roadmap and a list of known bugs can be found in the [issues](https://gi
 - Rewind to previous and next sub
 - Subtitles progress bar
 - Show alternative translations
+- Show all available audio tracks and subtitles on Netflix regardless of region
 
 ### Limitations
 
