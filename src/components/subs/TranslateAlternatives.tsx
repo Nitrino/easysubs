@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TranslateAlternativesItem from "./TranslateAlternativesItem";
+import Utils from "../../utils";
 
 function TranslateAlternatives(props: { alternativesGroups: any[]; word: string }) {
+  const [currentService, setCurrentService] = useState(null);
+
+  useEffect(() => {
+    setCurrentService(Utils.getCurrentLearningService());
+  }, []);
+
   return (
     <div className="easysubs-translate-alternative">
       <table>
@@ -29,6 +36,7 @@ function TranslateAlternatives(props: { alternativesGroups: any[]; word: string 
                       alternative={alternative}
                       word={props.word}
                       groupIndex={groupIndex}
+                      currentService={currentService}
                     />
                   </tr>
                 );

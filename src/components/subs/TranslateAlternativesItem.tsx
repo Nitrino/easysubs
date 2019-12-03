@@ -1,26 +1,35 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import Plus from "../../images/plus.svg";
 import Utils from "../../utils";
 import FrequencyDots from "./FrequencyDots";
+import Lingualeo from "../../learning-services/lingualeo";
+import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
 
-function TranslateAlternativesItem(props: { alternative: any[]; word: string; groupIndex: number }) {
-  const currentService = Utils.getCurrentLearningService();
+interface Props {
+  alternative: any[];
+  word: string;
+  groupIndex: number;
+  currentService: null | Lingualeo | PuzzleEnglish;
+}
+
+function TranslateAlternativesItem(props: Props) {
   const translateNode: any = useRef();
+
   function handleOnClick(e: any) {
     e.stopPropagation();
     const partOfSpeechNode = document.querySelector(`#part-of-speech-${props.groupIndex}`);
 
-    currentService
+    props.currentService
       .addWord(Utils.clearWord(props.word), translateNode.current.textContent, partOfSpeechNode.textContent)
       .then((text: string) => (toast as any).info(text))
       .catch((error: string) => (toast as any).error(error));
   }
 
   return [
-    currentService
+    props.currentService
       ? <td key={"plus"} className="easysubs-translate-alternative-item-add-to-learn" onClick={handleOnClick}>
-          <Plus style={{ fill: currentService.color }} />
+          <Plus style={{ fill: props.currentService.color }} />
         </td>
       : null,
     <td key={"translate"} className="easysubs-translate-alternative-item-translate" ref={translateNode}>

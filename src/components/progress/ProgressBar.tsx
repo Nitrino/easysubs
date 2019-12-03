@@ -50,10 +50,6 @@ function ProgressBar() {
   }
 
   function keyboardHandler(event: KeyboardEvent) {
-    if (Utils.detectService().constructor.name === "Netflix") {
-      return;
-    }
-
     if (event.code === "ArrowLeft") {
       event.stopPropagation();
       if (event.type === "keydown") {
@@ -79,9 +75,11 @@ function ProgressBar() {
   useEffect(
     () => {
       animateRef.current = requestAnimationFrame(animate);
-      keyboardEvents.forEach(eventType => {
-        document.addEventListener(eventType, keyboardHandler, true);
-      });
+      if (Utils.detectService().constructor.name !== "Netflix") {
+        keyboardEvents.forEach(eventType => {
+          document.addEventListener(eventType, keyboardHandler, true);
+        });
+      }
 
       return () => {
         cancelAnimationFrame(animateRef.current);
