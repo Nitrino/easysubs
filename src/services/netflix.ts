@@ -74,9 +74,6 @@ class Netflix implements Service {
       if (!response) return stringifyMock.apply(this, arguments);
       const data = parseMock(stringifyMock.apply(this, arguments));
 
-      if (data && data.languages) {
-        window.__NF_languages = data.languages;
-      }
       let modified = false;
       if (data && data.params && data.params.showAllSubDubTracks != null) {
         data.params.showAllSubDubTracks = true;
