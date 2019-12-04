@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Netflix: add the ability to rewind by subs
 - Netflix: show all available audio tracks and subtitles regardless of region
 - Netflix: load subtitles without reloading page
 - Rewind by click on the subtitles progress bar
