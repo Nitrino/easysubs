@@ -1,10 +1,13 @@
-import { learningServiceStore } from "./store";
+import { learningServiceStore, subsStore } from "./store";
 import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
 import YouTube from './services/youtube';
 import Lingualeo from "./learning-services/lingualeo";
 import PuzzleEnglish from "./learning-services/PuzzleEnglish";
+import Video from "./video";
+
+const keyboardEvents = ["keyup", "keydown", "keypress"];
 
 class Utils {
   public static castSubTime(time: number | string) {
@@ -50,6 +53,39 @@ class Utils {
       default:
         return null;
     }
+  }
+
+  
+  public static isNetflix() {
+    return ["www.netflix.com", "netflix.com"].includes(window.location.host)
+  }
+
+  public static keyboardHandler(event: KeyboardEvent) {
+    const videoElement = document.querySelector("video")
+    if (event.code === "ArrowLeft") {
+      event.stopPropagation();
+      if (event.type === "keydown") {
+        Video.moveToPrevSub(videoElement, subsStore.getState());
+      }
+    }
+    if (event.code === "ArrowRight") {
+      event.stopPropagation();
+      if (event.type === "keydown") {
+        Video.moveToNextSub(videoElement, subsStore.getState());
+      }
+    }
+  }
+
+  public static addKeyboardEventsListeners() {
+    keyboardEvents.forEach(eventType => {
+      document.addEventListener(eventType, Utils.keyboardHandler, true);
+    });
+  }
+
+  public static removeKeyboardEventsListeners() {
+    keyboardEvents.forEach(eventType => {
+      document.removeEventListener(eventType, Utils.keyboardHandler, true);
+    });
   }
 }
 

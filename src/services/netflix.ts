@@ -22,19 +22,18 @@ interface Track {
 }
 
 class Netflix implements Service {
-  private currentPathName: string;
   private subCache: any;
 
   constructor() {
     this.subCache = {};
-    this.currentPathName = location.pathname;
     this.processSubData = this.processSubData.bind(this);
-    this.injectScript();
     window.addEventListener("easysubs_data", this.processSubData);
   }
 
   public init() {
-    ready("video", (videoElement: HTMLVideoElement) => {
+    this.injectScript();
+
+    ready("video", () => {
       if (location.pathname.split("/")[1] === "watch") {
         window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
         window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "en" }));
@@ -42,12 +41,14 @@ class Netflix implements Service {
     });
   }
 
-  public getSubs(language: string) {
+  public async getSubs(language: string) {
     const ccLanguage = language + SUB_TYPES.closedcaptions;
     const langKey = Object.keys(this.subCache).find(key => key === language || key === ccLanguage);
 
     const subUri = this.subCache[langKey];
-    return fetch(subUri).then(resp => resp.text()).then(data => parse(data));
+    const resp = await fetch(subUri);
+    const data = await resp.text();
+    return parse(data);
   }
 
   public playerContainerSelector(): string {
@@ -86,6 +87,18 @@ class Netflix implements Service {
 
       return modified ? stringifyMock(data) : stringifyMock.apply(this, arguments);
     };
+
+    function getPlayer() {
+      const videoPlayer = netflix.appContext.state.playerApp.getAPI().videoPlayer;
+      const sessionId = videoPlayer.getAllPlayerSessionIds()[0];
+      return videoPlayer.getVideoPlayerBySessionId(sessionId);
+    }
+
+    function handleSeek(event: any) {
+      getPlayer().seek(event.detail);
+    }
+
+    window.addEventListener("easysubsSeek", handleSeek);
   };
 
   private randomProperty = (obj: any) => {
