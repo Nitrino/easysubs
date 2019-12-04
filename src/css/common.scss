@@ -49,7 +49,7 @@ i > span {
       transform: translate3d(-50%, -100%, 0);
       padding: 10px 25px;
       position: absolute;
-      background: #1e1e1e;
+      background-color: #1e1e1e;
       border-radius: 0.4em;
       font-size: 16px;
       max-width: fit-content;
@@ -98,7 +98,7 @@ i > span {
       font-size: 14px;
 
       &-part-speech {
-        padding-top: 15px;
+        padding-top: 15px !important;
         font-weight: bold;
         text-transform: uppercase;
         font-size: 12px;
@@ -108,12 +108,18 @@ i > span {
         width: max-content;
         border-collapse: separate;
         border-spacing: 0 5px;
+
+        th,
+        td {
+          background-color: #1e1e1e;
+          padding: 0;
+        }
       }
       &-item {
         word-break: break-word;
 
         &-add-to-learn {
-          padding-right: 10px;
+          padding-right: 10px !important;
           svg {
             width: 12px;
           }
@@ -123,13 +129,13 @@ i > span {
           color: $white;
           max-width: 115px;
           min-width: 50px;
-          padding-right: 10px;
+          padding-right: 10px !important;
         }
 
         &-original {
           max-width: 150px;
           min-width: 50px;
-          padding-right: 10px;
+          padding-right: 10px !important;
         }
 
         &-frequency {
