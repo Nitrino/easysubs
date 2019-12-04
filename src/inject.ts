@@ -19,7 +19,6 @@ if (service) {
       UI.renderSubs(service.playerContainerSelector());
       UI.renderProgressBar(service.playerContainerSelector());
       UI.renderNotifications();
-
       service.getSubs(event.detail).then(subs => {
         updateSubs(subs);
       });

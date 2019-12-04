@@ -7,7 +7,6 @@ import Utils from "../../utils";
 import Video from "../../video";
 
 const timePeriod = 30000;
-const keyboardEvents = ["keyup", "keydown", "keypress"];
 
 function ProgressBar() {
   const subs = useStore(subsStore);
@@ -49,21 +48,6 @@ function ProgressBar() {
     );
   }
 
-  function keyboardHandler(event: KeyboardEvent) {
-    if (event.code === "ArrowLeft") {
-      event.stopPropagation();
-      if (event.type === "keydown") {
-        Video.moveToPrevSub(videoElement, subs);
-      }
-    }
-    if (event.code === "ArrowRight") {
-      event.stopPropagation();
-      if (event.type === "keydown") {
-        Video.moveToNextSub(videoElement, subs);
-      }
-    }
-  }
-
   function handleClick(event: any) {
     const time = Utils.getVideoCurrentTime(videoElement);
     const leftBorder = time - timePeriod / 2;
@@ -75,17 +59,11 @@ function ProgressBar() {
   useEffect(
     () => {
       animateRef.current = requestAnimationFrame(animate);
-      if (Utils.detectService().constructor.name !== "Netflix") {
-        keyboardEvents.forEach(eventType => {
-          document.addEventListener(eventType, keyboardHandler, true);
-        });
-      }
+      Utils.addKeyboardEventsListeners();
 
       return () => {
         cancelAnimationFrame(animateRef.current);
-        keyboardEvents.forEach(eventType => {
-          document.removeEventListener(eventType, keyboardHandler, true);
-        });
+        Utils.removeKeyboardEventsListeners();
         updateElements([]);
       };
     },

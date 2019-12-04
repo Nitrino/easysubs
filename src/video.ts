@@ -32,7 +32,9 @@ class Video {
   }
 
   public static moveToTime(video: HTMLVideoElement, time: number | string) {
-    video.currentTime = Utils.castSubTime(time) / 1000;
+    Utils.isNetflix()
+      ? window.dispatchEvent(new CustomEvent("easysubsSeek", { detail: Utils.castSubTime(time) }))
+      : (video.currentTime = Utils.castSubTime(time) / 1000);
   }
 }
 export default Video;
