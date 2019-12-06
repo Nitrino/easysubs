@@ -6,3 +6,7 @@ declare var netflix: any;
 declare var player: any;
 declare var playerInstance: any;
 declare var jwPlayer: any;
+declare var currentLanguage: string;
+declare var isLoaded: boolean;
+declare var getPlayer: any;
+declare var currentPath: string;

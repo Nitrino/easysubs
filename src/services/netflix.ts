@@ -1,9 +1,7 @@
 import Service from "service";
 import { parse } from "subtitle";
-import { ready } from "../ready";
 
 const WEBVTT = "webvtt-lssdh-ios8";
-const MAIN_TITLE = ".player-status-main-title, .ellipsize-text>h4, .video-title>h4";
 const SUB_TYPES = {
   closedcaptions: "[cc]",
   subtitles: ""
@@ -32,20 +30,16 @@ class Netflix implements Service {
 
   public init() {
     this.injectScript();
-
-    ready("video", () => {
-      if (location.pathname.split("/")[1] === "watch") {
-        window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
-        window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "en" }));
-      }
-    });
   }
 
   public async getSubs(language: string) {
-    const ccLanguage = language + SUB_TYPES.closedcaptions;
-    const langKey = Object.keys(this.subCache).find(key => key === language || key === ccLanguage);
+    if (language === "") return parse("");
 
-    const subUri = this.subCache[langKey];
+    const ccLanguage = language + SUB_TYPES.closedcaptions;
+    const subsList = this.subCache[this.getMoveId()];
+    const langKey = Object.keys(subsList).find(key => key === language || key === ccLanguage);
+
+    const subUri = subsList[langKey];
     const resp = await fetch(subUri);
     const data = await resp.text();
     return parse(data);
@@ -99,6 +93,25 @@ class Netflix implements Service {
     }
 
     window.addEventListener("easysubsSeek", handleSeek);
+
+    window.setInterval(() => {
+      const player = getPlayer();
+
+      if (player && "getLoaded" in player && player.getLoaded()) {
+        if (!window.isLoaded) {
+          window.isLoaded = true;
+          window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
+        }
+
+        if (window.currentLanguage !== player.getTimedTextTrack().bcp47) {
+          window.currentLanguage = player.getTimedTextTrack().bcp47;
+          window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: window.currentLanguage }));
+        }
+      } else {
+        window.isLoaded = false;
+        window.currentLanguage = null;
+      }
+    }, 500);
   };
 
   private randomProperty = (obj: any) => {
@@ -112,6 +125,7 @@ class Netflix implements Service {
       return;
     }
 
+    this.subCache[event.detail.movieId] = {};
     const tracks: Track[] = event.detail.timedtexttracks;
 
     for (const track of tracks) {
@@ -122,7 +136,7 @@ class Netflix implements Service {
       let type = SUB_TYPES[track.rawTrackType];
       if (typeof type === "undefined") type = `[${track.rawTrackType}]`;
       const lang = track.language + type + (track.isForcedNarrative ? "-forced" : "");
-      this.subCache[lang] = this.randomProperty(track.ttDownloadables[WEBVTT].downloadUrls);
+      this.subCache[event.detail.movieId][lang] = this.randomProperty(track.ttDownloadables[WEBVTT].downloadUrls);
     }
   }
 
@@ -131,6 +145,10 @@ class Netflix implements Service {
     sc.innerHTML = `(${this.injection.toString()})()`;
     document.head.appendChild(sc);
     document.head.removeChild(sc);
+  }
+
+  private getMoveId() {
+    return window.location.pathname.match(/\/watch\/(.*)/)[1];
   }
 }
 
