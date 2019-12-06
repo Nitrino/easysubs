@@ -1,7 +1,6 @@
 import { useStore } from "effector-react";
-import React, { useEffect, useState } from "react";
-import { toggleShowFullSubTranslatePopup } from "../../event";
-import { showFullSubTranslatePopupStore, subsStore } from "../../store";
+import React, { useState } from "react";
+import { showFullSubTranslatePopupStore } from "../../store";
 
 import TranslateWordPopup from "./TranslateWordPopup";
 
@@ -14,22 +13,28 @@ interface Props {
 function Word(props: Props) {
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [showTranslation, toggleShowTranslation] = useState(false);
+  const wordNode: any = React.useRef(null);
+
+  function showTranslatePopup() {
+    if (!showFullSubTranslatePopup) {
+      wordNode.current.style.color = "#1296ba";
+      toggleShowTranslation(true);
+    }
+  }
+
+  function hideTranslatePopup() {
+    wordNode.current.style.color = "inherit";
+    toggleShowTranslation(false);
+  }
 
   return React.createElement(
     props.tagName,
     {
       className: "easysubs-word",
-      onClick: () => {
-        toggleShowTranslation(false);
-      },
-      onMouseEnter: () => {
-        if (!showFullSubTranslatePopup) {
-          toggleShowTranslation(true);
-        }
-      },
-      onMouseLeave: () => {
-        toggleShowTranslation(false);
-      }
+      onClick: hideTranslatePopup,
+      onMouseEnter: showTranslatePopup,
+      onMouseLeave: hideTranslatePopup,
+      ref: wordNode
     },
     props.word,
     // tslint:disable-next-line: jsx-self-close

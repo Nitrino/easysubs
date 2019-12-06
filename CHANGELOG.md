@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add translate word highlight
 - Youtube: add support subtitle selection
 - Netflix: add support subtitle selection
 - Netflix: add the ability to rewind by subs
