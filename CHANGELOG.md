@@ -4,6 +4,8 @@
 
 ### Enhancements
 
+- Youtube: add support subtitle selection
+- Netflix: add support subtitle selection
 - Netflix: add the ability to rewind by subs
 - Netflix: show all available audio tracks and subtitles regardless of region
 - Netflix: load subtitles without reloading page
