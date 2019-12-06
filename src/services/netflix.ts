@@ -1,6 +1,5 @@
 import Service from "service";
 import { parse } from "subtitle";
-import { updateSubs } from "../event";
 
 const WEBVTT = "webvtt-lssdh-ios8";
 const SUB_TYPES = {
@@ -30,12 +29,6 @@ class Netflix implements Service {
   }
 
   public init() {
-    // window.setInterval(() => {
-    //   if (window.currentPath !== window.location.href && this.subCache === {}) {
-    //     window.currentPath = window.location.href;
-    //     this.subCache = {};
-    //   }
-    // }, 500);
     this.injectScript();
   }
 
