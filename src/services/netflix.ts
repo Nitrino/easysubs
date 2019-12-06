@@ -31,14 +31,13 @@ class Netflix implements Service {
   }
 
   public init() {
-    this.injectScript();
-
-    ready("video", () => {
-      if (location.pathname.split("/")[1] === "watch") {
-        window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
-        window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "en" }));
+    window.setInterval(() => {
+      if (window.currentPath !== window.location.href) {
+        window.currentPath = window.location.href;
+        this.subCache = {};
       }
-    });
+    }, 100);
+    this.injectScript();
   }
 
   public async getSubs(language: string) {
@@ -99,6 +98,25 @@ class Netflix implements Service {
     }
 
     window.addEventListener("easysubsSeek", handleSeek);
+
+    window.setInterval(() => {
+      const player = getPlayer();
+
+      if (player && "getLoaded" in player && player.getLoaded()) {
+        if (!window.isLoaded) {
+          window.isLoaded = true;
+          window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
+        }
+
+        if (window.currentLanguage !== player.getTimedTextTrack().bcp47) {
+          window.currentLanguage = player.getTimedTextTrack().bcp47;
+          window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: window.currentLanguage }));
+        }
+      } else {
+        window.isLoaded = false;
+        window.currentLanguage = null;
+      }
+    }, 500);
   };
 
   private randomProperty = (obj: any) => {
