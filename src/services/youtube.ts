@@ -12,27 +12,11 @@ interface Subtitle {
 
 class YouTube implements Service {
   public init() {
-    ready("video", (videoElement: HTMLVideoElement) => {
-      videoElement.addEventListener("loadeddata", (event: any) => {
-        window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
-        window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "en" }));
-      });
-    });
-
-    let oldHref = document.location.href;
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        if (oldHref !== document.location.href) {
-          window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "en" }));
-          oldHref = document.location.href;
-        }
-      });
-    });
-    const config = { childList: true, subtree: true };
-    observer.observe(document.querySelector("body"), config);
+    this.injectScript();
   }
 
   public async getSubs(language: string) {
+    if (language === "") return parse("");
     const videoId = this.getVideoId();
     const subItem = await this.getVideoInfo(videoId, language);
     const subUri: string = `${subItem.baseUrl}&fmt=vtt`;
@@ -84,6 +68,53 @@ class YouTube implements Service {
       return match[2];
     }
     console.error("Can't get youtube video id");
+  }
+
+  private injection = () => {
+    window.setInterval(() => {
+      const player: any = document.getElementById("movie_player");
+
+      if (player) {
+        if (!window.isLoaded) {
+          window.isLoaded = true;
+          window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
+          player.toggleSubtitles();
+          player.toggleSubtitles();
+        }
+      } else {
+        window.isLoaded = false;
+      }
+
+      const subsToggleElement = document.querySelector(".ytp-subtitles-button");
+      if (subsToggleElement) {
+        if (window.subtitlesEnabled && subsToggleElement.getAttribute("aria-pressed") === "false") {
+          window.subtitlesEnabled = false;
+          window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "" }));
+        }
+      }
+    }, 500);
+
+    (open => {
+      XMLHttpRequest.prototype.open = function(method: string, url: string) {
+        if (url.match(/^http/g) !== null) {
+          const urlObject = new URL(url);
+          if (urlObject.pathname === "/api/timedtext") {
+            window.subtitlesEnabled = true;
+            window.dispatchEvent(
+              new CustomEvent("easysubsSubtitlesChanged", { detail: urlObject.searchParams.get("lang") })
+            );
+          }
+        }
+        open.call(this, method, url);
+      };
+    })(XMLHttpRequest.prototype.open);
+  };
+
+  private injectScript() {
+    const sc = document.createElement("script");
+    sc.innerHTML = `(${this.injection.toString()})()`;
+    document.head.appendChild(sc);
+    document.head.removeChild(sc);
   }
 }
 
