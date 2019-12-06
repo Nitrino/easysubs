@@ -1,9 +1,8 @@
 import Service from "service";
 import { parse } from "subtitle";
-import { ready } from "../ready";
+import { updateSubs } from "../event";
 
 const WEBVTT = "webvtt-lssdh-ios8";
-const MAIN_TITLE = ".player-status-main-title, .ellipsize-text>h4, .video-title>h4";
 const SUB_TYPES = {
   closedcaptions: "[cc]",
   subtitles: ""
@@ -31,20 +30,23 @@ class Netflix implements Service {
   }
 
   public init() {
-    window.setInterval(() => {
-      if (window.currentPath !== window.location.href) {
-        window.currentPath = window.location.href;
-        this.subCache = {};
-      }
-    }, 100);
+    // window.setInterval(() => {
+    //   if (window.currentPath !== window.location.href && this.subCache === {}) {
+    //     window.currentPath = window.location.href;
+    //     this.subCache = {};
+    //   }
+    // }, 500);
     this.injectScript();
   }
 
   public async getSubs(language: string) {
-    const ccLanguage = language + SUB_TYPES.closedcaptions;
-    const langKey = Object.keys(this.subCache).find(key => key === language || key === ccLanguage);
+    if (language === "") return parse("");
 
-    const subUri = this.subCache[langKey];
+    const ccLanguage = language + SUB_TYPES.closedcaptions;
+    const subsList = this.subCache[this.getMoveId()];
+    const langKey = Object.keys(subsList).find(key => key === language || key === ccLanguage);
+
+    const subUri = subsList[langKey];
     const resp = await fetch(subUri);
     const data = await resp.text();
     return parse(data);
@@ -130,6 +132,7 @@ class Netflix implements Service {
       return;
     }
 
+    this.subCache[event.detail.movieId] = {};
     const tracks: Track[] = event.detail.timedtexttracks;
 
     for (const track of tracks) {
@@ -140,7 +143,7 @@ class Netflix implements Service {
       let type = SUB_TYPES[track.rawTrackType];
       if (typeof type === "undefined") type = `[${track.rawTrackType}]`;
       const lang = track.language + type + (track.isForcedNarrative ? "-forced" : "");
-      this.subCache[lang] = this.randomProperty(track.ttDownloadables[WEBVTT].downloadUrls);
+      this.subCache[event.detail.movieId][lang] = this.randomProperty(track.ttDownloadables[WEBVTT].downloadUrls);
     }
   }
 
@@ -149,6 +152,10 @@ class Netflix implements Service {
     sc.innerHTML = `(${this.injection.toString()})()`;
     document.head.appendChild(sc);
     document.head.removeChild(sc);
+  }
+
+  private getMoveId() {
+    return window.location.pathname.match(/\/watch\/(.*)/)[1];
   }
 }
 
