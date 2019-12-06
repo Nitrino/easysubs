@@ -10,3 +10,4 @@ declare var currentLanguage: string;
 declare var isLoaded: boolean;
 declare var getPlayer: any;
 declare var currentPath: string;
+declare var subtitlesEnabled: boolean;
