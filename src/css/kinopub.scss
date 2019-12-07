@@ -1,4 +1,8 @@
 #kinopub.easysubs-enable {
+  #easysubs {
+    bottom: 130px;
+  }
+
   .jw-captions.jw-captions-enabled {
     display: none;
   }
@@ -10,7 +14,22 @@
   .jw-controlbar {
     bottom: 15px;
   }
+
   .jw-settings-menu {
-    bottom: 72px;
+    bottom: 130px;
+  }
+
+  .easysubs-settings {
+    width: 60px;
+    height: 60px;
+
+    &-wrapper {
+      bottom: 95px;
+    }
+
+    svg {
+      height: 30px;
+      width: 30px;
+    }
   }
 }
