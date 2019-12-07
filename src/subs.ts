@@ -10,7 +10,8 @@ class Subs {
 
   public static subTextToChildNodesArray(text: string): ChildNode[] {
     const tmpDiv = document.createElement("div") as HTMLDivElement
-    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, '').replace(/<\/c>/g, '')
+    tmpDiv.innerHTML = text.replace(/<.*?><c.*?>|<\/c>|<c.*?>|<\/c.*?>/g, '').replace(/[\r\n]+/g, " \r\n")
+    
     return Array.from(tmpDiv.childNodes)
   }
 
