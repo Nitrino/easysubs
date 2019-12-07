@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Kinopub: fix styles after update video player
 - Add translate word highlight
 - Youtube: add support subtitle selection
 - Netflix: add support subtitle selection
