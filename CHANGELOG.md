@@ -4,6 +4,8 @@
 
 ### Enhancements
 
+- Improve settings styles
+- Add ability to disable progress bar
 - Disable auto playback after manually stopping the video
 - Kinopub: fix styles after update video player
 - Add translate word highlight
