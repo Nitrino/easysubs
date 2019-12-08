@@ -41,6 +41,7 @@
   "dependencies": {
     "@babel/runtime": "^7.7.4",
     "@cospired/i18n-iso-languages": "^2.0.5",
+    "@sentry/browser": "^5.10.1",
     "@svgr/webpack": "^4.3.3",
     "@types/chrome": "0.0.88",
     "@types/hls.js": "^0.12.5",
