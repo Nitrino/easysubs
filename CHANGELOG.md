@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Enhancements
+
+- Add google analytics
+
 ## v0.6.1
 
 ### Bugs
