@@ -3,14 +3,17 @@
     display: none !important;
   }
 
-  .ytp-chrome-bottom,
-  .ytp-gradient-bottom {
-    bottom: 15px;
+  &.easysubs-progress-bar-enable {
+    .ytp-chrome-bottom,
+    .ytp-gradient-bottom {
+      bottom: 15px;
+    }
+    .html5-video-player {
+      padding-bottom: 15px;
+    }
   }
 
   .html5-video-player {
-    padding-bottom: 15px;
-
     &.ytp-fullscreen {
       padding-bottom: 0;
 

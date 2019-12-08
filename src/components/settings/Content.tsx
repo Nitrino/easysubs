@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Language from "./Language";
 import LearningService from "./LearningService";
 import Toggle from "./Toggle";
+import ShowProgressBar from "./ShowProgressBar";
 
 function Content(props: any) {
   function closeSettings() {
@@ -15,6 +16,7 @@ function Content(props: any) {
         <Toggle />
         <Language />
         <LearningService />
+        <ShowProgressBar />
       </div>
     </div>
   );
