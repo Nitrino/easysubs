@@ -7,3 +7,4 @@ export const userLanguageStore = withPersist(createStore(window.navigator.langua
 export const learningServiceStore = withPersist(createStore(null));
 export const subsStore = createStore(parse(""));
 export const showFullSubTranslatePopupStore = createStore(false);
+export const autoPauseStore = createStore(false);

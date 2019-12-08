@@ -1,13 +1,14 @@
 import { useStore } from "effector-react";
 import React, { useEffect, useRef, useState } from "react";
-import { toggleShowFullSubTranslatePopup } from "../../event";
-import { showFullSubTranslatePopupStore, subsStore } from "../../store";
+import { toggleShowFullSubTranslatePopup, toggleAutoPause } from "../../event";
+import { showFullSubTranslatePopupStore, subsStore, autoPauseStore } from "../../store";
 import Subs from "../../subs";
 import TranslateFullSubPopup from "./TranslateFullSubPopup";
 import Word from "./Word";
 
 function SubsComponent() {
   const subs = useStore(subsStore);
+  const autoPause = useStore(autoPauseStore);
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [videoElement] = useState(document.querySelector("video"));
   const [currentSubs, setCurrentSubs] = useState([]);
@@ -33,12 +34,18 @@ function SubsComponent() {
   }
 
   function handleOnMouseEnter() {
-    videoElement.pause();
+    if (!videoElement.paused) {
+      toggleAutoPause(true);
+      videoElement.pause();
+    }
   }
 
   function handleOnMouseLeave() {
-    videoElement.play();
-    toggleShowFullSubTranslatePopup(false);
+    if (autoPause) {
+      toggleAutoPause(false);
+      videoElement.play();
+      toggleShowFullSubTranslatePopup(false);
+    }
   }
 
   function handleOnClick() {
@@ -79,5 +86,6 @@ function SubsComponent() {
 }
 
 (showFullSubTranslatePopupStore as any).on(toggleShowFullSubTranslatePopup, (state: any, isShow: boolean) => isShow);
+(autoPauseStore as any).on(toggleAutoPause, (state: any, enable: boolean) => enable);
 
 export default SubsComponent;

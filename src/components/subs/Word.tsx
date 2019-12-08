@@ -23,7 +23,7 @@ function Word(props: Props) {
   }
 
   function hideTranslatePopup() {
-    wordNode.current.style.color = "inherit";
+    wordNode.current.style.color = "#ffffff";
     toggleShowTranslation(false);
   }
 
