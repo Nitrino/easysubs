@@ -32,7 +32,11 @@ function LearningService() {
         <span>Learning service: </span>
       </div>
       <div className="easysubs-settings__item__right">
-        <select value={currentService || ""} onChange={e => setLearningService(e.target.value || null)}>
+        <select
+          className="easysubs-settings__select"
+          value={currentService || ""}
+          onChange={e => setLearningService(e.target.value || null)}
+        >
           {services.map((service: { value: string; label: string }, index) => {
             return (
               <option value={service.value} key={index}>

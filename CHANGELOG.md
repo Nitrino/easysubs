@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add global extension menu
 - Improve settings styles
 - Add ability to disable progress bar
 - Disable auto playback after manually stopping the video

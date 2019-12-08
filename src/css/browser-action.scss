@@ -1,0 +1,37 @@
+#browser-action {
+  background: #262a32;
+  color: #ffffff;
+  width: 200px;
+
+  body {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  .header {
+    font-size: 14px;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(#fff, 0.1);
+  }
+
+  .content {
+    menu {
+      padding: 0;
+      margin: 10px 0;
+      li {
+        list-style: none;
+        line-height: 2;
+        padding: 0 20px;
+
+        &:hover {
+          background: rgba(#fff, 0.1);
+        }
+
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

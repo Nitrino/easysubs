@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     inject: "./src/inject.ts",
     background: "./src/background.ts",
+    browser_action: "./src/browser_action.tsx",
     styles: "./src/css/styles.scss"
   },
   resolve: {
@@ -51,7 +52,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       filename: "browser_action.html",
-      template: "src/browser_action.html"
+      template: "src/browser_action.html",
+      inject: false
     })
   ]
 };
