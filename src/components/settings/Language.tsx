@@ -12,17 +12,25 @@ function Language() {
   const userLanguage = useStore(userLanguageStore);
 
   return (
-    <div className="easysubs-settings-language">
-      <span>Language: </span>
-      <select value={userLanguage} onChange={e => setUserLanguage(e.target.value)}>
-        {options.map((language: { value: string; label: string }, index) => {
-          return (
-            <option value={language.value} key={index}>
-              {language.label}
-            </option>
-          );
-        })}
-      </select>
+    <div className="easysubs-settings-language easysubs-settings__item">
+      <div className="easysubs-settings__item__left">
+        <span>Translation language: </span>
+      </div>
+      <div className="easysubs-settings__item__right">
+        <select
+          className="easysubs-settings__item__right"
+          value={userLanguage}
+          onChange={e => setUserLanguage(e.target.value)}
+        >
+          {options.map((language: { value: string; label: string }, index) => {
+            return (
+              <option value={language.value} key={index}>
+                {language.label}
+              </option>
+            );
+          })}
+        </select>
+      </div>
     </div>
   );
 }

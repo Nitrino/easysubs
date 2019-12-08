@@ -3,20 +3,22 @@
     bottom: 130px;
   }
 
+  &.easysubs-progress-bar-enable {
+    .jw-controlbar {
+      bottom: 15px;
+    }
+
+    .jw-settings-menu {
+      bottom: 130px;
+    }
+  }
+
   .jw-captions.jw-captions-enabled {
     display: none;
   }
 
   .jw-flag-fullscreen #easysubs {
     font-size: 44px;
-  }
-
-  .jw-controlbar {
-    bottom: 15px;
-  }
-
-  .jw-settings-menu {
-    bottom: 130px;
   }
 
   .easysubs-settings {

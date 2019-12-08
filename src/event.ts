@@ -1,6 +1,7 @@
 import { createEvent } from "effector";
 
 export const toggleEnableState = createEvent("Toggle extension enable state");
+export const toggleShowProgressBarState = createEvent("Toggle show progress bar state");
 export const setUserLanguage = createEvent("Set user language");
 export const setLearningService = createEvent("Set learning service");
 

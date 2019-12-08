@@ -3,16 +3,18 @@
     display: none;
   }
 
+  &.easysubs-progress-bar-enable {
+    .jw-controlbar {
+      margin-bottom: 15px;
+    }
+  }
+
   #easysubs {
     font-size: 28px;
   }
 
   .jw-flag-fullscreen #easysubs {
     font-size: 44px;
-  }
-
-  .jw-controlbar {
-    margin-bottom: 15px;
   }
 
   .jw-settings-menu {

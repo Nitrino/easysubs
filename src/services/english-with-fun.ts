@@ -30,7 +30,7 @@ class EnglishWithFun implements Service {
   }
 
   public settingSelector(): string {
-    return ".jw-settings-submenu-button";
+    return ".jw-icon-settings.jw-settings-submenu-button";
   }
 
   private injectScript() {
