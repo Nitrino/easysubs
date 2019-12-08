@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Disable auto playback after manually stopping the video
 - Kinopub: fix styles after update video player
 - Add translate word highlight
 - Youtube: add support subtitle selection
