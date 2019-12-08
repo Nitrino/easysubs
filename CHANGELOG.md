@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.1
+
+### Bugs
+
+- Remove jekyll config since it conflicts with chrome
+
 ## v0.6.0
 
 The main functionality is implemented, ahead of the testing phase and bringing to production status.
