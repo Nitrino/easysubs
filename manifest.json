@@ -32,5 +32,6 @@
       "matches": ["https://*/*"],
       "js": ["dist/inject.js"]
     }
-  ]
+  ],
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
 }
