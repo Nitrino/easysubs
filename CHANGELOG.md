@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.6.0
+
+The main functionality is implemented, ahead of the testing phase and bringing to production status.
 
 ### Enhancements
 
