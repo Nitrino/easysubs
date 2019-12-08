@@ -18,7 +18,7 @@ function Language() {
       </div>
       <div className="easysubs-settings__item__right">
         <select
-          className="easysubs-settings__item__right"
+          className="easysubs-settings__select"
           value={userLanguage}
           onChange={e => setUserLanguage(e.target.value)}
         >
