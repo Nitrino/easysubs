@@ -56,10 +56,10 @@ function SubsComponent() {
   }
 
   function handleOnMouseLeave() {
+    toggleShowFullSubTranslatePopup(false);
     if (autoPause) {
       toggleAutoPause(false);
       videoElement.play();
-      toggleShowFullSubTranslatePopup(false);
     }
   }
 
