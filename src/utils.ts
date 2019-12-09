@@ -1,4 +1,4 @@
-import { learningServiceStore, subsStore } from "./store";
+import { learningServiceStore, subsStore, enableState } from "./store";
 import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
@@ -61,6 +61,8 @@ class Utils {
   }
 
   public static keyboardHandler(event: KeyboardEvent) {
+    if(!enableState.getState()) return;
+
     const videoElement = document.querySelector("video")
     if (event.code === "ArrowLeft") {
       event.stopPropagation();

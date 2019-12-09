@@ -1,6 +1,10 @@
 #netflix.easysubs-enable {
   #easysubs {
-    bottom: 120px;
+    bottom: 15vh;
+
+    @media screen and (max-height: 800px) {
+      bottom: 18vh;
+    }
   }
 
   .player-timedtext {
