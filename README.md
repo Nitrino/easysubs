@@ -29,3 +29,4 @@ Support:
 - Subtitles progress bar.
 - Show alternative translations.
 - Show all available audio tracks and subtitles on Netflix regardless of region.
+- Setting subtitle size
