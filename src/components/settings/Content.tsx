@@ -4,6 +4,7 @@ import LearningService from "./LearningService";
 import Toggle from "./Toggle";
 import ShowProgressBar from "./ShowProgressBar";
 import SubsFontSize from "./SubsFontSize";
+import ResyncSubs from "./ResyncSubs";
 
 function Content(props: any) {
   function closeSettings() {
@@ -19,6 +20,7 @@ function Content(props: any) {
         <LearningService />
         <ShowProgressBar />
         <SubsFontSize />
+        <ResyncSubs />
       </div>
     </div>
   );
