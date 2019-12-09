@@ -25,7 +25,8 @@ $text-color: #ffffff;
     background-size: 12px;
   }
 
-  &__font-size {
+  &__font-size,
+  &__delay {
     display: flex;
     align-items: center;
 
@@ -36,6 +37,8 @@ $text-color: #ffffff;
     &__text {
       font-weight: bold;
       font-size: 16px;
+      min-width: 45px;
+      text-align: center;
     }
   }
 

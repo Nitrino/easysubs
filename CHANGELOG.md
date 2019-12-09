@@ -4,7 +4,7 @@
 
 ### Enhancements
 
-- Fix rewinding after disable extension
+- Add subtitles delay settings
 - Add subtitles size settings
 - Fix setting popup size and styles
 - Fix subtitles responsive styles
@@ -12,6 +12,7 @@
 
 ### Bugs
 
+- Fix rewinding after disable extension
 - Fix closing popup translation of the full sentence after manually stopping the video
 
 ## v0.6.1

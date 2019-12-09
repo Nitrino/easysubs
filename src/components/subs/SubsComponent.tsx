@@ -20,6 +20,7 @@ function SubsComponent() {
   useEffect(
     () => {
       videoElement.addEventListener("timeupdate", handleTimeUpdate);
+      handleTimeUpdate();
 
       return () => {
         videoElement.removeEventListener("timeupdate", handleTimeUpdate);
@@ -41,7 +42,7 @@ function SubsComponent() {
     [subsFontSize]
   );
 
-  function handleTimeUpdate(event: any) {
+  function handleTimeUpdate() {
     const subTextVtt = Subs.getCurrentSubText(videoElement, subs);
     setSubText(Subs.getCleanSubText(subTextVtt));
     setCurrentSubs(getSubsItems(subTextVtt));
