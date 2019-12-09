@@ -1,5 +1,5 @@
 import { useStore } from "effector-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { toggleShowFullSubTranslatePopup, toggleAutoPause } from "../../event";
 import { showFullSubTranslatePopupStore, subsStore, autoPauseStore } from "../../store";
 import Subs from "../../subs";
@@ -11,6 +11,7 @@ function SubsComponent() {
   const autoPause = useStore(autoPauseStore);
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [videoElement] = useState(document.querySelector("video"));
+  const [fontSize, setFontSize] = useState(38);
   const [currentSubs, setCurrentSubs] = useState([]);
   const [subText, setSubText] = useState("");
   const subsContainer = useRef(null);
@@ -25,6 +26,16 @@ function SubsComponent() {
     },
     [subs]
   );
+
+  function updateSize() {
+    setFontSize(videoElement.clientWidth / 43);
+  }
+
+  useLayoutEffect(() => {
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   function handleTimeUpdate(event: any) {
     const subTextVtt = Subs.getCurrentSubText(videoElement, subs);
@@ -71,7 +82,7 @@ function SubsComponent() {
   }
 
   return (
-    <div className="easysubs-subtitles">
+    <div className="easysubs-subtitles" style={{ fontSize: `${fontSize}px` }}>
       <div
         onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}

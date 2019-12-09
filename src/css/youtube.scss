@@ -16,14 +16,15 @@
   .html5-video-player {
     &.ytp-fullscreen {
       padding-bottom: 0;
-
-      #easysubs {
-        font-size: 44px;
-      }
     }
   }
 
   #easysubs {
     z-index: 10;
+  }
+
+  .easysubs-settings-wrapper {
+    right: 0;
+    bottom: 50px;
   }
 }
