@@ -1,27 +1,4 @@
-#kinopub.easysubs-enable {
-  #easysubs {
-    bottom: 130px;
-    font-size: 2.1vw;
-
-    @media screen and (max-width: 1520px) {
-      bottom: 100px;
-    }
-  }
-
-  &.easysubs-progress-bar-enable {
-    .jw-controlbar {
-      bottom: 15px;
-    }
-
-    .jw-settings-menu {
-      bottom: 115px;
-    }
-  }
-
-  .jw-captions.jw-captions-enabled {
-    display: none;
-  }
-
+#kinopub {
   .easysubs-settings {
     width: 60px;
     height: 60px;
@@ -33,6 +10,37 @@
     svg {
       height: 30px;
       width: 30px;
+    }
+
+    &-wrapper {
+      right: 60px;
+      @media screen and (max-width: 1520px) {
+        right: 12px;
+      }
+    }
+  }
+  &.easysubs-enable {
+    #easysubs {
+      bottom: 130px;
+      font-size: 2.1vw;
+
+      @media screen and (max-width: 1520px) {
+        bottom: 100px;
+      }
+    }
+
+    &.easysubs-progress-bar-enable {
+      .jw-controlbar {
+        bottom: 15px;
+      }
+
+      .jw-settings-menu {
+        bottom: 115px;
+      }
+    }
+
+    .jw-captions.jw-captions-enabled {
+      display: none;
     }
   }
 }
