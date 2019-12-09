@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Fix subtitles responsive styles
 - Add google analytics
 
 ## v0.6.1
