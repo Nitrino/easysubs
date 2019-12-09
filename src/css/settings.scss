@@ -25,6 +25,48 @@ $text-color: #ffffff;
     background-size: 12px;
   }
 
+  &__font-size {
+    display: flex;
+    align-items: center;
+
+    > div {
+      margin-right: 10px;
+    }
+
+    &__text {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  &__button {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background: rgba(#ffffff, 0.2);
+    border-radius: 20px;
+
+    &:before,
+    &:after {
+      position: absolute;
+      display: block;
+      height: 2px;
+      width: 10px;
+      background: #fff;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+      content: "";
+    }
+
+    &.-plus {
+      &:after {
+        transform: translateX(-50%) rotate(90deg);
+      }
+    }
+  }
+
   &__item {
     display: flex;
     margin-top: 15px;
