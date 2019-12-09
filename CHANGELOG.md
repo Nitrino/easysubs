@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Fix rewinding after disable extension
 - Add subtitles size settings
 - Fix setting popup size and styles
 - Fix subtitles responsive styles
