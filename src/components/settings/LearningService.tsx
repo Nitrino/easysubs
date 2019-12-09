@@ -1,4 +1,3 @@
-import * as locale from "@cospired/i18n-iso-languages/langs/en.json";
 import { useStore } from "effector-react";
 import React from "react";
 import { setLearningService } from "../../event";

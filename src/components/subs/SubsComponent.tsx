@@ -1,7 +1,7 @@
 import { useStore } from "effector-react";
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import { toggleShowFullSubTranslatePopup, toggleAutoPause } from "../../event";
-import { showFullSubTranslatePopupStore, subsStore, autoPauseStore } from "../../store";
+import { toggleShowFullSubTranslatePopup, toggleAutoPause, setSubsFontSize } from "../../event";
+import { showFullSubTranslatePopupStore, subsStore, autoPauseStore, subsFontSizeStore } from "../../store";
 import Subs from "../../subs";
 import TranslateFullSubPopup from "./TranslateFullSubPopup";
 import Word from "./Word";
@@ -9,6 +9,7 @@ import Word from "./Word";
 function SubsComponent() {
   const subs = useStore(subsStore);
   const autoPause = useStore(autoPauseStore);
+  const subsFontSize = useStore(subsFontSizeStore);
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [videoElement] = useState(document.querySelector("video"));
   const [fontSize, setFontSize] = useState(38);
@@ -28,14 +29,17 @@ function SubsComponent() {
   );
 
   function updateSize() {
-    setFontSize(videoElement.clientWidth / 43);
+    setFontSize(videoElement.clientWidth / 100 * subsFontSize / 43);
   }
 
-  useLayoutEffect(() => {
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
+  useLayoutEffect(
+    () => {
+      window.addEventListener("resize", updateSize);
+      updateSize();
+      return () => window.removeEventListener("resize", updateSize);
+    },
+    [subsFontSize]
+  );
 
   function handleTimeUpdate(event: any) {
     const subTextVtt = Subs.getCurrentSubText(videoElement, subs);

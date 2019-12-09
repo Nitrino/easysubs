@@ -3,6 +3,7 @@ import Language from "./Language";
 import LearningService from "./LearningService";
 import Toggle from "./Toggle";
 import ShowProgressBar from "./ShowProgressBar";
+import SubsFontSize from "./SubsFontSize";
 
 function Content(props: any) {
   function closeSettings() {
@@ -17,6 +18,7 @@ function Content(props: any) {
         <Language />
         <LearningService />
         <ShowProgressBar />
+        <SubsFontSize />
       </div>
     </div>
   );

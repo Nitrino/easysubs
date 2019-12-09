@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add subtitles size settings
 - Fix setting popup size and styles
 - Fix subtitles responsive styles
 - Add google analytics
