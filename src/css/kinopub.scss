@@ -1,6 +1,11 @@
 #kinopub.easysubs-enable {
   #easysubs {
     bottom: 130px;
+    font-size: 2.1vw;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
   }
 
   &.easysubs-progress-bar-enable {
@@ -9,16 +14,12 @@
     }
 
     .jw-settings-menu {
-      bottom: 130px;
+      bottom: 115px;
     }
   }
 
   .jw-captions.jw-captions-enabled {
     display: none;
-  }
-
-  .jw-flag-fullscreen #easysubs {
-    font-size: 44px;
   }
 
   .easysubs-settings {

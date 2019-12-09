@@ -87,7 +87,6 @@ $text-color: #ffffff;
   display: inline-block;
   justify-content: center;
   align-items: center;
-  position: relative;
   cursor: pointer;
 
   &-container {
@@ -127,8 +126,8 @@ $text-color: #ffffff;
   &-wrapper {
     position: absolute;
     bottom: 57px;
-    width: 400px;
-    right: 0;
+    width: 370px;
+    right: 15px;
     background: #262a32;
     border-radius: 5px;
     overflow: hidden;
