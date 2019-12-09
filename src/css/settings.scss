@@ -9,7 +9,7 @@ $text-color: #ffffff;
   }
 
   &__select {
-    font-size: 16px;
+    font-size: 14px;
     padding: 0px;
     height: auto;
     width: auto;
@@ -20,13 +20,13 @@ $text-color: #ffffff;
     padding: 3px 8px;
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+DQo8cG9seWdvbiBvcGFjaXR5PSIwLjciIHBvaW50cz0iMCw0IDE2LDQgOCwxMiIvPg0KPC9zdmc+DQo=');
     background-repeat: no-repeat;
-    background-position: calc(100% - .5em) 50%;
+    background-position: 100% 50%;
     background-size: 12px;
   }
 
   &__item {
     display: flex;
-    margin-top: 20px;
+    margin-top: 15px;
 
     &:first-child {
       margin-top: 0;
@@ -106,9 +106,10 @@ $text-color: #ffffff;
     svg {
       width: 24px;
       height: 24px;
+      opacity: 0.8;
 
-      .st0 {
-        fill: rgba(255, 255, 255, 0.8);
+      &:hover {
+        opacity: 1;
       }
     }
   }
@@ -126,13 +127,13 @@ $text-color: #ffffff;
   &-wrapper {
     position: absolute;
     bottom: 57px;
-    width: 370px;
-    right: 15px;
+    width: max-content;
+    right: 0;
     background: #262a32;
     border-radius: 5px;
     overflow: hidden;
     z-index: 100;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   &-header {
@@ -141,7 +142,7 @@ $text-color: #ffffff;
   }
 
   &-content {
-    padding: 20px;
+    padding: 15px;
   }
 
   &-close {
