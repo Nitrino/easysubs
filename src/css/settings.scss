@@ -21,7 +21,7 @@ $text-color: #ffffff;
     line-height: 20px;
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+DQo8cG9seWdvbiBvcGFjaXR5PSIwLjciIHBvaW50cz0iMCw0IDE2LDQgOCwxMiIvPg0KPC9zdmc+DQo=');
     background-repeat: no-repeat;
-    background-position: 100% 50%;
+    background-position: calc(100% - 0.3em) 50%;
     background-size: 12px;
   }
 
