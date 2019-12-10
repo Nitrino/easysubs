@@ -22,7 +22,25 @@
     "default_title": "browser action demo",
     "default_popup": "dist/browser_action.html"
   },
-  "permissions": ["contextMenus", "activeTab", "storage"],
+  "file_browser_handlers": [
+    {
+      "id": "openSubs",
+      "default_title": "Open subtitles",
+      "file_filters": [
+        "filesystem:*.vvt",
+        "filesystem:*.srt"
+      ]
+    }
+  ],
+  "permissions": [
+    "contextMenus", 
+    "activeTab", 
+    "storage",    
+    "fileBrowserHandler",
+    "fileSystem",
+    "fileSystemProvider",
+    "syncFileSystem"
+  ],
   "content_scripts": [
     {
       "matches": ["https://*/*"],

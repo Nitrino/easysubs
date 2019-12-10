@@ -27,11 +27,11 @@ function ResyncSubs() {
       </div>
       <div className="easysubs-settings__item__right">
         <div className="easysubs-settings__delay">
-          <div className="easysubs-settings__button -minus" onClick={decreaseSubsTimeGap} />
+          <div className="easysubs-settings__button -transparent -minus" onClick={decreaseSubsTimeGap} />
           <div className="easysubs-settings__delay__text">
             {delay / 1000}s
           </div>
-          <div className="easysubs-settings__button -plus" onClick={increaseSubsDelay} />
+          <div className="easysubs-settings__button -transparent -plus" onClick={increaseSubsDelay} />
         </div>
       </div>
     </div>
