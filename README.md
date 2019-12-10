@@ -29,5 +29,6 @@ Support:
 - Subtitles progress bar.
 - Show alternative translations.
 - Show all available audio tracks and subtitles on Netflix regardless of region.
+- Upload custom subtitles
 - Setting subtitles size
 - Setting subtitles delay

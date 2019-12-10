@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add the ability to upload custom subtitles
 - Add subtitles delay settings
 - Add subtitles size settings
 - Fix setting popup size and styles

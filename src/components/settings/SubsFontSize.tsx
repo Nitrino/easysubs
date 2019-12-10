@@ -23,11 +23,11 @@ function SubsFontSize() {
       </div>
       <div className="easysubs-settings__item__right">
         <div className="easysubs-settings__font-size">
-          <div className="easysubs-settings__button -minus" onClick={decreaseSubsFontSize} />
+          <div className="easysubs-settings__button -transparent -minus" onClick={decreaseSubsFontSize} />
           <div className="easysubs-settings__font-size__text">
             {subsFontSize}%
           </div>
-          <div className="easysubs-settings__button -plus" onClick={increaseSubsFontSize} />
+          <div className="easysubs-settings__button -transparent -plus" onClick={increaseSubsFontSize} />
         </div>
       </div>
     </div>
