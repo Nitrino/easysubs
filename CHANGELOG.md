@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.7.0
+
+Additional subtitle features and general interface enhancements.
 
 ### Enhancements
 
