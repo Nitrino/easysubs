@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Enhancements
+
+- Add support multiple subs at one time
+
+### Bugs
+
+- Fix rewind by 5 seconds if have a current sub
+
 ## v0.7.0
 
 Additional subtitle features and general interface enhancements.
