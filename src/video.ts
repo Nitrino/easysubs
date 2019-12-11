@@ -10,24 +10,34 @@ class Video {
   }
 
   public static moveToPrevSub(video: HTMLVideoElement, subs: subTitleType[]) {
-    const currentTime = this.getCurrentTime(video);
-    const prevSub: subTitleType = Subs.getPrevSub(subs, currentTime);
+    let timeToRewind = this.getCurrentTime(video);
+    const currentSub = Subs.getCurrentSub(subs, timeToRewind);
+    if (currentSub) {
+      timeToRewind = Utils.castSubTime(currentSub.start);
+    }
 
-    if (prevSub && currentTime - Utils.castSubTime(prevSub.end) < 5000) {
+    const prevSub: subTitleType = Subs.getPrevSub(subs, timeToRewind);
+
+    if (prevSub && timeToRewind - Utils.castSubTime(prevSub.end) < 5000) {
       this.moveToTime(video, Utils.castSubTime(prevSub.start));
     } else {
-      this.moveToTime(video, Utils.castSubTime(currentTime - rewindTime));
+      this.moveToTime(video, Utils.castSubTime(timeToRewind - rewindTime));
     }
   }
 
   public static moveToNextSub(video: HTMLVideoElement, subs: subTitleType[]) {
-    const currentTime = this.getCurrentTime(video);
-    const nextSub: subTitleType = Subs.getNextSub(subs, currentTime);
+    let timeToRewind = this.getCurrentTime(video);
+    const currentSub = Subs.getCurrentSub(subs, timeToRewind);
 
-    if (nextSub && Utils.castSubTime(nextSub.start) - currentTime < 5000) {
+    if (currentSub) {
+      timeToRewind = Utils.castSubTime(currentSub.end);
+    }
+    const nextSub: subTitleType = Subs.getNextSub(subs, timeToRewind);
+
+    if (nextSub && Utils.castSubTime(nextSub.start) - timeToRewind < 5000) {
       this.moveToTime(video, Utils.castSubTime(nextSub.start));
     } else {
-      this.moveToTime(video, Utils.castSubTime(currentTime + rewindTime));
+      this.moveToTime(video, Utils.castSubTime(timeToRewind + rewindTime));
     }
   }
 
