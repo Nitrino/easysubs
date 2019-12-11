@@ -29,8 +29,13 @@ i > span {
   }
 
   .easysubs-subtitles {
-    white-space: pre;
-    background-color: rgba(0, 0, 0, 0.5);
+    &__sub {
+      position: relative;
+      white-space: pre;
+      background-color: rgba(0, 0, 0, 0.5);
+      margin-top: 5px;
+      padding: 0 10px;
+    }
   }
 
   .easysubs-translate {
