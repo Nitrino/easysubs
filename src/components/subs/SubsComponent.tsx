@@ -1,21 +1,18 @@
 import { useStore } from "effector-react";
-import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import { toggleShowFullSubTranslatePopup, toggleAutoPause, setSubsFontSize } from "../../event";
+import React, { useEffect, useState, useLayoutEffect } from "react";
+import { toggleShowFullSubTranslatePopup, toggleAutoPause } from "../../event";
 import { showFullSubTranslatePopupStore, subsStore, autoPauseStore, subsFontSizeStore } from "../../store";
 import Subs from "../../subs";
-import TranslateFullSubPopup from "./TranslateFullSubPopup";
 import Word from "./Word";
+import SubComponent from "./SubComponent";
 
 function SubsComponent() {
   const subs = useStore(subsStore);
   const autoPause = useStore(autoPauseStore);
   const subsFontSize = useStore(subsFontSizeStore);
-  const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
   const [videoElement] = useState(document.querySelector("video"));
   const [fontSize, setFontSize] = useState(38);
   const [currentSubs, setCurrentSubs] = useState([]);
-  const [subText, setSubText] = useState("");
-  const subsContainer = useRef(null);
 
   useEffect(
     () => {
@@ -43,9 +40,15 @@ function SubsComponent() {
   );
 
   function handleTimeUpdate() {
-    const subTextVtt = Subs.getCurrentSubText(videoElement, subs);
-    setSubText(Subs.getCleanSubText(subTextVtt));
-    setCurrentSubs(getSubsItems(subTextVtt));
+    const subsTextsVtt = Subs.getCurrentSubsTexts(videoElement, subs);
+    setCurrentSubs(
+      subsTextsVtt.map((subTextVtt: string, index: number) => {
+        const subWordsNodes = getSubWordsNodes(subTextVtt);
+        const cleanSubText = Subs.getCleanSubText(subTextVtt);
+        return <SubComponent text={cleanSubText} words={subWordsNodes} key={index} />;
+      })
+    );
+
     toggleShowFullSubTranslatePopup(false);
   }
 
@@ -64,11 +67,7 @@ function SubsComponent() {
     }
   }
 
-  function handleOnClick() {
-    toggleShowFullSubTranslatePopup(!showFullSubTranslatePopup);
-  }
-
-  function getSubsItems(subtitleText: string) {
+  function getSubWordsNodes(subtitleText: string) {
     return Subs.subTextToChildNodesArray(subtitleText)
       .map((node: any, nodeIndex: number) => {
         return node.textContent.match(/[^ ]+/g).map((word: string, wordIndex: number) => {
@@ -87,16 +86,13 @@ function SubsComponent() {
   }
 
   return (
-    <div className="easysubs-subtitles" style={{ fontSize: `${fontSize}px` }}>
-      <div
-        onMouseEnter={handleOnMouseEnter}
-        onMouseLeave={handleOnMouseLeave}
-        onClick={handleOnClick}
-        ref={subsContainer}
-      >
-        {currentSubs}
-      </div>
-      {showFullSubTranslatePopup ? <TranslateFullSubPopup text={subText} /> : null}
+    <div
+      className="easysubs-subtitles"
+      onMouseEnter={handleOnMouseEnter}
+      onMouseLeave={handleOnMouseLeave}
+      style={{ fontSize: `${fontSize}px` }}
+    >
+      {currentSubs}
     </div>
   );
 }

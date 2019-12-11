@@ -41,7 +41,7 @@ function ProgressBar() {
           <div
             className="easysubs-progress-bar-element"
             style={{ width: `${subWidth}px`, transform: `translateX(${x}px)` }}
-            key={`id${sub.start}-${sub.end}`}
+            key={`id${sub.start}-${sub.end}-${sub.text}`}
           />
         );
       })
