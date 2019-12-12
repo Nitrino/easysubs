@@ -1,5 +1,5 @@
 import { useStore } from "effector-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { userLanguageStore } from "../../store";
 import Utils from "../../utils";
 import TranslateAlternatives from "./TranslateAlternatives";
@@ -21,6 +21,7 @@ function TranslateWordPopup(props: Props) {
     original: ""
   });
   const language = useStore(userLanguageStore);
+  const isUnmounted = useRef(false);
 
   useEffect(() => {
     chrome.runtime.sendMessage(
@@ -30,6 +31,8 @@ function TranslateWordPopup(props: Props) {
         text: Utils.clearWord(props.word)
       },
       response => {
+        if (isUnmounted.current) return;
+
         const main: string = response[0][0][0];
         const alternatives: [] = response[1] || [];
 
@@ -40,6 +43,10 @@ function TranslateWordPopup(props: Props) {
         });
       }
     );
+
+    return () => {
+      isUnmounted.current = true;
+    };
   }, []);
 
   if (translation.original !== "") {
