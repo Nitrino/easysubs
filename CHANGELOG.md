@@ -4,10 +4,12 @@
 
 ### Enhancements
 
+- Add production config
 - Add support multiple subs at one time
 
 ### Bugs
 
+- Fix react state update on an unmounted component
 - Fix rewind by 5 seconds if have a current sub
 
 ## v0.7.0
