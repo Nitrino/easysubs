@@ -1,10 +1,11 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
-module.exports = {
-  mode: "development",
-  devtool: "inline-source-map",
+module.exports = env => ({
+  mode: env,
+  devtool: env === "production" ? false : "inline-source-map",
   entry: {
     inject: "./src/inject.ts",
     background: "./src/background.ts",
@@ -38,13 +39,13 @@ module.exports = {
   },
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, env === "production" ? "release" : "dist")
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "styles",
-      path: path.resolve(__dirname, "dist")
+      path: path.resolve(__dirname, env === "production" ? "release" : "dist")
     }),
     new HtmlWebpackPlugin({
       filename: "index.html",
@@ -54,6 +55,11 @@ module.exports = {
       filename: "browser_action.html",
       template: "src/browser_action.html",
       inject: false
-    })
+    }),
+    new CopyPlugin([
+      { from: "manifest.json", to: "." },
+      { from: "icons", to: "icons" },
+      { from: "_locales", to: "_locales" }
+    ])
   ]
-};
+});
