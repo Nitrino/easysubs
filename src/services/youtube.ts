@@ -1,6 +1,5 @@
 import Service from "service";
 import { parse } from "subtitle";
-import { ready } from "../ready";
 
 interface Subtitle {
   baseUrl: string;

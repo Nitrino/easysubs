@@ -3,6 +3,7 @@ import EnglishWithFun from './services/english-with-fun';
 import KinoPub from './services/kinopub';
 import Netflix from './services/netflix';
 import YouTube from './services/youtube';
+import AmazonPrime from './services/amazon-prime';
 import Lingualeo from "./learning-services/lingualeo";
 import PuzzleEnglish from "./learning-services/PuzzleEnglish";
 import Video from "./video";
@@ -14,7 +15,7 @@ class Utils {
     return typeof time === "number" ? time : parseInt(time, 10)
   }
 
-  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun {
+  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun| AmazonPrime {
     const titleContent = document.querySelector('title').textContent
     if (titleContent.includes("YouTube") || window.location.host === "www.youtube.com") {
       document.querySelector('html').id = "youtube"
@@ -31,6 +32,10 @@ class Utils {
     if (titleContent.includes("English-With-Fun") || window.location.host === "english-with-fun.com") {
       document.querySelector('html').id = "english-with-fun"
       return new EnglishWithFun
+    }
+    if (window.location.host === "www.primevideo.com") {
+      document.querySelector('html').id = "amazon-prime"
+      return new AmazonPrime
     }
     return null
   }
