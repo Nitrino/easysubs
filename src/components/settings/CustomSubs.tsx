@@ -30,7 +30,14 @@ function CustomSubs() {
         <span>Custom subtitles: </span>
       </div>
       <div className="easysubs-settings__item__right">
-        <input type="file" accept=".vtt,.srt" id="file" ref={inputFile} onChange={handleOnChange} style={{ display: "none" }} />
+        <input
+          type="file"
+          accept=".vtt,.srt"
+          id="file"
+          ref={inputFile}
+          onChange={handleOnChange}
+          style={{ display: "none" }}
+        />
         <div className="easysubs-settings__button" onClick={handleFileSelect}>
           Select file
         </div>

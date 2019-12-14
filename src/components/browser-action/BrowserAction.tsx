@@ -1,10 +1,10 @@
 import React from "react";
-import Toggle from "../settings/Toggle";
-import Language from "../settings/Language";
-import LearningService from "../settings/LearningService";
-import ShowProgressBar from "../settings/ShowProgressBar";
 
 function BrowserAction() {
+  function handleClick() {
+    chrome.tabs.create({ url: chrome.runtime.getURL("index.html") });
+  }
+
   return (
     <div className="content">
       <div className="header">EasySubs</div>
@@ -28,6 +28,9 @@ function BrowserAction() {
           <a target="_blank" href="https://github.com/Nitrino/easysubs/issues">
             Suggest features
           </a>
+        </li>
+        <li>
+          <div onClick={handleClick}>Open local video player</div>
         </li>
       </menu>
     </div>

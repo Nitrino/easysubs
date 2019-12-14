@@ -10,6 +10,7 @@ module.exports = env => ({
     inject: "./src/inject.ts",
     background: "./src/background.ts",
     browser_action: "./src/browser_action.tsx",
+    local_player: "./src/local_player.tsx",
     styles: "./src/css/styles.scss"
   },
   resolve: {
