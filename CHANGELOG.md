@@ -9,6 +9,7 @@
 
 ### Bugs
 
+- Fix auto play after show full sentence translation
 - Fix react state update on an unmounted component
 - Fix rewind by 5 seconds if have a current sub
 

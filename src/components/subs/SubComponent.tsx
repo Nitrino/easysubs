@@ -1,15 +1,17 @@
 import { useStore } from "effector-react";
 import React, { useRef, useState } from "react";
 import { toggleShowFullSubTranslatePopup } from "../../event";
-import { showFullSubTranslatePopupStore } from "../../store";
+import { showFullSubTranslatePopupStore, autoPauseStore } from "../../store";
 import TranslateFullSubPopup from "./TranslateFullSubPopup";
 
 function SubComponent(props: { text: string; words: any[] }) {
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore);
+  const autoPause = useStore(autoPauseStore);
+  const [videoElement] = useState(document.querySelector("video"));
   const [showCurrentFullSubTranslatePopup, setShowCurrentFullSubTranslatePopup] = useState(false);
   const subsContainer = useRef(null);
 
-  function handleOnClick() {
+  function handleOnClick(event: any) {
     setShowCurrentFullSubTranslatePopup(!showCurrentFullSubTranslatePopup);
     toggleShowFullSubTranslatePopup(!showFullSubTranslatePopup);
   }
@@ -17,6 +19,9 @@ function SubComponent(props: { text: string; words: any[] }) {
   function handleOnMouseLeave() {
     setShowCurrentFullSubTranslatePopup(false);
     toggleShowFullSubTranslatePopup(false);
+    if (autoPause) {
+      videoElement.play();
+    }
   }
 
   return (
