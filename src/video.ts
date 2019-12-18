@@ -9,7 +9,7 @@ class Video {
     return Math.round(video.currentTime * 1000);
   }
 
-  public static moveToPrevSub(video: HTMLVideoElement, subs: subTitleType[]) {
+  public static moveToPrevSub(video: HTMLVideoElement, subs: subTitleType[], force: boolean) {
     let timeToRewind = this.getCurrentTime(video);
     const currentSub = Subs.getCurrentSub(subs, timeToRewind);
     if (currentSub) {
@@ -18,14 +18,14 @@ class Video {
 
     const prevSub: subTitleType = Subs.getPrevSub(subs, timeToRewind);
 
-    if (prevSub && timeToRewind - Utils.castSubTime(prevSub.end) < 5000) {
+    if (prevSub && (timeToRewind - Utils.castSubTime(prevSub.end) < 5000 || force)) {
       this.moveToTime(video, Utils.castSubTime(prevSub.start));
     } else {
       this.moveToTime(video, Utils.castSubTime(timeToRewind - rewindTime));
     }
   }
 
-  public static moveToNextSub(video: HTMLVideoElement, subs: subTitleType[]) {
+  public static moveToNextSub(video: HTMLVideoElement, subs: subTitleType[], force: boolean) {
     let timeToRewind = this.getCurrentTime(video);
     const currentSub = Subs.getCurrentSub(subs, timeToRewind);
 
@@ -34,7 +34,7 @@ class Video {
     }
     const nextSub: subTitleType = Subs.getNextSub(subs, timeToRewind);
 
-    if (nextSub && Utils.castSubTime(nextSub.start) - timeToRewind < 5000) {
+    if (nextSub && (Utils.castSubTime(nextSub.start) - timeToRewind < 5000 || force)) {
       this.moveToTime(video, Utils.castSubTime(nextSub.start));
     } else {
       this.moveToTime(video, Utils.castSubTime(timeToRewind + rewindTime));
