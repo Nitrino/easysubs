@@ -4,20 +4,28 @@ import { updateSubs } from "../../event";
 import { subsStore } from "../../store";
 import { resync } from "subtitle";
 
-const timeDelayStep = 250;
-
 function ResyncSubs() {
   const subs = useStore(subsStore);
   const [delay, setDelay] = useState(0);
 
-  function increaseSubsDelay() {
+  function increaseSubsDelay(event: any) {
+    event.stopPropagation();
+    const timeDelayStep = getTimeDelayStep(event);
     setDelay(delay + timeDelayStep);
     updateSubs(resync(subs, timeDelayStep));
   }
 
-  function decreaseSubsTimeGap() {
+  function decreaseSubsTimeGap(event: any) {
+    event.stopPropagation();
+    const timeDelayStep = getTimeDelayStep(event);
     setDelay(delay - timeDelayStep);
     updateSubs(resync(subs, -1 * timeDelayStep));
+  }
+
+  function getTimeDelayStep(event: any) {
+    if (event.altKey) return 1000;
+    if (event.shiftKey) return 5000;
+    return 250;
   }
 
   return (
