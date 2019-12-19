@@ -4,7 +4,6 @@ import { toggleEnableState } from "../../event";
 import { enableState } from "../../store";
 
 function Toggle() {
-  enableState.watch(console.log);
   const isEnable = useStore(enableState);
   addEnableClass(isEnable);
 
