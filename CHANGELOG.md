@@ -4,12 +4,14 @@
 
 ### Enhancements
 
+- Add increase subs delay to 1 sec by press alt + click and 5 sec by press shift + click
 - Add the ability to force rewind to subs even if they are further than 5 seconds
 - Add production config
 - Add support multiple subs at one time
 
 ### Bugs
 
+- Fix subs delay freezes with frequent button presses
 - Fix auto play after show full sentence translation
 - Fix react state update on an unmounted component
 - Fix rewind by 5 seconds if have a current sub
