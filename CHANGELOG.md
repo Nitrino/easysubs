@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add the ability to force rewind to subs even if they are further than 5 seconds
 - Add production config
 - Add support multiple subs at one time
 

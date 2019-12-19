@@ -67,13 +67,13 @@ class Utils {
     if (event.code === "ArrowLeft") {
       event.stopPropagation();
       if (event.type === "keydown") {
-        Video.moveToPrevSub(videoElement, subsStore.getState());
+        Video.moveToPrevSub(videoElement, subsStore.getState(), event.altKey);
       }
     }
     if (event.code === "ArrowRight") {
       event.stopPropagation();
       if (event.type === "keydown") {
-        Video.moveToNextSub(videoElement, subsStore.getState());
+        Video.moveToNextSub(videoElement, subsStore.getState(), event.altKey);
       }
     }
   }

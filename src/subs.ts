@@ -37,10 +37,7 @@ class Subs {
     }
 
     return subs.find((sub, index) => {
-      if (subs[index + 1] == null) {
-        return null;
-      }
-      return sub.end <= currentTime && subs[index + 1].start >= currentTime;
+      return sub.end <= currentTime && (!subs[index + 1] || subs[index + 1].start >= currentTime);
     });
   }
 
