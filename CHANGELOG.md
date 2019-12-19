@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Close setting popup on outside click
 - Add increase subs delay to 1 sec by press alt + click and 5 sec by press shift + click
 - Add the ability to force rewind to subs even if they are further than 5 seconds
 - Add production config

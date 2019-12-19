@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Language from "./Language";
 import LearningService from "./LearningService";
 import Toggle from "./Toggle";
@@ -6,11 +6,18 @@ import ShowProgressBar from "./ShowProgressBar";
 import SubsFontSize from "./SubsFontSize";
 import ResyncSubs from "./ResyncSubs";
 import CustomSubs from "./CustomSubs";
+import onClickOutside from "react-onclickoutside";
 
-function Content(props: any) {
+// tslint:disable-next-line: variable-name
+const Content = (props: any) => {
   function closeSettings() {
     props.toggleShowSettings(false);
   }
+
+  (Content as any).handleClickOutside = () => {
+    props.toggleShowSettings(false);
+  };
+
   return (
     <div className="easysubs-settings-wrapper" style={{ display: props.display }}>
       <div className="easysubs-settings-close" onClick={closeSettings} />
@@ -29,6 +36,10 @@ function Content(props: any) {
       </div>
     </div>
   );
-}
+};
 
-export default Content;
+const clickOutsideConfig = {
+  handleClickOutside: () => (Content as any).handleClickOutside
+};
+
+export default onClickOutside(Content, clickOutsideConfig);
