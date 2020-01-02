@@ -24,6 +24,7 @@ To use the plugin, you must have a subscription to the desired service.
 #### Word and full subtitle translation
 
 Just hover over the word you want to translate it, the video will automatically pause and start when you remove the cursor from the subtitles.
+![word translation](screenshots/word.png)
 
 - Adding words to language learning services.
   Support:
