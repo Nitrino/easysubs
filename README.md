@@ -58,16 +58,19 @@ Rewind works only if the next/previous subtitle is less than 5 seconds. For forc
 
 ### Subtitles progress bar
 
-At the bottom of the player, there is a subtitles progress bar to simplify navigation between subtitles.
+At the bottom of the player, there is a subtitles progress bar to simplify navigation between subtitles.  
 Click on the progress bar to rewind the video to the desired point.
 
 ![word translation](screenshots/progressbar.png)
 
 ### Subtitles settings and custom subtitles
 
-- Upload custom subtitles
-- Setting subtitles size
-- Setting subtitles delay
+The extension allows you to adjust the size of the subtitles and their delay.
+The default subtitle delay step is 0.25 seconds.
+`alt + click the ➕ or ➖ buttons` changes the delay by 1 second.
+`shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
+
+You can also upload your custom subtitles if they are not on the video service.
 
 ### Addition features
 
