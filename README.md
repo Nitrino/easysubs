@@ -70,7 +70,9 @@ The default subtitle delay step is 0.25 seconds.
 `alt + click the ➕ or ➖ buttons` changes the delay by 1 second.
 `shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
 
-You can also upload your custom subtitles if they are not on the video service.
+You can also upload your custom subtitles if they are not on the video service, supported `srt` and `vtt` formats.
+
+![word translation](screenshots/subtitles-settingsxw.png)
 
 ### Addition features
 
