@@ -11,7 +11,7 @@ Chrome extension for studying languages with watching movies and TV shows.
 
 ### Integration with multiple video services
 
-The list of services will expand at the request of users.
+The list of services will expand at the request of users.  
 To use the plugin, you must have a subscription to the desired service.
 
 **Now supported:**
@@ -23,7 +23,7 @@ To use the plugin, you must have a subscription to the desired service.
 
 ### Word and full subtitle translation
 
-Just hover over the word you want to translate it, the video will automatically pause and start when you remove the cursor from the subtitles.
+Just hover over the word you want to translate it, the video will automatically pause and start when you remove the cursor from the subtitles.  
 In the translation popup of the word, you can see alternative translations with the frequency of use.
 ![word translation](screenshots/word.png)
 
@@ -49,10 +49,11 @@ After which a ➕(plus) icon will appear near the words of the translation, by c
 
 ### Rewind to previous and next subtitle
 
-Rewind to previous subtitle by press ⬅️ left arrow.
+Rewind to previous subtitle by press ⬅️ left arrow.  
 Rewind to next subtitle by press ➡️ right arrow.
 
-Rewind works only if the next/previous subtitle is less than 5 seconds. For force rewind to next/previous subtitle use `alt + arrow button`.
+Rewind works only if the next/previous subtitle is less than 5 seconds.  
+For force rewind to next/previous subtitle use `alt + arrow button`.
 
 ![word translation](screenshots/navigation.png)
 
@@ -67,7 +68,7 @@ Click on the progress bar to rewind the video to the desired point.
 
 The extension allows you to adjust the size of the subtitles and their delay.
 The default subtitle delay step is 0.25 seconds.  
-`alt + click the ➕ or ➖ buttons` changes the delay by 1 second.
+`alt + click the ➕ or ➖ buttons` changes the delay by 1 second.  
 `shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
 
 You can also upload your custom subtitles if they are not on the video service, supported `srt` and `vtt` formats.
