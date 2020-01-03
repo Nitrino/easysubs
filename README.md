@@ -66,7 +66,7 @@ Click on the progress bar to rewind the video to the desired point.
 ### Subtitles settings and custom subtitles
 
 The extension allows you to adjust the size of the subtitles and their delay.
-The default subtitle delay step is 0.25 seconds.
+The default subtitle delay step is 0.25 seconds.  
 `alt + click the ➕ or ➖ buttons` changes the delay by 1 second.
 `shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
 
