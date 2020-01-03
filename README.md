@@ -24,6 +24,7 @@ To use the plugin, you must have a subscription to the desired service.
 ### Word and full subtitle translation
 
 Just hover over the word you want to translate it, the video will automatically pause and start when you remove the cursor from the subtitles.
+In the translation popup of the word, you can see alternative translations with the frequency of use.
 ![word translation](screenshots/word.png)
 
 Click on subtitles for translation all text.
@@ -55,9 +56,19 @@ Rewind works only if the next/previous subtitle is less than 5 seconds. For forc
 
 ![word translation](screenshots/navigation.png)
 
-- Subtitles progress bar.
-- Show alternative translations.
-- Show all available audio tracks and subtitles on Netflix regardless of region.
+### Subtitles progress bar
+
+At the bottom of the player, there is a subtitles progress bar to simplify navigation between subtitles.
+Click on the progress bar to rewind the video to the desired point.
+
+![word translation](screenshots/progressbar.png)
+
+### Subtitles settings and custom subtitles
+
 - Upload custom subtitles
 - Setting subtitles size
 - Setting subtitles delay
+
+### Addition features
+
+- Show all available audio tracks and subtitles on Netflix regardless of region.
