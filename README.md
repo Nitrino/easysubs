@@ -7,6 +7,18 @@
 
 Chrome extension for studying languages with watching movies and TV shows.
 
+## Installation
+
+The release version will be available soon in the Chrome Web Store.  
+Now you can install the dev version:
+
+1. Download and unzip [current repository](https://github.com/Nitrino/easysubs/archive/master.zip)
+2. Open chrome extension page `chrome://extensions/`
+3. Turn on developer mode
+4. Click to `Load unpacked` button and select `dist` folder
+
+After that, you can use it as a regular extension. To upgrade, you will have to download the new version again.
+
 ## Features
 
 ### Integration with multiple video services
@@ -78,3 +90,10 @@ You can also upload your custom subtitles if they are not on the video service, 
 ### Addition features
 
 - Show all available audio tracks and subtitles on Netflix regardless of region.
+
+## Contributing
+
+We are open to community help.  
+To report a bug or feature offer, create [issue](https://github.com/Nitrino/easysubs/issues) and describe the question in detail.
+
+You can also implement the desired feature and send a [pull request](https://github.com/Nitrino/easysubs/pulls). We recommend discussing the feature in issues tracker before implementation. This will help reduce your time.
