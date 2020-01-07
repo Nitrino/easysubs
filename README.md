@@ -66,7 +66,7 @@ Rewind to previous subtitle by press ⬅️ left arrow.
 Rewind to next subtitle by press ➡️ right arrow.
 
 Rewind works only if the next/previous subtitle is less than 5 seconds. Otherwise, rewinds for 5 seconds.  
-For force rewind to next/previous subtitle use `alt + arrow button`.
+For force rewind to next/previous subtitle use `alt (option for macOS) + arrow button`.
 
 ![word translation](screenshots/navigation.png)
 
@@ -81,7 +81,7 @@ Click on the progress bar to rewind the video to the desired point.
 
 The extension allows you to adjust the size of the subtitles and their delay.
 The default subtitle delay step is 0.25 seconds.  
-`alt + click the ➕ or ➖ buttons` changes the delay by 1 second.  
+`alt (option for macOS) + click the ➕ or ➖ buttons` changes the delay by 1 second.  
 `shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
 
 You can also upload your custom subtitles if they are not on the video service, supported `srt` and `vtt` formats.
