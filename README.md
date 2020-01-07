@@ -17,7 +17,8 @@ Now you can install the dev version:
 3. Turn on developer mode
 4. Click to `Load unpacked` button and select `dist` folder
 
-After that, you can use it as a regular extension. To upgrade, you will have to download the new version again.
+After that, you can use it as a regular extension.\
+To upgrade, you will have to download the new version again.
 
 ## Features
 
