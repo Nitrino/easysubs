@@ -5,30 +5,95 @@
   <h2 align="center">Learn languages with fun 🎉</h2>
 </p>
 
-### !!! Project is under active development !!!
+Chrome extension for studying languages with watching movies and TV shows.
 
-This means that many things may not work as you expect and will change in the future.  
-Current roadmap and a list of known bugs can be found in the [issues](https://github.com/Nitrino/easysubs/issues).
+## Installation
 
-### Features
+The release version will be available soon in the Chrome Web Store.  
+Now you can install the dev version:
 
-#### Common
+1. Download and unzip [current repository](https://github.com/Nitrino/easysubs/archive/master.zip)
+2. Open chrome extensions page `chrome://extensions/`
+3. Turn on developer mode
+4. Click to `Load unpacked` button and select `dist` folder
 
-- Support video streaming services:
-  - Youtube (videos and originals),
-  - Netflix,
-  - [KinoPub](https://kino.pub),
-  - [English With Fun](https://english-with-fun.com)
-- Word translation when cursor hover.
-- Adding words to language learning services.
-Support:
-  - [LinguaLeo](https://lingualeo.com),
-  - [Puzzle English](https://puzzle-english.com)
-- Translate full sentence by click.
-- Rewind to previous and next sub.
-- Subtitles progress bar.
-- Show alternative translations.
+After that, you can use it as a regular extension. To upgrade, you will have to download the new version again.
+
+## Features
+
+### Integration with multiple video services
+
+The list of services will expand at the request of users.  
+To use the plugin, you must have a subscription to the desired service.
+
+**Now supported:**
+
+- [Youtube (videos and originals)](https://www.youtube.com)
+- [Netflix](https://www.netflix.com)
+- [KinoPub](https://kino.pub)
+- [English With Fun](https://english-with-fun.com)
+
+### Word and full subtitle translation
+
+Just hover over the word you want to translate it, the video will automatically pause and start when you remove the cursor from the subtitles.  
+In the translation popup of the word, you can see alternative translations with the frequency of use.
+![word translation](screenshots/word.png)
+
+Click on subtitles for translation all text.
+![word translation](screenshots/full-sub.png)
+
+### Export words to learning services
+
+The list of services will expand at the request of users.
+
+**Now supported:**
+
+- [LinguaLeo](https://lingualeo.com),
+- [Puzzle English](https://puzzle-english.com)
+
+For export to work, you must be logged in to learning service in the same browser. Then select the desired service in the extension settings.
+
+![word translation](screenshots/select-service.png)
+
+After which a ➕(plus) icon will appear near the words of the translation, by clicking on which the word is exported to the selected service.
+
+![word translation](screenshots/export-to-service.png)
+
+### Rewind to previous and next subtitle
+
+Rewind to previous subtitle by press ⬅️ left arrow.  
+Rewind to next subtitle by press ➡️ right arrow.
+
+Rewind works only if the next/previous subtitle is less than 5 seconds. Otherwise, rewinds for 5 seconds.  
+For force rewind to next/previous subtitle use `alt + arrow button`.
+
+![word translation](screenshots/navigation.png)
+
+### Subtitles progress bar
+
+At the bottom of the player, there is a subtitles progress bar to simplify navigation between subtitles.  
+Click on the progress bar to rewind the video to the desired point.
+
+![word translation](screenshots/progressbar.png)
+
+### Subtitles settings and custom subtitles
+
+The extension allows you to adjust the size of the subtitles and their delay.
+The default subtitle delay step is 0.25 seconds.  
+`alt + click the ➕ or ➖ buttons` changes the delay by 1 second.  
+`shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
+
+You can also upload your custom subtitles if they are not on the video service, supported `srt` and `vtt` formats.
+
+![word translation](screenshots/subtitles-settings.png)
+
+### Addition features
+
 - Show all available audio tracks and subtitles on Netflix regardless of region.
-- Upload custom subtitles
-- Setting subtitles size
-- Setting subtitles delay
+
+## Contributing
+
+We are open to community help.  
+To report a bug or feature offer, create [issue](https://github.com/Nitrino/easysubs/issues) and describe the question in detail.
+
+You can also implement the desired feature and send a [pull request](https://github.com/Nitrino/easysubs/pulls). We recommend discussing the feature in issues tracker before implementation. This will help reduce your time.
