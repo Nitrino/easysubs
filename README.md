@@ -13,7 +13,7 @@ The release version will be available soon in the Chrome Web Store.
 Now you can install the dev version:
 
 1. Download and unzip [current repository](https://github.com/Nitrino/easysubs/archive/master.zip)
-2. Open chrome extension page `chrome://extensions/`
+2. Open chrome extensions page `chrome://extensions/`
 3. Turn on developer mode
 4. Click to `Load unpacked` button and select `dist` folder
 
@@ -64,7 +64,7 @@ After which a ➕(plus) icon will appear near the words of the translation, by c
 Rewind to previous subtitle by press ⬅️ left arrow.  
 Rewind to next subtitle by press ➡️ right arrow.
 
-Rewind works only if the next/previous subtitle is less than 5 seconds.  
+Rewind works only if the next/previous subtitle is less than 5 seconds. Otherwise, rewinds for 5 seconds.  
 For force rewind to next/previous subtitle use `alt + arrow button`.
 
 ![word translation](screenshots/navigation.png)
