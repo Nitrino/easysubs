@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           oe: "UTF-8",
           otf: 1,
           q: request.text,
-          sl: "en",
+          sl: "auto",
           ssel: 0,
           tl: request.lang,
           tsel: 0,
