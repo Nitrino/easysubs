@@ -54,6 +54,7 @@ main {
 .block__title {
   font-size: 42px;
   line-height: 1.23;
+  margin-top: 0;
   margin-bottom: 30px;
   font-weight: 600;
   text-align: center;
@@ -144,6 +145,12 @@ main {
   }
 }
 
+@media (max-width: 480px) {
+  .cover__left {
+    text-align: center;
+  }
+}
+
 .cover__app-name {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -152,6 +159,14 @@ main {
       -ms-flex-align: center;
           align-items: center;
   margin-bottom: 15px;
+}
+
+@media (max-width: 480px) {
+  .cover__app-name {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
 }
 
 .cover__app-name__text {
@@ -243,7 +258,7 @@ main {
 }
 
 .services__list {
-  margin-top: 120px;
+  margin-top: 100px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
