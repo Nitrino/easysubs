@@ -1,9 +1,25 @@
+@mixin tablet {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+
 body {
   font-family: "Open Sans", Arial, sans-serif;
   font-size: 18px;
   font-weight: 300px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+
+  @include phone {
+    font-size: 16px;
+  }
 }
 
 .bold {
@@ -22,10 +38,19 @@ main {
 .content {
   margin: 0 auto;
   max-width: 1200px;
+  padding: 0 20px;
+
+  @include tablet {
+    max-width: 640px;
+  }
 }
 
 .block {
   padding: 150px 0;
+
+  @include phone {
+    padding: 80px 0;
+  }
 
   &.-dark {
     background-color: #f5f5f5;
@@ -37,6 +62,15 @@ main {
     margin-bottom: 30px;
     font-weight: 600;
     text-align: center;
+
+    @include tablet {
+      margin: 0 auto 30px 0;
+      max-width: 600px;
+    }
+
+    @include phone {
+      font-size: 30px;
+    }
   }
 
   &__subtitle {
@@ -45,6 +79,10 @@ main {
     font-size: 24px;
     line-height: 1.5;
     text-align: center;
+
+    @include phone {
+      font-size: 20px;
+    }
   }
 }
 
@@ -57,6 +95,10 @@ main {
   &.-main {
     padding: 16px 60px;
     background: #000;
+
+    @include phone {
+      padding: 16px 30px;
+    }
   }
 
   &.-second {
@@ -70,11 +112,20 @@ main {
   display: flex;
   align-items: center;
 
+  @include tablet {
+    flex-direction: column;
+  }
+
   &__left {
     flex: 1;
     max-width: 460px;
     padding-left: 100px;
     margin: 0 20px;
+
+    @include tablet {
+      padding-left: 0;
+      margin: 0;
+    }
   }
 
   &__app-name {
@@ -113,14 +164,28 @@ main {
     font-size: 32px;
     font-weight: 600;
     line-height: 1.17;
+
+    @include phone {
+      font-size: 26px;
+    }
   }
 
   &__subtitle {
     margin-top: 17px;
+
+    @include phone {
+      font-size: 16px;
+    }
   }
 
   &__store {
     margin-top: 60px;
+
+    @include tablet {
+      padding-left: 0;
+      max-width: 640px;
+      margin-top: 30px;
+    }
   }
 
   &__right {
@@ -128,9 +193,20 @@ main {
     max-width: 60px;
     margin: 0 20px;
 
+    @include tablet {
+      width: 100%;
+      max-width: 100%;
+      margin-top: 60px;
+    }
+
     img {
       max-height: 550px;
       float: left;
+
+      @include tablet {
+        float: none;
+        width: 100%;
+      }
     }
   }
 }
@@ -139,13 +215,28 @@ main {
   &__list {
     margin-top: 120px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+
+    @include tablet {
+      flex-direction: column;
+      margin-top: 80px;
+    }
   }
 
   &__item {
     flex: 1;
-    padding: 0 90px;
+    max-width: 220px;
+
+    @include tablet {
+      max-width: 200px;
+      padding: 0;
+      margin-bottom: 60px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
 
     img {
       width: 100%;
@@ -160,8 +251,18 @@ main {
     align-items: center;
     margin-top: 120px;
 
+    @include tablet {
+      flex-direction: column-reverse;
+      margin-top: 60px;
+      align-items: flex-start;
+    }
+
     &.-reverse {
       flex-direction: row-reverse;
+
+      @include tablet {
+        flex-direction: column-reverse;
+      }
     }
   }
 
@@ -170,6 +271,12 @@ main {
     max-width: 500px;
     padding-right: 20px;
     padding-left: 0;
+
+    @include tablet {
+      margin-top: 30px;
+      padding-right: 0 !important;
+      padding-left: 0 !important;
+    }
 
     &__list {
       margin: 15px 0;
@@ -195,6 +302,11 @@ main {
     padding-left: 20px;
     padding-right: 0;
 
+    @include tablet {
+      padding-right: 0 !important;
+      padding-left: 0 !important;
+    }
+
     .features__item.-reverse & {
       padding-left: 0;
       padding-right: 20px;
@@ -203,6 +315,10 @@ main {
     img {
       max-width: 650px;
       float: left;
+
+      @include phone {
+        max-width: 100%;
+      }
     }
   }
 
@@ -218,6 +334,10 @@ main {
     font-size: 26px;
     line-height: 1.5;
     font-weight: 600;
+
+    @include phone {
+      font-size: 20px;
+    }
   }
 
   &__social-networks {
