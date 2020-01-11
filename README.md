@@ -5,7 +5,7 @@
   <h2 align="center">Learn languages with fun 🎉</h2>
 </p>
 
-Chrome extension for studying languages with watching movies and TV shows.
+Chrome extension for learning languages with watching movies and TV shows.
 
 ## Installation
 
