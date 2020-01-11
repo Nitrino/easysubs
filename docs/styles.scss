@@ -39,6 +39,7 @@ main {
   margin: 0 auto;
   max-width: 1200px;
   padding: 0 20px;
+  position: relative;
 
   @include tablet {
     max-width: 640px;
@@ -106,6 +107,18 @@ main {
     background: #1f5bff;
     font-size: 14px;
     padding: 12px 30px;
+  }
+}
+
+.languages {
+  position: absolute;
+  right: 0;
+
+  &__item {
+    text-decoration: underline;
+    &.-active {
+      text-decoration: none;
+    }
   }
 }
 

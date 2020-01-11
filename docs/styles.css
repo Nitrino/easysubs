@@ -29,6 +29,7 @@ main {
   margin: 0 auto;
   max-width: 1200px;
   padding: 0 20px;
+  position: relative;
 }
 
 @media (max-width: 1024px) {
@@ -109,6 +110,19 @@ main {
   background: #1f5bff;
   font-size: 14px;
   padding: 12px 30px;
+}
+
+.languages {
+  position: absolute;
+  right: 0;
+}
+
+.languages__item {
+  text-decoration: underline;
+}
+
+.languages__item.-active {
+  text-decoration: none;
 }
 
 .cover {
