@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add project landing page
 - Auto detect source language
 - Close setting popup on outside click
 - Add increase subs delay to 1 sec by press alt + click and 5 sec by press shift + click
