@@ -1,7 +1,7 @@
 body {
   font-family: "Open Sans", Arial, sans-serif;
   font-size: 18px;
-  font-weight: 300px;
+  font-weight: 300;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -115,6 +115,8 @@ main {
 .languages {
   position: absolute;
   right: 0;
+  padding-right: 20px;
+  padding-top: 20px;
 }
 
 .languages__item {
