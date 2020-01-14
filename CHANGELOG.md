@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Add stylization of scrollbar of alternative translations
 - Remove activeTab permission
 - Add project landing page
 - Auto detect source language

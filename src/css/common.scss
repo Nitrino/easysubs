@@ -101,6 +101,20 @@ i > span {
       max-height: 200px;
       overflow-y: auto;
       font-size: 14px;
+      padding-right: 5px;
+
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #666;
+        border-radius: 10px;
+      }
 
       &-part-speech {
         padding-top: 15px !important;
