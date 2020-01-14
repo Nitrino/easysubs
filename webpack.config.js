@@ -2,6 +2,7 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = env => ({
   mode: env,
@@ -61,5 +62,17 @@ module.exports = env => ({
       { from: "icons", to: "icons" },
       { from: "_locales", to: "_locales" }
     ])
-  ]
+  ],
+  optimization: {
+    minimize: env === "production",
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true
+          }
+        }
+      })
+    ]
+  }
 });

@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Remove `console.log` in production version
 - Add stylization of scrollbar of alternative translations
 - Remove activeTab permission
 - Add project landing page

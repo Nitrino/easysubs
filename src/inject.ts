@@ -38,6 +38,6 @@ try {
     (subsStore as any).on(updateSubs, (state: subTitleType[], subs: subTitleType[]) => subs);
   }
 } catch (e) {
-  console.log("Easysubs unknown error:", e);
+  console.error("Easysubs unknown error:", e);
   Sentry.captureEvent(e);
 }

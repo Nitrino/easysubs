@@ -30,7 +30,7 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
-    "terser-webpack-plugin": "^2.2.2",
+    "terser-webpack-plugin": "^2.3.2",
     "ts-loader": "^6.0.4",
     "tslint": "^5.20.1",
     "tslint-config-airbnb": "^5.11.2",
