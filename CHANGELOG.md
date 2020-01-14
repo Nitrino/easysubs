@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## v1.0.0
+
+Yippee! The long-awaited release.
+The basic set of features is completed and will continue to focus on improving stability and communicating with the community.
+The extension will be available soon in the chrome web store.
 
 ### Enhancements
 
@@ -14,6 +18,7 @@
 - Add the ability to force rewind to subs even if they are further than 5 seconds
 - Add production config
 - Add support multiple subs at one time
+- Improve readme and add Russian version
 
 ### Bugs
 
