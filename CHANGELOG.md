@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Remove activeTab permission
 - Add project landing page
 - Auto detect source language
 - Close setting popup on outside click
@@ -14,6 +15,7 @@
 
 ### Bugs
 
+- Fix setting icon styles on netflix
 - Fix subs delay freezes with frequent button presses
 - Fix auto play after show full sentence translation
 - Fix react state update on an unmounted component
