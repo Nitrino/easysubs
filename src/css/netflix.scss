@@ -1,23 +1,37 @@
-#netflix.easysubs-enable {
-  #easysubs {
-    bottom: 15vh;
+#netflix {
+  &.easysubs-enable {
+    #easysubs {
+      bottom: 15vh;
 
-    @media screen and (max-height: 800px) {
-      bottom: 18vh;
+      @media screen and (max-height: 800px) {
+        bottom: 18vh;
+      }
+    }
+
+    .player-timedtext {
+      display: none !important;
+    }
+
+    hr {
+      border: none;
+    }
+
+    .easysubs-settings-wrapper {
+      bottom: 120px;
+      right: 85px;
     }
   }
 
-  .player-timedtext {
-    display: none !important;
-  }
+  .easysubs-settings-container {
+    svg {
+      opacity: 1;
+      transition: transform 350ms cubic-bezier(0.86, 0, 0.07, 1);
+    }
 
-  hr {
-    border: none;
-  }
-
-  .easysubs-settings {
-    &-wrapper {
-      bottom: 120px;
+    &:hover {
+      svg {
+        transform: scale(1.13);
+      }
     }
   }
 }
