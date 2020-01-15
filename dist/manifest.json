@@ -2,7 +2,7 @@
   "name": "Easysubs",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Easysubs extension",
+  "description": "Chrome extension for learning languages with watching movies and TV shows",
   "homepage_url": "https://github.com/Nitrino/easysubs",
   "icons": {
     "16": "icons/icon16.png",
