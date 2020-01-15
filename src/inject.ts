@@ -16,7 +16,7 @@ try {
   const service = Utils.detectService();
   if (service) {
     GoogleAnalytics.run();
-    console.log("EasySubs initialized. Service:", service.constructor.name);
+    console.log("Easysubs initialized. Service:", service.constructor.name);
     window.addEventListener("easysubsVideoReady", () => {
       console.log("TCL: EVENT", "easysubsVideoReady");
 

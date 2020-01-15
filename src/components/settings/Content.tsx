@@ -19,9 +19,12 @@ const Content = (props: any) => {
   };
 
   return (
-    <div className="easysubs-settings-wrapper" style={{ display: props.display }}>
+    <div
+      className="easysubs-settings-wrapper"
+      style={{ display: props.display }}
+    >
       <div className="easysubs-settings-close" onClick={closeSettings} />
-      <div className="easysubs-settings-header">EasySubs settings</div>
+      <div className="easysubs-settings-header">Easysubs settings</div>
       <div className="easysubs-settings__content">
         <div className="easysubs-settings__content__header">Global</div>
         <Toggle />

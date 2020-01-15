@@ -7,7 +7,7 @@ import ShowProgressBar from "../settings/ShowProgressBar";
 function BrowserAction() {
   return (
     <div className="content">
-      <div className="header">EasySubs</div>
+      <div className="header">Easysubs</div>
       <menu>
         <li>
           <a target="_blank" href="http://nitrino.io/easysubs/">
