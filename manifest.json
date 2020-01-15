@@ -25,11 +25,8 @@
   "permissions": ["contextMenus", "storage"],
   "content_scripts": [
     {
-      "matches": ["https://*/*"],
-      "css": ["styles.css"]
-    },
-    {
-      "matches": ["https://*/*"],
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
       "js": ["inject.js"]
     }
   ],
