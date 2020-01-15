@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.1
+
+### Enhancements
+
+- Fix hosts permissions for non https urls
+- Unification Easysubs spelling
+- Fix youtube logo on landing for users with adblock
+- Update extension description
+
 ## v1.0.0
 
 Yippee! The long-awaited release.
