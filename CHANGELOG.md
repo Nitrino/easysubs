@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Bugs
+
+- Fix slice error when don't have alternative translations
+
 ## v1.0.1
 
 ### Enhancements
