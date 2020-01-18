@@ -20,8 +20,12 @@ class Subs {
     return tmpDiv.textContent;
   }
 
-  public static getCurrentSub(subs: subTitleType[], currentTime: number) {
-    return subs.find((sub: subTitleType) => sub.start <= currentTime && sub.end >= currentTime);
+  public static getCurrentFirstSub(subs: subTitleType[], currentTime: number) {
+    return Subs.getAllCurrentSub(subs, currentTime)[0];
+  }
+
+  public static getCurrentLastSub(subs: subTitleType[], currentTime: number) {
+    return Subs.getAllCurrentSub(subs, currentTime).slice(-1)[0];
   }
 
   public static getAllCurrentSub(subs: subTitleType[], currentTime: number) {
@@ -29,7 +33,7 @@ class Subs {
   }
 
   public static getPrevSub(subs: subTitleType[], currentTime: number): subTitleType {
-    const currentSub = Subs.getCurrentSub(subs, currentTime);
+    const currentSub = Subs.getCurrentLastSub(subs, currentTime);
     if (currentSub) {
       const indexCurrentSub = subs.findIndex(sub => sub === currentSub);
       return subs[indexCurrentSub - 1];
@@ -41,7 +45,7 @@ class Subs {
   }
 
   public static getNextSub(subs: subTitleType[], currentTime: number): subTitleType {
-    const currentSub = Subs.getCurrentSub(subs, currentTime);
+    const currentSub = Subs.getCurrentFirstSub(subs, currentTime);
     if (currentSub) {
       const indexCurrentSub = subs.findIndex(sub => sub === currentSub);
       return subs[indexCurrentSub + 1];

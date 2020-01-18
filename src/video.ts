@@ -11,7 +11,7 @@ class Video {
 
   public static moveToPrevSub(video: HTMLVideoElement, subs: subTitleType[], force: boolean) {
     let timeToRewind = this.getCurrentTime(video);
-    const currentSub = Subs.getCurrentSub(subs, timeToRewind);
+    const currentSub = Subs.getCurrentLastSub(subs, timeToRewind);
     if (currentSub) {
       timeToRewind = Utils.castSubTime(currentSub.start);
     }
@@ -27,7 +27,7 @@ class Video {
 
   public static moveToNextSub(video: HTMLVideoElement, subs: subTitleType[], force: boolean) {
     let timeToRewind = this.getCurrentTime(video);
-    const currentSub = Subs.getCurrentSub(subs, timeToRewind);
+    const currentSub = Subs.getCurrentFirstSub(subs, timeToRewind);
 
     if (currentSub) {
       timeToRewind = Utils.castSubTime(currentSub.end);

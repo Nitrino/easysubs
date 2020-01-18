@@ -4,6 +4,7 @@
 
 ### Bugs
 
+- Fix subtitle rewind with overlapping subtitles
 - Fix slice error when don't have alternative translations
 
 ## v1.0.1
