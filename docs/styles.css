@@ -90,7 +90,7 @@ main {
 
 .btn {
   display: inline-block;
-  border-radius: 30px;
+  border-radius: 50px;
   color: #fff;
   font-weight: 600;
 }
@@ -102,6 +102,32 @@ main {
 
 @media (max-width: 480px) {
   .btn.-main {
+    padding: 16px 30px;
+  }
+}
+
+.btn.-store {
+  padding: 16px 50px;
+  max-width: 200px;
+  -webkit-box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.1);
+  -webkit-transition: -webkit-box-shadow 0.15s;
+  transition: -webkit-box-shadow 0.15s;
+  transition: box-shadow 0.15s;
+  transition: box-shadow 0.15s, -webkit-box-shadow 0.15s;
+}
+
+.btn.-store:hover {
+  -webkit-box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.15);
+          box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+.btn.-store img {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .btn.-store {
     padding: 16px 30px;
   }
 }

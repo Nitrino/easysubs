@@ -9,8 +9,13 @@
 
 ## Установка
 
-Релизная версия скоро будет доступна в Chrome Web Store.\
-Пока вы можете установить дев версию:
+**Релизная версия доступна в [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github).**
+
+<a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
+  <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
+</a>
+
+#### Установка дев версии:
 
 1. Скачайте и разархивируйте [текущий репозиторий](https://github.com/Nitrino/easysubs/archive/master.zip)
 2. Откройте страницу расширений в Chrome `chrome://extensions/`

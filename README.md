@@ -8,9 +8,13 @@
 Chrome extension for learning languages with watching movies and TV shows.
 
 ## Installation
+**Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github).**
 
-The release version will be available soon in the Chrome Web Store.  
-Now you can install the dev version:
+<a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
+  <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
+</a>
+
+### Install dev version
 
 1. Download and unzip [current repository](https://github.com/Nitrino/easysubs/archive/master.zip)
 2. Open chrome extensions page `chrome://extensions/`
