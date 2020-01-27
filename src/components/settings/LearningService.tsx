@@ -28,7 +28,7 @@ function LearningService() {
   return (
     <div className="easysubs-settings__learning-service easysubs-settings__item">
       <div className="easysubs-settings__item__left">
-        <span>Learning service: </span>
+        <span>{chrome.i18n.getMessage("learningService")}</span>
       </div>
       <div className="easysubs-settings__item__right">
         <select

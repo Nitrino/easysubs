@@ -98,11 +98,13 @@ $text-color: #ffffff;
       flex: 1;
       text-align: right;
       margin-right: 10px;
+      align-self: center;
     }
 
     &__right {
       flex: 1;
       text-align: left;
+      align-self: center;
     }
   }
 

@@ -13,7 +13,7 @@ class PuzzleEnglish {
       chrome.runtime.sendMessage({ contentScriptQuery: "postFormDataRequest", url: url, data: data }, response => {
         response.word_id.error
           ? reject("Puzzle English Error: " + response.word_id.error)
-          : resolve("Word added to Puzzle English");
+          : resolve(chrome.i18n.getMessage("wordAddedToPuzzleEnglish"));
       });
     });
   }

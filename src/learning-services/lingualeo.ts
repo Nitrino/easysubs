@@ -11,7 +11,9 @@ class Lingualeo {
 
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({ contentScriptQuery: "getRequest", url: url.toString() }, response => {
-        response.error_msg === "" ? resolve("Word added to LinguaLeo") : reject("LinguaLeo authorization required");
+        response.error_msg === ""
+          ? resolve(chrome.i18n.getMessage("wordAddedToLinguaLeo"))
+          : reject(chrome.i18n.getMessage("lingualeoError"));
       });
     });
   }

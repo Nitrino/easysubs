@@ -11,7 +11,7 @@ function BrowserAction() {
       <menu>
         <li>
           <a target="_blank" href="http://nitrino.io/easysubs/">
-            Home page
+            {chrome.i18n.getMessage("homePage")}
           </a>
         </li>
         <li>
@@ -21,12 +21,12 @@ function BrowserAction() {
         </li>
         <li>
           <a target="_blank" href="https://github.com/Nitrino/easysubs/issues">
-            Report bugs
+            {chrome.i18n.getMessage("reportBugs")}
           </a>
         </li>
         <li>
           <a target="_blank" href="https://github.com/Nitrino/easysubs/issues">
-            Suggest features
+            {chrome.i18n.getMessage("suggestFeatures")}
           </a>
         </li>
       </menu>

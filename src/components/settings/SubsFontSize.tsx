@@ -19,7 +19,7 @@ function SubsFontSize() {
   return (
     <div className="easysubs-settings__learning-service easysubs-settings__item">
       <div className="easysubs-settings__item__left">
-        <span>Subtitles size: </span>
+        <span>{chrome.i18n.getMessage("subtitlesSize")}</span>
       </div>
       <div className="easysubs-settings__item__right">
         <div className="easysubs-settings__font-size">

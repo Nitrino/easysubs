@@ -2,8 +2,14 @@
 
 ## Unreleased
 
+### Enhancements
+
+- Remove contextMenus permissions and add all_urls
+- Add Russian localization
+
 ### Bugs
 
+- Fix icons border
 - Fix subtitle rewind with overlapping subtitles
 - Fix slice error when don't have alternative translations
 

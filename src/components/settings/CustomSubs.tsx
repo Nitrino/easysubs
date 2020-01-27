@@ -18,7 +18,7 @@ function CustomSubs() {
       const data: string = reader.result as string;
 
       updateSubs(parse(data));
-      (toast as any).info("🦄 Custom subtitles loaded");
+      (toast as any).info(chrome.i18n.getMessage("customSubtitlesLoaded"));
     };
     reader.readAsText(file);
     inputFile.current.value = null;
@@ -27,12 +27,12 @@ function CustomSubs() {
   return (
     <div className="easysubs-settings__custom-subs easysubs-settings__item">
       <div className="easysubs-settings__item__left">
-        <span>Custom subtitles: </span>
+        <span>{chrome.i18n.getMessage("customSubtitles")}</span>
       </div>
       <div className="easysubs-settings__item__right">
         <input type="file" accept=".vtt,.srt" id="file" ref={inputFile} onChange={handleOnChange} style={{ display: "none" }} />
         <div className="easysubs-settings__button" onClick={handleFileSelect}>
-          Select file
+          {chrome.i18n.getMessage("selectFile")}
         </div>
       </div>
     </div>

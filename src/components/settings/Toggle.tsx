@@ -24,7 +24,9 @@ function Toggle() {
   return (
     <label className="easysubs-label easysubs-settings__item">
       <div className="easysubs-settings__item__left">
-        <div className="easysubs-label-text">Enable:</div>
+        <div className="easysubs-label-text">
+          {chrome.i18n.getMessage("enable")}
+        </div>
       </div>
       <div className="easysubs-settings__item__right">
         <div className="toggle">

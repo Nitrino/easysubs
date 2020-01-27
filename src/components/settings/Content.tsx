@@ -24,15 +24,21 @@ const Content = (props: any) => {
       style={{ display: props.display }}
     >
       <div className="easysubs-settings-close" onClick={closeSettings} />
-      <div className="easysubs-settings-header">Easysubs settings</div>
+      <div className="easysubs-settings-header">
+        {chrome.i18n.getMessage("easysubsSettings")}
+      </div>
       <div className="easysubs-settings__content">
-        <div className="easysubs-settings__content__header">Global</div>
+        <div className="easysubs-settings__content__header">
+          {chrome.i18n.getMessage("global")}
+        </div>
         <Toggle />
         <ShowProgressBar />
         <Language />
         <LearningService />
         {/* <div className="easysubs-settings__content__header">Interface</div> */}
-        <div className="easysubs-settings__content__header">Subtitles</div>
+        <div className="easysubs-settings__content__header">
+          {chrome.i18n.getMessage("subtitles")}
+        </div>
         <SubsFontSize />
         <ResyncSubs />
         <CustomSubs />

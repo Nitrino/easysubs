@@ -1,0 +1,56 @@
+{
+  "homePage": {
+    "message": "Домашняя страница"
+  },
+  "reportBugs": {
+    "message": "Сообщить об ошибках"
+  },
+  "suggestFeatures": {
+    "message": "Предложить функции"
+  },
+  "easysubsSettings": {
+    "message": "Easysubs настройки"
+  },
+  "global": {
+    "message": "Глобальные"
+  },
+  "subtitles": {
+    "message": "Субтитры"
+  },
+  "enable": {
+    "message": "Включено"
+  },
+  "showProgressBar": {
+    "message": "Показать прогресс бар"
+  },
+  "translationLanguage": {
+    "message": "Язык перевода"
+  },
+  "learningService": {
+    "message": "Сервис изучения языка"
+  },
+  "subtitlesSize": {
+    "message": "Размер субтитров"
+  },
+  "subtitlesDelay": {
+    "message": "Задержка субтитров"
+  },
+  "customSubtitles": {
+    "message": "Пользовательские субтитры"
+  },
+  "selectFile": {
+    "message": "Выбрать фаил"
+  },
+  "customSubtitlesLoaded": {
+    "message": "🦄 Пользовательские субтитры загружены"
+  },
+  "wordAddedToLinguaLeo": {
+    "message": "Слово добавлено в словарь LinguaLeo"
+  },
+  "wordAddedToPuzzleEnglish": {
+    "message": "Слово добавлено в словарь Puzzle English"
+  },
+  "lingualeoError": {
+    "message": "Требуется авторизация в LinguaLeo"
+  }
+}
