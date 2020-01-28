@@ -2,11 +2,17 @@
   "homePage": {
     "message": "Домашняя страница"
   },
+  "homePageUrl": {
+    "message": "https://easysubs.co/ru.html"
+  },
   "reportBugs": {
     "message": "Сообщить об ошибках"
   },
   "suggestFeatures": {
     "message": "Предложить функции"
+  },
+  "supportChat": {
+    "message": "Чат поддержки"
   },
   "easysubsSettings": {
     "message": "Easysubs настройки"

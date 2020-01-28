@@ -2,11 +2,17 @@
   "homePage": {
     "message": "Home page"
   },
+  "homePageUrl": {
+    "message": "https://easysubs.co"
+  },
   "reportBugs": {
     "message": "Report bugs"
   },
   "suggestFeatures": {
     "message": "Suggest features"
+  },
+  "supportChat": {
+    "message": "Support chat"
   },
   "easysubsSettings": {
     "message": "Easysubs settings"
