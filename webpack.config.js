@@ -49,10 +49,6 @@ module.exports = env => ({
       path: path.resolve(__dirname, env === "production" ? "release" : "dist")
     }),
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "src/index.html"
-    }),
-    new HtmlWebpackPlugin({
       filename: "browser_action.html",
       template: "src/browser_action.html",
       inject: false
