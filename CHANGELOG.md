@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Enhancements
+
+- Support firefox
+- Change `storage.sync` to `storage.local`
+- Remove options page
+- Improve promotional image
+
 ## v1.1.0
 
 ### Enhancements
