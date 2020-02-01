@@ -13,7 +13,7 @@ export const withPersist = <State>(store: any, config: IPersistConfig = defaultC
   const persistKey = `${config.key}:${name}`;
   const rehydrate = createEvent("@PERSIST/REHYDRATE");
 
-  chrome.storage.sync.get([persistKey], result => {
+  chrome.storage.local.get([persistKey], result => {
     if (result[persistKey]) {
       store.on(rehydrate, () => JSON.parse(result[persistKey]));
       rehydrate();
@@ -21,7 +21,7 @@ export const withPersist = <State>(store: any, config: IPersistConfig = defaultC
   });
 
   store.watch((state: any) => {
-    chrome.storage.sync.set({ [persistKey]: JSON.stringify(state) });
+    chrome.storage.local.set({ [persistKey]: JSON.stringify(state) });
   });
 
   return store;
