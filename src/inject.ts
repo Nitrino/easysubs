@@ -6,7 +6,10 @@ import UI from "./ui";
 import Utils from "./utils";
 import GoogleAnalytics from "./google-analytics";
 
-(Sentry as any).init({ dsn: "https://f0696dfa1f80424f9f0f628d8d1d7796@sentry.io/1849876" });
+(Sentry as any).init({
+  dsn: "https://f0696dfa1f80424f9f0f628d8d1d7796@sentry.io/1849876",
+  defaultIntegrations: Sentry.defaultIntegrations.filter(({ name }) => name !== "TryCatch")
+});
 
 window.addEventListener("unhandledrejection", event => {
   Sentry.captureEvent(event.reason);
