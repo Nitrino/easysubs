@@ -33,8 +33,9 @@ function SubsComponent() {
   }
 
   useLayoutEffect(() => {
-    window.addEventListener("resize", updateSize);
-    updateSize();
+    const ro = new ResizeObserver(() => { updateSize(); });
+    ro.observe(videoElement);
+
     return () => window.removeEventListener("resize", updateSize);
   }, [subsFontSize]);
 
