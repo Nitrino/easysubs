@@ -36,7 +36,7 @@ class Utils {
   }
 
   public static clearWord(word: string): string {
-    return word.match(/[^\W\d](\w|[-']{1,2}(?=\w))*/g)?.shift() || ""
+    return word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, '');
   }
 
   public static getVideoCurrentTime(video: HTMLVideoElement) {
@@ -45,8 +45,8 @@ class Utils {
 
   public static getCurrentLearningService() {
     const currentServiceName = learningServiceStore.getState()
-    switch (currentServiceName) { 
-      case "lingualeo": 
+    switch (currentServiceName) {
+      case "lingualeo":
         return new Lingualeo()
       case "puzzle-english":
         return new PuzzleEnglish()
@@ -55,13 +55,13 @@ class Utils {
     }
   }
 
-  
+
   public static isNetflix() {
     return ["www.netflix.com", "netflix.com"].includes(window.location.host)
   }
 
   public static keyboardHandler(event: KeyboardEvent) {
-    if(!enableState.getState()) return;
+    if (!enableState.getState()) return;
 
     const videoElement = document.querySelector("video")
     if (event.code === "ArrowLeft") {
