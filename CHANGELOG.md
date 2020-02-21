@@ -4,10 +4,20 @@
 
 ### Enhancements
 
-- Support firefox
+- Improve google analytics integration
+- Support only google translation languages
+- Support Firefox browser
+- Support Opera browser
+- Support Yandex browser
 - Change `storage.sync` to `storage.local`
 - Remove options page
 - Improve promotional image
+
+### Bugs
+
+- Fix translating from languages with special characters
+- Fix small font-size in full screen on YouTube
+
 
 ## v1.1.0
 
