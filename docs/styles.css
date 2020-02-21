@@ -271,6 +271,18 @@ main {
   }
 }
 
+.cover__manual {
+  margin-top: 30px;
+  font-size: 16px;
+}
+
+.cover__manual a {
+  color: #000;
+  text-decoration: underline;
+  -webkit-text-decoration-color: #989898;
+          text-decoration-color: #989898;
+}
+
 .cover__right {
   -webkit-box-flex: 1;
       -ms-flex: 1;

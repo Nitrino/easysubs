@@ -232,6 +232,17 @@ main {
     }
   }
 
+  &__manual {
+    margin-top: 30px;
+    font-size: 16px;
+
+    a {
+      color: #000;
+      text-decoration: underline;
+      text-decoration-color: #989898;
+    }
+  }
+
   &__right {
     flex: 1;
     max-width: 60px;
