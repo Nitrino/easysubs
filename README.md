@@ -5,9 +5,11 @@
   <h2 align="center">Learn languages with fun 🎉</h2>
 </p>
 
-Chrome extension for learning languages with watching movies and TV shows.
+Browser extension for learning languages with watching movies and TV shows.
 
 ## Installation
+
+The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in other browsers with WebExtensions API support, but has not been tested yet.
 
 **Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github).**
 
@@ -15,14 +17,23 @@ Chrome extension for learning languages with watching movies and TV shows.
   <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
 </a>
 
-#### Install dev version:
+Will be available soon in other stores.
+
+#### Install dev version
 
 1. Download and unzip [current repository](https://github.com/Nitrino/easysubs/archive/master.zip)
-2. Open chrome extensions page `chrome://extensions/`
-3. Turn on developer mode
-4. Click to `Load unpacked` button and select `dist` folder
+2. Open extensions page:
+    * For Chrome: `chrome://extensions/`
+    * For Firefox: `about:debugging#/runtime/this-firefox`
+    * For Opera: `opera://extensions`
+    * For Yandex browser: `browser://tune/`
+3. Turn on developer mode (for all except Yandex browser)
+4. Load unpacked extension:
+    * For Chrome and Opera: Click to `Load unpacked` button and select `dist` folder
+    * For Firefox: Click to `Load temporary Add-on...` button and select `dist` folder
+    * For Yandex browser: Drag and drop `dist` folder to extensions page
 
-To upgrade you have to download the new version again.
+> To upgrade you have to download the new version again.
 
 ## Features
 
