@@ -2,6 +2,7 @@ import { useStore } from "effector-react";
 import React, { useEffect } from "react";
 import { toggleShowProgressBarState } from "../../event";
 import { showProgressBarState } from "../../store";
+import GoogleAnalytics from "../../ga";
 
 function ShowProgressBar() {
   const showProgressBar = useStore(showProgressBarState);
@@ -14,6 +15,7 @@ function ShowProgressBar() {
   function changeShowState(showed: boolean) {
     toggleShowProgressBarState(showed);
     addEnableClass(showed);
+    GoogleAnalytics.trackEvent("show-progress-bar", showed.toString())
   }
 
   function addEnableClass(showed: boolean) {

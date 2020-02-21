@@ -5,6 +5,7 @@ import Utils from "../../utils";
 import FrequencyDots from "./FrequencyDots";
 import Lingualeo from "../../learning-services/lingualeo";
 import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
+import GoogleAnalytics from "../../ga";
 
 interface Props {
   alternative: any[];
@@ -28,8 +29,17 @@ function TranslateAlternativesItem(props: Props) {
         translateNode.current.textContent,
         partOfSpeechNode.textContent
       )
-      .then((text: string) => (toast as any).info(text))
-      .catch((error: string) => (toast as any).error(error));
+      .then((text: string) => {
+        (toast as any).info(text)
+        GoogleAnalytics.trackEvent("export-word", "success")
+        GoogleAnalytics.trackEvent(props.currentService.constructor.name, "success")
+      })
+      .catch((error: string) => {
+        (toast as any).error(error)
+        GoogleAnalytics.trackEvent("export-word", "error")
+        GoogleAnalytics.trackEvent(props.currentService.constructor.name, "error")
+      });
+    GoogleAnalytics.trackEvent("export-word", props.currentService.constructor.name)
   }
 
   return [

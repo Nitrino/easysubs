@@ -1,8 +1,4 @@
 import React from "react";
-import Toggle from "../settings/Toggle";
-import Language from "../settings/Language";
-import LearningService from "../settings/LearningService";
-import ShowProgressBar from "../settings/ShowProgressBar";
 
 function BrowserAction() {
   return (

@@ -2,6 +2,7 @@ import { useStore } from "effector-react";
 import React from "react";
 import { setLearningService } from "../../event";
 import { learningServiceStore } from "../../store";
+import GoogleAnalytics from "../../ga";
 
 const services = [
   {
@@ -16,14 +17,15 @@ const services = [
     label: "Puzzle English",
     value: "puzzle-english"
   }
-  // {
-  //   label: "Quizlet",
-  //   value: "quizlet"
-  // }
 ];
 
 function LearningService() {
   const currentService = useStore(learningServiceStore);
+
+  function changeLearningService(service: string) {
+    setLearningService(service)
+    GoogleAnalytics.trackEvent("learning-service", service)
+  }
 
   return (
     <div className="easysubs-settings__learning-service easysubs-settings__item">
@@ -34,7 +36,7 @@ function LearningService() {
         <select
           className="easysubs-settings__select"
           value={currentService || ""}
-          onChange={e => setLearningService(e.target.value || null)}
+          onChange={e => changeLearningService(e.target.value || null)}
         >
           {services.map((service: { value: string; label: string }, index) => {
             return (
