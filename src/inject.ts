@@ -4,11 +4,11 @@ import { updateSubs } from "./event";
 import { subsStore } from "./store";
 import UI from "./ui";
 import Utils from "./utils";
-import GoogleAnalytics from "./google-analytics";
+import GoogleAnalytics from "./ga";
 
 (Sentry as any).init({
   dsn: "https://f0696dfa1f80424f9f0f628d8d1d7796@sentry.io/1849876",
-  defaultIntegrations: Sentry.defaultIntegrations.filter(({ name }) => name !== "TryCatch")
+  defaultIntegrations: Sentry.defaultIntegrations.filter(({ name }: any) => name !== "TryCatch")
 });
 
 window.addEventListener("unhandledrejection", event => {
@@ -32,6 +32,7 @@ try {
         UI.renderProgressBar(service.playerContainerSelector());
         UI.renderNotifications();
         service.getSubs(event.detail).then(subs => {
+          GoogleAnalytics.trackEvent("subs-loaded", event.detail)
           updateSubs(subs);
         });
       });

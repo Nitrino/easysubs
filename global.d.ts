@@ -1,7 +1,7 @@
 declare module "*";
-declare var showTranslation: boolean;
-declare var initializeInProgress: boolean;
 declare var isEnabled: boolean;
+declare var googleAnalytics: any;
+declare var ga: any;
 declare var netflix: any;
 declare var player: any;
 declare var playerInstance: any;

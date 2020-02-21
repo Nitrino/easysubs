@@ -1,11 +1,16 @@
-import * as locale from "@cospired/i18n-iso-languages/langs/en.json";
 import { useStore } from "effector-react";
 import React from "react";
 import { setUserLanguage } from "../../event";
 import { userLanguageStore } from "../../store";
+import GoogleAnalytics from "../../ga";
 
 function Language() {
   const userLanguage = useStore(userLanguageStore);
+
+  function changeLanguage(language: string) {
+    setUserLanguage(language)
+    GoogleAnalytics.trackEvent("translation-language", language)
+  }
 
   return (
     <div className="easysubs-settings-language easysubs-settings__item">
@@ -16,7 +21,7 @@ function Language() {
         <select
           className="easysubs-settings__select"
           value={userLanguage}
-          onChange={e => setUserLanguage(e.target.value)}
+          onChange={e => changeLanguage(e.target.value)}
         >
           {languages.map((language: { value: string; label: string }, index) => {
             return (
@@ -35,9 +40,9 @@ userLanguageStore.on(setUserLanguage, (state: any, language: object) => language
 export default Language;
 
 const languages = [
-  { label: "Afrikaans",	value: "af" },
+  { label: "Afrikaans", value: "af" },
   { label: "Albanian", value: "sq" },
-  { label: "Amharic",	value: "am" },
+  { label: "Amharic", value: "am" },
   { label: "Arabic", value: "ar" },
   { label: "Armenian", value: "hy" },
   { label: "Azerbaijani", value: "az" },
@@ -52,13 +57,13 @@ const languages = [
   { label: "Chinese (Traditional)", value: "zh-TW" },
   { label: "Corsican", value: "co" },
   { label: "Croatian", value: "hr" },
-  { label: "Czech",	value: "cs" },
-  { label: "Danish",	value: "da" },
-  { label: "Dutch",	value: "nl" },
-  { label: "English",	value: "en" },
-  { label: "Esperanto",	value: "eo" },
-  { label: "Estonian",	value: "et" },
-  { label: "Finnish",	value: "fi" },
+  { label: "Czech", value: "cs" },
+  { label: "Danish", value: "da" },
+  { label: "Dutch", value: "nl" },
+  { label: "English", value: "en" },
+  { label: "Esperanto", value: "eo" },
+  { label: "Estonian", value: "et" },
+  { label: "Finnish", value: "fi" },
   { label: "French", value: "fr" },
   { label: "Frisian", value: "fy" },
   { label: "Galician", value: "gl" },
@@ -71,7 +76,7 @@ const languages = [
   { label: "Hawaiian", value: "haw" },
   { label: "Hebrew", value: "he" },
   { label: "Hindi", value: "hi" },
-  { label: "Hmong", value: "hmn"},
+  { label: "Hmong", value: "hmn" },
   { label: "Hungarian", value: "hu" },
   { label: "Icelandic", value: "is" },
   { label: "Igbo", value: "ig" },
