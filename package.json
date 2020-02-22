@@ -1,6 +1,6 @@
 {
   "name": "easysubs",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Browser extension for learning languages with watching movies and TV shows",
   "main": "inject.js",
   "scripts": {

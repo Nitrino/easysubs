@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## v1.2.0
+
+Starting from this version we support Chrome, Firefox, Opera and Yandex browsers.
 
 ### Enhancements
 
@@ -17,7 +19,6 @@
 
 - Fix translating from languages with special characters
 - Fix small font-size in full screen on YouTube
-
 
 ## v1.1.0
 
