@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TranslateAlternativesItem from "./TranslateAlternativesItem";
 import Utils from "../../utils";
 
-function TranslateAlternatives(props: { alternativesGroups: any[]; word: string }) {
+function TranslateAlternatives(props: { alternativesGroups: any[]; word: string, context: string }) {
   const [currentService, setCurrentService] = useState(null);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ function TranslateAlternatives(props: { alternativesGroups: any[]; word: string 
                       word={props.word}
                       groupIndex={groupIndex}
                       currentService={currentService}
+                      context={props.context}
                     />
                   </tr>
                 );
