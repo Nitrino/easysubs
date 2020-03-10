@@ -8,6 +8,7 @@ interface Props {
   tagName: string;
   keyName: string;
   word: string;
+  context: string;
 }
 
 function Word(props: Props) {
@@ -39,7 +40,7 @@ function Word(props: Props) {
     props.word,
     // tslint:disable-next-line: jsx-self-close
     <span key={`space${props.keyName}`}> </span>,
-    showTranslation ? <TranslateWordPopup word={props.word} /> : null
+    showTranslation ? <TranslateWordPopup word={props.word} context={props.context} /> : null
   );
 }
 

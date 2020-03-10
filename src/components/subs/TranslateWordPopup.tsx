@@ -7,6 +7,7 @@ import GoogleAnalytics from "../../ga";
 
 interface Props {
   word: string;
+  context: string;
 }
 
 interface Translate {
@@ -61,7 +62,7 @@ function TranslateWordPopup(props: Props) {
         <div className="easysubs-translate-original">
           {translation.original}
         </div>
-        <TranslateAlternatives alternativesGroups={translation.alternatives} word={props.word} />
+        <TranslateAlternatives alternativesGroups={translation.alternatives} word={props.word} context={props.context} />
       </div>
     );
   }

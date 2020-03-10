@@ -10,6 +10,7 @@ import {
 import Subs from "../../subs";
 import Word from "./Word";
 import SubComponent from "./SubComponent";
+import Utils from "../../utils";
 
 function SubsComponent() {
   const subs = useStore(subsStore);
@@ -85,6 +86,7 @@ function SubsComponent() {
               <Word
                 tagName={tagName}
                 word={word}
+                context={Utils.clearWordContext(subtitleText, word)}
                 key={word + nodeIndex + wordIndex}
                 keyName={word + nodeIndex + wordIndex}
               />

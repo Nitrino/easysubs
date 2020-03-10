@@ -38,6 +38,12 @@ class Utils {
   public static clearWord(word: string): string {
     return word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, '');
   }
+  public static clearWordContext(sub: string, word: string): string {
+    return sub
+      .replace(/[\r\n]+/g, " ")
+      .match(/([^ \r\n][^!?\.\r\n]+[\w!?\.]+)/g)
+      .find(element => element.indexOf(word) >= 0);
+  }
 
   public static getVideoCurrentTime(video: HTMLVideoElement) {
     return Math.round(video.currentTime * 1000)

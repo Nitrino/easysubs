@@ -5,7 +5,7 @@ class PuzzleEnglish {
     this.color = "#88BA28";
   }
 
-  public addWord(word: string, translate: string, partOfSpeech: string) {
+  public addWord(word: string, translate: string, partOfSpeech: string, _: string) {
     const url = "https://puzzle-english.com/api2/userDictionary/addWord";
     const data = { post_id: 0, word: word, translation: translate, piece_index: 0, part_of_speech: partOfSpeech };
 
