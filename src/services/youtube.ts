@@ -73,19 +73,24 @@ class YouTube implements Service {
   private injection = () => {
     window.setInterval(() => {
       const player: any = document.getElementById("movie_player");
+      const subsToggleElement = document.querySelector(".ytp-subtitles-button");
 
       if (player) {
         if (!window.isLoaded) {
           window.isLoaded = true;
           window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
-          player.toggleSubtitles();
-          player.toggleSubtitles();
+
+          if (subsToggleElement.getAttribute("aria-pressed") === "true") {
+            player.toggleSubtitles();
+            player.toggleSubtitles();
+          } else {
+            window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: "" }));
+          }
         }
       } else {
         window.isLoaded = false;
       }
 
-      const subsToggleElement = document.querySelector(".ytp-subtitles-button");
       if (subsToggleElement) {
         if (window.subtitlesEnabled && subsToggleElement.getAttribute("aria-pressed") === "false") {
           window.subtitlesEnabled = false;
@@ -95,7 +100,7 @@ class YouTube implements Service {
     }, 500);
 
     (open => {
-      XMLHttpRequest.prototype.open = function(method: string, url: string) {
+      XMLHttpRequest.prototype.open = function (method: string, url: string) {
         if (url.match(/^http/g) !== null) {
           const urlObject = new URL(url);
           if (urlObject.pathname === "/api/timedtext") {

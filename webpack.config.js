@@ -25,15 +25,18 @@ module.exports = env => ({
       },
       {
         test: /\.js$/,
+        exclude: /(node_modules)/,
         use: ["source-map-loader"],
         enforce: "pre"
       },
       {
         test: /\.(scss|css)$/,
+        exclude: /(node_modules)/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
       },
       {
         test: /\.svg$/,
+        exclude: /(node_modules)/,
         use: ["@svgr/webpack"]
       }
     ]
@@ -70,5 +73,8 @@ module.exports = env => ({
         }
       })
     ]
+  },
+  watchOptions: {
+    ignored: /node_modules/
   }
 });
