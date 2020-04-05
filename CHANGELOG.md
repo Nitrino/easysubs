@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Enhancements
+
+- Add support youtube auto-translate subtitles
+
+### Bugs
+
+- Fix adding a word to lingualeo with new API
+- Fix show youtube subs when disabled by default
+- Fix CVE-2020-7598 and CVE-2019-20149
+
 ## v1.2.0
 
 Starting from this version we support Chrome, Firefox, Opera and Yandex browsers.
