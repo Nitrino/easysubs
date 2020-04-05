@@ -1,6 +1,5 @@
 import Service from "service";
 import { parse } from "subtitle";
-import { ready } from "../ready";
 
 interface Subtitle {
   baseUrl: string;
@@ -11,6 +10,14 @@ interface Subtitle {
 }
 
 class YouTube implements Service {
+  private subCache: any;
+
+  constructor() {
+    this.subCache = {};
+    this.processSubData = this.processSubData.bind(this);
+    window.addEventListener("easysubs_data", this.processSubData);
+  }
+
   public init() {
     this.injectScript();
   }
@@ -18,8 +25,10 @@ class YouTube implements Service {
   public async getSubs(language: string) {
     if (language === "") return parse("");
     const videoId = this.getVideoId();
-    const subItem = await this.getVideoInfo(videoId, language);
-    const subUri: string = `${subItem.baseUrl}&fmt=vtt`;
+
+    const urlObject: URL = new URL(this.subCache[videoId][language])
+    urlObject.searchParams.set("fmt", "vtt")
+    const subUri: string = urlObject.href
 
     const resp = await fetch(subUri);
     const text = await resp.text();
@@ -32,33 +41,6 @@ class YouTube implements Service {
 
   public playerContainerSelector(): string {
     return ".html5-video-player";
-  }
-
-  private async getVideoInfo(videoId: string, lang: string) {
-    const resp = await fetch(`https://youtube.com/get_video_info?video_id=${videoId}`);
-    const text = await resp.text();
-    const data = decodeURIComponent(text);
-
-    if (!data.includes("captionTracks")) throw new Error(`Could not find captions for video: ${videoId}`);
-
-    const regex = /({"captionTracks":.*isTranslatable":(true|false)}])/;
-    const [match] = regex.exec(data);
-    const { captionTracks } = JSON.parse(`${match}}`);
-
-    const subtitle: Subtitle =
-      captionTracks.find((track: any) => {
-        return track.vssId === `.${lang}`;
-      }) ||
-      captionTracks.find((track: any) => {
-        return track.vssId === `a.${lang}`;
-      }) ||
-      captionTracks.find((track: any) => {
-        return track.vssId.match(`.${lang}`);
-      });
-
-    if (!subtitle || (subtitle && !subtitle.baseUrl)) throw new Error(`Could not find ${lang} captions for ${videoId}`);
-
-    return subtitle;
   }
 
   private getVideoId() {
@@ -105,8 +87,10 @@ class YouTube implements Service {
           const urlObject = new URL(url);
           if (urlObject.pathname === "/api/timedtext") {
             window.subtitlesEnabled = true;
+            const lang = urlObject.searchParams.get("tlang") || urlObject.searchParams.get("lang")
+            window.dispatchEvent(new CustomEvent("easysubs_data", { detail: urlObject.href }));
             window.dispatchEvent(
-              new CustomEvent("easysubsSubtitlesChanged", { detail: urlObject.searchParams.get("lang") })
+              new CustomEvent("easysubsSubtitlesChanged", { detail: lang })
             );
           }
         }
@@ -114,6 +98,14 @@ class YouTube implements Service {
       };
     })(XMLHttpRequest.prototype.open);
   };
+
+  private processSubData(event: any) {
+    const urlObject = new URL(event.detail)
+    const lang = urlObject.searchParams.get("tlang") || urlObject.searchParams.get("lang")
+    const videoId = urlObject.searchParams.get("v")
+    this.subCache[videoId] = {}
+    this.subCache[videoId][lang] = urlObject.href
+  }
 
   private injectScript() {
     const sc = document.createElement("script");
