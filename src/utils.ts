@@ -39,10 +39,11 @@ class Utils {
     return word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, '');
   }
   public static clearWordContext(sub: string, word: string): string {
-    return sub
+    const words = sub
       .replace(/[\r\n]+/g, " ")
-      .match(/([^ \r\n][^!?\.\r\n]+[\w!?\.]+)/g)
-      .find(element => element.indexOf(word) >= 0);
+      .match(/([^ \r\n][^!?\.\r\n]+[\w!?\.]+)/g) || [""]
+
+    return words.find(element => element.indexOf(word) >= 0);
   }
 
   public static getVideoCurrentTime(video: HTMLVideoElement) {
