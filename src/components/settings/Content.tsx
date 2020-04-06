@@ -6,6 +6,7 @@ import ShowProgressBar from "./ShowProgressBar";
 import SubsFontSize from "./SubsFontSize";
 import ResyncSubs from "./ResyncSubs";
 import CustomSubs from "./CustomSubs";
+import SubsBackground from "./SubsBackground";
 import onClickOutside from "react-onclickoutside";
 
 // tslint:disable-next-line: variable-name
@@ -39,6 +40,7 @@ const Content = (props: any) => {
         <div className="easysubs-settings__content__header">
           {chrome.i18n.getMessage("subtitles")}
         </div>
+        <SubsBackground />
         <SubsFontSize />
         <ResyncSubs />
         <CustomSubs />

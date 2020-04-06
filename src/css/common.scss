@@ -32,7 +32,12 @@ i > span {
     &__sub {
       position: relative;
       white-space: pre;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: transparent;
+
+      .easysubs-show-subtitles-background & {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
       margin-top: 5px;
       padding: 0 10px;
     }

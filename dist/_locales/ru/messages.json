@@ -44,6 +44,9 @@
   "subtitlesDelay": {
     "message": "Задержка субтитров"
   },
+  "showSubsBackground": {
+    "message": "Фон субтитров"
+  },
   "customSubtitles": {
     "message": "Пользовательские субтитры"
   },
