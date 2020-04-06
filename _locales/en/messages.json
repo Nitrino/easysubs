@@ -44,6 +44,9 @@
   "subtitlesDelay": {
     "message": "Subtitles delay"
   },
+  "showSubsBackground": {
+    "message": "Subtitles background"
+  },
   "customSubtitles": {
     "message": "Custom subtitles"
   },
