@@ -4,6 +4,8 @@
 
 ### Enhancements
 
+- Add the ability to drag subtitles to any position on video
+- Add subtitles backgrounds toggle to settings
 - Add support youtube auto-translate subtitles
 
 ### Bugs

@@ -11,6 +11,7 @@ import Subs from "../../subs";
 import Word from "./Word";
 import SubComponent from "./SubComponent";
 import Utils from "../../utils";
+import Draggable from 'react-draggable';
 
 function SubsComponent() {
   const subs = useStore(subsStore);
@@ -97,14 +98,16 @@ function SubsComponent() {
   }
 
   return (
-    <div
-      className="easysubs-subtitles"
-      onMouseEnter={handleOnMouseEnter}
-      onMouseLeave={handleOnMouseLeave}
-      style={{ fontSize: `${fontSize}px` }}
-    >
-      {currentSubs}
-    </div>
+    <Draggable>
+      <div
+        className="easysubs-subtitles"
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+        style={{ fontSize: `${fontSize}px` }}
+      >
+        {currentSubs}
+      </div>
+    </Draggable>
   );
 }
 
