@@ -63,6 +63,7 @@
     "querystring": "^0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-draggable": "^4.2.0",
     "react-onclickoutside": "^6.9.0",
     "react-select": "^3.1.0",
     "react-toastify": "^5.5.0",
