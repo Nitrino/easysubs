@@ -25,6 +25,14 @@ main {
   overflow: hidden;
 }
 
+main .telegram_badge {
+  text-align: center;
+  color: #ffffff;
+  background-color: #151513;
+  font-weight: 600;
+  padding: 0.5em 0;
+}
+
 .content {
   margin: 0 auto;
   max-width: 1200px;

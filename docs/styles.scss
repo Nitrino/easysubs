@@ -33,6 +33,14 @@ a {
 
 main {
   overflow: hidden;
+
+  .telegram_badge {
+    text-align: center;
+    color: #ffffff;
+    background-color: #151513;
+    font-weight: 600;
+    padding: 0.5em 0;
+  }
 }
 
 .content {
