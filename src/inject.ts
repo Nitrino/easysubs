@@ -20,6 +20,7 @@ try {
   if (service) {
     GoogleAnalytics.run();
     console.log("Easysubs initialized. Service:", service.constructor.name);
+    GoogleAnalytics.trackEvent("service", service.constructor.name)
     window.addEventListener("easysubsVideoReady", () => {
       console.log("TCL: EVENT", "easysubsVideoReady");
 
