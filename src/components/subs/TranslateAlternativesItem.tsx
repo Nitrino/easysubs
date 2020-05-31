@@ -1,18 +1,17 @@
-import React, { useRef, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, {useRef} from "react";
+import {toast} from "react-toastify";
 import Plus from "../../images/plus.svg";
 import Utils from "../../utils";
 import FrequencyDots from "./FrequencyDots";
-import Lingualeo from "../../learning-services/lingualeo";
-import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
 import GoogleAnalytics from "../../ga";
+import {LearningService} from "../../learning-services/LearningService";
 
 interface Props {
   alternative: any[];
   word: string;
   context: string;
   groupIndex: number;
-  currentService: null | Lingualeo | PuzzleEnglish;
+  currentService: null | LearningService;
 }
 
 function TranslateAlternativesItem(props: Props) {

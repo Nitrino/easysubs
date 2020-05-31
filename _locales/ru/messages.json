@@ -64,5 +64,33 @@
   },
   "lingualeoError": {
     "message": "Требуется авторизация в LinguaLeo"
+  },
+  "SkyEngMeaningError": {
+    "message": "Не удалось добавить слово в SkyEng (не нашли такое слово в  SkyEng)"
+  },
+  "SkyEngAddError": {
+    "message": "Не удалось добавить слово в SkyEng"
+  },
+  "SkyEngAddSuccess": {
+    "message": "Добавили в SkyEng: $ORIGINAL$—$TRANSLATION$",
+    "placeholders": {
+      "original": {
+        "content": "$1",
+        "example": "Table"
+      },
+      "translation": {
+        "content": "$2",
+        "example": "Стол"
+      }
+    }
+  },
+  "SkyEng_Settings_Email": {
+    "message": "Email"
+  },
+  "SkyEng_Settings_Token": {
+    "message": "Токен"
+  },
+  "SkyEng_Settings_GetToken": {
+    "message": "Получить"
   }
 }

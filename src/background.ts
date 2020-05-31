@@ -42,7 +42,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
       .catch((err: Error) => console.error(err));
   } else if (request.contentScriptQuery === "getRequest") {
-    fetch(request.url).then(resp => resp.json()).then(data => sendResponse(data));
+    fetch(request.url, {
+      method: "GET",
+      body: request.data
+    })
+      .then(resp => resp.json())
+      .then(data => sendResponse(data))
+      .catch(err => sendResponse(err));
   } else if (request.contentScriptQuery === "postFormDataRequest") {
     const formData = new FormData();
     for (const key in request.data) {
@@ -55,6 +61,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     })
       .then(resp => resp.json())
       .then(data => sendResponse(data));
+
+  } else if (request.contentScriptQuery === "putRequest") {
+    fetch(request.url, {
+      method: "PUT",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request.data)
+    })
+      .then(resp => resp.json())
+      .then(data => sendResponse(data))
+      .catch(err => sendResponse(err));
   } else {
     sendResponse();
   }

@@ -1,26 +1,26 @@
-import { useStore } from "effector-react";
+import {useStore} from "effector-react";
 import React from "react";
-import { setLearningService } from "../../event";
-import { learningServiceStore } from "../../store";
+import {setLearningService} from "../../event";
+import {learningServiceStore} from "../../store";
 import GoogleAnalytics from "../../ga";
+import NoService from "../../learning-services/NoService";
+import Lingualeo from "../../learning-services/lingualeo";
+import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
+import SkyEng from "../../learning-services/SkyEng";
+import {LearningService} from "../../learning-services/LearningService";
 
-const services = [
-  {
-    label: "Disable",
-    value: ""
-  },
-  {
-    label: "LinguaLeo",
-    value: "lingualeo"
-  },
-  {
-    label: "Puzzle English",
-    value: "puzzle-english"
-  }
+const skyEng = new SkyEng();
+
+const services: LearningService[] = [
+  new NoService(),
+  new Lingualeo(),
+  new PuzzleEnglish(),
+  skyEng
 ];
 
+
 function LearningService() {
-  const currentService = useStore(learningServiceStore);
+  const currentServiceId = useStore(learningServiceStore);
 
   function changeLearningService(service: string) {
     setLearningService(service)
@@ -28,28 +28,31 @@ function LearningService() {
   }
 
   return (
-    <div className="easysubs-settings__learning-service easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
-        <span>{chrome.i18n.getMessage("learningService")}</span>
+    <>
+      <div className="easysubs-settings__learning-service easysubs-settings__item">
+        <div className="easysubs-settings__item__left">
+          <span>{chrome.i18n.getMessage("learningService")}</span>
+        </div>
+        <div className="easysubs-settings__item__right">
+          <select
+            className="easysubs-settings__select"
+            value={currentServiceId || ""}
+            onChange={e => changeLearningService(e.target.value || null)}
+          >
+            {services.map((service: { id: string; label: string }, index) => {
+              return (
+                <option value={service.id} key={index}>
+                  {service.label}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </div>
-      <div className="easysubs-settings__item__right">
-        <select
-          className="easysubs-settings__select"
-          value={currentService || ""}
-          onChange={e => changeLearningService(e.target.value || null)}
-        >
-          {services.map((service: { value: string; label: string }, index) => {
-            return (
-              <option value={service.value} key={index}>
-                {service.label}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-    </div>
+    </>
   );
 }
+
 learningServiceStore.on(setLearningService, (state: any, service: object) => service);
 
 export default LearningService;
