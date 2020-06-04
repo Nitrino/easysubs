@@ -84,6 +84,15 @@
       }
     }
   },
+  "SkyEngTokenSent": {
+    "message": "Токен отправлен на почту"
+  },
+  "SkyEng_Error_NeedCredentials": {
+    "message": "Нужно войти: Нажмите кнопку дополнения в тулбаре и введите данные"
+  },
+  "SkyEng_Settings_Title": {
+    "message": "SkyEng"
+  },
   "SkyEng_Settings_Email": {
     "message": "Email"
   },
@@ -91,6 +100,6 @@
     "message": "Токен"
   },
   "SkyEng_Settings_GetToken": {
-    "message": "Получить"
+    "message": "Получить токен"
   }
 }

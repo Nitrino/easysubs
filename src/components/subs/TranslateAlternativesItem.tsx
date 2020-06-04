@@ -35,8 +35,9 @@ function TranslateAlternativesItem(props: Props) {
         GoogleAnalytics.trackEvent("export-word", "success")
         GoogleAnalytics.trackEvent(props.currentService.constructor.name, "success")
       })
-      .catch((error: string) => {
-        (toast as any).error(error)
+      .catch((error: any) => {
+        (toast as any).error(error.toString())
+        console.error(error)
         GoogleAnalytics.trackEvent("export-word", "error")
         GoogleAnalytics.trackEvent(props.currentService.constructor.name, "error")
       });

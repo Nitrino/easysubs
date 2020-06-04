@@ -1,4 +1,5 @@
 import {LearningService} from "./LearningService";
+import {learningServiceSkyEngEmail, learningServiceSkyEngToken} from "../store";
 
 class SkyEng implements LearningService {
   public readonly id: string = "skyeng";
@@ -15,14 +16,26 @@ class SkyEng implements LearningService {
     const body = {
       "meaningIds": [meaning.id],
     };
+
+    const skyEngSettingsEmail = learningServiceSkyEngEmail.getState()
+    const skyEngSettingsToken = learningServiceSkyEngToken.getState();
+
+    if (!skyEngSettingsEmail
+      || skyEngSettingsEmail === ""
+      || !skyEngSettingsToken
+      || skyEngSettingsToken === "") {
+      throw new Error(chrome.i18n.getMessage("SkyEng_Error_NeedCredentials"))
+    }
+
     const params: any = {
-      email: 'hardcoded_email',
-      token: 'hardcoded_token'
+      email: skyEngSettingsEmail,
+      token: skyEngSettingsToken,
     };
+
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
     return new Promise<string>((resolve, reject) => {
-      chrome.runtime.sendMessage({ contentScriptQuery: "putRequest", url: url.toString(), data: body }, response => {
+      chrome.runtime.sendMessage({contentScriptQuery: "putRequest", url: url.toString(), data: body}, response => {
         response.hasOwnProperty('error_msg')
           ? reject(chrome.i18n.getMessage("SkyEngAddError"))
           : resolve(chrome.i18n.getMessage("SkyEngAddSuccess", [word, meaning.translation]));
@@ -32,11 +45,11 @@ class SkyEng implements LearningService {
 
   private async findMeaning(word: string, translate: string, partOfSpeech: string, context: string): Promise<Meaning> {
     const url = new URL("https://dictionary.skyeng.ru/api/v2/search-word-exact");
-    const params: any = { word: word };
+    const params: any = {word: word};
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
     const searchResponse: MeaningResponse = await new Promise<MeaningResponse>((resolve, reject) => {
-      chrome.runtime.sendMessage({ contentScriptQuery: "getRequest", url: url.toString() }, response => {
+      chrome.runtime.sendMessage({contentScriptQuery: "getRequest", url: url.toString()}, response => {
         response.hasOwnProperty('error_msg')
           ? reject(chrome.i18n.getMessage("SkyEngMeaningError"))
           : resolve(response as MeaningResponse);
@@ -65,3 +78,24 @@ interface MeaningResponse {
 
 
 export default SkyEng;
+
+export const sendToken = (userEmail: string): Promise<any> => {
+  const url = new URL("https://words.skyeng.ru/api/public/v1/users/token");
+
+  const params: any = {
+    email: userEmail
+  };
+  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+  const body = {};
+
+  return new Promise<string>((resolve, reject) => {
+    chrome.runtime.sendMessage({contentScriptQuery: "postFormDataRequest", url: url, data: body}, response => {
+      console.log(response);
+      (response.code !== 200)
+        ? reject('Error sending email')
+        : resolve(chrome.i18n.getMessage("SkyEngTokenSent"));
+    });
+  });
+};
+

@@ -1,4 +1,4 @@
-import { createStore } from "effector";
+import { createStore, createEvent } from "effector";
 import { parse } from "subtitle";
 import { withPersist } from "./effector-persist";
 
@@ -11,3 +11,6 @@ export const learningServiceStore = withPersist(createStore(null));
 export const subsStore = createStore(parse(""));
 export const showFullSubTranslatePopupStore = createStore(false);
 export const autoPauseStore = createStore(false);
+
+export const learningServiceSkyEngEmail = withPersist(createStore("", {name: "skyeng_email"}));
+export const learningServiceSkyEngToken = withPersist(createStore("", {name: "skyeng_token"}));

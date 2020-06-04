@@ -84,6 +84,15 @@
       }
     }
   },
+  "SkyEngTokenSent": {
+    "message": "Check your email"
+  },
+  "SkyEng_Error_NeedCredentials": {
+    "message": "Need login: Press addon button and specify email & token"
+  },
+  "SkyEng_Settings_Title": {
+    "message": "SkyEng settings"
+  },
   "SkyEng_Settings_Email": {
     "message": "Email"
   },
@@ -91,6 +100,6 @@
     "message": "Token"
   },
   "SkyEng_Settings_GetToken": {
-    "message": "Get new"
+    "message": "Get new token"
   }
 }
