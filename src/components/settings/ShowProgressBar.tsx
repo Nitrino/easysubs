@@ -24,12 +24,12 @@ function ShowProgressBar() {
 
   return (
     <label className="easysubs-label easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
+      <div className="easysubs-settings__item__left-side">
         <div className="easysubs-label-text">
           {chrome.i18n.getMessage("showProgressBar")}
         </div>
       </div>
-      <div className="easysubs-settings__item__right">
+      <div className="easysubs-settings__item__right-side">
         <div className="toggle">
           <input
             className="toggle-state setting-toggle"

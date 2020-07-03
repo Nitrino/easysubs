@@ -28,10 +28,10 @@ function CustomSubs() {
 
   return (
     <div className="easysubs-settings__custom-subs easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
+      <div className="easysubs-settings__item__left-side">
         <span>{chrome.i18n.getMessage("customSubtitles")}</span>
       </div>
-      <div className="easysubs-settings__item__right">
+      <div className="easysubs-settings__item__right-side">
         <input type="file" accept=".vtt,.srt" id="file" ref={inputFile} onChange={handleOnChange} style={{ display: "none" }} />
         <div className="easysubs-settings__button" onClick={handleFileSelect}>
           {chrome.i18n.getMessage("selectFile")}

@@ -14,10 +14,10 @@ function Language() {
 
   return (
     <div className="easysubs-settings-language easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
+      <div className="easysubs-settings__item__left-side">
         <span>{chrome.i18n.getMessage("translationLanguage")}</span>
       </div>
-      <div className="easysubs-settings__item__right">
+      <div className="easysubs-settings__item__right-side">
         <select
           className="easysubs-settings__select"
           value={userLanguage}
