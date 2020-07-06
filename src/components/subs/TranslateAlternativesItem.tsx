@@ -5,7 +5,7 @@ import Utils from "../../utils";
 import FrequencyDots from "./FrequencyDots";
 import Lingualeo from "../../learning-services/lingualeo";
 import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
-import GoogleAnalytics from "../../ga";
+import galite from 'ga-lite'
 
 interface Props {
   alternative: any[];
@@ -33,15 +33,15 @@ function TranslateAlternativesItem(props: Props) {
       )
       .then((text: string) => {
         (toast as any).info(text)
-        GoogleAnalytics.trackEvent("export-word", "success")
-        GoogleAnalytics.trackEvent(props.currentService.constructor.name, "success")
+        galite('easySubsTracker.send', 'event', "export-word", "success");
+        galite('easySubsTracker.send', 'event', props.currentService.constructor.name, "success");
       })
       .catch((error: string) => {
         (toast as any).error(error)
-        GoogleAnalytics.trackEvent("export-word", "error")
-        GoogleAnalytics.trackEvent(props.currentService.constructor.name, "error")
+        galite('easySubsTracker.send', 'event', "export-word", "error");
+        galite('easySubsTracker.send', 'event', props.currentService.constructor.name, "error");
       });
-    GoogleAnalytics.trackEvent("export-word", props.currentService.constructor.name)
+    galite('easySubsTracker.send', 'event', "export-word", props.currentService.constructor.name);
   }
 
   return [
