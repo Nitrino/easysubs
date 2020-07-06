@@ -30,10 +30,10 @@ function ResyncSubs() {
 
   return (
     <div className="easysubs-settings__learning-service easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
+      <div className="easysubs-settings__item__left-side">
         <span>{chrome.i18n.getMessage("subtitlesDelay")}</span>
       </div>
-      <div className="easysubs-settings__item__right">
+      <div className="easysubs-settings__item__right-side">
         <div className="easysubs-settings__delay">
           <div className="easysubs-settings__button -transparent -minus" onClick={decreaseSubsTimeGap} />
           <div className="easysubs-settings__delay__text">
