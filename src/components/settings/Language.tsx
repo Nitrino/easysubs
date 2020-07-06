@@ -2,14 +2,14 @@ import { useStore } from "effector-react";
 import React from "react";
 import { setUserLanguage } from "../../event";
 import { userLanguageStore } from "../../store";
-import GoogleAnalytics from "../../ga";
+import galite from 'ga-lite'
 
 function Language() {
   const userLanguage = useStore(userLanguageStore);
 
   function changeLanguage(language: string) {
     setUserLanguage(language)
-    GoogleAnalytics.trackEvent("translation-language", language)
+    galite('easySubsTracker.send', 'event', "translation-language", language);
   }
 
   return (
