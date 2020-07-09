@@ -2,7 +2,7 @@ import { useStore } from "effector-react";
 import React, { useEffect } from "react";
 import { toggleShowSubsBackgroundState } from "../../event";
 import { showSubsBackgroundState } from "../../store";
-import GoogleAnalytics from "../../ga";
+import galite from 'ga-lite'
 
 function SubsBackground() {
   const showSubsBackground = useStore(showSubsBackgroundState);
@@ -15,7 +15,7 @@ function SubsBackground() {
   function changeShowState(showed: boolean) {
     toggleShowSubsBackgroundState(showed);
     addEnableClass(showed);
-    GoogleAnalytics.trackEvent("show-subs-background", showed.toString())
+    galite('easySubsTracker.send', 'event', "show-subs-background", showed.toString());
   }
 
   function addEnableClass(showed: boolean) {
@@ -24,12 +24,12 @@ function SubsBackground() {
 
   return (
     <label className="easysubs-label easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
+      <div className="easysubs-settings__item__left-side">
         <div className="easysubs-label-text">
           {chrome.i18n.getMessage("showSubsBackground")}
         </div>
       </div>
-      <div className="easysubs-settings__item__right">
+      <div className="easysubs-settings__item__right-side">
         <div className="toggle">
           <input
             className="toggle-state setting-toggle"

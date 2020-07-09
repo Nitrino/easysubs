@@ -2,7 +2,7 @@ import { useStore } from "effector-react";
 import React, { useEffect } from "react";
 import { toggleShowProgressBarState } from "../../event";
 import { showProgressBarState } from "../../store";
-import GoogleAnalytics from "../../ga";
+import galite from 'ga-lite'
 
 function ShowProgressBar() {
   const showProgressBar = useStore(showProgressBarState);
@@ -15,7 +15,7 @@ function ShowProgressBar() {
   function changeShowState(showed: boolean) {
     toggleShowProgressBarState(showed);
     addEnableClass(showed);
-    GoogleAnalytics.trackEvent("show-progress-bar", showed.toString())
+    galite('easySubsTracker.send', 'event', "show-progress-bar", showed.toString());
   }
 
   function addEnableClass(showed: boolean) {
@@ -24,12 +24,12 @@ function ShowProgressBar() {
 
   return (
     <label className="easysubs-label easysubs-settings__item">
-      <div className="easysubs-settings__item__left">
+      <div className="easysubs-settings__item__left-side">
         <div className="easysubs-label-text">
           {chrome.i18n.getMessage("showProgressBar")}
         </div>
       </div>
-      <div className="easysubs-settings__item__right">
+      <div className="easysubs-settings__item__right-side">
         <div className="toggle">
           <input
             className="toggle-state setting-toggle"

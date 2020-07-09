@@ -1,7 +1,7 @@
 import { useStore } from "effector-react";
 import React, { useEffect, useState } from "react";
 import { userLanguageStore } from "../../store";
-import GoogleAnalytics from "../../ga";
+import galite from 'ga-lite'
 
 interface Props {
   text: string;
@@ -32,7 +32,7 @@ function TranslateFullSubPopup(props: Props) {
           main: main,
           original: props.text
         });
-        GoogleAnalytics.trackEvent("translate", "full-sub")
+        galite('easySubsTracker.send', 'event', "translate", "full-sub");
       }
     );
   }, []);

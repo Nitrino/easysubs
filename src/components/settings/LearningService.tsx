@@ -2,7 +2,7 @@ import {useStore} from "effector-react";
 import React from "react";
 import {setLearningService} from "../../event";
 import {learningServiceStore} from "../../store";
-import GoogleAnalytics from "../../ga";
+import galite from 'ga-lite'
 import NoService from "../../learning-services/NoService";
 import Lingualeo from "../../learning-services/lingualeo";
 import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
@@ -24,16 +24,16 @@ function LearningService() {
 
   function changeLearningService(service: string) {
     setLearningService(service)
-    GoogleAnalytics.trackEvent("learning-service", service)
+    galite('easySubsTracker.send', 'event', "learning-service", service);
   }
 
   return (
     <>
       <div className="easysubs-settings__learning-service easysubs-settings__item">
-        <div className="easysubs-settings__item__left">
+        <div className="easysubs-settings__item__left-side">
           <span>{chrome.i18n.getMessage("learningService")}</span>
         </div>
-        <div className="easysubs-settings__item__right">
+        <div className="easysubs-settings__item__right-side">
           <select
             className="easysubs-settings__select"
             value={currentServiceId || ""}
