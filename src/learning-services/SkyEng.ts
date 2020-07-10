@@ -36,7 +36,7 @@ class SkyEng implements LearningService {
 
     return new Promise<string>((resolve, reject) => {
       chrome.runtime.sendMessage({contentScriptQuery: "putRequest", url: url.toString(), data: body}, response => {
-        response.hasOwnProperty('error_msg')
+        response === undefined || response.hasOwnProperty('error_msg')
           ? reject(chrome.i18n.getMessage("SkyEngAddError"))
           : resolve(chrome.i18n.getMessage("SkyEngAddSuccess", [word, meaning.translation]));
       });
