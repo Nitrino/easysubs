@@ -8,7 +8,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then((response: object) => {
         sendResponse(response);
       })
-      .catch((err: Error) => console.error(err));
+      .catch((err: any) => {
+        console.error(err);
+        sendResponse({error_msg: err.message});
+      });
+
   } else if (request.contentScriptQuery === "getSingleTranslation") {
     translateToken
       .get(request.text, { tld: "com", proxy: false })
@@ -40,9 +44,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           .then(resp => resp.json())
           .then(respData => sendResponse(respData));
       })
-      .catch((err: Error) => console.error(err));
+      .catch(err => {
+        console.error(err);
+        sendResponse({error_msg: err.message});
+      });
   } else if (request.contentScriptQuery === "getRequest") {
-    fetch(request.url).then(resp => resp.json()).then(data => sendResponse(data));
+    fetch(request.url, {
+      method: "GET"
+    })
+      .then(resp => resp.json())
+      .then(data => sendResponse(data))
+      .catch(err => {
+        console.error(err);
+        sendResponse({error_msg: err.message});
+      });
   } else if (request.contentScriptQuery === "postFormDataRequest") {
     const formData = new FormData();
     for (const key in request.data) {
@@ -55,6 +70,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     })
       .then(resp => resp.json())
       .then(data => sendResponse(data));
+
+  } else if (request.contentScriptQuery === "putRequest") {
+    fetch(request.url, {
+      method: "PUT",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request.data)
+    })
+      .then(resp => resp.json())
+      .then(data => sendResponse(data))
+      .catch(err => {
+        console.error(err);
+        sendResponse({error_msg: err.message});
+      });
   } else {
     sendResponse();
   }

@@ -5,6 +5,7 @@ import Netflix from './services/netflix';
 import YouTube from './services/youtube';
 import Lingualeo from "./learning-services/lingualeo";
 import PuzzleEnglish from "./learning-services/PuzzleEnglish";
+import SkyEng from "./learning-services/SkyEng";
 import Video from "./video";
 
 const keyboardEvents = ["keyup", "keydown", "keypress"];
@@ -57,6 +58,8 @@ class Utils {
         return new Lingualeo()
       case "puzzle-english":
         return new PuzzleEnglish()
+      case "skyeng":
+        return new SkyEng()
       default:
         return null;
     }

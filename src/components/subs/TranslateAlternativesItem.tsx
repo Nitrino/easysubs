@@ -1,18 +1,17 @@
-import React, { useRef, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, {useRef} from "react";
+import {toast} from "react-toastify";
 import Plus from "../../images/plus.svg";
 import Utils from "../../utils";
 import FrequencyDots from "./FrequencyDots";
-import Lingualeo from "../../learning-services/lingualeo";
-import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
 import galite from 'ga-lite'
+import {LearningService} from "../../learning-services/LearningService";
 
 interface Props {
   alternative: any[];
   word: string;
   context: string;
   groupIndex: number;
-  currentService: null | Lingualeo | PuzzleEnglish;
+  currentService: null | LearningService;
 }
 
 function TranslateAlternativesItem(props: Props) {
@@ -36,8 +35,9 @@ function TranslateAlternativesItem(props: Props) {
         galite('easySubsTracker.send', 'event', "export-word", "success");
         galite('easySubsTracker.send', 'event', props.currentService.constructor.name, "success");
       })
-      .catch((error: string) => {
-        (toast as any).error(error)
+      .catch((error: any) => {
+        (toast as any).error(error.toString())
+        console.error(error)
         galite('easySubsTracker.send', 'event', "export-word", "error");
         galite('easySubsTracker.send', 'event', props.currentService.constructor.name, "error");
       });

@@ -64,5 +64,42 @@
   },
   "lingualeoError": {
     "message": "LinguaLeo authorization required"
+  },
+  "SkyEngMeaningError": {
+    "message": "Error while adding word to SkyEng (can't find word in SkyEng)"
+  },
+  "SkyEngAddError": {
+    "message": "Error while adding word to SkyEng"
+  },
+  "SkyEngAddSuccess": {
+    "message": "Word added to SkyEng: $ORIGINAL$—$TRANSLATION$",
+    "placeholders": {
+      "original": {
+        "content": "$1",
+        "example": "Table"
+      },
+      "translation": {
+        "content": "$2",
+        "example": "Стол"
+      }
+    }
+  },
+  "SkyEngTokenSent": {
+    "message": "Check your email"
+  },
+  "SkyEng_Error_NeedCredentials": {
+    "message": "Need login: Press addon button and specify email & token"
+  },
+  "SkyEng_Settings_Title": {
+    "message": "SkyEng settings"
+  },
+  "SkyEng_Settings_Email": {
+    "message": "Email"
+  },
+  "SkyEng_Settings_Token": {
+    "message": "Token"
+  },
+  "SkyEng_Settings_GetToken": {
+    "message": "Get new token"
   }
 }
