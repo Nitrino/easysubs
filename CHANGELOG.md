@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.4.0
+
+### Enhancements
+
+- Make subtitles white on youtube. Thanks @xamgore
+- Rewrite remote GA script to local ga-lite script
+- Add privacy policy
+
+### Bugs
+
+- Fix Adguard block elements with \*\_right classes (#162)
+
 ## v1.3.0
 
 ### Enhancements
