@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.2
+
+### Enhancements
+
+- Remove Google Analytics from `content_security_policy`
+
 ## v1.4.1
 
 ### Enhancements

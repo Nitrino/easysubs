@@ -1,6 +1,6 @@
 {
   "name": "Easysubs",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "homepage_url": "https://github.com/Nitrino/easysubs",
@@ -30,5 +30,5 @@
       "js": ["inject.js"]
     }
   ],
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
+  "content_security_policy": "script-src 'self'; object-src 'self'"
 }
