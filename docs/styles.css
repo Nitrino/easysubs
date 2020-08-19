@@ -507,4 +507,13 @@ main .telegram_badge {
   height: 30px;
   margin-right: 10px;
 }
+
+.privacy-page__logo {
+  margin-top: 30px;
+  display: inline-block;
+}
+
+.bold {
+  font-weight: bold;
+}
 /*# sourceMappingURL=styles.css.map */
