@@ -2,7 +2,7 @@ import { useStore } from "effector-react";
 import React, { useEffect } from "react";
 import { toggleShowProgressBarState } from "../../event";
 import { showProgressBarState } from "../../store";
-import galite from 'ga-lite'
+import ga from '../../ga'
 
 function ShowProgressBar() {
   const showProgressBar = useStore(showProgressBarState);
@@ -15,7 +15,7 @@ function ShowProgressBar() {
   function changeShowState(showed: boolean) {
     toggleShowProgressBarState(showed);
     addEnableClass(showed);
-    galite('easySubsTracker.send', 'event', "show-progress-bar", showed.toString());
+    ga('easySubsTracker.send', 'event', "show-progress-bar", showed.toString());
   }
 
   function addEnableClass(showed: boolean) {

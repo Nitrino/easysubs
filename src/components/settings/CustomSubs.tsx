@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { updateSubs } from "../../event";
 import { parse } from "subtitle";
 import { toast } from "react-toastify";
-import galite from 'ga-lite'
+import ga from '../../ga'
 
 function CustomSubs() {
   const inputFile = useRef(null);
@@ -19,7 +19,7 @@ function CustomSubs() {
       const data: string = reader.result as string;
 
       updateSubs(parse(data));
-      galite('easySubsTracker.send', 'event', "custom-subs", "loaded");
+      ga('easySubsTracker.send', 'event', "custom-subs", "loaded");
       (toast as any).info(chrome.i18n.getMessage("customSubtitlesLoaded"));
     };
     reader.readAsText(file);

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1
+
+### Enhancements
+
+- Remove Google Analytics collect data in Mozilla Firefox
+
 ## v1.4.0
 
 ### Enhancements

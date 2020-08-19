@@ -2,7 +2,7 @@ import { useStore } from "effector-react";
 import React, { useEffect } from "react";
 import { toggleShowSubsBackgroundState } from "../../event";
 import { showSubsBackgroundState } from "../../store";
-import galite from 'ga-lite'
+import ga from '../../ga'
 
 function SubsBackground() {
   const showSubsBackground = useStore(showSubsBackgroundState);
@@ -15,7 +15,7 @@ function SubsBackground() {
   function changeShowState(showed: boolean) {
     toggleShowSubsBackgroundState(showed);
     addEnableClass(showed);
-    galite('easySubsTracker.send', 'event', "show-subs-background", showed.toString());
+    ga('easySubsTracker.send', 'event', "show-subs-background", showed.toString());
   }
 
   function addEnableClass(showed: boolean) {

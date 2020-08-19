@@ -2,14 +2,14 @@ import { useStore } from "effector-react";
 import React from "react";
 import { setUserLanguage } from "../../event";
 import { userLanguageStore } from "../../store";
-import galite from 'ga-lite'
+import ga from '../../ga'
 
 function Language() {
   const userLanguage = useStore(userLanguageStore);
 
   function changeLanguage(language: string) {
     setUserLanguage(language)
-    galite('easySubsTracker.send', 'event', "translation-language", language);
+    ga('easySubsTracker.send', 'event', "translation-language", language);
   }
 
   return (

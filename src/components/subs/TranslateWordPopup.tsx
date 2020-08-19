@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { userLanguageStore } from "../../store";
 import Utils from "../../utils";
 import TranslateAlternatives from "./TranslateAlternatives";
-import galite from 'ga-lite'
+import ga from '../../ga'
 
 interface Props {
   word: string;
@@ -43,7 +43,7 @@ function TranslateWordPopup(props: Props) {
           main: main,
           original: Utils.clearWord(props.word)
         });
-        galite('easySubsTracker.send', 'event', "translate", "word");
+        ga('easySubsTracker.send', 'event', "translate", "word");
       }
     );
 

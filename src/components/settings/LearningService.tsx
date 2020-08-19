@@ -2,7 +2,7 @@ import { useStore } from "effector-react";
 import React from "react";
 import { setLearningService } from "../../event";
 import { learningServiceStore } from "../../store";
-import galite from 'ga-lite'
+import ga from '../../ga'
 
 const services = [
   {
@@ -24,7 +24,7 @@ function LearningService() {
 
   function changeLearningService(service: string) {
     setLearningService(service)
-    galite('easySubsTracker.send', 'event', "learning-service", service);
+    ga('easySubsTracker.send', 'event', "learning-service", service);
   }
 
   return (
