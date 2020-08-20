@@ -181,6 +181,9 @@ $text-color: #ffffff;
   select {
     color: #ffffff;
   }
+  option {
+    color: initial;
+  }
 
   &:hover {
     svg .st0 {
