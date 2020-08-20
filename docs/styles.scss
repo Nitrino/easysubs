@@ -230,13 +230,20 @@ main {
     }
   }
 
+  &__stores {
+    margin-top: 20px;
+
+    @include tablet {
+      margin-top: 30px;
+    }
+  }
+
   &__store {
-    margin-top: 60px;
+    margin-top: 20px;
 
     @include tablet {
       padding-left: 0;
       max-width: 640px;
-      margin-top: 30px;
     }
   }
 

@@ -267,15 +267,24 @@ main .telegram_badge {
   }
 }
 
+.cover__stores {
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .cover__stores {
+    margin-top: 30px;
+  }
+}
+
 .cover__store {
-  margin-top: 60px;
+  margin-top: 20px;
 }
 
 @media (max-width: 1024px) {
   .cover__store {
     padding-left: 0;
     max-width: 640px;
-    margin-top: 30px;
   }
 }
 
