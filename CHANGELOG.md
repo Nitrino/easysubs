@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Bugs
+
+- Fix Firefox selectors background color
+
 ## v1.4.2
 
 ### Enhancements
