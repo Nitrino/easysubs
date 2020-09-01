@@ -16,8 +16,11 @@ The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in
 <a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
   <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
 </a>
-
-Will be available soon in other stores.
+<span><img width="30px"></img></span>
+<a href="https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=easysubsco&utm_medium=social&utm_campaign=github"
+  class="btn -store cover__store" target="_blank">
+  <img src="./docs/img/firefox-store.svg" alt="firefox store" width="220px">
+</a>
 
 #### Install dev version
 
