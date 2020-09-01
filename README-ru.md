@@ -11,18 +11,13 @@
 
 Расширение поддерживает Chrome, Firefox, Opera и Яндекс браузер. Так же должно работать в других браузерах с поддержкой WebExtensions API, но не тестировалось..
 
-**Релизная версия доступна в [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github).**
+**Релизная версия доступна в [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github) и [Firefox Browser Add-ons](https://addons.mozilla.org/ru/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github).**
 
 <a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
   <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
 </a>
-<span width="50px"heigh="10px" display="block"></span>
-<span width="50px"heigh="10px" display="block"></span>
-<span width="50px"heigh="10px" display="block"></span>
-<span width="50px"heigh="10px" display="block"></span>
-<span width="50px"heigh="10px" display="block"></span>
-<span width="50px"heigh="10px" display="block"></span>
-<a href="https://addons.mozilla.org/ru/firefox/addon/easysubs/?utm_source=easysubsco&utm_medium=social&utm_campaign=github"
+<span><img width="30px"></img></span>
+<a href="https://addons.mozilla.org/ru/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github"
   class="btn -store cover__store" target="_blank">
   <img src="./docs/img/firefox-store.svg" alt="firefox store" width="220px">
 </a>

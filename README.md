@@ -11,13 +11,13 @@ Browser extension for learning languages with watching movies and TV shows.
 
 The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in other browsers with WebExtensions API support, but has not been tested yet.
 
-**Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github).**
+**Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github) and [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github).**
 
 <a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
   <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
 </a>
 <span><img width="30px"></img></span>
-<a href="https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=easysubsco&utm_medium=social&utm_campaign=github"
+<a href="https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github"
   class="btn -store cover__store" target="_blank">
   <img src="./docs/img/firefox-store.svg" alt="firefox store" width="220px">
 </a>
