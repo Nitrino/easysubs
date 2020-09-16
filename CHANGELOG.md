@@ -1,11 +1,12 @@
 # Changelog
 
-## Unreleased
+## v1.4.3
 
 ### Bugs
 
-- Fix Firefox selectors background color
+- Fix puzzle english and show service error
 - Fix add words to lingualeo
+- Fix Firefox selectors background color
 
 ## v1.4.2
 
