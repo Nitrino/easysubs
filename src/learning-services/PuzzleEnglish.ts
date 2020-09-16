@@ -11,12 +11,11 @@ class PuzzleEnglish {
 
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({ contentScriptQuery: "postFormDataRequest", url: url, data: data }, response => {
-        response.word_id.error
-          ? reject("Puzzle English Error: " + response.word_id.error)
-          : resolve(chrome.i18n.getMessage("wordAddedToPuzzleEnglish"));
+        response.status
+          ? resolve(chrome.i18n.getMessage("wordAddedToPuzzleEnglish"))
+          : reject("Puzzle English Error: " + response.error);
       });
     });
   }
 }
-
 export default PuzzleEnglish;
