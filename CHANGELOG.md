@@ -5,6 +5,7 @@
 ### Bugs
 
 - Fix Firefox selectors background color
+- Fix add words to lingualeo
 
 ## v1.4.2
 
