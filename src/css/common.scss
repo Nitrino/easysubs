@@ -65,6 +65,7 @@ i > span {
       max-width: fit-content;
       font-style: normal;
       white-space: normal;
+      box-sizing: content-box;
 
       &:after {
         content: "";
