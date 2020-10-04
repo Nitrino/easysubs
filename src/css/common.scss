@@ -31,7 +31,7 @@ i > span {
   .easysubs-subtitles {
     &__sub {
       position: relative;
-      white-space: pre;
+      white-space: pre-line;
       background-color: transparent;
 
       .easysubs-show-subtitles-background & {

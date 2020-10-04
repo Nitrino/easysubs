@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Bugs
+
+- Fix long subtitles overflow
+
 ## v1.4.3
 
 ### Bugs
