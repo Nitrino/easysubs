@@ -2,14 +2,12 @@ import { useStore } from "effector-react";
 import React from "react";
 import { setUserLanguage } from "../../event";
 import { userLanguageStore } from "../../store";
-import ga from '../../ga'
 
 function Language() {
   const userLanguage = useStore(userLanguageStore);
 
   function changeLanguage(language: string) {
     setUserLanguage(language)
-    ga('easySubsTracker.send', 'event', "translation-language", language);
   }
 
   return (

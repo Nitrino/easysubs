@@ -5,7 +5,6 @@ import Utils from "../../utils";
 import FrequencyDots from "./FrequencyDots";
 import Lingualeo from "../../learning-services/lingualeo";
 import PuzzleEnglish from "../../learning-services/PuzzleEnglish";
-import ga from '../../ga'
 
 interface Props {
   alternative: any[];
@@ -33,15 +32,10 @@ function TranslateAlternativesItem(props: Props) {
       )
       .then((text: string) => {
         (toast as any).info(text)
-        ga('easySubsTracker.send', 'event', "export-word", "success");
-        ga('easySubsTracker.send', 'event', props.currentService.constructor.name, "success");
       })
       .catch((error: string) => {
         (toast as any).error(error)
-        ga('easySubsTracker.send', 'event', "export-word", "error");
-        ga('easySubsTracker.send', 'event', props.currentService.constructor.name, "error");
       });
-    ga('easySubsTracker.send', 'event', "export-word", props.currentService.constructor.name);
   }
 
   return [
