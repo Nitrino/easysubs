@@ -14,7 +14,7 @@ function ProgressBar() {
   const [videoElement] = useState(document.querySelector("video"));
   const [progressBarElement] = useState(document.querySelector(".easysubs-progress-bar"));
   const [elements, updateElements] = useState([]);
-  const animateRef: any = React.useRef(null);
+  const animateRef = React.useRef(null);
 
   const animate = () => {
     if (subs.length === 0) return;

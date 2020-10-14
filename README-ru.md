@@ -50,6 +50,7 @@
 
 - [Youtube (videos and originals)](https://www.youtube.com)
 - [Netflix](https://www.netflix.com)
+- [Coursera](https://www.coursera.org)
 - [KinoPub](https://kino.pub)
 - [English With Fun](https://english-with-fun.com)
 
