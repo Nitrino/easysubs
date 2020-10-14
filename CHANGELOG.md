@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Enhancements
+
+- Support Coursera
+
 ### Bugs
 
 - Fix long subtitles overflow
