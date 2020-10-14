@@ -50,6 +50,7 @@ To use the plugin, you must have a subscription to the desired service.
 - [Youtube (videos and originals)](https://www.youtube.com)
 - [Netflix](https://www.netflix.com)
 - [KinoPub](https://kino.pub)
+- [Coursera](https://www.coursera.org)
 - [English With Fun](https://english-with-fun.com)
 
 ### Word and full subtitle translation

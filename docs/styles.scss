@@ -299,6 +299,7 @@ main {
     max-width: 220px;
 
     @include tablet {
+      width: 100%;
       max-width: 200px;
       padding: 0;
       margin-bottom: 60px;
