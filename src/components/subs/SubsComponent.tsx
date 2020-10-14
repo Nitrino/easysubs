@@ -77,6 +77,7 @@ function SubsComponent() {
         if (node.textContent.match(/[^ ]/g) == null) {
           return false;
         }
+        
         return node.textContent
           .match(/[^ ]+/g)
           .map((word: string, wordIndex: number) => {
