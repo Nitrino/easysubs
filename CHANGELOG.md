@@ -4,6 +4,7 @@
 
 ### Enhancements
 
+- Remove google analytics
 - Support Coursera
 
 ### Bugs
