@@ -6,6 +6,7 @@
 
 - Remove google analytics
 - Support Coursera
+- Support Safari 13
 
 ### Bugs
 
