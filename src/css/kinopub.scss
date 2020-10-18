@@ -43,3 +43,7 @@
     }
   }
 }
+.media-controls-container,
+.media-controls-container * {
+  display: none !important;
+}
