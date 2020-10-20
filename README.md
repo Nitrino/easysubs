@@ -22,19 +22,23 @@ The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in
   <img src="./docs/img/firefox-store.svg" alt="firefox store" width="220px">
 </a>
 
-## Build dev version
+## Build
 
 1. Install node 12+
 2. Clone repo `git clone git@github.com:Nitrino/easysubs.git`
 3. Go to folder and install dependencies `cd easysubs && npm i`
 4. Build extension `npm run build`
-5. Open extensions page in browser:
+
+## Manual install
+
+1. Download and unzip [latest version](https://github.com/Nitrino/easysubs/releases/download/v1.5.0/easysubs_v1.5.0.zip)
+2. Open extensions page in browser:
     * For Chrome: `chrome://extensions/`
     * For Firefox: `about:debugging#/runtime/this-firefox`
     * For Opera: `opera://extensions`
     * For Yandex browser: `browser://tune/`
-6. Turn on developer mode (for all except Yandex browser)
-7. Load unpacked extension:
+3. Turn on developer mode (for all except Yandex browser)
+4. Load unpacked extension:
     * For Chrome and Opera: Click to `Load unpacked` button and select `dist` folder
     * For Firefox: Click to `Load temporary Add-on...` button and select `dist` folder
     * For Yandex browser: Drag and drop `dist` folder to extensions page
