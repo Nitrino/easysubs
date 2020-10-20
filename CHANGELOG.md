@@ -10,6 +10,7 @@
 
 ### Bugs
 
+- Fix settings selectors on Netflix
 - Fix long subtitles overflow
 
 ## v1.4.3

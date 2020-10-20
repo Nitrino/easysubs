@@ -28,8 +28,12 @@ class Coursera implements Service {
     return parse(text);
   }
 
-  public settingSelector(): string {
+  public settingsSelector(): string {
     return ".rc-FullscreenToggle";
+  }
+
+  public settingsContentSelector(): string {
+    return ".easysubs-settings-container";
   }
 
   public playerContainerSelector(): string {

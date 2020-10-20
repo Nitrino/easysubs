@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Logo from "../../images/logo.svg";
 import Content from "./Content";
+import Portal from './Portal'
 
-function Settings() {
+function Settings(props: {settingsContentSelector: string}) {
   const [showSettings, toggleShowSettings] = useState(false);
 
   return (
@@ -10,7 +11,9 @@ function Settings() {
       <div className="easysubs-settings-container-logo" onClick={() => toggleShowSettings(!showSettings)}>
         <Logo />
       </div>
-      <Content display={showSettings ? "block" : "none"} toggleShowSettings={toggleShowSettings} />
+      <Portal id={props.settingsContentSelector}>
+        <Content display={showSettings ? "block" : "none"} toggleShowSettings={toggleShowSettings} />
+      </Portal>
     </div>
   );
 }

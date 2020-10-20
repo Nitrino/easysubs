@@ -30,17 +30,21 @@ class UI {
     ReactDOM.render(<ProgressBar />, document.querySelector(".easysubs-progress-bar"));
   }
 
-  public static renderSettings(settingSelector: string) {
+  public static renderSettings(settingsSelector: string, settingsContentSelector: string) {
     const prevNode = document.querySelector(".easysubs-settings");
     if (prevNode) return;
-    const referenceNode = document.querySelector(settingSelector);
+    const referenceNode = document.querySelector(settingsSelector);
     const parentNode = referenceNode.parentNode;
     const settingNode = document.createElement("div");
     settingNode.className = "easysubs-settings";
     parentNode.insertBefore(settingNode, referenceNode);
 
-    ReactDOM.render(<SettingsComponent />, document.querySelector(".easysubs-settings"));
+    ReactDOM.render(
+      <SettingsComponent settingsContentSelector={settingsContentSelector}/>, 
+      document.querySelector(".easysubs-settings")
+    );
   }
+
   public static renderNotifications() {
     const prevNode = document.querySelector(".easysubs-notifications");
     if (prevNode) return;
