@@ -29,8 +29,12 @@ class EnglishWithFun implements Service {
     return "#video-player";
   }
 
-  public settingSelector(): string {
+  public settingsSelector(): string {
     return ".jw-icon-settings.jw-settings-submenu-button";
+  }
+
+  public settingsContentSelector(): string {
+    return ".easysubs-settings-container";
   }
 
   private injectScript() {

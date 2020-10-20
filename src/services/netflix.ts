@@ -49,8 +49,12 @@ class Netflix implements Service {
     return ".VideoContainer";
   }
 
-  public settingSelector(): string {
+  public settingsSelector(): string {
     return ".button-nfplayerFullscreen";
+  }
+
+  public settingsContentSelector(): string {
+    return "#appMountPoint";
   }
 
   private injection = () => {

@@ -52,8 +52,12 @@ class KinoPub implements Service {
     return "#player";
   }
 
-  public settingSelector(): string {
+  public settingsSelector(): string {
     return ".jw-button-container > div:last-child";
+  }
+
+  public settingsContentSelector(): string {
+    return ".easysubs-settings-container";
   }
 
   private injectScript() {

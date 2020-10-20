@@ -26,7 +26,7 @@ try {
         console.log("TCL: EVENT", "easysubsSubtitlesChanged");
 
         console.log("Language:", event.detail)
-        UI.renderSettings(service.settingSelector());
+        UI.renderSettings(service.settingsSelector(), service.settingsContentSelector());
 
         UI.renderSubs(service.playerContainerSelector());
         UI.renderProgressBar(service.playerContainerSelector());

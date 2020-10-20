@@ -35,8 +35,12 @@ class YouTube implements Service {
     return parse(text);
   }
 
-  public settingSelector(): string {
+  public settingsSelector(): string {
     return ".ytp-right-controls > .ytp-size-button";
+  }
+
+  public settingsContentSelector(): string {
+    return ".easysubs-settings-container";
   }
 
   public playerContainerSelector(): string {
