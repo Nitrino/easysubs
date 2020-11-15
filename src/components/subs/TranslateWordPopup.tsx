@@ -1,6 +1,7 @@
 import { useStore } from "effector-react";
 import React, { useEffect, useState, useRef } from "react";
-import { userLanguageStore } from "../../store";
+import { userLanguageStore, translationsStore } from "../../store";
+import { updateTranslations } from "../../event";
 import Utils from "../../utils";
 import TranslateAlternatives from "./TranslateAlternatives";
 
@@ -22,16 +23,30 @@ function TranslateWordPopup(props: Props) {
     original: ""
   });
   const language = useStore(userLanguageStore);
+  const translations = useStore(translationsStore);
   const isUnmounted = useRef(false);
 
   useEffect(() => {
+    const word = Utils.clearWord(props.word)
+    const localTranslation = translations[word]
+
+    // Try get translation from local cache
+    if(localTranslation) {
+      return changeTranslation({
+        alternatives: localTranslation.alternatives,
+        main: localTranslation.main,
+        original: word
+      });
+    }
+
     chrome.runtime.sendMessage(
       {
         contentScriptQuery: "getSingleTranslation",
         lang: language,
-        text: Utils.clearWord(props.word)
+        text: word
       },
       response => {
+        
         if (isUnmounted.current) return;
 
         const main: string = response[0][0][0];
@@ -40,8 +55,11 @@ function TranslateWordPopup(props: Props) {
         changeTranslation({
           alternatives: alternatives,
           main: main,
-          original: Utils.clearWord(props.word)
+          original: word
         });
+
+        // Save translation to local cache
+        updateTranslations({[word]: {main: main, alternatives: alternatives}})
       }
     );
 
@@ -66,5 +84,12 @@ function TranslateWordPopup(props: Props) {
   }
   return null;
 }
+
+(translationsStore as any).on(
+  updateTranslations, 
+  (state: {}, newWord: {}) => {
+    return {...state, ...newWord}
+  }
+);
 
 export default TranslateWordPopup;
