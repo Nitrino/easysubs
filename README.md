@@ -39,9 +39,9 @@ The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in
     * For Yandex browser: `browser://tune/`
 3. Turn on developer mode (for all except Yandex browser)
 4. Load unpacked extension:
-    * For Chrome and Opera: Click to `Load unpacked` button and select `dist` folder
-    * For Firefox: Click to `Load temporary Add-on...` button and select `dist` folder
-    * For Yandex browser: Drag and drop `dist` folder to extensions page
+    * For Chrome and Opera: Click to `Load unpacked` button and select folder
+    * For Firefox: Click to `Load temporary Add-on...` button and select folder
+    * For Yandex browser: Drag and drop folder to extensions page
 
 ## Features
 
