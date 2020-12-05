@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then((token: { name: string; value: string }) => {
         const url = "https://translate.google.com/translate_a/single";
         const data = {
-          client: "webapp",
+          client: "gtx",
           dt: ["bd", "ex", "md", "ss", "t"],
           hl: "en",
           ie: "UTF-8",
