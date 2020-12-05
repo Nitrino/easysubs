@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.1
+
+### Enhancements
+
+- Fix Google translation
+
 ## v1.5.0
 
 ### Enhancements
