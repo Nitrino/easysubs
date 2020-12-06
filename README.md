@@ -31,7 +31,7 @@ The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in
 
 ## Manual install
 
-1. Download and unzip [latest version](https://github.com/Nitrino/easysubs/releases/download/v1.5.0/easysubs_v1.5.0.zip)
+1. Download and unzip [latest version](https://github.com/Nitrino/easysubs/releases/download/v1.5.1/easysubs-v1.5.1.zip)
 2. Open extensions page in browser:
     * For Chrome: `chrome://extensions/`
     * For Firefox: `about:debugging#/runtime/this-firefox`
