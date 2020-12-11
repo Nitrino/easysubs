@@ -26,7 +26,7 @@ function TranslateFullSubPopup(props: Props) {
         text: props.text
       },
       response => {
-        const main: string = response.data[0];
+        const main: string = response;
         changeTranslation({
           main: main,
           original: props.text
@@ -37,13 +37,9 @@ function TranslateFullSubPopup(props: Props) {
 
   if (translation.original !== "") {
     return (
-      <div className="easysubs-translate-container">
+      <div className="easysubs-translate-container -full-sub">
         <div className="easysubs-translate-result">
           {translation.main}
-        </div>
-        <hr />
-        <div className="easysubs-translate-original">
-          {translation.original}
         </div>
       </div>
     );
