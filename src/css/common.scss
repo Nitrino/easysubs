@@ -67,6 +67,11 @@ i > span {
       white-space: normal;
       box-sizing: content-box;
 
+      &.-full-sub {
+        width: 100%;
+        top: -5px;
+      }
+
       &:after {
         content: "";
         position: absolute;
@@ -92,7 +97,8 @@ i > span {
 
     &-result {
       color: $white;
-      white-space: pre;
+      white-space: pre-line;
+      width: 100%;
     }
 
     &-original {
