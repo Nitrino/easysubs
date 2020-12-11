@@ -1,10 +1,16 @@
 # Changelog
 
+## v1.5.2
+
+### Enhancements
+
+- Fix full sub translation
+
 ## v1.5.1
 
 ### Enhancements
 
-- Fix Google translation
+- Fix single word translation. Full sub translation not working yet
 
 ## v1.5.0
 
