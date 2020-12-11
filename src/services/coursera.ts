@@ -23,7 +23,6 @@ class Coursera implements Service {
     const subUri: string = track.src
     const resp = await fetch(subUri);
     const text = await resp.text();
-    console.log(parse(text));
 
     return parse(text);
   }
@@ -48,12 +47,12 @@ class Coursera implements Service {
     function getLanguage(playerInstance: any) {
       return playerInstance.currentTrack()?.language || ""
     }
-    
+
     const player: any = (document.querySelector(".video-js") as any).player;
     window.dispatchEvent(new CustomEvent("easysubsVideoReady"));
 
     player.on("loadeddata", (event: any) => {
-      window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: getLanguage(player)  }));
+      window.dispatchEvent(new CustomEvent("easysubsSubtitlesChanged", { detail: getLanguage(player) }));
     });
 
     player.textTracks().on("change", (event: any) => {

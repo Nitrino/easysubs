@@ -8,10 +8,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     fetch(baseUrl)
       .then(resp => resp.text())
       .then(resp => {
-        console.log("bl", Utils.extract('cfb2h', resp));
-        console.log("f.sid", Utils.extract('FdrFJe', resp));
-        console.log("at", Utils.extract('SNlM0e', resp));
-
         return {
           query: {
             'rpcids': 'MkEWBc',
