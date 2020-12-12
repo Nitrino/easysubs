@@ -125,7 +125,7 @@ class Utils {
 
       if (parsed_item[0][2]) {
         const translates = JSON.parse(parsed_item[0][2])
-        return translates[1][0][0][5].map((translate: any) => translate[0]).join('')
+        return translates[1][0][0][5].map((translate: any) => translate[0]).join(' ')
       }
     }
   }
