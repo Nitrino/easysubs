@@ -10,7 +10,9 @@
     "48": "icons/icon48.png",
     "64": "icons/icon64.png",
     "128": "icons/icon128.png",
-    "256": "icons/icon256.png"
+    "256": "icons/icon256.png",
+    "512": "icons/icon512.png",
+    "1024": "icons/icon1024.png"
   },
   "default_locale": "en",
   "background": {
