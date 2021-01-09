@@ -10,28 +10,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(resp => {
         return {
           query: {
-            'rpcids': 'MkEWBc',
-            'f.sid': Utils.extract('FdrFJe', resp),
-            'bl': Utils.extract('cfb2h', resp),
-            'hl': 'en',
-            'soc-app': 1,
-            'soc-platform': 1,
-            'soc-device': 1,
-            '_reqid': Math.floor(1000 + (Math.random() * 9000)),
-            'rt': 'c'
+            "rpcids": "MkEWBc",
+            "f.sid": Utils.extract("FdrFJe", resp),
+            "bl": Utils.extract("cfb2h", resp),
+            "hl": "en",
+            "soc-app": 1,
+            "soc-platform": 1,
+            "soc-device": 1,
+            "_reqid": Math.floor(1000 + (Math.random() * 9000)),
+            "rt": "c"
           },
-          at: Utils.extract('SNlM0e', resp)
+          at: Utils.extract("SNlM0e", resp)
         };
       })
       .then(data => {
-        const url = baseUrl + '/_/TranslateWebserverUi/data/batchexecute?' + stringify(data.query);
+        const url = baseUrl + "/_/TranslateWebserverUi/data/batchexecute?" + stringify(data.query);
         const payload = JSON.stringify([[request.text.replace(/(\r\n|\n|\r)/gm, ""), "auto", request.lang, true]])
-        const req = JSON.stringify([[['MkEWBc', payload, null, 'generic']]])
-        const body = 'f.req=' + encodeURIComponent(req) + '&at=' + data.at
-        const headers = { 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+        const req = JSON.stringify([[["MkEWBc", payload, null, "generic"]]])
+        const body = "f.req=" + encodeURIComponent(req) + "&at=" + data.at
+        const headers = { "content-type": "application/x-www-form-urlencoded;charset=UTF-8" }
 
         fetch(url, {
-          method: 'POST',
+          method: "POST",
           body: body,
           headers: headers
         })

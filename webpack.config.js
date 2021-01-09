@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const BomPlugin = require('webpack-utf8-bom');
 
 module.exports = env => ({
   mode: env,
@@ -60,7 +61,8 @@ module.exports = env => ({
       { from: "manifest.json", to: "." },
       { from: "icons", to: "icons" },
       { from: "_locales", to: "_locales" }
-    ])
+    ]),
+    new BomPlugin(true)
   ],
   optimization: {
     minimize: env === "production",
