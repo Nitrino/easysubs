@@ -114,32 +114,6 @@ main .telegram_badge {
   }
 }
 
-.btn.-store {
-  padding: 16px 50px;
-  max-width: 200px;
-  -webkit-box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.1);
-          box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.1);
-  -webkit-transition: -webkit-box-shadow 0.15s;
-  transition: -webkit-box-shadow 0.15s;
-  transition: box-shadow 0.15s;
-  transition: box-shadow 0.15s, -webkit-box-shadow 0.15s;
-}
-
-.btn.-store:hover {
-  -webkit-box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.15);
-          box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.15);
-}
-
-.btn.-store img {
-  width: 100%;
-}
-
-@media (max-width: 480px) {
-  .btn.-store {
-    padding: 16px 30px;
-  }
-}
-
 .btn.-second {
   background: #1f5bff;
   font-size: 14px;
@@ -278,14 +252,19 @@ main .telegram_badge {
 }
 
 .cover__store {
+  display: block;
   margin-top: 20px;
+  max-width: 230px;
 }
 
 @media (max-width: 1024px) {
   .cover__store {
     padding-left: 0;
-    max-width: 640px;
   }
+}
+
+.cover__store img {
+  width: 100%;
 }
 
 .cover__manual {

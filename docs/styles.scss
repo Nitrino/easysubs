@@ -111,26 +111,6 @@ main {
     }
   }
 
-  &.-store {
-    padding: 16px 50px;
-    max-width: 200px;
-    box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.1);
-
-    transition: box-shadow 0.15s;
-
-    &:hover {
-      box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    img {
-      width: 100%;
-    }
-
-    @include phone {
-      padding: 16px 30px;
-    }
-  }
-
   &.-second {
     background: #1f5bff;
     font-size: 14px;
@@ -239,11 +219,16 @@ main {
   }
 
   &__store {
+    display: block;
     margin-top: 20px;
+    max-width: 230px;
 
     @include tablet {
       padding-left: 0;
-      max-width: 640px;
+    }
+
+    img {
+      width: 100%;
     }
   }
 
