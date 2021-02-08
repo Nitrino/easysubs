@@ -10,7 +10,6 @@
 ### Bugs
 
 - Fix UTF-8 characters for safari
-- Add more icon resolutions
 
 ## v1.5.2
 
