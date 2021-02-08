@@ -1,10 +1,16 @@
 # Changelog
 
-## Unreleased
+## v1.5.3
 
 ### Enhancements
 
 - Translations of one word should no longer cause errors related to rate limit
+- Add more icon resolutions
+
+### Bugs
+
+- Fix UTF-8 characters for safari
+- Add more icon resolutions
 
 ## v1.5.2
 
