@@ -25,7 +25,7 @@ function TranslateAlternatives(props: { alternativesGroups: any[]; word: string,
                   {group[0]}
                 </th>
               </tr>,
-              group[2].slice(0, 5).map((alternative: any, altIndex: number) => {
+              group[1].slice(0, 5).map((alternative: any, altIndex: number) => {
                 return (
                   <tr
                     className="easysubs-translate-alternative-item"

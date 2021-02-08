@@ -59,7 +59,7 @@ function TranslateAlternativesItem(props: Props) {
       key={"original"}
       className="easysubs-translate-alternative-item-original"
     >
-      {props.alternative[1]?.slice(0, 3)?.join(", ")}
+      {props.alternative[2]?.slice(0, 3)?.join(", ")}
     </td>,
     <td
       key={"frequency"}

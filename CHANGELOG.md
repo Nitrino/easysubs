@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Enhancements
+
+- Translations of one word should no longer cause errors related to rate limit
+
 ## v1.5.2
 
 ### Enhancements

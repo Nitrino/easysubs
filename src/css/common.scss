@@ -178,10 +178,8 @@ i > span {
             width: 10px;
             height: 6px;
             margin-right: 2px;
+            background-color: $gray;
 
-            &.-empty {
-              background-color: $gray;
-            }
             &.-fill {
               background-color: #c6c6c6;
             }

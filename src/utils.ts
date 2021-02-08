@@ -107,28 +107,6 @@ class Utils {
   public static arrayStringify(data: string[]): string {
     return data.map(item => `q=${encodeURIComponent(item)}`).join('&');
   }
-
-  public static extract(key: string, resp: any) {
-    const re = new RegExp(`"${key}":".*?"`);
-    const result = re.exec(resp);
-    if (result !== null) {
-      return result[0].replace(`"${key}":"`, '').slice(0, -1);
-    }
-    return '';
-  }
-
-  public static getTranslateFromGoogleResponse(response: any) {
-    response = response.slice(6)
-    const response_items = response.split(/^\d+$/gm).slice(1)
-    for (const json_item of response_items) {
-      const parsed_item = JSON.parse(json_item)
-
-      if (parsed_item[0][2]) {
-        const translates = JSON.parse(parsed_item[0][2])
-        return translates[1][0][0][5].map((translate: any) => translate[0]).join(' ')
-      }
-    }
-  }
 }
 
 export default Utils
