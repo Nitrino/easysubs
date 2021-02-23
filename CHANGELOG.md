@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.4 (23.02.2021)
+
+### Enhancements
+
+- Netflix: fix detect current video id
+
 ## v1.5.3
 
 ### Enhancements

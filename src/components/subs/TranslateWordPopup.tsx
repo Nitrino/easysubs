@@ -35,10 +35,6 @@ function TranslateWordPopup(props: Props) {
         if (isUnmounted.current) return;
 
         const { main, alternatives } = response;
-
-        console.log(main);
-        console.log(alternatives);
-
         changeTranslation({
           alternatives: alternatives,
           main: main,

@@ -61,7 +61,7 @@ class Netflix implements Service {
     const parseMock = JSON.parse;
     const stringifyMock = JSON.stringify;
 
-    JSON.parse = function() {
+    JSON.parse = function () {
       const data = parseMock.apply(this, arguments);
       if (data && data.result && data.result.timedtexttracks) {
         window.dispatchEvent(new CustomEvent("easysubs_data", { detail: data.result }));
@@ -69,7 +69,7 @@ class Netflix implements Service {
       return data;
     };
 
-    JSON.stringify = function(response: any) {
+    JSON.stringify = function (response: any) {
       if (!response) return stringifyMock.apply(this, arguments);
       const data = parseMock(stringifyMock.apply(this, arguments));
 
@@ -152,7 +152,7 @@ class Netflix implements Service {
   }
 
   private getMoveId() {
-    return window.location.pathname.match(/\/watch\/(.*)/)[1];
+    return (document.querySelector('.VideoContainer') as HTMLElement).dataset.videoid
   }
 }
 
