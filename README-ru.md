@@ -32,7 +32,7 @@
 
 ## Ручная установка:
 
-1. Скачайте и разархивируйте [последнюю версию](https://github.com/Nitrino/easysubs/releases/download/v1.5.1/easysubs-v1.5.1.zip)
+1. Скачайте и разархивируйте [последнюю версию](https://github.com/Nitrino/easysubs/releases)
 2. Откройте страницу расширений в браузере:
     * Для Chrome: `chrome://extensions/`
     * Для Firefox: `about:debugging#/runtime/this-firefox`
