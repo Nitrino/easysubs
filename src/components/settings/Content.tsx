@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Language from "./Language";
 import LearningService from "./LearningService";
+import CustomSite from "./CustomSite";
 import Toggle from "./Toggle";
 import ShowProgressBar from "./ShowProgressBar";
 import SubsFontSize from "./SubsFontSize";
@@ -36,6 +37,7 @@ const Content = (props: any) => {
         <ShowProgressBar />
         <Language />
         <LearningService />
+        <CustomSite />
         {/* <div className="easysubs-settings__content__header">Interface</div> */}
         <div className="easysubs-settings__content__header">
           {chrome.i18n.getMessage("subtitles")}

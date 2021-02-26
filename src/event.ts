@@ -5,6 +5,7 @@ export const toggleShowProgressBarState = createEvent("Toggle show progress bar 
 export const toggleShowSubsBackgroundState = createEvent("Toggle show subs background");
 export const setUserLanguage = createEvent("Set user language");
 export const setLearningService = createEvent("Set learning service");
+export const setCustomSite = createEvent("Set custom site");
 
 export const updateSubs = createEvent("Update subtitles");
 export const videoTimeUpdate = createEvent("Video time update");

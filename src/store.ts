@@ -8,6 +8,7 @@ export const showSubsBackgroundState = withPersist(createStore(true));
 export const subsFontSizeStore = withPersist(createStore(100));
 export const userLanguageStore = withPersist(createStore(window.navigator.language.split("-")[0]));
 export const learningServiceStore = withPersist(createStore(null));
+export const customSiteStore = withPersist(createStore(null));
 export const subsStore = createStore(parse(""));
 export const showFullSubTranslatePopupStore = createStore(false);
 export const autoPauseStore = createStore(false);

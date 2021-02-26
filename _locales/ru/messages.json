@@ -38,6 +38,9 @@
   "learningService": {
     "message": "Сервис изучения языка"
   },
+  "customSite": {
+    "message": "Custom site"
+  },
   "subtitlesSize": {
     "message": "Размер субтитров"
   },
