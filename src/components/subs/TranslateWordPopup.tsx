@@ -1,6 +1,7 @@
 import { useStore } from "effector-react";
 import React, { useEffect, useState, useRef } from "react";
 import { userLanguageStore } from "../../store";
+import { customSiteStore } from "../../store";
 import Utils from "../../utils";
 import TranslateAlternatives from "./TranslateAlternatives";
 
@@ -23,6 +24,7 @@ function TranslateWordPopup(props: Props) {
   });
   const language = useStore(userLanguageStore);
   const isUnmounted = useRef(false);
+  const urlTemplate = useStore(customSiteStore)
 
   useEffect(() => {
     chrome.runtime.sendMessage(
@@ -48,6 +50,10 @@ function TranslateWordPopup(props: Props) {
     };
   }, []);
 
+  function getUrl(word: String) {
+    return urlTemplate.replace("${word}", word)
+  }
+
   if (translation.original !== "") {
     return (
       <div className="easysubs-translate-container">
@@ -58,6 +64,7 @@ function TranslateWordPopup(props: Props) {
         <div className="easysubs-translate-original">
           {translation.original}
         </div>
+        {urlTemplate && <div><a href={getUrl(translation.original)} target="_blank">open</a></div>}
         <TranslateAlternatives alternativesGroups={translation.alternatives} word={props.word} context={props.context} />
       </div>
     );
