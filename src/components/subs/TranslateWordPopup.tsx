@@ -64,8 +64,8 @@ function TranslateWordPopup(props: Props) {
         <div className="easysubs-translate-original">
           {translation.original}
         </div>
-        {urlTemplate && <div><a href={getUrl(translation.original)} target="_blank">open</a></div>}
         <TranslateAlternatives alternativesGroups={translation.alternatives} word={props.word} context={props.context} />
+        {urlTemplate && <div><a href={getUrl(translation.original)} target="_blank">open</a></div>}
       </div>
     );
   }
