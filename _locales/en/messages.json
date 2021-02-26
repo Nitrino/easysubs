@@ -38,6 +38,9 @@
   "learningService": {
     "message": "Learning service"
   },
+  "customSite": {
+    "message": "Custom site"
+  },
   "subtitlesSize": {
     "message": "Subtitles size"
   },
