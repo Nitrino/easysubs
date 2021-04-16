@@ -31,7 +31,7 @@ class KinoPub implements Service {
     parser.end();
     const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub;
 
-    const uri = `https://cdn.streambox.in${subsSegments[label].uri}`;
+    const uri = `https://yandex-cdn.net${subsSegments[label].uri}`;
     const subsSegmentsResp = await fetch(uri);
     const subsSegmentsData = await subsSegmentsResp.text();
 
@@ -39,7 +39,7 @@ class KinoPub implements Service {
     subsSegmentsParser.push(subsSegmentsData);
     subsSegmentsParser.end();
     const subPath = subsSegmentsParser.manifest.segments[0].uri.match(/.*\/hls\/(.*)\/seg.*/)[1];
-    const subUri = `https://cdn.streambox.in/pd/${subPath}`;
+    const subUri = `https://yandex-cdn.net/pd/${subPath}`;
 
     const subsResp = await fetch(subUri);
     const subsData = await subsResp.text();
