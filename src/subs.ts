@@ -16,7 +16,7 @@ class Subs {
 
   public static getCleanSubText(text: string): string {
     const tmpDiv = document.createElement("div") as HTMLDivElement;
-    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, "").replace(/<\/c>/g, "");
+    tmpDiv.innerHTML = text.replace(/<\d+:\d+:\d+.\d+><c>/g, "").replace(/<\/c>/g, "").replace(/(\r\n|\n|\r)/gm, " ");
     return tmpDiv.textContent;
   }
 
