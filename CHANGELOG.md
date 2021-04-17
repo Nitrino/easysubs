@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.5 (17.04.2021)
+
+### Enhancements
+
+- Fixed kinopub support
+- Improved multi-line translation
+
 ## v1.5.4 (23.02.2021)
 
 ### Enhancements
