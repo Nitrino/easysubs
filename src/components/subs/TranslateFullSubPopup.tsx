@@ -14,7 +14,7 @@ interface Translate {
 function TranslateFullSubPopup(props: Props) {
   const [translation, changeTranslation] = useState<Translate>({
     main: "",
-    original: ""
+    original: "",
   });
   const language = useStore(userLanguageStore);
 
@@ -23,13 +23,13 @@ function TranslateFullSubPopup(props: Props) {
       {
         contentScriptQuery: "translate",
         lang: language,
-        text: props.text
+        text: props.text,
       },
-      response => {
+      (response) => {
         const main: string = response;
         changeTranslation({
           main: main,
-          original: props.text
+          original: props.text,
         });
       }
     );
@@ -38,9 +38,7 @@ function TranslateFullSubPopup(props: Props) {
   if (translation.original !== "") {
     return (
       <div className="easysubs-translate-container -full-sub">
-        <div className="easysubs-translate-result">
-          {translation.main}
-        </div>
+        <div className="easysubs-translate-result">{translation.main}</div>
       </div>
     );
   }
