@@ -9,7 +9,7 @@ Browser extension to learn languages by watching movies and TV shows.
 
 ## Installation
 
-The extension supports Chrome, Firefox, Opera and Yandex. It should also work in other browsers that have WebExtensions API support, but it has not been tested yet.
+The extension supports Chrome, Firefox, Opera and Yandex. It should also work in other browsers that have WebExtensions API support, but it hasn't been tested yet.
 
 **Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github) and [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github).**
 
@@ -60,11 +60,11 @@ To use the plugin, you must have a subscription to the desired service.
 
 ### Word and full subtitle translation
 
-Just hover over the word you want to translate it, the video will automatically pause and start when you remove the cursor from the subtitles.  
+Just hover over the word that you want to translate. The video will automatically pause and then start playing when you remove the cursor from the subtitles.  
 In the translation popup of the word, you can see alternative translations with the frequency of use.
 ![word translation](screenshots/word.png)
 
-Click on subtitles for translation all text.
+Click on the subtitles to translate the whole sentence.
 ![word translation](screenshots/full-sub.png)
 
 ### Export words to learning services
@@ -76,7 +76,7 @@ The list of services will expand at the request of users.
 - [LinguaLeo](https://lingualeo.com),
 - [Puzzle English](https://puzzle-english.com)
 
-For export to work, you must be logged in to learning service in the same browser. Then select the desired service in the extension settings.
+For the export to work, you must be logged in to the learning service that you want to use (make sure it's the same browser). Then select the desired service in the extension settings.
 
 ![word translation](screenshots/select-service.png)
 
@@ -86,33 +86,33 @@ After which a ➕(plus) icon will appear near the words of the translation, by c
 
 ### Rewind to previous and next subtitle
 
-Rewind to previous subtitle by press ⬅️ left arrow.  
-Rewind to next subtitle by press ➡️ right arrow.
+Rewind to the previous sentence by pressing ⬅️ (left arrow).  
+Rewind to the next sentence by pressing ➡️ (right arrow).
 
-Rewind works only if the next/previous subtitle is less than 5 seconds. Otherwise, rewinds for 5 seconds.  
-For force rewind to next/previous subtitle use `alt (option for macOS) + arrow button`.
+Rewind only works if the next/previous sentence is less than 5 seconds apart from the current sentence. Otherwise it'll rewinds 5 seconds.  
+To force rewinding to the next/previous sentence use `alt (option for macOS) + arrow button`.
 
 ![word translation](screenshots/navigation.png)
 
-### Subtitles progress bar
+### Subtitle progress bar
 
 At the bottom of the player, there is a subtitles progress bar to simplify navigation between subtitles.  
-Click on the progress bar to rewind the video to the desired point.
+Click on the progress bar to rewind the video to the desired spot.
 
 ![word translation](screenshots/progressbar.png)
 
-### Subtitles settings and custom subtitles
+### Subtitle settings and custom subtitles
 
 The extension allows you to adjust the size of the subtitles and their delay.
 The default subtitle delay step is 0.25 seconds.  
 `alt (option for macOS) + click the ➕ or ➖ buttons` changes the delay by 1 second.  
 `shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
 
-You can also upload your custom subtitles if they are not on the video service, supported `srt` and `vtt` formats.
+You can also upload your own custom subtitles. Supported are `srt` and `vtt` formats.
 
 ![word translation](screenshots/subtitles-settings.png)
 
-### Addition features
+### Additional features
 
 - Show all available audio tracks and subtitles on Netflix regardless of region.
 
