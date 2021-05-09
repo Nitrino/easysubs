@@ -5,11 +5,11 @@
   <h2 align="center">Learn languages with fun 🎉</h2>
 </p>
 
-Browser extension for learning languages with watching movies and TV shows.
+Browser extension to learn languages by watching movies and TV shows.
 
 ## Installation
 
-The extension supports Chrome, Firefox, Opera and Yandex browser. Should work in other browsers with WebExtensions API support, but has not been tested yet.
+The extension supports Chrome, Firefox, Opera and Yandex. It should also work in other browsers that have WebExtensions API support, but it has not been tested yet.
 
 **Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github) and [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github).**
 
