@@ -11,7 +11,7 @@ class PuzzleEnglish {
 
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({ contentScriptQuery: "postFormDataRequest", url: url, data: data }, response => {
-        response.status
+        response.success
           ? resolve(chrome.i18n.getMessage("wordAddedToPuzzleEnglish"))
           : reject("Puzzle English Error: " + response.error);
       });
