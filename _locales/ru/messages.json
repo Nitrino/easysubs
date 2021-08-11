@@ -32,6 +32,9 @@
   "showProgressBar": {
     "message": "Показать прогресс бар"
   },
+  "rewindBySubs": {
+    "message": "Перемотка по сабам"
+  },
   "translationLanguage": {
     "message": "Язык перевода"
   },
