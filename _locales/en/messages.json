@@ -32,6 +32,9 @@
   "showProgressBar": {
     "message": "Show progress bar"
   },
+  "rewindBySubs": {
+    "message": "Rewind by subs"
+  },
   "translationLanguage": {
     "message": "Translation language"
   },

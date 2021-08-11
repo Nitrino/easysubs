@@ -3,6 +3,7 @@ import Language from "./Language";
 import LearningService from "./LearningService";
 import Toggle from "./Toggle";
 import ShowProgressBar from "./ShowProgressBar";
+import RewindBySubs from "./RewindBySubs";
 import SubsFontSize from "./SubsFontSize";
 import ResyncSubs from "./ResyncSubs";
 import CustomSubs from "./CustomSubs";
@@ -34,6 +35,7 @@ const Content = (props: any) => {
         </div>
         <Toggle />
         <ShowProgressBar />
+        <RewindBySubs />
         <Language />
         <LearningService />
         {/* <div className="easysubs-settings__content__header">Interface</div> */}

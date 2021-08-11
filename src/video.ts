@@ -1,6 +1,7 @@
 import { subTitleType } from "subtitle";
 import Subs from "./subs";
 import Utils from "./utils";
+import { rewindBySubsState} from "./store";
 
 const rewindTime = 5000;
 
@@ -19,7 +20,10 @@ class Video {
 
     const prevSub: subTitleType = Subs.getPrevSub(subs, timeToRewind);
 
-    if (prevSub && (timeToRewind - Utils.castSubTime(prevSub.end) < 5000 || force)) {
+    const rewindBySubs = rewindBySubsState.getState();
+    
+    if ( rewindBySubs && prevSub && (timeToRewind - Utils.castSubTime(prevSub.end) < 5000 || force)
+    ) {
       this.moveToTime(video, Utils.castSubTime(prevSub.start));
     } else {
       this.moveToTime(video, Utils.castSubTime(timeToRewind - rewindTime));
@@ -35,7 +39,9 @@ class Video {
     }
     const nextSub: subTitleType = Subs.getNextSub(subs, timeToRewind);
 
-    if (nextSub && (Utils.castSubTime(nextSub.start) - timeToRewind < 5000 || force)) {
+    const rewindBySubs = rewindBySubsState.getState();
+
+    if (rewindBySubs && nextSub && (Utils.castSubTime(nextSub.start) - timeToRewind < 5000 || force)) {
       this.moveToTime(video, Utils.castSubTime(nextSub.start));
     } else {
       this.moveToTime(video, Utils.castSubTime(timeToRewind + rewindTime));

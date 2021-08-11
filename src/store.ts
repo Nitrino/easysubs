@@ -4,6 +4,7 @@ import { withPersist } from "./effector-persist";
 
 export const enableState = withPersist(createStore(true));
 export const showProgressBarState = withPersist(createStore(true));
+export const rewindBySubsState = withPersist(createStore(true));
 export const showSubsBackgroundState = withPersist(createStore(true));
 export const subsFontSizeStore = withPersist(createStore(100));
 export const userLanguageStore = withPersist(createStore(window.navigator.language.split("-")[0]));
