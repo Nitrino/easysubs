@@ -13,7 +13,8 @@ class Video {
     let timeToRewind = this.getCurrentTime(video);
     const currentSub = Subs.getCurrentLastSub(subs, timeToRewind);
     if (currentSub) {
-      timeToRewind = Utils.castSubTime(currentSub.start);
+      // NOTE: -1 is hack for cases when prev sub ends same time as next sub starts
+      timeToRewind = Utils.castSubTime(currentSub.start) - 1;
     }
 
     const prevSub: subTitleType = Subs.getPrevSub(subs, timeToRewind);
