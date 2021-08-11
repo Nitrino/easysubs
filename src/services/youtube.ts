@@ -1,5 +1,5 @@
-import Service from 'service'
-import { parse } from 'subtitle'
+import Service from './service'
+import { parse, subTitleType } from 'subtitle'
 
 class YouTube implements Service {
   private subCache: any
@@ -10,11 +10,11 @@ class YouTube implements Service {
     window.addEventListener('easysubs_data', this.processSubData)
   }
 
-  public init() {
+  public init(): void {
     this.injectScript()
   }
 
-  public async getSubs(language: string) {
+  public async getSubs(language: string): Promise<subTitleType[]> {
     if (language === '') return parse('')
     const videoId = this.getVideoId()
 
@@ -39,13 +39,14 @@ class YouTube implements Service {
     return '.html5-video-player'
   }
 
-  private getVideoId() {
+  private getVideoId(): string {
     const regExpression = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
     const match = window.location.href.match(regExpression)
     if (match && match[2].length === 11) {
       return match[2]
     }
     console.error("Can't get youtube video id")
+    return ''
   }
 
   private injection = () => {
@@ -58,7 +59,7 @@ class YouTube implements Service {
           window.isLoaded = true
           window.dispatchEvent(new CustomEvent('easysubsVideoReady'))
 
-          if (subsToggleElement.getAttribute('aria-pressed') === 'true') {
+          if (subsToggleElement && subsToggleElement.getAttribute('aria-pressed') === 'true') {
             player.toggleSubtitles()
             player.toggleSubtitles()
           } else {
@@ -87,20 +88,20 @@ class YouTube implements Service {
             window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: lang }))
           }
         }
-        open.call(this, method, url)
+        open.call(this, method, url, true)
       }
     })(XMLHttpRequest.prototype.open)
   }
 
-  private processSubData(event: any) {
+  private processSubData(event: any): void {
     const urlObject = new URL(event.detail)
-    const lang = urlObject.searchParams.get('tlang') || urlObject.searchParams.get('lang')
-    const videoId = urlObject.searchParams.get('v')
+    const lang = urlObject.searchParams.get('tlang') || urlObject.searchParams.get('lang') || ''
+    const videoId = urlObject.searchParams.get('v') || ''
     this.subCache[videoId] = {}
     this.subCache[videoId][lang] = urlObject.href
   }
 
-  private injectScript() {
+  private injectScript(): void {
     const sc = document.createElement('script')
     sc.innerHTML = `(${this.injection.toString()})()`
     document.head.appendChild(sc)

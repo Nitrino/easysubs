@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useEffect, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useState, useLayoutEffect, ReactElement } from 'react'
 import { toggleShowFullSubTranslatePopup, toggleAutoPause } from '../../event'
 import { showFullSubTranslatePopupStore, subsStore, autoPauseStore, subsFontSizeStore } from '../../store'
 import Subs from '../../subs'
@@ -12,47 +12,57 @@ function SubsComponent() {
   const subs = useStore(subsStore)
   const autoPause = useStore(autoPauseStore)
   const subsFontSize = useStore(subsFontSizeStore)
-  const [videoElement] = useState(document.querySelector('video'))
   const [fontSize, setFontSize] = useState(38)
-  const [currentSubs, setCurrentSubs] = useState([])
+  const [currentSubs, setCurrentSubs] = useState<ReactElement[]>([])
+  const videoElement = document.querySelector('video')
 
   useEffect(() => {
+    if (!videoElement) {
+      return
+    }
+
+    const handleTimeUpdate = (): void => {
+      const subsTextsVtt = Subs.getCurrentSubsTexts(videoElement, subs)
+      setCurrentSubs(
+        subsTextsVtt.map((subTextVtt: string, index: number) => {
+          const subWordsNodes = getSubWordsNodes(subTextVtt)
+          const cleanSubText = Subs.getCleanSubText(subTextVtt)
+          return <SubComponent text={cleanSubText} words={subWordsNodes} key={index} />
+        }),
+      )
+
+      toggleShowFullSubTranslatePopup(false)
+    }
+
     videoElement.addEventListener('timeupdate', handleTimeUpdate)
     handleTimeUpdate()
 
     return () => {
-      videoElement.removeEventListener('timeupdate', handleTimeUpdate)
+      videoElement?.removeEventListener('timeupdate', handleTimeUpdate)
     }
-  }, [subs])
-
-  function updateSize() {
-    setFontSize(((videoElement.clientWidth / 100) * subsFontSize) / 43)
-  }
+  }, [subs, videoElement])
 
   useLayoutEffect(() => {
-    const ro = new ResizeObserver(() => {
-      updateSize()
-    })
-    ro.observe(videoElement)
+    const updateSize = (): void => {
+      if (!videoElement) {
+        return
+      }
+
+      setFontSize(((videoElement.clientWidth / 100) * subsFontSize) / 43)
+    }
+
+    if (videoElement) {
+      const ro = new ResizeObserver(() => {
+        updateSize()
+      })
+      ro.observe(videoElement)
+    }
 
     return () => window.removeEventListener('resize', updateSize)
-  }, [subsFontSize])
-
-  function handleTimeUpdate() {
-    const subsTextsVtt = Subs.getCurrentSubsTexts(videoElement, subs)
-    setCurrentSubs(
-      subsTextsVtt.map((subTextVtt: string, index: number) => {
-        const subWordsNodes = getSubWordsNodes(subTextVtt)
-        const cleanSubText = Subs.getCleanSubText(subTextVtt)
-        return <SubComponent text={cleanSubText} words={subWordsNodes} key={index} />
-      }),
-    )
-
-    toggleShowFullSubTranslatePopup(false)
-  }
+  }, [subsFontSize, videoElement])
 
   function handleOnMouseEnter() {
-    if (!videoElement.paused) {
+    if (videoElement && !videoElement.paused) {
       toggleAutoPause(true)
       videoElement.pause()
     }
@@ -60,7 +70,7 @@ function SubsComponent() {
 
   function handleOnMouseLeave() {
     toggleShowFullSubTranslatePopup(false)
-    if (autoPause) {
+    if (videoElement && autoPause) {
       toggleAutoPause(false)
       videoElement.play()
     }
@@ -104,6 +114,6 @@ function SubsComponent() {
 }
 
 ;(showFullSubTranslatePopupStore as any).on(toggleShowFullSubTranslatePopup, (state: any, isShow: boolean) => isShow)
-;(autoPauseStore as any).on(toggleAutoPause, (state: any, enable: boolean) => enable)
+;(autoPauseStore as any).on(toggleAutoPause, (_state: any, enable: boolean) => enable)
 
 export default SubsComponent

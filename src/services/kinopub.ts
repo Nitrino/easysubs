@@ -1,5 +1,5 @@
 import { Parser } from 'm3u8-parser'
-import Service from 'service'
+import Service from './service'
 import { parse } from 'subtitle'
 
 class KinoPub implements Service {
@@ -7,8 +7,8 @@ class KinoPub implements Service {
   private subsName: string
 
   constructor() {
-    this.videoPlaylistUrl = null
-    this.subsName = null
+    this.videoPlaylistUrl = ''
+    this.subsName = ''
     this.handleEasysubsChangePlaylist = this.handleEasysubsChangePlaylist.bind(this)
   }
 
@@ -26,7 +26,7 @@ class KinoPub implements Service {
 
     const resp = await fetch(this.videoPlaylistUrl)
     const data = await resp.text()
-    const parser = new (Parser as any)()
+    const parser = new Parser()
     parser.push(data)
     parser.end()
     const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub
@@ -35,10 +35,10 @@ class KinoPub implements Service {
     const subsSegmentsResp = await fetch(uri)
     const subsSegmentsData = await subsSegmentsResp.text()
 
-    const subsSegmentsParser = new (Parser as any)()
+    const subsSegmentsParser = new Parser()
     subsSegmentsParser.push(subsSegmentsData)
     subsSegmentsParser.end()
-    const subPath = subsSegmentsParser.manifest.segments[0].uri.match(/.*\/hls\/(.*)\/seg.*/)[1]
+    const subPath = subsSegmentsParser.manifest.segments[0].uri.match(/.*\/hls\/(.*)\/seg.*/)?.[1]
     const subUri = `https://yandex-cdn.net/pd/${subPath}`
 
     const subsResp = await fetch(subUri)

@@ -1,4 +1,4 @@
-import Service from 'service'
+import Service from './service'
 import { parse } from 'subtitle'
 
 const WEBVTT = 'webvtt-lssdh-ios8'
@@ -37,7 +37,7 @@ class Netflix implements Service {
 
     const ccLanguage = language + SUB_TYPES.closedcaptions
     const subsList = this.subCache[this.getMoveId()]
-    const langKey = Object.keys(subsList).find((key) => key === language || key === ccLanguage)
+    const langKey = Object.keys(subsList).find((key) => key === language || key === ccLanguage) || ''
 
     const subUri = subsList[langKey]
     const resp = await fetch(subUri)
@@ -70,8 +70,8 @@ class Netflix implements Service {
     }
 
     JSON.stringify = function (response: any, ...args) {
-      if (!response) return stringifyMock.apply(this, args)
-      const data = parseMock(stringifyMock.apply(this, args))
+      if (!response) return stringifyMock.apply(this, args as any)
+      const data = parseMock(stringifyMock.apply(this, args as any))
 
       let modified = false
       if (data && data.params && data.params.showAllSubDubTracks != null) {
@@ -83,11 +83,11 @@ class Netflix implements Service {
         modified = true
       }
 
-      return modified ? stringifyMock(data) : stringifyMock.apply(this, args)
+      return modified ? stringifyMock(data) : stringifyMock.apply(this, args as any)
     }
 
     function getPlayer() {
-      const videoPlayer = netflix.appContext.state.playerApp.getAPI().videoPlayer
+      const videoPlayer = window.netflix.appContext.state.playerApp.getAPI().videoPlayer
       const sessionId = videoPlayer.getAllPlayerSessionIds()[0]
       return videoPlayer.getVideoPlayerBySessionId(sessionId)
     }
@@ -152,7 +152,7 @@ class Netflix implements Service {
   }
 
   private getMoveId() {
-    return (document.querySelector('.VideoContainer') as HTMLElement).dataset.videoid
+    return (document.querySelector('.VideoContainer') as HTMLElement).dataset.videoid || ''
   }
 }
 

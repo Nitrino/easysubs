@@ -1352,6 +1352,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-onclickoutside@^6.7.4":
+  version "6.7.4"
+  resolved "https://registry.yarnpkg.com/@types/react-onclickoutside/-/react-onclickoutside-6.7.4.tgz#05b1ec0d31a85999873c51e166f57aefa3f037a4"
+  integrity sha512-N7EnMhxqb+TaUOGJQUV8YJeL3n5qP5+cXwtWRS/FYW+DSEAb8T3xwNsgZ6wEJMHP4/QpfVHcBaFopFjJ9XBuOg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^17.0.16":
   version "17.0.16"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.16.tgz#056f40c45645761527baeb7d89d842a6abdf285a"

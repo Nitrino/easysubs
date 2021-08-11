@@ -1,5 +1,5 @@
-import Service from 'service'
-import { parse } from 'subtitle'
+import Service from './service'
+import { parse, subTitleType } from 'subtitle'
 import { ready } from '../ready'
 
 class Coursera implements Service {
@@ -11,9 +11,14 @@ class Coursera implements Service {
     ready('video', this.injectScript)
   }
 
-  public async getSubs(language: string) {
+  public async getSubs(language: string): Promise<subTitleType[]> {
     if (!language) return parse('')
-    const track: HTMLTrackElement = document.querySelector(`track[srclang="${language}"]`)
+    const track: HTMLTrackElement | null = document.querySelector(`track[srclang="${language}"]`)
+
+    if (!track) {
+      console.error("Can't find track with lang=${language}")
+      return []
+    }
 
     const subUri: string = track.src
     const resp = await fetch(subUri)
@@ -32,10 +37,6 @@ class Coursera implements Service {
 
   public playerContainerSelector(): string {
     return '.rc-VideoControlsContainer'
-  }
-
-  private getVideoId() {
-    return window.location.pathname.match(/\/lecture\/(.*)\//)[1]
   }
 
   private injection = () => {

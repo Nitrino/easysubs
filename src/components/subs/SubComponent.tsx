@@ -20,7 +20,7 @@ function SubComponent(props: { text: string; words: any[] }) {
     setShowCurrentFullSubTranslatePopup(false)
     toggleShowFullSubTranslatePopup(false)
     if (autoPause) {
-      videoElement.play()
+      videoElement?.play()
     }
   }
 

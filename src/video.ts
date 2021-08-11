@@ -16,7 +16,7 @@ class Video {
       timeToRewind = Utils.castSubTime(currentSub.start)
     }
 
-    const prevSub: subTitleType = Subs.getPrevSub(subs, timeToRewind)
+    const prevSub = Subs.getPrevSub(subs, timeToRewind)
 
     if (prevSub && (timeToRewind - Utils.castSubTime(prevSub.end) < 5000 || force)) {
       this.moveToTime(video, Utils.castSubTime(prevSub.start))
@@ -32,7 +32,7 @@ class Video {
     if (currentSub) {
       timeToRewind = Utils.castSubTime(currentSub.end)
     }
-    const nextSub: subTitleType = Subs.getNextSub(subs, timeToRewind)
+    const nextSub = Subs.getNextSub(subs, timeToRewind)
 
     if (nextSub && (Utils.castSubTime(nextSub.start) - timeToRewind < 5000 || force)) {
       this.moveToTime(video, Utils.castSubTime(nextSub.start))

@@ -14,8 +14,11 @@ function createRootElement(selector: string): HTMLElement {
  * Appends element as last child of body.
  * @param {HTMLElement} rootElem
  */
-function addRootElement(rootElem: HTMLElement) {
-  document.body.insertBefore(rootElem, document.body.lastElementChild.nextElementSibling)
+function addRootElement(rootElem: HTMLElement): void {
+  document.body.insertBefore(
+    rootElem,
+    document.body.lastElementChild ? document.body.lastElementChild.nextElementSibling : null,
+  )
 }
 
 /**
@@ -30,7 +33,7 @@ function addRootElement(rootElem: HTMLElement) {
  * @returns {HTMLElement} The DOM node to use as the Portal target.
  */
 function usePortal(selector: string): HTMLElement {
-  const rootElemRef = useRef(null)
+  const rootElemRef = useRef<HTMLElement>()
 
   useEffect(() => {
     // Look for existing target dom element to append to
@@ -44,10 +47,12 @@ function usePortal(selector: string): HTMLElement {
     }
 
     // Add the detached element to the parent
-    parentElem.appendChild(rootElemRef.current)
+    if (rootElemRef.current) {
+      parentElem.appendChild(rootElemRef.current)
+    }
 
     return function removeElement() {
-      rootElemRef.current.remove()
+      rootElemRef.current?.remove()
       if (parentElem.childNodes.length === -1) {
         parentElem.remove()
       }
@@ -64,7 +69,7 @@ function usePortal(selector: string): HTMLElement {
    *   ever run once.
    * @link https://reactjs.org/docs/hooks-faq.html#how-to-create-expensive-objects-lazily
    */
-  function getRootElem() {
+  function getRootElem(): HTMLElement {
     if (!rootElemRef.current) {
       rootElemRef.current = document.createElement('div')
     }

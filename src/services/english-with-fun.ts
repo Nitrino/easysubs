@@ -1,11 +1,11 @@
-import Service from 'service'
+import Service from './service'
 import { parse } from 'subtitle'
 
 class EnglishWithFun implements Service {
   private subUrl: string
 
   constructor() {
-    this.subUrl = null
+    this.subUrl = ''
   }
 
   public init() {

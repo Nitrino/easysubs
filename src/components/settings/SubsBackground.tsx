@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { toggleShowSubsBackgroundState } from '../../event'
 import { showSubsBackgroundState } from '../../store'
 
@@ -45,6 +45,6 @@ function SubsBackground() {
     </label>
   )
 }
-showSubsBackgroundState.on(toggleShowSubsBackgroundState, (state: any, showed: boolean) => showed)
+showSubsBackgroundState.on(toggleShowSubsBackgroundState as any, (state: any, showed: boolean) => showed)
 
 export default SubsBackground

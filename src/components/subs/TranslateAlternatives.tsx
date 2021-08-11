@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import TranslateAlternativesItem from './TranslateAlternativesItem'
 import Utils from '../../utils'
+import Lingualeo from '../../learning-services/lingualeo'
+import PuzzleEnglish from '../../learning-services/PuzzleEnglish'
 
 function TranslateAlternatives(props: { alternativesGroups: any[]; word: string; context: string }) {
-  const [currentService, setCurrentService] = useState(null)
+  const [currentService, setCurrentService] = useState<Lingualeo | PuzzleEnglish>()
 
   useEffect(() => {
     setCurrentService(Utils.getCurrentLearningService())

@@ -11,7 +11,7 @@ interface Props {
   word: string
   context: string
   groupIndex: number
-  currentService: null | Lingualeo | PuzzleEnglish
+  currentService: undefined | Lingualeo | PuzzleEnglish
 }
 
 function TranslateAlternativesItem(props: Props) {
@@ -21,15 +21,19 @@ function TranslateAlternativesItem(props: Props) {
     e.stopPropagation()
     const partOfSpeechNode = document.querySelector(`#part-of-speech-${props.groupIndex}`)
 
+    if (!props.currentService) {
+      return
+    }
+
     props.currentService
       .addWord(
         Utils.clearWord(props.word),
         translateNode.current.textContent,
-        partOfSpeechNode.textContent,
+        partOfSpeechNode?.textContent || '',
         props.context,
       )
-      .then((text: string) => {
-        ;(toast as any).info(text)
+      .then((text) => {
+        toast.info(text)
       })
       .catch((error: string) => {
         ;(toast as any).error(error)

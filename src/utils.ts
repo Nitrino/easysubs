@@ -15,29 +15,30 @@ class Utils {
     return typeof time === 'number' ? time : parseInt(time, 10)
   }
 
-  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun | Coursera {
-    const titleContent = document.querySelector('title').textContent
-    if (titleContent.includes('YouTube') || window.location.host === 'www.youtube.com') {
-      document.querySelector('html').id = 'youtube'
+  public static detectService(): YouTube | Netflix | KinoPub | EnglishWithFun | Coursera | undefined {
+    const titleContent = document.querySelector('title')?.textContent
+    if (titleContent?.includes('YouTube') || window.location.host === 'www.youtube.com') {
+      document.querySelector('html')?.setAttribute('id', 'youtube')
       return new YouTube()
     }
-    if (titleContent.includes('Netflix') || window.location.host === 'www.netflix.com') {
-      document.querySelector('html').id = 'netflix'
+    if (titleContent?.includes('Netflix') || window.location.host === 'www.netflix.com') {
+      document.querySelector('html')?.setAttribute('id', 'netflix')
       return new Netflix()
     }
-    if (titleContent.includes('Кинопаб') || document.querySelector('meta[content="Кинопаб"]')) {
-      document.querySelector('html').id = 'kinopub'
+    if (titleContent?.includes('Кинопаб') || document.querySelector('meta[content="Кинопаб"]')) {
+      document.querySelector('html')?.setAttribute('id', 'kinopub')
       return new KinoPub()
     }
-    if (titleContent.includes('English-With-Fun') || window.location.host === 'english-with-fun.com') {
-      document.querySelector('html').id = 'english-with-fun'
+    if (titleContent?.includes('English-With-Fun') || window.location.host === 'english-with-fun.com') {
+      document.querySelector('html')?.setAttribute('id', 'english-with-fun')
       return new EnglishWithFun()
     }
-    if (titleContent.includes('Coursera') || window.location.host === 'www.coursera.org') {
-      document.querySelector('html').id = 'coursera'
+    if (titleContent?.includes('Coursera') || window.location.host === 'www.coursera.org') {
+      document.querySelector('html')?.setAttribute('id', 'coursera')
       return new Coursera()
     }
-    return null
+
+    return undefined
   }
 
   public static clearWord(word: string): string {
@@ -50,7 +51,7 @@ class Utils {
       .replace(/(<([^>]+)>)/gi, '') // Remove tags
       .match(/([^ \r\n][^!?.\r\n]+[\w!?.]+)/g) || [''] // Split to sentences
 
-    return words.find((element) => element.indexOf(word) >= 0)
+    return words.find((element) => element.indexOf(word) >= 0) || ''
   }
 
   public static getVideoCurrentTime(video: HTMLVideoElement) {
@@ -65,7 +66,7 @@ class Utils {
       case 'puzzle-english':
         return new PuzzleEnglish()
       default:
-        return null
+        return undefined
     }
   }
 
@@ -77,6 +78,10 @@ class Utils {
     if (!enableState.getState()) return
 
     const videoElement = document.querySelector('video')
+    if (!videoElement) {
+      return
+    }
+
     if (event.code === 'ArrowLeft') {
       event.stopPropagation()
       if (event.type === 'keydown') {
@@ -93,13 +98,13 @@ class Utils {
 
   public static addKeyboardEventsListeners() {
     keyboardEvents.forEach((eventType) => {
-      document.addEventListener(eventType, Utils.keyboardHandler, true)
+      document.addEventListener(eventType as any, Utils.keyboardHandler, true)
     })
   }
 
   public static removeKeyboardEventsListeners() {
     keyboardEvents.forEach((eventType) => {
-      document.removeEventListener(eventType, Utils.keyboardHandler, true)
+      document.removeEventListener(eventType as any, Utils.keyboardHandler, true)
     })
   }
 

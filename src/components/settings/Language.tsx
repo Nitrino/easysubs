@@ -33,7 +33,7 @@ function Language() {
     </div>
   )
 }
-userLanguageStore.on(setUserLanguage, (state: any, language: Record<string, unknown>) => language)
+userLanguageStore.on(setUserLanguage, (state: any, language: string) => language)
 
 export default Language
 

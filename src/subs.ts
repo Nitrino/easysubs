@@ -20,7 +20,7 @@ class Subs {
       .replace(/<\d+:\d+:\d+.\d+><c>/g, '')
       .replace(/<\/c>/g, '')
       .replace(/(\r\n|\n|\r)/gm, ' ')
-    return tmpDiv.textContent
+    return tmpDiv.textContent || ''
   }
 
   public static getCurrentFirstSub(subs: subTitleType[], currentTime: number) {
@@ -35,7 +35,7 @@ class Subs {
     return subs.filter((sub: subTitleType) => sub.start <= currentTime && sub.end >= currentTime)
   }
 
-  public static getPrevSub(subs: subTitleType[], currentTime: number): subTitleType {
+  public static getPrevSub(subs: subTitleType[], currentTime: number): subTitleType | undefined {
     const currentSub = Subs.getCurrentLastSub(subs, currentTime)
     if (currentSub) {
       const indexCurrentSub = subs.findIndex((sub) => sub === currentSub)
@@ -47,7 +47,7 @@ class Subs {
     })
   }
 
-  public static getNextSub(subs: subTitleType[], currentTime: number): subTitleType {
+  public static getNextSub(subs: subTitleType[], currentTime: number): subTitleType | undefined {
     const currentSub = Subs.getCurrentFirstSub(subs, currentTime)
     if (currentSub) {
       const indexCurrentSub = subs.findIndex((sub) => sub === currentSub)

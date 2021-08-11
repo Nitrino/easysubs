@@ -4,7 +4,8 @@ class Lingualeo {
   constructor() {
     this.color = '#FFC900'
   }
-  public addWord(word: string, translate: string, _: string, context: string) {
+
+  public addWord(word: string, translate: string, _: string, context: string): Promise<string> {
     const url = new URL('https://api.lingualeo.com/addword')
     const data = {
       word: word,

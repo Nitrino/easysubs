@@ -29,6 +29,7 @@ module.exports = {
         'plugin:prettier/recommended',
       ],
       rules: {
+        'prefer-rest-params': 'off',
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
         '@typescript-eslint/no-unused-vars': ['error'],

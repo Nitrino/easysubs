@@ -1,13 +1,15 @@
-import { createStore } from 'effector'
-import { parse } from 'subtitle'
+import { createStore, Store } from 'effector'
+import { subTitleType } from 'subtitle'
 import { withPersist } from './effector-persist'
 
-export const enableState = withPersist(createStore(true))
-export const showProgressBarState = withPersist(createStore(true))
-export const showSubsBackgroundState = withPersist(createStore(true))
-export const subsFontSizeStore = withPersist(createStore(100))
-export const userLanguageStore = withPersist(createStore(window.navigator.language.split('-')[0]))
-export const learningServiceStore = withPersist(createStore(null))
-export const subsStore = createStore(parse(''))
-export const showFullSubTranslatePopupStore = createStore(false)
-export const autoPauseStore = createStore(false)
+export const enableState: Store<boolean> = withPersist(createStore<boolean>(true))
+export const showProgressBarState: Store<boolean> = withPersist(createStore<boolean>(true))
+export const showSubsBackgroundState: Store<boolean> = withPersist(createStore<boolean>(true))
+export const subsFontSizeStore: Store<number> = withPersist(createStore<number>(100))
+export const userLanguageStore: Store<string> = withPersist(
+  createStore<string>(window.navigator.language.split('-')[0]),
+)
+export const learningServiceStore: Store<string> = withPersist(createStore<string>(''))
+export const subsStore = createStore<subTitleType[]>([])
+export const showFullSubTranslatePopupStore = createStore<boolean>(false)
+export const autoPauseStore = createStore<boolean>(false)

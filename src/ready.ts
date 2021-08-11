@@ -1,20 +1,25 @@
 interface Listener {
   selector: string
-  fn: () => void
+  fn: (element: ElementObject) => void
 }
 
-interface ElementObject {
+interface ElementObject extends Element {
   ready: boolean
 }
+
 const listeners: Listener[] = []
 let observer
 
 function check() {
   // Check the DOM for elements matching a stored selector
-  for (let i = 0, len: number = listeners.length, listener: Listener, elements: ElementObject[]; i < len; i++) {
+  for (
+    let i = 0, len: number = listeners.length, listener: Listener, elements: NodeListOf<ElementObject>;
+    i < len;
+    i++
+  ) {
     listener = listeners[i]
     // Query for elements matching the specified selector
-    elements = window.document.querySelectorAll(listener.selector) as unknown as ElementObject[]
+    elements = window.document.querySelectorAll(listener.selector)
     for (let j = 0, jLen = elements.length, element; j < jLen; j++) {
       element = elements[j]
       // Make sure the callback isn't invoked with the

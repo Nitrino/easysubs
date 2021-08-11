@@ -1,14 +1,14 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { updateSubs } from '../../event'
 import { parse } from 'subtitle'
 import { toast } from 'react-toastify'
 
 function CustomSubs() {
-  const inputFile = useRef(null)
+  const inputFile = useRef<HTMLInputElement>(null)
 
   function handleFileSelect(event: any) {
     event.preventDefault()
-    inputFile.current.click()
+    inputFile.current?.click()
   }
 
   function handleOnChange(event: any) {
@@ -21,7 +21,6 @@ function CustomSubs() {
       ;(toast as any).info(chrome.i18n.getMessage('customSubtitlesLoaded'))
     }
     reader.readAsText(file)
-    inputFile.current.value = null
   }
 
   return (

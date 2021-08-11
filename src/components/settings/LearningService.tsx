@@ -34,7 +34,7 @@ function LearningService() {
         <select
           className="easysubs-settings__select"
           value={currentService || ''}
-          onChange={(e) => changeLearningService(e.target.value || null)}
+          onChange={(e) => changeLearningService(e.target.value || '')}
         >
           {services.map((service: { value: string; label: string }, index) => {
             return (
@@ -48,6 +48,6 @@ function LearningService() {
     </div>
   )
 }
-learningServiceStore.on(setLearningService, (_state: any, service: Record<string, unknown>) => service)
+learningServiceStore.on(setLearningService, (_state: any, service: string) => service)
 
 export default LearningService
