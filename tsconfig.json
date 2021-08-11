@@ -1,20 +1,26 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "jsx": "preserve",
-    "module": "es6",
     "target": "es2016",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "lib": [
-      "dom",
-      "es6",
-      "es2017",
-      "dom.iterable",
-      "scripthost",
-      "esnext.array"
-    ]
-  }
+    "module": "es6",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "paths": {
+      "@hooks/*": ["hooks/*"],
+      "@hocs/*": ["hocs/*"],
+      "@assets/*": ["assets/*"],
+      "@utils/*": ["utils/*"],
+      "@features/*": ["features/*"]
+    },
+  },
+  "include": ["./src/**/*", "./global.d.ts"],
+  "exclude": ["node_modules"]
 }

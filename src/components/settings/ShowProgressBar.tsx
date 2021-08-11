@@ -1,31 +1,29 @@
-import { useStore } from "effector-react";
-import React, { useEffect } from "react";
-import { toggleShowProgressBarState } from "../../event";
-import { showProgressBarState } from "../../store";
+import { useStore } from 'effector-react'
+import React, { useEffect } from 'react'
+import { toggleShowProgressBarState } from '../../event'
+import { showProgressBarState } from '../../store'
 
 function ShowProgressBar() {
-  const showProgressBar = useStore(showProgressBarState);
-  addEnableClass(showProgressBar);
+  const showProgressBar = useStore(showProgressBarState)
+  addEnableClass(showProgressBar)
 
   useEffect(() => {
-    addEnableClass(showProgressBar);
-  });
+    addEnableClass(showProgressBar)
+  })
 
   function changeShowState(showed: boolean) {
-    toggleShowProgressBarState(showed);
-    addEnableClass(showed);
+    toggleShowProgressBarState(showed)
+    addEnableClass(showed)
   }
 
   function addEnableClass(showed: boolean) {
-    document.documentElement.classList.toggle("easysubs-progress-bar-enable", showed);
+    document.documentElement.classList.toggle('easysubs-progress-bar-enable', showed)
   }
 
   return (
     <label className="easysubs-label easysubs-settings__item">
       <div className="easysubs-settings__item__left-side">
-        <div className="easysubs-label-text">
-          {chrome.i18n.getMessage("showProgressBar")}
-        </div>
+        <div className="easysubs-label-text">{chrome.i18n.getMessage('showProgressBar')}</div>
       </div>
       <div className="easysubs-settings__item__right-side">
         <div className="toggle">
@@ -45,8 +43,8 @@ function ShowProgressBar() {
         </div>
       </div>
     </label>
-  );
+  )
 }
-showProgressBarState.on(toggleShowProgressBarState, (state: any, showed: boolean) => showed);
+showProgressBarState.on(toggleShowProgressBarState, (state: any, showed: boolean) => showed)
 
-export default ShowProgressBar;
+export default ShowProgressBar

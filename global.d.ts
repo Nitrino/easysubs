@@ -1,12 +1,12 @@
-declare module "*";
-declare var isEnabled: boolean;
-declare var googleAnalytics: any;
-declare var netflix: any;
-declare var player: any;
-declare var playerInstance: any;
-declare var jwPlayer: any;
-declare var currentLanguage: string;
-declare var isLoaded: boolean;
-declare var getPlayer: any;
-declare var currentPath: string;
-declare var subtitlesEnabled: boolean;
+interface Window {
+  isEnabled: boolean
+  netflix: any
+  player: any
+  playerInstance: any
+  jwPlayer: any
+  currentLanguage: any
+  isLoaded: any
+  getPlayer: any
+  currentPath: any
+  subtitlesEnabled: any
+}

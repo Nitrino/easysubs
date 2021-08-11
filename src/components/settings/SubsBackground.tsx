@@ -1,31 +1,29 @@
-import { useStore } from "effector-react";
-import React, { useEffect } from "react";
-import { toggleShowSubsBackgroundState } from "../../event";
-import { showSubsBackgroundState } from "../../store";
+import { useStore } from 'effector-react'
+import React, { useEffect } from 'react'
+import { toggleShowSubsBackgroundState } from '../../event'
+import { showSubsBackgroundState } from '../../store'
 
 function SubsBackground() {
-  const showSubsBackground = useStore(showSubsBackgroundState);
-  addEnableClass(showSubsBackground);
+  const showSubsBackground = useStore(showSubsBackgroundState)
+  addEnableClass(showSubsBackground)
 
   useEffect(() => {
-    addEnableClass(showSubsBackground);
-  });
+    addEnableClass(showSubsBackground)
+  })
 
   function changeShowState(showed: boolean) {
-    toggleShowSubsBackgroundState(showed);
-    addEnableClass(showed);
+    toggleShowSubsBackgroundState(showed)
+    addEnableClass(showed)
   }
 
   function addEnableClass(showed: boolean) {
-    document.documentElement.classList.toggle("easysubs-show-subtitles-background", showed);
+    document.documentElement.classList.toggle('easysubs-show-subtitles-background', showed)
   }
 
   return (
     <label className="easysubs-label easysubs-settings__item">
       <div className="easysubs-settings__item__left-side">
-        <div className="easysubs-label-text">
-          {chrome.i18n.getMessage("showSubsBackground")}
-        </div>
+        <div className="easysubs-label-text">{chrome.i18n.getMessage('showSubsBackground')}</div>
       </div>
       <div className="easysubs-settings__item__right-side">
         <div className="toggle">
@@ -45,8 +43,8 @@ function SubsBackground() {
         </div>
       </div>
     </label>
-  );
+  )
 }
-showSubsBackgroundState.on(toggleShowSubsBackgroundState, (state: any, showed: boolean) => showed);
+showSubsBackgroundState.on(toggleShowSubsBackgroundState, (state: any, showed: boolean) => showed)
 
-export default SubsBackground;
+export default SubsBackground

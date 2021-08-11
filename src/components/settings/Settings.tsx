@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import Logo from "../../images/logo.svg";
-import Content from "./Content";
+import React, { useState } from 'react'
+import Logo from '../../images/logo.svg'
+import Content from './Content'
 import Portal from './Portal'
 
-function Settings(props: {settingsContentSelector: string}) {
-  const [showSettings, toggleShowSettings] = useState(false);
+function Settings(props: { settingsContentSelector: string }) {
+  const [showSettings, toggleShowSettings] = useState(false)
 
   return (
     <div className="easysubs-settings-container">
@@ -12,10 +12,10 @@ function Settings(props: {settingsContentSelector: string}) {
         <Logo />
       </div>
       <Portal id={props.settingsContentSelector}>
-        <Content display={showSettings ? "block" : "none"} toggleShowSettings={toggleShowSettings} />
+        <Content display={showSettings ? 'block' : 'none'} toggleShowSettings={toggleShowSettings} />
       </Portal>
     </div>
-  );
+  )
 }
 
-export default Settings;
+export default Settings

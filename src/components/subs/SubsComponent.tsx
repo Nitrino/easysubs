@@ -1,73 +1,68 @@
-import { useStore } from "effector-react";
-import React, { useEffect, useState, useLayoutEffect } from "react";
-import { toggleShowFullSubTranslatePopup, toggleAutoPause } from "../../event";
-import {
-  showFullSubTranslatePopupStore,
-  subsStore,
-  autoPauseStore,
-  subsFontSizeStore
-} from "../../store";
-import Subs from "../../subs";
-import Word from "./Word";
-import SubComponent from "./SubComponent";
-import Utils from "../../utils";
-import Draggable from 'react-draggable';
+import { useStore } from 'effector-react'
+import React, { useEffect, useState, useLayoutEffect } from 'react'
+import { toggleShowFullSubTranslatePopup, toggleAutoPause } from '../../event'
+import { showFullSubTranslatePopupStore, subsStore, autoPauseStore, subsFontSizeStore } from '../../store'
+import Subs from '../../subs'
+import Word from './Word'
+import SubComponent from './SubComponent'
+import Utils from '../../utils'
+import Draggable from 'react-draggable'
 
 function SubsComponent() {
-  const subs = useStore(subsStore);
-  const autoPause = useStore(autoPauseStore);
-  const subsFontSize = useStore(subsFontSizeStore);
-  const [videoElement] = useState(document.querySelector("video"));
-  const [fontSize, setFontSize] = useState(38);
-  const [currentSubs, setCurrentSubs] = useState([]);
+  const subs = useStore(subsStore)
+  const autoPause = useStore(autoPauseStore)
+  const subsFontSize = useStore(subsFontSizeStore)
+  const [videoElement] = useState(document.querySelector('video'))
+  const [fontSize, setFontSize] = useState(38)
+  const [currentSubs, setCurrentSubs] = useState([])
 
   useEffect(() => {
-    videoElement.addEventListener("timeupdate", handleTimeUpdate);
-    handleTimeUpdate();
+    videoElement.addEventListener('timeupdate', handleTimeUpdate)
+    handleTimeUpdate()
 
     return () => {
-      videoElement.removeEventListener("timeupdate", handleTimeUpdate);
-    };
-  }, [subs]);
+      videoElement.removeEventListener('timeupdate', handleTimeUpdate)
+    }
+  }, [subs])
 
   function updateSize() {
-    setFontSize(((videoElement.clientWidth / 100) * subsFontSize) / 43);
+    setFontSize(((videoElement.clientWidth / 100) * subsFontSize) / 43)
   }
 
   useLayoutEffect(() => {
-    const ro = new ResizeObserver(() => { updateSize(); });
-    ro.observe(videoElement);
+    const ro = new ResizeObserver(() => {
+      updateSize()
+    })
+    ro.observe(videoElement)
 
-    return () => window.removeEventListener("resize", updateSize);
-  }, [subsFontSize]);
+    return () => window.removeEventListener('resize', updateSize)
+  }, [subsFontSize])
 
   function handleTimeUpdate() {
-    const subsTextsVtt = Subs.getCurrentSubsTexts(videoElement, subs);
+    const subsTextsVtt = Subs.getCurrentSubsTexts(videoElement, subs)
     setCurrentSubs(
       subsTextsVtt.map((subTextVtt: string, index: number) => {
-        const subWordsNodes = getSubWordsNodes(subTextVtt);
-        const cleanSubText = Subs.getCleanSubText(subTextVtt);
-        return (
-          <SubComponent text={cleanSubText} words={subWordsNodes} key={index} />
-        );
-      })
-    );
+        const subWordsNodes = getSubWordsNodes(subTextVtt)
+        const cleanSubText = Subs.getCleanSubText(subTextVtt)
+        return <SubComponent text={cleanSubText} words={subWordsNodes} key={index} />
+      }),
+    )
 
-    toggleShowFullSubTranslatePopup(false);
+    toggleShowFullSubTranslatePopup(false)
   }
 
   function handleOnMouseEnter() {
     if (!videoElement.paused) {
-      toggleAutoPause(true);
-      videoElement.pause();
+      toggleAutoPause(true)
+      videoElement.pause()
     }
   }
 
   function handleOnMouseLeave() {
-    toggleShowFullSubTranslatePopup(false);
+    toggleShowFullSubTranslatePopup(false)
     if (autoPause) {
-      toggleAutoPause(false);
-      videoElement.play();
+      toggleAutoPause(false)
+      videoElement.play()
     }
   }
 
@@ -75,27 +70,23 @@ function SubsComponent() {
     return Subs.subTextToChildNodesArray(subtitleText)
       .map((node: any, nodeIndex: number) => {
         if (node.textContent.match(/[^ ]/g) == null) {
-          return false;
+          return false
         }
 
-        return node.textContent
-          .match(/[^ ]+/g)
-          .map((word: string, wordIndex: number) => {
-            const tagName = !!node.tagName
-              ? node.tagName.toLowerCase()
-              : "span";
-            return (
-              <Word
-                tagName={tagName}
-                word={word}
-                context={Utils.clearWordContext(subtitleText, word)}
-                key={word + nodeIndex + wordIndex}
-                keyName={word + nodeIndex + wordIndex}
-              />
-            );
-          });
+        return node.textContent.match(/[^ ]+/g).map((word: string, wordIndex: number) => {
+          const tagName = node.tagName ? node.tagName.toLowerCase() : 'span'
+          return (
+            <Word
+              tagName={tagName}
+              word={word}
+              context={Utils.clearWordContext(subtitleText, word)}
+              key={word + nodeIndex + wordIndex}
+              keyName={word + nodeIndex + wordIndex}
+            />
+          )
+        })
       })
-      .flat();
+      .flat()
   }
 
   return (
@@ -109,16 +100,10 @@ function SubsComponent() {
         {currentSubs}
       </div>
     </Draggable>
-  );
+  )
 }
 
-(showFullSubTranslatePopupStore as any).on(
-  toggleShowFullSubTranslatePopup,
-  (state: any, isShow: boolean) => isShow
-);
-(autoPauseStore as any).on(
-  toggleAutoPause,
-  (state: any, enable: boolean) => enable
-);
+;(showFullSubTranslatePopupStore as any).on(toggleShowFullSubTranslatePopup, (state: any, isShow: boolean) => isShow)
+;(autoPauseStore as any).on(toggleAutoPause, (state: any, enable: boolean) => enable)
 
-export default SubsComponent;
+export default SubsComponent

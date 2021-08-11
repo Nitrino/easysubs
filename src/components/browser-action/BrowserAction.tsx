@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 function BrowserAction() {
   return (
@@ -6,33 +6,33 @@ function BrowserAction() {
       <div className="header">Easysubs</div>
       <menu>
         <li>
-          <a target="_blank" href={chrome.i18n.getMessage("homePageUrl")}>
-            {chrome.i18n.getMessage("homePage")}
+          <a target="_blank" href={chrome.i18n.getMessage('homePageUrl')} rel="noreferrer">
+            {chrome.i18n.getMessage('homePage')}
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://github.com/Nitrino/easysubs">
+          <a target="_blank" href="https://github.com/Nitrino/easysubs" rel="noreferrer">
             Github
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://github.com/Nitrino/easysubs/issues">
-            {chrome.i18n.getMessage("reportBugs")}
+          <a target="_blank" href="https://github.com/Nitrino/easysubs/issues" rel="noreferrer">
+            {chrome.i18n.getMessage('reportBugs')}
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://github.com/Nitrino/easysubs/issues">
-            {chrome.i18n.getMessage("suggestFeatures")}
+          <a target="_blank" href="https://github.com/Nitrino/easysubs/issues" rel="noreferrer">
+            {chrome.i18n.getMessage('suggestFeatures')}
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://t.me/easysubs_ext">
-            {chrome.i18n.getMessage("supportChat")}
+          <a target="_blank" href="https://t.me/easysubs_ext" rel="noreferrer">
+            {chrome.i18n.getMessage('supportChat')}
           </a>
         </li>
       </menu>
     </div>
-  );
+  )
 }
 
-export default BrowserAction;
+export default BrowserAction

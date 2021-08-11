@@ -1,24 +1,21 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react'
 
 /**
  * Creates DOM element to be used as React root.
  * @returns {HTMLElement}
  */
 function createRootElement(selector: string): HTMLElement {
-  const rootContainer = document.createElement('div');
-  rootContainer.setAttribute('id', selector);
-  return rootContainer;
+  const rootContainer = document.createElement('div')
+  rootContainer.setAttribute('id', selector)
+  return rootContainer
 }
 
 /**
  * Appends element as last child of body.
- * @param {HTMLElement} rootElem 
+ * @param {HTMLElement} rootElem
  */
 function addRootElement(rootElem: HTMLElement) {
-  document.body.insertBefore(
-    rootElem,
-    document.body.lastElementChild.nextElementSibling,
-  );
+  document.body.insertBefore(rootElem, document.body.lastElementChild.nextElementSibling)
 }
 
 /**
@@ -33,29 +30,29 @@ function addRootElement(rootElem: HTMLElement) {
  * @returns {HTMLElement} The DOM node to use as the Portal target.
  */
 function usePortal(selector: string): HTMLElement {
-  const rootElemRef = useRef(null);
+  const rootElemRef = useRef(null)
 
   useEffect(() => {
     // Look for existing target dom element to append to
-    const existingParent = document.querySelector(selector) as HTMLElement;
+    const existingParent = document.querySelector(selector) as HTMLElement
     // Parent is either a new root or the existing dom element
-    const parentElem = existingParent || createRootElement(selector);
+    const parentElem = existingParent || createRootElement(selector)
 
     // If there is no existing DOM element, add a new one.
     if (!existingParent) {
-      addRootElement(parentElem);
+      addRootElement(parentElem)
     }
 
     // Add the detached element to the parent
-    parentElem.appendChild(rootElemRef.current);
+    parentElem.appendChild(rootElemRef.current)
 
     return function removeElement() {
-      rootElemRef.current.remove();
+      rootElemRef.current.remove()
       if (parentElem.childNodes.length === -1) {
-        parentElem.remove();
+        parentElem.remove()
       }
-    };
-  }, []);
+    }
+  }, [])
 
   /**
    * It's important we evaluate this lazily:
@@ -69,12 +66,12 @@ function usePortal(selector: string): HTMLElement {
    */
   function getRootElem() {
     if (!rootElemRef.current) {
-      rootElemRef.current = document.createElement('div');
+      rootElemRef.current = document.createElement('div')
     }
-    return rootElemRef.current;
+    return rootElemRef.current
   }
 
-  return getRootElem();
+  return getRootElem()
 }
 
-export default usePortal;
+export default usePortal

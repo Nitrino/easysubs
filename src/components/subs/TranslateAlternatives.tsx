@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import TranslateAlternativesItem from "./TranslateAlternativesItem";
-import Utils from "../../utils";
+import React, { useState, useEffect } from 'react'
+import TranslateAlternativesItem from './TranslateAlternativesItem'
+import Utils from '../../utils'
 
-function TranslateAlternatives(props: { alternativesGroups: any[]; word: string, context: string }) {
-  const [currentService, setCurrentService] = useState(null);
+function TranslateAlternatives(props: { alternativesGroups: any[]; word: string; context: string }) {
+  const [currentService, setCurrentService] = useState(null)
 
   useEffect(() => {
-    setCurrentService(Utils.getCurrentLearningService());
-  }, []);
+    setCurrentService(Utils.getCurrentLearningService())
+  }, [])
 
   return (
     <div className="easysubs-translate-alternative">
@@ -40,14 +40,14 @@ function TranslateAlternatives(props: { alternativesGroups: any[]; word: string,
                       context={props.context}
                     />
                   </tr>
-                );
-              })
-            ];
+                )
+              }),
+            ]
           })}
         </tbody>
       </table>
     </div>
-  );
+  )
 }
 
-export default TranslateAlternatives;
+export default TranslateAlternatives
