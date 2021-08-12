@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC, useRef } from 'react'
 import Language from './Language'
 import LearningService from './LearningService'
 import Toggle from './Toggle'
@@ -7,20 +7,23 @@ import SubsFontSize from './SubsFontSize'
 import ResyncSubs from './ResyncSubs'
 import CustomSubs from './CustomSubs'
 import SubsBackground from './SubsBackground'
-import onClickOutside from 'react-onclickoutside'
+import { useOnClickOutside } from './../../hooks/useOnClickOutside'
 
-// tslint:disable-next-line: variable-name
-const Content = (props: any) => {
-  function closeSettings() {
-    props.toggleShowSettings(false)
+type TContentProps = {
+  toggleShowSettings: (toggleShow: boolean) => void
+  display: string
+}
+
+export const Content: FC<TContentProps> = ({ toggleShowSettings, display }) => {
+  const ref = useRef(null)
+  const closeSettings = (): void => {
+    toggleShowSettings(false)
   }
 
-  ;(Content as any).handleClickOutside = () => {
-    props.toggleShowSettings(false)
-  }
+  useOnClickOutside(ref, () => toggleShowSettings(false))
 
   return (
-    <div className="easysubs-settings-wrapper" style={{ display: props.display }}>
+    <div ref={ref} className="easysubs-settings-wrapper" style={{ display: display }}>
       <div className="easysubs-settings-close" onClick={closeSettings} />
       <div className="easysubs-settings-header">{chrome.i18n.getMessage('easysubsSettings')}</div>
       <div className="easysubs-settings__content">
@@ -39,9 +42,3 @@ const Content = (props: any) => {
     </div>
   )
 }
-
-const clickOutsideConfig = {
-  handleClickOutside: () => (Content as any).handleClickOutside,
-}
-
-export default onClickOutside(Content, clickOutsideConfig)

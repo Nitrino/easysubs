@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Logo from '../../images/logo.svg'
-import Content from './Content'
+import { Content } from './Content'
 import Portal from './Portal'
 
 function Settings(props: { settingsContentSelector: string }) {
