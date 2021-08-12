@@ -7,7 +7,7 @@ import SubsFontSize from './SubsFontSize'
 import ResyncSubs from './ResyncSubs'
 import CustomSubs from './CustomSubs'
 import SubsBackground from './SubsBackground'
-import RewindBySubs from "./RewindBySubs";
+import RewindBySubs from './RewindBySubs'
 import { useOnClickOutside } from './../../hooks/useOnClickOutside'
 
 type TContentProps = {
