@@ -8,7 +8,7 @@ const webpack = require("webpack");
 
 module.exports = (env) => ({
   mode: env.production ? "production" : "development",
-  devtool: env === "production" ? false : "inline-source-map",
+  devtool: env.production ? false : "inline-source-map",
   entry: {
     inject: "./src/inject.ts",
     background: "./src/background.ts",
@@ -43,7 +43,7 @@ module.exports = (env) => ({
             options: {
               publicPath: path.resolve(
                 __dirname,
-                env === "production" ? "release" : "dist"
+                env.production ? "release" : "dist"
               ),
             },
           },
@@ -60,7 +60,7 @@ module.exports = (env) => ({
   },
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, env === "production" ? "release" : "dist"),
+    path: path.resolve(__dirname, env.production ? "release" : "dist"),
   },
   plugins: [
     new MiniCssExtractPlugin(),
@@ -83,7 +83,7 @@ module.exports = (env) => ({
     }),
   ],
   optimization: {
-    minimize: env === "production",
+    minimize: env.production,
     minimizer: [
       new TerserPlugin({
         terserOptions: {

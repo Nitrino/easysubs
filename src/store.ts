@@ -4,6 +4,8 @@ import { withPersist } from './effector-persist'
 
 export const enableState: Store<boolean> = withPersist(createStore<boolean>(true))
 export const showProgressBarState: Store<boolean> = withPersist(createStore<boolean>(true))
+export const rewindBySubsState: Store<boolean> = withPersist(createStore<boolean>(true))
+
 export const showSubsBackgroundState: Store<boolean> = withPersist(createStore<boolean>(true))
 export const subsFontSizeStore: Store<number> = withPersist(createStore<number>(100))
 export const userLanguageStore: Store<string> = withPersist(

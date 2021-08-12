@@ -1,6 +1,7 @@
-import { subTitleType } from 'subtitle'
-import Subs from './subs'
-import Utils from './utils'
+import { subTitleType } from "subtitle";
+import Subs from "./subs";
+import Utils from "./utils";
+import { rewindBySubsState} from "./store";
 
 const rewindTime = 5000
 
@@ -13,13 +14,15 @@ class Video {
     let timeToRewind = this.getCurrentTime(video)
     const currentSub = Subs.getCurrentLastSub(subs, timeToRewind)
     if (currentSub) {
-      timeToRewind = Utils.castSubTime(currentSub.start)
+      // NOTE: -1 is hack for cases when prev sub ends same time as next sub starts
+      timeToRewind = Utils.castSubTime(currentSub.start) - 1;
     }
 
     const prevSub = Subs.getPrevSub(subs, timeToRewind)
+    const rewindBySubs = rewindBySubsState.getState()
 
-    if (prevSub && (timeToRewind - Utils.castSubTime(prevSub.end) < 5000 || force)) {
-      this.moveToTime(video, Utils.castSubTime(prevSub.start))
+    if (rewindBySubs && prevSub && (timeToRewind - Utils.castSubTime(prevSub.end) < 5000 || force)) {
+      this.moveToTime(video, Utils.castSubTime(prevSub.start));
     } else {
       this.moveToTime(video, Utils.castSubTime(timeToRewind - rewindTime))
     }
@@ -34,7 +37,9 @@ class Video {
     }
     const nextSub = Subs.getNextSub(subs, timeToRewind)
 
-    if (nextSub && (Utils.castSubTime(nextSub.start) - timeToRewind < 5000 || force)) {
+    const rewindBySubs = rewindBySubsState.getState()
+
+    if (rewindBySubs && nextSub && (Utils.castSubTime(nextSub.start) - timeToRewind < 5000 || force)) {
       this.moveToTime(video, Utils.castSubTime(nextSub.start))
     } else {
       this.moveToTime(video, Utils.castSubTime(timeToRewind + rewindTime))

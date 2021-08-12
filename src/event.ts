@@ -4,6 +4,7 @@ import { subTitleType } from 'subtitle'
 export const toggleEnableState = createEvent<boolean>('Toggle extension enable state')
 export const toggleShowProgressBarState = createEvent<boolean>('Toggle show progress bar state')
 export const toggleShowSubsBackgroundState = createEvent<boolean>('Toggle show subs background')
+export const toggleRewindBySubsState = createEvent<boolean>('Toggle show progress bar state')
 export const setUserLanguage = createEvent<string>('Set user language')
 export const setLearningService = createEvent<string>('Set learning service')
 

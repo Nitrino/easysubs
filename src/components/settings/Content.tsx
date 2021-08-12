@@ -7,6 +7,7 @@ import SubsFontSize from './SubsFontSize'
 import ResyncSubs from './ResyncSubs'
 import CustomSubs from './CustomSubs'
 import SubsBackground from './SubsBackground'
+import RewindBySubs from "./RewindBySubs";
 import { useOnClickOutside } from './../../hooks/useOnClickOutside'
 
 type TContentProps = {
@@ -30,6 +31,7 @@ export const Content: FC<TContentProps> = ({ toggleShowSettings, display }) => {
         <div className="easysubs-settings__content__header">{chrome.i18n.getMessage('global')}</div>
         <Toggle />
         <ShowProgressBar />
+        <RewindBySubs />
         <Language />
         <LearningService />
         {/* <div className="easysubs-settings__content__header">Interface</div> */}
