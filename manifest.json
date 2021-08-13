@@ -17,14 +17,14 @@
   "default_locale": "en",
   "background": {
     "scripts": ["background.js"],
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_icon": "icons/icon128.png",
     "default_title": "browser action demo",
     "default_popup": "browser_action.html"
   },
-  "permissions": ["storage", "<all_urls>"],
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "<all_urls>"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

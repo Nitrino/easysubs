@@ -1,5 +1,15 @@
 import { googleTranslateFetcher } from './utils/google-translate-fetcher'
 
+const requestInterceptor = (details: any) => {
+  details.requestHeaders.push({ name: 'Sec-Fetch-Site', value: 'none' })
+  return { requestHeaders: details.requestHeaders }
+}
+
+chrome.webRequest.onBeforeSendHeaders.addListener(requestInterceptor, { urls: ['https://translate.google.com/*'] }, [
+  'requestHeaders',
+  'blocking',
+])
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.contentScriptQuery === 'translate') {
     googleTranslateFetcher
