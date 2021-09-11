@@ -16,6 +16,9 @@ interface Track {
     'webvtt-lssdh-ios8': {
       downloadUrls: Record<string, string>
     }
+    simplesdh: {
+      downloadUrls: Record<string, string>
+    }
   }
 }
 
@@ -30,6 +33,13 @@ class Netflix implements Service {
 
   public init() {
     this.injectScript()
+    setInterval(() => {
+      const videoControlContainer = document.querySelector('.watch-video--bottom-controls-container')
+      const easysubsSettings = document.querySelector('.easysubs-settings')
+      if (videoControlContainer && !easysubsSettings) {
+        window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
+      }
+    }, 100)
   }
 
   public async getSubs(language: string) {
@@ -46,11 +56,11 @@ class Netflix implements Service {
   }
 
   public playerContainerSelector(): string {
-    return '.VideoContainer'
+    return '.watch-video--player-view'
   }
 
-  public settingsSelector(): string {
-    return '.button-nfplayerFullscreen'
+  public settingsSelector(): HTMLElement | string {
+    return document.querySelector('[data-uia="control-fullscreen-enter"]')?.parentElement || ''
   }
 
   public settingsContentSelector(): string {
@@ -61,17 +71,17 @@ class Netflix implements Service {
     const parseMock = JSON.parse
     const stringifyMock = JSON.stringify
 
-    JSON.parse = function (...args) {
-      const data = parseMock.apply(this, args)
+    JSON.parse = function () {
+      const data = parseMock.apply(this, arguments as any)
       if (data && data.result && data.result.timedtexttracks) {
         window.dispatchEvent(new CustomEvent('easysubs_data', { detail: data.result }))
       }
       return data
     }
 
-    JSON.stringify = function (response: any, ...args) {
-      if (!response) return stringifyMock.apply(this, args as any)
-      const data = parseMock(stringifyMock.apply(this, args as any))
+    JSON.stringify = function (response: any) {
+      if (!response) return stringifyMock.apply(this, arguments as any)
+      const data = parseMock(stringifyMock.apply(this, arguments as any))
 
       let modified = false
       if (data && data.params && data.params.showAllSubDubTracks != null) {
@@ -83,7 +93,7 @@ class Netflix implements Service {
         modified = true
       }
 
-      return modified ? stringifyMock(data) : stringifyMock.apply(this, args as any)
+      return modified ? stringifyMock(data) : stringifyMock.apply(this, arguments as any)
     }
 
     function getPlayer() {
@@ -101,7 +111,7 @@ class Netflix implements Service {
     window.setInterval(() => {
       const player = getPlayer()
 
-      if (player && 'getLoaded' in player && player.getLoaded()) {
+      if (player && document.querySelector('.watch-video--player-view')) {
         if (!window.isLoaded) {
           window.isLoaded = true
           window.dispatchEvent(new CustomEvent('easysubsVideoReady'))
@@ -152,7 +162,7 @@ class Netflix implements Service {
   }
 
   private getMoveId() {
-    return (document.querySelector('.VideoContainer') as HTMLElement).dataset.videoid || ''
+    return (document.querySelector('*[data-videoid]') as HTMLElement)?.dataset?.videoid || ''
   }
 }
 

@@ -24,8 +24,11 @@ class UI {
     ReactDOM.render(<ProgressBar />, document.querySelector('.easysubs-progress-bar'))
   }
 
-  public static renderSettings(settingsSelector: string, settingsContentSelector: string) {
-    const referenceNode = document.querySelector(settingsSelector)
+  public static renderSettings(settingsSelector: string | HTMLElement, settingsContentSelector: string) {
+    const referenceNode =
+      typeof settingsSelector == 'string' ? document.querySelector(settingsSelector) : settingsSelector
+    document.querySelectorAll('.easysubs-settings').forEach((e) => e.remove())
+
     const parentNode = referenceNode?.parentNode
     const settingNode = document.createElement('div')
     settingNode.className = 'easysubs-settings'

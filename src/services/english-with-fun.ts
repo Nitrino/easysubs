@@ -57,6 +57,7 @@ class EnglishWithFun implements Service {
         window.dispatchEvent(new CustomEvent('easysubsChangePlaylist', { detail: track.file }))
       }
       window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: label }))
+      window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
     })
 
     window.jwPlayer.on('firstFrame', () => {
@@ -66,6 +67,7 @@ class EnglishWithFun implements Service {
       }
       const label = track ? track.label : null
       window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: label }))
+      window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
     })
   }
 }

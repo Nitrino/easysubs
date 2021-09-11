@@ -75,6 +75,7 @@ class KinoPub implements Service {
       const track = window.playerInstance.getConfig().captionsTrack
       const label = track ? track.label : null
       window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: label }))
+      window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
     })
 
     window.playerInstance.on('firstFrame', () => {
@@ -86,6 +87,7 @@ class KinoPub implements Service {
   private handleEasysubsChangePlaylist(event: any) {
     this.videoPlaylistUrl = event.detail
     window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: this.subsName }))
+    window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
   }
 }
 

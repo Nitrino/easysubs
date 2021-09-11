@@ -58,6 +58,7 @@ class YouTube implements Service {
         if (!window.isLoaded) {
           window.isLoaded = true
           window.dispatchEvent(new CustomEvent('easysubsVideoReady'))
+          window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
 
           if (subsToggleElement && subsToggleElement.getAttribute('aria-pressed') === 'true') {
             player.toggleSubtitles()

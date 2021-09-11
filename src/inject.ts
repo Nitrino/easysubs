@@ -20,11 +20,14 @@ try {
     window.addEventListener('easysubsVideoReady', () => {
       console.log('TCL: EVENT', 'easysubsVideoReady')
 
+      window.addEventListener('easysubsRenderSettings', () => {
+        UI.renderSettings(service.settingsSelector(), service.settingsContentSelector())
+      })
+
       window.addEventListener('easysubsSubtitlesChanged', (event: any) => {
         console.log('TCL: EVENT', 'easysubsSubtitlesChanged')
 
         console.log('Language:', event.detail)
-        UI.renderSettings(service.settingsSelector(), service.settingsContentSelector())
 
         UI.renderSubs(service.playerContainerSelector())
         UI.renderProgressBar(service.playerContainerSelector())
@@ -39,5 +42,5 @@ try {
   }
 } catch (e) {
   console.error('Easysubs unknown error:', e)
-  Sentry.captureEvent(e)
+  Sentry.captureEvent(e as any)
 }

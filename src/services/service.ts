@@ -2,7 +2,7 @@ import { subTitleType } from 'subtitle'
 interface Service {
   getSubs(language: string): Promise<subTitleType[]>
   playerContainerSelector(): string
-  settingsSelector(): string
+  settingsSelector(): string | HTMLElement
   settingsContentSelector(): string
 }
 
