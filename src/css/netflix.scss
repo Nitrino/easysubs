@@ -1,10 +1,10 @@
 #netflix {
   &.easysubs-enable {
     #easysubs {
-      bottom: 15vh;
+      bottom: 21vh;
 
-      @media screen and (max-height: 800px) {
-        bottom: 18vh;
+      @media screen and (min-width: 1440px) {
+        bottom: 26vh;
       }
     }
 
@@ -16,10 +16,14 @@
       border: none;
     }
 
-    .easysubs-settings-wrapper {
-      bottom: 120px;
-      right: 85px;
+    .watch-video--selector-audio-subtitle {
+      overflow-y: auto;
     }
+  }
+
+  .easysubs-settings-wrapper {
+    bottom: 120px;
+    right: 85px;
   }
 
   .easysubs-settings-container {

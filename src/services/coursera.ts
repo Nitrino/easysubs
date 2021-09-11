@@ -49,10 +49,12 @@ class Coursera implements Service {
 
     player.on('loadeddata', () => {
       window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: getLanguage(player) }))
+      window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
     })
 
     player.textTracks().on('change', () => {
       window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: getLanguage(player) }))
+      window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
     })
   }
 
