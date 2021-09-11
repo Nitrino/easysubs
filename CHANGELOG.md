@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.5.6 (11.09.2021)
+
+### Enhancements
+
+- Global code refactoring and update dependencies
+
+### Bugs
+
+- Fix work of the extension in Firefox 90+
+- Fix work of the extension with Netflix after redesign
+- Fix rewind with overlap subs and add disable rewind by subs config
+- Fix response handler for add new word to puzzle-english.com service
+
 ## v1.5.5 (17.04.2021)
 
 ### Enhancements
