@@ -48,6 +48,6 @@ function LearningService() {
     </div>
   )
 }
-learningServiceStore.on(setLearningService, (_state: any, service: string) => service)
+learningServiceStore.on(setLearningService, (_, service: string) => service)
 
 export default LearningService

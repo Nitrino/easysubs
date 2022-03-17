@@ -45,6 +45,6 @@ function RewindBySubs() {
     </label>
   )
 }
-rewindBySubsState.on(toggleRewindBySubsState, (state: any, showed: boolean) => showed)
+rewindBySubsState.on(toggleRewindBySubsState, (_, showed: boolean) => showed)
 
 export default RewindBySubs
