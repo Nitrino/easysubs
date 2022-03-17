@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React from 'react'
+
 import { setLearningService } from '../../event'
 import { learningServiceStore } from '../../store'
 

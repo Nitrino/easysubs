@@ -1,5 +1,3 @@
-import React from 'react'
-
 function FrequencyDots(props: { frequency: number }): any {
   const { frequency } = props
   return [

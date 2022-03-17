@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React from 'react'
+
 import { setUserLanguage } from '../../event'
 import { userLanguageStore } from '../../store'
 

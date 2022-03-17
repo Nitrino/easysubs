@@ -13,17 +13,6 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
-    "paths": {
-      "@hooks/*": ["hooks/*"],
-      "@hocs/*": ["hocs/*"],
-      "@assets/*": ["assets/*"],
-      "@utils/*": ["utils/*"],
-      "@learning-services/*": ["learning-services/*"],
-      "@components/*": ["components/*"],
-      "@services/*": ["services/*"],
-      "@store": ["store"],
-      "@event": ["event"],
-    },
   },
   "include": ["./src/**/*", "./global.d.ts"],
   "exclude": ["node_modules"]

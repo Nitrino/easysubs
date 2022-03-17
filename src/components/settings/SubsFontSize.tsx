@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React from 'react'
+
 import { setSubsFontSize } from '../../event'
 import { subsFontSizeStore } from '../../store'
 
