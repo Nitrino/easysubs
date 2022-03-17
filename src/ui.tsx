@@ -19,6 +19,9 @@ class UI {
     const playerContainerElement = document.querySelector(playerContainerElementSelector)
     const progressBarElement = document.createElement('div')
     progressBarElement.className = 'easysubs-progress-bar'
+    const prevProgressBarElement = document.querySelector('.easysubs-progress-bar')
+    if (prevProgressBarElement != null) return
+
     playerContainerElement?.appendChild(progressBarElement)
 
     ReactDOM.render(<ProgressBar />, document.querySelector('.easysubs-progress-bar'))
