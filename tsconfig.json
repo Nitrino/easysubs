@@ -18,8 +18,11 @@
       "@hocs/*": ["hocs/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
-      "@features/*": ["features/*"],
-      "@events/*": ["events/*"]
+      "@learning-services/*": ["learning-services/*"],
+      "@components/*": ["components/*"],
+      "@services/*": ["services/*"],
+      "@store": ["store"],
+      "@event": ["event"],
     },
   },
   "include": ["./src/**/*", "./global.d.ts"],

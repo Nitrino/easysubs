@@ -3,7 +3,7 @@ import { subTitleType } from 'subtitle'
 import { updateSubs } from './event'
 import { subsStore } from './store'
 import UI from './ui'
-import Utils from './utils'
+import { detectService } from './utils/detectService'
 
 Sentry.init({
   dsn: 'https://f0696dfa1f80424f9f0f628d8d1d7796@sentry.io/1849876',
@@ -15,7 +15,7 @@ window.addEventListener('unhandledrejection', (event) => {
 })
 
 try {
-  const service = Utils.detectService()
+  const service = detectService()
 
   if (service) {
     const handleEasysubsSubtitlesChanged = (event: CustomEvent) => {
@@ -25,7 +25,7 @@ try {
       UI.renderSubs(service.playerContainerSelector())
       UI.renderProgressBar(service.playerContainerSelector())
       UI.renderNotifications()
-      service.getSubs(event.detail).then((subs) => {
+      service.getSubs(event.detail).then((subs: subTitleType[]) => {
         updateSubs(subs)
       })
     }

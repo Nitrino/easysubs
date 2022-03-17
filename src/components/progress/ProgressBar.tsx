@@ -1,10 +1,11 @@
-import { useStore } from 'effector-react'
 import { ReactElement, useEffect, useState, useRef } from 'react'
-import { subsStore } from '../../store'
-
+import { useStore } from 'effector-react'
 import { subTitleType } from 'subtitle'
-import Utils from '../../utils'
-import Video from '../../video'
+
+import { subsStore } from '../../store'
+import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from '../../utils/keyboardHelpers'
+import { moveToTime, getCurrentTime } from '../../utils/videoHelpers'
+import { castSubTime } from '../../utils/castSubTime'
 
 const timePeriod = 30000
 
@@ -21,11 +22,11 @@ function ProgressBar() {
       return
     }
 
-    const time = Utils.getVideoCurrentTime(videoElement)
+    const time = getCurrentTime(videoElement)
     const leftBorder = time - timePeriod / 2
     const msInPx = timePeriod / progressBarElement.clientWidth
     const moveTime = leftBorder + event.nativeEvent.offsetX * msInPx
-    Video.moveToTime(videoElement, moveTime)
+    moveToTime(videoElement, moveTime)
   }
 
   useEffect(() => {
@@ -34,7 +35,7 @@ function ProgressBar() {
         return
       }
 
-      const time = Utils.getVideoCurrentTime(videoElement)
+      const time = getCurrentTime(videoElement)
       const leftBorder = time + timePeriod / 2
       const rightBorder = time - timePeriod / 2
       const msInPx = progressBarElement.clientWidth / timePeriod
@@ -46,8 +47,8 @@ function ProgressBar() {
 
       updateElements(
         subsInDuration.map((sub: subTitleType) => {
-          const subWidth = msInPx * (Utils.castSubTime(sub.end) - Utils.castSubTime(sub.start))
-          const x = msInPx * (Utils.castSubTime(sub.start) - rightBorder)
+          const subWidth = msInPx * (castSubTime(sub.end) - castSubTime(sub.start))
+          const x = msInPx * (castSubTime(sub.start) - rightBorder)
           return (
             <div
               className="easysubs-progress-bar-element"
@@ -66,11 +67,11 @@ function ProgressBar() {
     }
 
     animateRef.current = requestAnimationFrame(animate)
-    Utils.addKeyboardEventsListeners()
+    addKeyboardEventsListeners()
 
     return () => {
       animateRef.current && cancelAnimationFrame(animateRef.current)
-      Utils.removeKeyboardEventsListeners()
+      removeKeyboardEventsListeners()
       updateElements([])
     }
   }, [subs, progressBarElement, videoElement])

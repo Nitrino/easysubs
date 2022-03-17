@@ -1,12 +1,13 @@
-import { useStore } from 'effector-react'
 import { useEffect, useState, useLayoutEffect, ReactElement } from 'react'
+import { useStore } from 'effector-react'
+import Draggable from 'react-draggable'
+
 import { toggleShowFullSubTranslatePopup, toggleAutoPause } from '../../event'
 import { showFullSubTranslatePopupStore, subsStore, autoPauseStore, subsFontSizeStore } from '../../store'
-import Subs from '../../subs'
+import { getCurrentSubsTexts, getCleanSubText, subTextToChildNodesArray } from '../../utils/subsHelpers'
+import { clearWordContext } from '../../utils/clearWordContext'
 import Word from './Word'
 import SubComponent from './SubComponent'
-import Utils from '../../utils'
-import Draggable from 'react-draggable'
 
 function SubsComponent() {
   const subs = useStore(subsStore)
@@ -22,11 +23,11 @@ function SubsComponent() {
     }
 
     const handleTimeUpdate = (): void => {
-      const subsTextsVtt = Subs.getCurrentSubsTexts(videoElement, subs)
+      const subsTextsVtt = getCurrentSubsTexts(videoElement, subs)
       setCurrentSubs(
         subsTextsVtt.map((subTextVtt: string, index: number) => {
           const subWordsNodes = getSubWordsNodes(subTextVtt)
-          const cleanSubText = Subs.getCleanSubText(subTextVtt)
+          const cleanSubText = getCleanSubText(subTextVtt)
           return <SubComponent text={cleanSubText} words={subWordsNodes} key={index} />
         }),
       )
@@ -77,7 +78,7 @@ function SubsComponent() {
   }
 
   function getSubWordsNodes(subtitleText: string) {
-    return Subs.subTextToChildNodesArray(subtitleText)
+    return subTextToChildNodesArray(subtitleText)
       .map((node: any, nodeIndex: number) => {
         if (node.textContent.match(/[^ ]/g) == null) {
           return false
@@ -89,7 +90,7 @@ function SubsComponent() {
             <Word
               tagName={tagName}
               word={word}
-              context={Utils.clearWordContext(subtitleText, word)}
+              context={clearWordContext(subtitleText, word)}
               key={word + nodeIndex + wordIndex}
               keyName={word + nodeIndex + wordIndex}
             />

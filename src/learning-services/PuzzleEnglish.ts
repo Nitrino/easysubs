@@ -1,4 +1,4 @@
-class PuzzleEnglish {
+export class PuzzleEnglish {
   public color: string
 
   constructor() {
@@ -18,4 +18,3 @@ class PuzzleEnglish {
     })
   }
 }
-export default PuzzleEnglish

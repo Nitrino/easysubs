@@ -1,4 +1,4 @@
-import { googleTranslateFetcher } from './utils/google-translate-fetcher'
+import { googleTranslateFetcher } from './utils/googleTranslateFetcher'
 
 const requestInterceptor = (details: any) => {
   details.requestHeaders.push({ name: 'Sec-Fetch-Site', value: 'none' })

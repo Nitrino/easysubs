@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react'
 import { useEffect, useState, useRef } from 'react'
 import { userLanguageStore } from '../../store'
-import Utils from '../../utils'
+import { clearWord } from '../../utils/clearWord'
 import TranslateAlternatives from './TranslateAlternatives'
 
 interface Props {
@@ -29,7 +29,7 @@ function TranslateWordPopup(props: Props) {
       {
         contentScriptQuery: 'getSingleTranslation',
         lang: language,
-        text: Utils.clearWord(props.word),
+        text: clearWord(props.word),
       },
       (response) => {
         if (isUnmounted.current) return
@@ -38,7 +38,7 @@ function TranslateWordPopup(props: Props) {
         changeTranslation({
           alternatives: alternatives,
           main: main,
-          original: Utils.clearWord(props.word),
+          original: clearWord(props.word),
         })
       },
     )

@@ -1,4 +1,4 @@
-class Lingualeo {
+export class Lingualeo {
   public color: string
 
   constructor() {
@@ -28,5 +28,3 @@ class Lingualeo {
     })
   }
 }
-
-export default Lingualeo
