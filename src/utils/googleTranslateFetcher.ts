@@ -1,3 +1,4 @@
+import { string } from 'fp-ts'
 import { stringify } from 'querystring'
 
 export interface IWordTranslate {
@@ -17,12 +18,14 @@ class GoogleTranslateFetcher {
     this.#baseUrl = 'https://translate.google.com'
   }
 
+  // Get full text translation
   async getTextTranslation({ text, lang }: IRequest): Promise<string> {
     const resp = await this.get({ text, lang })
     const content = this.getResponseContent(resp)
     return this.getTextTranslate(content)
   }
 
+  // Get one word translation
   async getWordTranslation({ text, lang }: IRequest): Promise<IWordTranslate> {
     const resp = await this.get({ text, lang })
     const content = this.getResponseContent(resp)
@@ -60,7 +63,8 @@ class GoogleTranslateFetcher {
     return await resp.text()
   }
 
-  private extract(key: string, resp: any) {
+  // Extract passed parameter from google translate page
+  private extract(key: string, resp: string) {
     const re = new RegExp(`"${key}":".*?"`)
     const result = re.exec(resp)
     if (result !== null) {

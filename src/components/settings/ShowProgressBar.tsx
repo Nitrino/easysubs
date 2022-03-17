@@ -33,7 +33,6 @@ function ShowProgressBar() {
             name="check"
             value="check"
             defaultChecked={showProgressBar}
-            // tslint:disable-next-line: jsx-no-lambda
             onChange={() => changeShowState(!showProgressBar)}
           />
           <div className="toggle-inner">

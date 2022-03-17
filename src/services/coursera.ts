@@ -44,7 +44,7 @@ class Coursera implements Service {
       return playerInstance.currentTrack()?.language || ''
     }
 
-    const player: any = (document.querySelector('.video-js') as any).player
+    const player = (document.querySelector('.video-js') as any).player
     window.dispatchEvent(new CustomEvent('easysubsVideoReady'))
 
     player.on('loadeddata', () => {

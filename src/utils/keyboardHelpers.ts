@@ -1,8 +1,10 @@
+/**
+ * Helpers to control the extension from the keyboard
+ */
 import { enableState, subsStore } from '../store'
 import { moveToNextSub, moveToPrevSub } from './videoHelpers'
 
 const keyboardEvents = ['keyup', 'keydown', 'keypress']
-
 export const keyboardHandler = (event: KeyboardEvent) => {
   if (!enableState.getState()) return
 

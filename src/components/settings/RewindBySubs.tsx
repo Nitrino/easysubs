@@ -33,7 +33,6 @@ function RewindBySubs() {
             name="check"
             value="check"
             defaultChecked={rewindBySubs}
-            // tslint:disable-next-line: jsx-no-lambda
             onChange={() => changeShowState(!rewindBySubs)}
           />
           <div className="toggle-inner">

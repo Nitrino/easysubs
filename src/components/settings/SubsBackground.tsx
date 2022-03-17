@@ -33,7 +33,6 @@ function SubsBackground() {
             name="check"
             value="check"
             defaultChecked={showSubsBackground}
-            // tslint:disable-next-line: jsx-no-lambda
             onChange={() => changeShowState(!showSubsBackground)}
           />
           <div className="toggle-inner">

@@ -32,7 +32,7 @@ class Netflix implements Service {
   constructor() {
     this.subCache = {}
     this.processSubData = this.processSubData.bind(this)
-    window.addEventListener('easysubs_data', this.processSubData as EventListener)
+    window.addEventListener('easysubsData', this.processSubData as EventListener)
   }
 
   public init(): void {
@@ -46,6 +46,7 @@ class Netflix implements Service {
     }, 100)
   }
 
+  // Selector to find player container
   public async getSubs(language: string): Promise<subTitleType[]> {
     if (language === '') return parse('')
 
@@ -59,10 +60,12 @@ class Netflix implements Service {
     return parse(data)
   }
 
+  // Selector to insert estention settings menu
   public playerContainerSelector(): string {
     return '.watch-video--player-view'
   }
 
+  // Selector to insert estention settings menu
   public settingsSelector(): HTMLElement | string {
     return document.querySelector('[data-uia="control-fullscreen-enter"]')?.parentElement || ''
   }
@@ -71,19 +74,34 @@ class Netflix implements Service {
     return '#appMountPoint'
   }
 
+  // Injectes the script into the service page
+  private injectScript(): void {
+    const sc = document.createElement('script')
+    sc.innerHTML = `(${this.injection.toString()})()`
+    document.head.appendChild(sc)
+    document.head.removeChild(sc)
+  }
+
+  // A script that injectes into service page and can intercept events and add our logic
   private injection = (): void => {
     const parseMock = JSON.parse
     const stringifyMock = JSON.stringify
     const jsonMock = JSON
 
+    // Override the standard JSON.parse function.
+    // This is required to intercept subtitles from the server response.
     JSON.parse = function () {
       const data = parseMock.apply(this, arguments as any)
       if (data && data.result && data.result.timedtexttracks) {
-        window.dispatchEvent(new CustomEvent('easysubs_data', { detail: data.result }))
+        // Sends subtitles from the site page to the extension via a browser event
+        window.dispatchEvent(new CustomEvent('easysubsData', { detail: data.result }))
       }
       return data
     }
 
+    // Override the standard JSON.stringify function.
+    // This is required for the Netflix server to respond with subtitles in vtt format.
+    // Also here we request all available audio tracks and subtitles, regardless of the region
     JSON.stringify = function (response: typeof JSON.stringify) {
       if (!response) return jsonMock.stringify.apply(this, arguments as any)
       const data = parseMock(stringifyMock.apply(this, arguments as any))
@@ -101,6 +119,7 @@ class Netflix implements Service {
       return modified ? stringifyMock(data) : stringifyMock.apply(this, arguments as any)
     }
 
+    // We find the global variable of the Netflix player to subscribe to its events and control the player
     function getPlayer() {
       const videoPlayer = window.netflix.appContext.state.playerApp.getAPI().videoPlayer
       const sessionId = videoPlayer.getAllPlayerSessionIds()[0]
@@ -113,17 +132,20 @@ class Netflix implements Service {
 
     window.addEventListener('easysubsSeek', handleSeek as EventListener)
 
+    // Hack to wait for the player to load
     window.setInterval(() => {
       const player = getPlayer()
 
       if (player && document.querySelector('.watch-video--player-view')) {
         if (!window.isLoaded) {
           window.isLoaded = true
+          // We send a message to the extension that the player has loaded and is ready to play
           window.dispatchEvent(new CustomEvent('easysubsVideoReady'))
         }
 
         if (window.currentLanguage !== player.getTimedTextTrack().bcp47) {
           window.currentLanguage = player.getTimedTextTrack().bcp47
+          // When changing subtitles, we send an event to the extension
           window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: window.currentLanguage }))
         }
       } else {
@@ -133,11 +155,7 @@ class Netflix implements Service {
     }, 500)
   }
 
-  private randomProperty = (obj: Record<string, string>): string => {
-    const keys = Object.keys(obj)
-    return obj[keys[(keys.length * Math.random()) << 0]]
-  }
-
+  // Convert the response of the Netflix server to a convenient format and save it to the cache
   private processSubData(event: CustomEvent): void {
     if (!['EPISODE', 'MOVIE'].includes(event.detail.viewableType)) {
       return
@@ -158,16 +176,14 @@ class Netflix implements Service {
     }
   }
 
-  private injectScript(): void {
-    const sc = document.createElement('script')
-    sc.innerHTML = `(${this.injection.toString()})()`
-    document.head.appendChild(sc)
-    document.head.removeChild(sc)
-  }
-
   private getMoveId(): string {
     const videoIdElement: HTMLElement | null = document.querySelector('*[data-videoid]')
     return videoIdElement?.dataset?.videoid || ''
+  }
+
+  private randomProperty = (obj: Record<string, string>): string => {
+    const keys = Object.keys(obj)
+    return obj[keys[(keys.length * Math.random()) << 0]]
   }
 }
 

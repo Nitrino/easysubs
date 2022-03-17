@@ -4,6 +4,9 @@ import Netflix from '../services/netflix'
 import YouTube from '../services/youtube'
 import Coursera from '../services/coursera'
 
+/**
+ * Determines which service the user is using
+ */
 export const detectService = (): YouTube | Netflix | KinoPub | EnglishWithFun | Coursera | undefined => {
   const titleContent = document.querySelector('title')?.textContent
   if (titleContent?.includes('YouTube') || window.location.host === 'www.youtube.com') {

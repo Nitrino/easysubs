@@ -29,43 +29,45 @@ function ProgressBar() {
     moveToTime(videoElement, moveTime)
   }
 
+  // Updating the rendering state of the progress bar
+  const updateProgressBar = (): void => {
+    if (!videoElement || !progressBarElement) {
+      return
+    }
+
+    const time = getCurrentTime(videoElement)
+    const leftBorder = time + timePeriod / 2
+    const rightBorder = time - timePeriod / 2
+    const msInPx = progressBarElement.clientWidth / timePeriod
+
+    const subsInDuration = subs.filter(
+      (sub: subTitleType) =>
+        (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder),
+    )
+
+    updateElements(
+      subsInDuration.map((sub: subTitleType) => {
+        const subWidth = msInPx * (castSubTime(sub.end) - castSubTime(sub.start))
+        const x = msInPx * (castSubTime(sub.start) - rightBorder)
+        return (
+          <div
+            className="easysubs-progress-bar-element"
+            style={{ width: `${subWidth}px`, transform: `translateX(${x}px)` }}
+            key={`id${sub.start}-${sub.end}-${sub.text}`}
+          />
+        )
+      }),
+    )
+  }
+
+  const animate = (): void => {
+    if (subs.length === 0) return
+    updateProgressBar()
+    animateRef.current = requestAnimationFrame(animate)
+  }
+
+  // We use requestAnimationFrame for performance animation
   useEffect(() => {
-    const updateProgressBar = (): void => {
-      if (!videoElement || !progressBarElement) {
-        return
-      }
-
-      const time = getCurrentTime(videoElement)
-      const leftBorder = time + timePeriod / 2
-      const rightBorder = time - timePeriod / 2
-      const msInPx = progressBarElement.clientWidth / timePeriod
-
-      const subsInDuration = subs.filter(
-        (sub: subTitleType) =>
-          (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder),
-      )
-
-      updateElements(
-        subsInDuration.map((sub: subTitleType) => {
-          const subWidth = msInPx * (castSubTime(sub.end) - castSubTime(sub.start))
-          const x = msInPx * (castSubTime(sub.start) - rightBorder)
-          return (
-            <div
-              className="easysubs-progress-bar-element"
-              style={{ width: `${subWidth}px`, transform: `translateX(${x}px)` }}
-              key={`id${sub.start}-${sub.end}-${sub.text}`}
-            />
-          )
-        }),
-      )
-    }
-
-    const animate = (): void => {
-      if (subs.length === 0) return
-      updateProgressBar()
-      animateRef.current = requestAnimationFrame(animate)
-    }
-
     animateRef.current = requestAnimationFrame(animate)
     addKeyboardEventsListeners()
 

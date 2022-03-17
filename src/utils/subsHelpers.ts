@@ -1,3 +1,6 @@
+/**
+ * Helpers for working with subtitles
+ */
 import { subTitleType } from 'subtitle'
 
 import { getCurrentTime } from '../utils/videoHelpers'

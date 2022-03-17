@@ -10,6 +10,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(requestInterceptor, { urls: ['
   'blocking',
 ])
 
+// Handling side effects in the browser's background process
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.contentScriptQuery === 'translate') {
     googleTranslateFetcher

@@ -34,7 +34,6 @@ function Toggle() {
             name="check"
             value="check"
             defaultChecked={isEnable}
-            // tslint:disable-next-line: jsx-no-lambda
             onChange={() => changeEnableState(!isEnable)}
           />
           <div className="toggle-inner">

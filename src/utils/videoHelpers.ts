@@ -1,3 +1,6 @@
+/**
+ * Helpers for working with video
+ */
 import { subTitleType } from 'subtitle'
 
 import { getCurrentLastSub, getCurrentFirstSub, getPrevSub, getNextSub } from './subsHelpers'
