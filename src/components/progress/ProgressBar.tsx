@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState, useRef } from 'react'
 import { subsStore } from '../../store'
 
 import { subTitleType } from 'subtitle'
@@ -14,7 +14,7 @@ function ProgressBar() {
   const [videoElement] = useState(document.querySelector('video'))
   const [progressBarElement] = useState(document.querySelector('.easysubs-progress-bar'))
   const [elements, updateElements] = useState<ReactElement[]>([])
-  const animateRef = React.useRef<number>()
+  const animateRef = useRef<number>()
 
   function handleClick(event: any) {
     if (!videoElement || !progressBarElement) {

@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useState } from 'react'
+import { useState, useRef, createElement } from 'react'
 import { showFullSubTranslatePopupStore } from '../../store'
 
 import TranslateWordPopup from './TranslateWordPopup'
@@ -14,7 +14,7 @@ interface Props {
 function Word(props: Props) {
   const showFullSubTranslatePopup = useStore(showFullSubTranslatePopupStore)
   const [showTranslation, toggleShowTranslation] = useState(false)
-  const wordNode: any = React.useRef(null)
+  const wordNode: any = useRef(null)
 
   function showTranslatePopup() {
     if (!showFullSubTranslatePopup) {
@@ -28,7 +28,7 @@ function Word(props: Props) {
     toggleShowTranslation(false)
   }
 
-  return React.createElement(
+  return createElement(
     props.tagName,
     {
       className: 'easysubs-word',

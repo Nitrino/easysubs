@@ -12,12 +12,12 @@ class KinoPub implements Service {
     this.handleEasysubsChangePlaylist = this.handleEasysubsChangePlaylist.bind(this)
   }
 
-  public init() {
+  public init(): void {
     this.injectScript()
-    window.addEventListener('easysubsChangePlaylist', this.handleEasysubsChangePlaylist)
-    window.addEventListener('easysubsSubtitlesChanged', (event: any) => {
+    window.addEventListener('easysubsChangePlaylist', this.handleEasysubsChangePlaylist as EventListener)
+    window.addEventListener('easysubsSubtitlesChanged', ((event: CustomEvent) => {
       this.subsName = event.detail
-    })
+    }) as EventListener)
   }
 
   public async getSubs(label: string) {
@@ -84,7 +84,7 @@ class KinoPub implements Service {
     })
   }
 
-  private handleEasysubsChangePlaylist(event: any) {
+  private handleEasysubsChangePlaylist(event: CustomEvent) {
     this.videoPlaylistUrl = event.detail
     window.dispatchEvent(new CustomEvent('easysubsSubtitlesChanged', { detail: this.subsName }))
     window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))

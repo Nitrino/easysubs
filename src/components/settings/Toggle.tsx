@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { toggleEnableState } from '../../event'
 import { enableState } from '../../store'
 

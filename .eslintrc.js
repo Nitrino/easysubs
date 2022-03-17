@@ -33,13 +33,7 @@ module.exports = {
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
         '@typescript-eslint/no-unused-vars': ['error'],
-        '@typescript-eslint/explicit-function-return-type': [
-          'warn',
-          {
-            allowExpressions: true,
-            allowConciseArrowFunctionExpressionsStartingWithVoid: true,
-          },
-        ],
+        '@typescript-eslint/explicit-function-return-type': false,
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
       },
     },

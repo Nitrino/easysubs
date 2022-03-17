@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { updateSubs } from '../../event'
 import { subsStore } from '../../store'
 import { resync } from 'subtitle'

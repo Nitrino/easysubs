@@ -15,13 +15,11 @@ class Lingualeo {
       context_url: window.location.href,
       context_title: document.title,
     }
-    const params: any = { port: 1001 }
-    Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]))
 
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
         { contentScriptQuery: 'postFormDataRequest', url: url.toString(), data: data },
-        (response: any) => {
+        (response: { status: 'error' | 'success' }) => {
           response.status === 'error'
             ? reject(chrome.i18n.getMessage('lingualeoError'))
             : resolve(chrome.i18n.getMessage('wordAddedToLinguaLeo'))

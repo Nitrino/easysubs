@@ -18,7 +18,8 @@
       "@hocs/*": ["hocs/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
-      "@features/*": ["features/*"]
+      "@features/*": ["features/*"],
+      "@events/*": ["events/*"]
     },
   },
   "include": ["./src/**/*", "./global.d.ts"],

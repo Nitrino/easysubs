@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useEffect, useState, useLayoutEffect, ReactElement } from 'react'
+import { useEffect, useState, useLayoutEffect, ReactElement } from 'react'
 import { toggleShowFullSubTranslatePopup, toggleAutoPause } from '../../event'
 import { showFullSubTranslatePopupStore, subsStore, autoPauseStore, subsFontSizeStore } from '../../store'
 import Subs from '../../subs'

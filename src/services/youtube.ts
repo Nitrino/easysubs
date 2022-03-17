@@ -2,12 +2,16 @@ import Service from './service'
 import { parse, subTitleType } from 'subtitle'
 
 class YouTube implements Service {
-  private subCache: any
+  private subCache: {
+    [moveId: string]: {
+      [lang: string]: string
+    }
+  }
 
   constructor() {
     this.subCache = {}
     this.processSubData = this.processSubData.bind(this)
-    window.addEventListener('easysubs_data', this.processSubData)
+    window.addEventListener('easysubs_data', this.processSubData as EventListener)
   }
 
   public init(): void {
@@ -49,9 +53,13 @@ class YouTube implements Service {
     return ''
   }
 
-  private injection = () => {
+  private injection = (): void => {
     window.setInterval(() => {
-      const player: any = document.getElementById('movie_player')
+      type TPlayer = HTMLElement & {
+        toggleSubtitles: () => void
+      }
+
+      const player: TPlayer | null = document.getElementById('movie_player') as TPlayer | null
       const subsToggleElement = document.querySelector('.ytp-subtitles-button')
 
       if (player) {
@@ -94,7 +102,7 @@ class YouTube implements Service {
     })(XMLHttpRequest.prototype.open)
   }
 
-  private processSubData(event: any): void {
+  private processSubData(event: CustomEvent): void {
     const urlObject = new URL(event.detail)
     const lang = urlObject.searchParams.get('tlang') || urlObject.searchParams.get('lang') || ''
     const videoId = urlObject.searchParams.get('v') || ''

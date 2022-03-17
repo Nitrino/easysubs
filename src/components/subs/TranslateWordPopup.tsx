@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { userLanguageStore } from '../../store'
 import Utils from '../../utils'
 import TranslateAlternatives from './TranslateAlternatives'

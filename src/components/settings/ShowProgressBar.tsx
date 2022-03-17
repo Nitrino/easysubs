@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { toggleShowProgressBarState } from '../../event'
 import { showProgressBarState } from '../../store'
 

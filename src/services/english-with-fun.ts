@@ -9,9 +9,9 @@ class EnglishWithFun implements Service {
   }
 
   public init() {
-    window.addEventListener('easysubsChangePlaylist', (event: any) => {
+    window.addEventListener('easysubsChangePlaylist', ((event: CustomEvent) => {
       this.subUrl = event.detail
-    })
+    }) as EventListener)
     this.injectScript()
   }
 

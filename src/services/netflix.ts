@@ -1,5 +1,5 @@
 import Service from './service'
-import { parse } from 'subtitle'
+import { parse, subTitleType } from 'subtitle'
 
 const WEBVTT = 'webvtt-lssdh-ios8'
 const SUB_TYPES = {
@@ -7,7 +7,7 @@ const SUB_TYPES = {
   subtitles: '',
 }
 
-interface Track {
+type TTrack = {
   isNoneTrack: boolean
   isForcedNarrative: boolean
   language: string
@@ -23,15 +23,19 @@ interface Track {
 }
 
 class Netflix implements Service {
-  private subCache: any
+  private subCache: {
+    [moveId: string]: {
+      [lang: string]: string
+    }
+  }
 
   constructor() {
     this.subCache = {}
     this.processSubData = this.processSubData.bind(this)
-    window.addEventListener('easysubs_data', this.processSubData)
+    window.addEventListener('easysubs_data', this.processSubData as EventListener)
   }
 
-  public init() {
+  public init(): void {
     this.injectScript()
     setInterval(() => {
       const videoControlContainer = document.querySelector('.watch-video--bottom-controls-container')
@@ -42,7 +46,7 @@ class Netflix implements Service {
     }, 100)
   }
 
-  public async getSubs(language: string) {
+  public async getSubs(language: string): Promise<subTitleType[]> {
     if (language === '') return parse('')
 
     const ccLanguage = language + SUB_TYPES.closedcaptions
@@ -67,9 +71,10 @@ class Netflix implements Service {
     return '#appMountPoint'
   }
 
-  private injection = () => {
+  private injection = (): void => {
     const parseMock = JSON.parse
     const stringifyMock = JSON.stringify
+    const jsonMock = JSON
 
     JSON.parse = function () {
       const data = parseMock.apply(this, arguments as any)
@@ -79,8 +84,8 @@ class Netflix implements Service {
       return data
     }
 
-    JSON.stringify = function (response: any) {
-      if (!response) return stringifyMock.apply(this, arguments as any)
+    JSON.stringify = function (response: typeof JSON.stringify) {
+      if (!response) return jsonMock.stringify.apply(this, arguments as any)
       const data = parseMock(stringifyMock.apply(this, arguments as any))
 
       let modified = false
@@ -102,11 +107,11 @@ class Netflix implements Service {
       return videoPlayer.getVideoPlayerBySessionId(sessionId)
     }
 
-    function handleSeek(event: any) {
+    function handleSeek(event: CustomEvent) {
       getPlayer().seek(event.detail)
     }
 
-    window.addEventListener('easysubsSeek', handleSeek)
+    window.addEventListener('easysubsSeek', handleSeek as EventListener)
 
     window.setInterval(() => {
       const player = getPlayer()
@@ -123,24 +128,23 @@ class Netflix implements Service {
         }
       } else {
         window.isLoaded = false
-        window.currentLanguage = null
+        window.currentLanguage = ''
       }
     }, 500)
   }
 
-  private randomProperty = (obj: any) => {
+  private randomProperty = (obj: Record<string, string>): string => {
     const keys = Object.keys(obj)
-    // tslint:disable-next-line: no-bitwise
     return obj[keys[(keys.length * Math.random()) << 0]]
   }
 
-  private processSubData(event: any) {
+  private processSubData(event: CustomEvent): void {
     if (!['EPISODE', 'MOVIE'].includes(event.detail.viewableType)) {
       return
     }
 
     this.subCache[event.detail.movieId] = {}
-    const tracks: Track[] = event.detail.timedtexttracks
+    const tracks: TTrack[] = event.detail.timedtexttracks
 
     for (const track of tracks) {
       if (track.isNoneTrack) {
@@ -154,15 +158,16 @@ class Netflix implements Service {
     }
   }
 
-  private injectScript() {
+  private injectScript(): void {
     const sc = document.createElement('script')
     sc.innerHTML = `(${this.injection.toString()})()`
     document.head.appendChild(sc)
     document.head.removeChild(sc)
   }
 
-  private getMoveId() {
-    return (document.querySelector('*[data-videoid]') as HTMLElement)?.dataset?.videoid || ''
+  private getMoveId(): string {
+    const videoIdElement: HTMLElement | null = document.querySelector('*[data-videoid]')
+    return videoIdElement?.dataset?.videoid || ''
   }
 }
 
