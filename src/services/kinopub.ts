@@ -24,6 +24,7 @@ class KinoPub implements Service {
     if (!label) return parse('')
     if (!this.videoPlaylistUrl) return parse('')
 
+    const cdnHostName = new URL(this.videoPlaylistUrl)?.hostname ?? 'cdn-azure.net';
     const resp = await fetch(this.videoPlaylistUrl)
     const data = await resp.text()
     const parser = new Parser()
@@ -31,7 +32,7 @@ class KinoPub implements Service {
     parser.end()
     const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub
 
-    const uri = `https://cdn-azure.net${subsSegments[label].uri}`
+    const uri = `https://${cdnHostName}${subsSegments[label].uri}`
     const subsSegmentsResp = await fetch(uri)
     const subsSegmentsData = await subsSegmentsResp.text()
 
@@ -39,7 +40,7 @@ class KinoPub implements Service {
     subsSegmentsParser.push(subsSegmentsData)
     subsSegmentsParser.end()
     const subPath = subsSegmentsParser.manifest.segments[0].uri.match(/.*\/hls\/(.*)\/seg.*/)?.[1]
-    const subUri = `https://cdn-azure.net/pd/${subPath}`
+    const subUri = `https://${cdnHostName}/pd/${subPath}`
 
     const subsResp = await fetch(subUri)
     const subsData = await subsResp.text()
