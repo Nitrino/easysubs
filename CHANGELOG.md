@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.5.7 (25.05.2022)
+### Bugs
+
+- Fix kinopub cdn
+
 ## v1.5.6 (11.09.2021)
 
 ### Enhancements
