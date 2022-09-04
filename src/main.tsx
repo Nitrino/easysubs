@@ -2,18 +2,20 @@
 import { render } from 'solid-js/web'
 import { Captions } from 'subtitle'
 
-import { $streaming, fetchCurrentService } from '@/models/subs'
+import { esRenderSetings, esSubsChanged, fetchServiceSubsFx } from '@/models/subs'
+import { $streaming, fetchCurrentStreamingFx } from '@/models/streamings'
+
 import Subs from './Subs'
 import './models/init'
 
-fetchCurrentService()
+fetchCurrentStreamingFx()
 
 $streaming.watch((streaming) => {
   if (streaming == null) {
     return
   }
 
-  const handleRenderSettings = () => {
+  esRenderSetings.watch(() => {
     const buttonContainer = streaming.getSettingsButtonContainer()
     const contentContainer = streaming.getSettingsContentContainer()
     document.querySelectorAll('.easysubs-settings').forEach((e) => e.remove())
@@ -27,22 +29,21 @@ $streaming.watch((streaming) => {
       () => <Subs contentContainer={contentContainer} />,
       document.querySelector('.easysubs-settings') as HTMLElement,
     )
-  }
+  })
 
-  const handleSubsChanged = (event: CustomEvent) => {
-    console.log('Event:', 'easysubsSubsChanged')
-    console.log('Language:', event.detail)
+  esSubsChanged.watch((language) => {
+    console.log('Event:', 'esSubsChanged')
+    console.log('Language:', language)
 
     // UI.renderSubs(service.playerContainerSelector())
     // UI.renderProgressBar(service.playerContainerSelector())
     // UI.renderNotifications()
-    streaming.getSubs(event.detail).then((subs: Captions) => {
-      console.log('Subs:', subs)
-    })
-  }
 
-  window.addEventListener('easysubsRenderSettings', handleRenderSettings)
-  window.addEventListener('easysubsSubsChanged', handleSubsChanged as EventListener)
+    fetchServiceSubsFx(language)
+    // streaming.getSubs(language).then((subs: Captions) => {
+    //   console.log('Subs:', subs)
+    // })
+  })
 
   streaming.init()
 })

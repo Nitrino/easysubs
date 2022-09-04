@@ -10,15 +10,14 @@ class KinoPub implements Service {
   private subsName: string | undefined
 
   constructor() {
-    this.handleEasysubsPlaylistChanged = this.handleEasysubsPlaylistChanged.bind(this)
+    this.handleKinopubFirstFrame = this.handleKinopubFirstFrame.bind(this)
+    this.handleKinopubCaptionsChanged = this.handleKinopubCaptionsChanged.bind(this)
   }
 
   public init(): void {
     this.injectScript()
-    window.addEventListener('easysubsPlaylistChanged', this.handleEasysubsPlaylistChanged as EventListener)
-    window.addEventListener('easysubsSubsChanged', ((event: CustomEvent) => {
-      this.subsName = event.detail
-    }) as EventListener)
+    window.addEventListener('kinopubFirstFrame', this.handleKinopubFirstFrame as EventListener)
+    window.addEventListener('kinopubCaptionsChanged', this.handleKinopubCaptionsChanged as EventListener)
   }
 
   public async getSubs(label: string) {
@@ -76,16 +75,20 @@ class KinoPub implements Service {
     document.head.prepend(script)
   }
 
-  private handleEasysubsPlaylistChanged(event: CustomEvent) {
-    console.log('easysubsPlaylistChanged', event.detail)
-
+  private handleKinopubFirstFrame(event: CustomEvent) {
     this.videoPlaylistUrl = event.detail
     if (this.subsName) {
       esSubsChanged(this.subsName)
     }
     esRenderSetings()
-    window.dispatchEvent(new CustomEvent('easysubsSubsChanged', { detail: this.subsName }))
-    window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
+  }
+
+  private handleKinopubCaptionsChanged(event: CustomEvent) {
+    this.subsName = event.detail
+    if (this.subsName) {
+      esSubsChanged(this.subsName)
+    }
+    esRenderSetings()
   }
 }
 

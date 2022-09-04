@@ -1,7 +1,6 @@
-import { updateSubsEvent, $subs, fetchCurrentService, $streaming } from './'
-import { getCurrentService } from '@/utils/getCurrentService'
+import { $subs, fetchSubsFx } from './'
 
-$subs.on(updateSubsEvent, (_, subs) => subs)
+$subs.on(fetchSubsFx.doneData, (_, subs) => subs)
+fetchSubsFx.use(async ({ language, streaming }) => streaming!.getSubs(language))
 
-fetchCurrentService.use(() => getCurrentService())
-$streaming.on(fetchCurrentService.doneData, (_, streaming) => streaming)
+$subs.watch((subs) => console.log('SUBS ', subs))
