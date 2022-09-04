@@ -3,7 +3,10 @@ import type { Component } from 'solid-js'
 import logo from './logo.svg'
 import styles from './App.module.css'
 
-const App: Component = () => {
+interface SubsProps {
+  contentContainer: HTMLElement | null
+}
+const Subs: Component<SubsProps> = (props) => {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
@@ -19,4 +22,4 @@ const App: Component = () => {
   )
 }
 
-export default App
+export default Subs

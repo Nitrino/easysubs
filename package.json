@@ -10,11 +10,34 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@crxjs/vite-plugin": "^1.0.14",
+    "@types/chrome": "^0.0.195",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-solid": "^0.7.1",
+    "prettier": "^2.7.1",
+    "rollup": "^2.78.1",
     "typescript": "^4.8.2",
-    "vite": "^3.0.9",
-    "vite-plugin-solid": "^2.3.0"
+    "vite": "^2.9.15",
+    "vite-plugin-solid": "2.2.5",
+    "vite-tsconfig-paths": "^3.5.0"
   },
   "dependencies": {
-    "solid-js": "^1.5.1"
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+    "buffer": "^6.0.3",
+    "effector": "^22.3.0",
+    "effector-solid": "^0.22.2",
+    "events": "^3.3.0",
+    "m3u8-parser": "^5.0.0",
+    "solid-js": "^1.5.1",
+    "stream-browserify": "^3.0.0",
+    "subtitle": "3.0.0"
   }
 }
