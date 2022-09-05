@@ -1,5 +1,6 @@
 import KinoPub from '@/streamings/kinopub'
 import Service from '@/streamings/service'
+import ServiceStub from '@/streamings/ServiceStub'
 
 export const getCurrentService = (): Service | null => {
   const titleContent = document.querySelector('title')?.textContent
@@ -24,5 +25,5 @@ export const getCurrentService = (): Service | null => {
   //   return 'coursera'
   // }
 
-  return null
+  return new ServiceStub()
 }

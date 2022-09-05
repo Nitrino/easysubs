@@ -1,7 +1,7 @@
 import { createStore, createEffect } from 'effector'
-import Service from '@/streamings/service'
+import type Service from '@/streamings/service'
+import ServiceStub from '@/streamings/ServiceStub'
 
-export type TStreaming = Service | null
-export const $streaming = createStore<TStreaming>(null)
+export const $streaming = createStore<Service>(new ServiceStub())
 
-export const fetchCurrentStreamingFx = createEffect<void, TStreaming>()
+export const fetchCurrentStreamingFx = createEffect<void, Service>()
