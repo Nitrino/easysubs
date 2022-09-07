@@ -2,7 +2,7 @@ import KinoPub from '@/streamings/kinopub'
 import Service from '@/streamings/service'
 import ServiceStub from '@/streamings/ServiceStub'
 
-export const getCurrentService = (): Service | null => {
+export const getCurrentService = (): Service => {
   const titleContent = document.querySelector('title')?.textContent
   // if (titleContent?.includes('YouTube') || window.location.host === 'www.youtube.com') {
   //   document.querySelector('html')?.setAttribute('id', 'youtube')
