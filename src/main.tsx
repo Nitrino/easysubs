@@ -1,14 +1,17 @@
 /* @refresh reload */
 import { render } from 'solid-js/web'
-import { Captions } from 'subtitle'
 
 import { esRenderSetings, esSubsChanged, fetchServiceSubsFx } from '@/models/subs'
 import { $streaming, fetchCurrentStreamingFx } from '@/models/streamings'
+import { $video, getCurrentVideoFx, videoTimeUpdate } from '@/models/videos'
 
-import Subs from './Subs'
+import { Subs } from './components/Subs'
+import { Settings } from './components/Settings'
 import './models/init'
+import './main.css'
 
 fetchCurrentStreamingFx()
+const handleTimeUpdate = () => videoTimeUpdate()
 
 $streaming.watch((streaming) => {
   if (streaming == null) {
@@ -16,33 +19,35 @@ $streaming.watch((streaming) => {
   }
 
   esRenderSetings.watch(() => {
+    document.querySelectorAll('.es-settings').forEach((e) => e.remove())
     const buttonContainer = streaming.getSettingsButtonContainer()
     const contentContainer = streaming.getSettingsContentContainer()
-    document.querySelectorAll('.easysubs-settings').forEach((e) => e.remove())
 
     const parentNode = buttonContainer?.parentNode
     const settingNode = document.createElement('div')
-    settingNode.className = 'easysubs-settings'
+    settingNode.className = 'es-settings'
     parentNode?.insertBefore(settingNode, buttonContainer)
 
-    render(
-      () => <Subs contentContainer={contentContainer} />,
-      document.querySelector('.easysubs-settings') as HTMLElement,
-    )
+    getCurrentVideoFx()
+    $video.watch((video) => {
+      video?.removeEventListener('timeupdate', handleTimeUpdate)
+      video?.addEventListener('timeupdate', handleTimeUpdate)
+    })
+    render(() => <Settings contentContainer={contentContainer} />, settingNode)
   })
 
   esSubsChanged.watch((language) => {
+    fetchServiceSubsFx(language)
     console.log('Event:', 'esSubsChanged')
     console.log('Language:', language)
 
-    // UI.renderSubs(service.playerContainerSelector())
-    // UI.renderProgressBar(service.playerContainerSelector())
-    // UI.renderNotifications()
+    document.querySelectorAll('#es').forEach((e) => e.remove())
+    const subsContainer = streaming.getSubsContainer()
+    const subsNode = document.createElement('div')
+    subsNode.id = 'es'
+    subsContainer?.appendChild(subsNode)
 
-    fetchServiceSubsFx(language)
-    // streaming.getSubs(language).then((subs: Captions) => {
-    //   console.log('Subs:', subs)
-    // })
+    render(() => <Subs />, subsNode)
   })
 
   streaming.init()
