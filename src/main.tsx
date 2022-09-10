@@ -11,7 +11,10 @@ import './models/init'
 import './main.css'
 
 fetchCurrentStreamingFx()
-const handleTimeUpdate = () => videoTimeUpdate()
+
+const handleTimeUpdate = (event: VideoEvent) => {
+  videoTimeUpdate(event.target.currentTime * 1000)
+}
 
 $streaming.watch((streaming) => {
   if (streaming == null) {
