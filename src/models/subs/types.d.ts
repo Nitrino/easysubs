@@ -1,5 +1,6 @@
 export type TSubItem = {
   text: string
+  cleanedText: string
   tag: 'span' | 'b' | 'i' | 'u'
   type: 'word' | 'phrasal-verb' | 'punctuation'
 }

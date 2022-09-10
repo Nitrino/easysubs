@@ -1,15 +1,49 @@
-import { Component, For } from 'solid-js'
+import { Component, For, createSignal, Show, onMount } from 'solid-js'
 import { useUnit } from 'effector-solid'
 
 import { $currentSubs } from '@/models/subs'
 import { TSub, TSubItem } from '@/models/subs/types'
+import { googleTranslateFetcher, TWordTranslate } from '@/utils/googleTranslateFetcher'
+
+const SubItemTranslation: Component<{ text: string }> = (props) => {
+  const [translation, setTranslation] = createSignal<TWordTranslate | null>()
+  onMount(() => {
+    chrome.runtime.sendMessage(
+      {
+        type: 'translateWord',
+        lang: 'ru',
+        text: props.text,
+      },
+      (response: TWordTranslate) => {
+        setTranslation(response)
+      },
+    )
+  })
+
+  return (
+    <Show when={translation() !== null && translation() !== undefined}>
+      <div class="es-sub-item-translation">{translation()!.main}</div>
+    </Show>
+  )
+}
 
 const SubItem: Component<{ subItem: TSubItem }> = (props) => {
+  const [showTranslation, setShowTranslation] = createSignal(false)
   return (
     <>
-      {/* eslint-disable-next-line solid/no-innerhtml */}
-      <pre innerHTML={props.subItem.text} classList={{ [props.subItem.tag]: true, 'es-sub-item': true }} />
-      <pre classList={{ spaces: true, 'es-sub-item': true }}> </pre>
+      <span class="es-sub-item">
+        <pre
+          // eslint-disable-next-line solid/no-innerhtml
+          innerHTML={props.subItem.text}
+          class={props.subItem.tag}
+          onMouseEnter={() => setShowTranslation(true)}
+          onMouseLeave={() => setShowTranslation(false)}
+        />
+        <Show when={showTranslation()}>
+          <SubItemTranslation text={props.subItem.cleanedText} />
+        </Show>
+      </span>
+      <pre class="es-sub-item-space"> </pre>
     </>
   )
 }

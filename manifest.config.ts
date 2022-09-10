@@ -29,6 +29,7 @@ export default defineManifest(async (env) => ({
       matches: ['<all_urls>'],
     },
   ],
+  host_permissions: ['https://translate.google.com/*'],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",
   },

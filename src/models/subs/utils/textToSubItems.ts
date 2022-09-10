@@ -1,11 +1,7 @@
 import { TSubItem } from '@/models/subs/types'
 
-const cleanWord = (word: string) => {
-  return word
-    .replace(/<\d+:\d+:\d+.\d+><c>/g, '')
-    .replace(/<\/c>/g, '')
-    .replace(/(\r\n|\n|\r)/gm, ' ')
-}
+const cleanWord = (word: string) => word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>{}[\]\\/]/gi, '')
+
 export const textToSubItems = (text: string): TSubItem[] => {
   const words = text
     .replace(/(<\d+:\d+:\d+.\d+>)?<[/]?[c].*?>/g, '')

@@ -29,6 +29,48 @@
 
   .es-sub-item {
     display: inline;
+    position: relative;
+
+    pre {
+      display: inline;
+    }
+
+    &:hover {
+      color: #3a88a2;
+      cursor: pointer;
+    }
+  }
+  .es-sub-item-space {
+    display: inline;
+  }
+
+  .es-sub-item-translation {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate3d(-50%, -100%, 0);
+    padding: 10px 25px;
+    background-color: #1e1e1e;
+    border-radius: 0.4em;
+    font-size: 16px;
+    max-width: fit-content;
+    font-style: normal;
+    white-space: normal;
+    box-sizing: content-box;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-top-color: #1e1e1e;
+      border-bottom: 0;
+      margin-left: -10px;
+      margin-bottom: -10px;
+    }
   }
 }
 
