@@ -1,0 +1,47 @@
+#es {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: white;
+
+  pre {
+    background-color: transparent;
+    font: inherit;
+  }
+
+  .i {
+    font-style: italic;
+  }
+  .b {
+    font-weight: bold;
+  }
+  .u {
+    text-decoration: underline;
+  }
+
+  .es-sub {
+    text-align: center;
+    line-height: 1.25;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0 10px;
+  }
+
+  .es-sub-item {
+    display: inline;
+  }
+}
+
+.es-kinopub {
+  .jw-captions.jw-captions-enabled {
+    display: none;
+  }
+
+  #es {
+    bottom: 130px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}

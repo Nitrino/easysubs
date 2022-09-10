@@ -1,15 +1,16 @@
-export type SubItem = {
+export type TSubItem = {
   text: string
-  tag: 'span' | 'b' | 'i' | 'u' | 's'
+  tag: 'span' | 'b' | 'i' | 'u'
   type: 'word' | 'phrasal-verb' | 'punctuation'
 }
 
-export type Sub = {
+export type TSub = {
+  id: number
   start: number
   end: number
   text: string
   cleanedText: string
-  items: SubItem[]
+  items: TSubItem[]
 }
 
-export type Subs = Sub[]
+export type TSubs = TSub[]

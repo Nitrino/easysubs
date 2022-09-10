@@ -8,7 +8,7 @@ import { $video, getCurrentVideoFx, videoTimeUpdate } from '@/models/videos'
 import { Subs } from './components/Subs'
 import { Settings } from './components/Settings'
 import './models/init'
-import './main.css'
+import './main.scss'
 
 fetchCurrentStreamingFx()
 
@@ -17,6 +17,7 @@ const handleTimeUpdate = (event: VideoEvent) => {
 }
 
 $streaming.watch((streaming) => {
+  document.querySelector('html')?.classList.add('es-' + streaming.constructor.name.toLowerCase())
   if (streaming == null) {
     return
   }
@@ -33,8 +34,8 @@ $streaming.watch((streaming) => {
 
     getCurrentVideoFx()
     $video.watch((video) => {
-      video?.removeEventListener('timeupdate', handleTimeUpdate)
-      video?.addEventListener('timeupdate', handleTimeUpdate)
+      video?.removeEventListener('timeupdate', handleTimeUpdate as EventListener)
+      video?.addEventListener('timeupdate', handleTimeUpdate as EventListener)
     })
     render(() => <Settings contentContainer={contentContainer} />, settingNode)
   })
