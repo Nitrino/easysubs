@@ -3,21 +3,14 @@ import { useUnit } from 'effector-solid'
 
 import { $currentSubs } from '@/models/subs'
 import { TSub, TSubItem } from '@/models/subs/types'
-import { googleTranslateFetcher, TWordTranslate } from '@/utils/googleTranslateFetcher'
+import { getWordTranslationFx } from '@/models/translations'
+import { TWordTranslate } from '@/utils/googleTranslateFetcher'
 
 const SubItemTranslation: Component<{ text: string }> = (props) => {
   const [translation, setTranslation] = createSignal<TWordTranslate | null>()
-  onMount(() => {
-    chrome.runtime.sendMessage(
-      {
-        type: 'translateWord',
-        lang: 'ru',
-        text: props.text,
-      },
-      (response: TWordTranslate) => {
-        setTranslation(response)
-      },
-    )
+  onMount(async () => {
+    const data = await getWordTranslationFx({ text: props.text, lang: 'ru' })
+    setTranslation(data)
   })
 
   return (

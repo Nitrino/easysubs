@@ -1,6 +1,8 @@
 import { stringify } from 'querystring'
 
 export type TWordTranslate = {
+  original: string
+  lang: string
   main: string
   alternatives: []
 }
@@ -28,7 +30,7 @@ class GoogleTranslateFetcher {
   async getWordTranslation({ text, lang }: TRequest): Promise<TWordTranslate> {
     const resp = await this.get({ text, lang })
     const content = this.getResponseContent(resp)
-    return this.getWordTranslate(content)
+    return this.getWordTranslate(content, text, lang)
   }
 
   async get({ text, lang }: TRequest): Promise<string> {
@@ -76,14 +78,18 @@ class GoogleTranslateFetcher {
     return content[1][0][0][5].map((translate: any) => translate[0]).join(' ')
   }
 
-  private getWordTranslate(content: any): TWordTranslate {
+  private getWordTranslate(content: any, original: string, lang: string): TWordTranslate {
     try {
       return {
+        original: original,
+        lang: lang,
         main: content[1][0][0][5][0][0],
         alternatives: content[3][5][0],
       }
     } catch {
       return {
+        original: original,
+        lang: lang,
         main: this.getTextTranslate(content),
         alternatives: [],
       }
