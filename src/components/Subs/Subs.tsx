@@ -4,24 +4,26 @@ import { useUnit } from 'effector-solid'
 import { $currentSubs } from '@/models/subs'
 import { $video } from '@/models/videos'
 import { TSub, TSubItem } from '@/models/subs/types'
-import { getWordTranslationFx } from '@/models/translations'
-import { TWordTranslate } from '@/utils/googleTranslateFetcher'
+import { getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
+import { TTranslation } from '@/models/translations/types'
 
 const SubItemTranslation: Component<{ text: string }> = (props) => {
-  const [translation, setTranslation] = createSignal<TWordTranslate | null>()
+  const [quickTranslations, setQuickTranslations] = createSignal<string[]>()
   onMount(async () => {
-    const data = await getWordTranslationFx({ text: props.text, lang: 'ru' })
-    setTranslation(data)
+    const data = await getWordQuickTranslationFx({ text: props.text, lang: 'ru' })
+    setQuickTranslations(data)
   })
 
   return (
-    <Show when={translation() !== null && translation() !== undefined}>
-      <div class="es-sub-item-translation">{translation()!.main}</div>
-    </Show>
+    <div class="es-sub-item-translation">
+      <For each={quickTranslations()}>
+        {(quickTranslation) => <div class="es-sub-item-translation-item">{quickTranslation}</div>}
+      </For>
+    </div>
   )
 }
 const SubDescription: Component<{ text: string }> = (props) => {
-  const [translation, setTranslation] = createSignal<TWordTranslate | null>()
+  const [translation, setTranslation] = createSignal<TTranslation | null>()
   onMount(async () => {
     const data = await getWordTranslationFx({ text: props.text, lang: 'ru' })
     setTranslation(data)

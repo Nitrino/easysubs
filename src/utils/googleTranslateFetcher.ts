@@ -33,6 +33,12 @@ class GoogleTranslateFetcher {
     return this.getWordTranslate(content, text, lang)
   }
 
+  // Get one word full translation
+  async getWordFullTranslation({ text, lang }: TRequest): Promise<unknown> {
+    const resp = await this.get({ text, lang })
+    return this.getResponseContent(resp)
+  }
+
   async get({ text, lang }: TRequest): Promise<string> {
     const googleTranslatePageResp = await fetch(this.#baseUrl)
     const googleTranslatePageText = await googleTranslatePageResp.text()

@@ -45,6 +45,7 @@
   }
 
   .es-sub-item-translation {
+    text-align: left;
     position: absolute;
     top: -8px;
     left: 50%;
@@ -71,6 +72,10 @@
       margin-left: -10px;
       margin-bottom: -10px;
     }
+  }
+
+  .es-sub-item-translation-item {
+    white-space: nowrap;
   }
 }
 

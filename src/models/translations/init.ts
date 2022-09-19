@@ -1,69 +1,67 @@
-import { $wordTranslations, fetchWordTranslationFx } from './'
-import { TWordTranslate } from '@/utils/googleTranslateFetcher'
+import { $wordTranslations, fetchWordQuickTranslationFx, saveTranslationFx, addTranslationFx } from './'
+import { TTranslation } from './types'
 import translations from './api'
 
-$wordTranslations.on(fetchWordTranslationFx.doneData, (state, translation) => {
-  const existTranslation = findTranslationInStore(state, translation.original, translation.lang)
-  if (existTranslation == undefined) {
-    state = [...state, translation]
-  }
-  return state
-})
+// $wordTranslations.on(saveTranslationFx.doneData, (state, translation) => {
+//   const existTranslation = findTranslationInStore(state, translation.source, translation.target_lang)
+//   if (existTranslation == undefined) {
+//     state = [...state, translation]
+//   }
+//   return state
+// })
 
-fetchWordTranslationFx.use(async ({ text, lang, wordTranslations }) => {
+$wordTranslations.on(saveTranslationFx.doneData, (state, translation) => [...state, translation])
+$wordTranslations.on(addTranslationFx.doneData, (state, translation) => [...state, translation])
+
+fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
+  // Try to find translation in store
   const translation = findTranslationInStore(wordTranslations, text, lang)
   if (translation) {
-    return translation
+    return translation.quick_translations
   }
 
+  // Try to find translation on server
   const translationFromServer = await findTranslationOnServer(text, 'en', lang)
   if (translationFromServer) {
-    return translationFromServer
+    addTranslationFx(translationFromServer)
+    return translationFromServer.quick_translations
   }
 
-  const response = (await chrome.runtime.sendMessage({
-    type: 'translateWord',
+  // Try to fetch translation from google
+  const gooogleResponse = await chrome.runtime.sendMessage({
+    type: 'translateWordFull',
     lang: lang,
     text: text,
-  })) as TWordTranslate
+  })
 
-  // TODO: use subcription on Effect getting google translation data
-  storeTranslationOnServer(text, 'en', lang, response)
-
-  return response
+  if (gooogleResponse) {
+    const data = gooogleResponse[1][0][0][5][0][4] as string[]
+    saveTranslationFx({
+      source: text,
+      source_lang: 'en',
+      target_lang: lang,
+      translation: { translate: gooogleResponse },
+    })
+    return data.map((t) => t[0])
+  }
 })
 
-function findTranslationInStore(wordTranslations: TWordTranslate[], text: string, lang: string) {
-  return wordTranslations.find((t) => t.original === text && t.lang === lang)
+saveTranslationFx.use(async (rawTranslation) => {
+  const { data } = await translations.create(rawTranslation)
+  return data
+})
+
+function findTranslationInStore(wordTranslations: TTranslation[], text: string, lang: string) {
+  return wordTranslations.find((t) => t.source === text && t.target_lang === lang)
 }
 
 async function findTranslationOnServer(source: string, sourseLang: string, targetLang: string) {
   try {
     const { data } = await translations.find(source, sourseLang, targetLang)
-    if (data) {
-      return data.translation
-    }
+    return data
   } catch (error) {
     console.error('Find translation error: ', error)
   }
-}
-
-async function storeTranslationOnServer(
-  source: string,
-  sourseLang: string,
-  targetLang: string,
-  translation: TWordTranslate,
-) {
-  translations
-    .create({
-      source: source,
-      source_lang: sourseLang,
-      target_lang: targetLang,
-      translation: translation,
-    })
-    .then((res) => {
-      console.log('success store translation', res)
-    })
 }
 
 $wordTranslations.watch((translations) => console.log('wordTranslations', translations))
