@@ -9,6 +9,7 @@ import { TTranslation } from '@/models/translations/types'
 
 const SubItemTranslation: Component<{ text: string }> = (props) => {
   const [quickTranslations, setQuickTranslations] = createSignal<string[]>()
+
   onMount(async () => {
     const data = await getWordQuickTranslationFx({ text: props.text, lang: 'ru' })
     setQuickTranslations(data)
