@@ -79,6 +79,26 @@
   }
 }
 
+.es-settings-icon {
+  margin: 0 10px;
+  cursor: pointer;
+  svg {
+    width: 24px;
+  }
+}
+
+.es-settings-content {
+  position: fixed;
+  width: 800px;
+  height: 500px;
+  background-color: #1f1d2b;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  border-radius: 35px;
+}
+
 .es-kinopub {
   .jw-captions.jw-captions-enabled {
     display: none;
