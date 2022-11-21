@@ -2,14 +2,6 @@ import { $wordTranslations, fetchWordQuickTranslationFx, saveTranslationFx, addT
 import { TTranslation } from './types'
 import translations from './api'
 
-// $wordTranslations.on(saveTranslationFx.doneData, (state, translation) => {
-//   const existTranslation = findTranslationInStore(state, translation.source, translation.target_lang)
-//   if (existTranslation == undefined) {
-//     state = [...state, translation]
-//   }
-//   return state
-// })
-
 $wordTranslations.on(saveTranslationFx.doneData, (state, translation) => [...state, translation])
 $wordTranslations.on(addTranslationFx.doneData, (state, translation) => [...state, translation])
 
@@ -21,11 +13,11 @@ fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
   }
 
   // Try to find translation on server
-  const translationFromServer = await findTranslationOnServer(text, 'en', lang)
-  if (translationFromServer) {
-    addTranslationFx(translationFromServer)
-    return translationFromServer.quick_translations
-  }
+  // const translationFromServer = await findTranslationOnServer(text, 'en', lang)
+  // if (translationFromServer) {
+  //   addTranslationFx(translationFromServer)
+  //   return translationFromServer.quick_translations
+  // }
 
   // Try to fetch translation from google
   const gooogleResponse = await chrome.runtime.sendMessage({
@@ -34,16 +26,14 @@ fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
     text: text,
   })
 
-  if (gooogleResponse) {
-    const data = gooogleResponse[1][0][0][5][0][4] as string[]
-    saveTranslationFx({
-      source: text,
-      source_lang: 'en',
-      target_lang: lang,
-      translation: { translate: gooogleResponse },
-    })
-    return data.map((t) => t[0])
-  }
+  const data = gooogleResponse[1][0][0][5][0][4] as string[]
+  saveTranslationFx({
+    source: text,
+    source_lang: 'en',
+    target_lang: lang,
+    translation: { translate: gooogleResponse },
+  })
+  return data.map((t) => t[0])
 })
 
 saveTranslationFx.use(async (rawTranslation) => {
