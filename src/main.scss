@@ -97,6 +97,29 @@
   transform: translate(-50%, -50%);
   z-index: 10000;
   border-radius: 35px;
+  display: flex;
+
+  &__menu {
+    flex: 0 220px;
+    padding: 25px;
+
+    &__title {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      svg {
+        width: 32px;
+        margin-right: 16px;
+      }
+    }
+  }
+
+  &__main {
+    flex: 1;
+    padding: 25px;
+    background-color: #252836;
+    border-radius: 25px 35px 35px 25px;
+  }
 }
 
 .es-kinopub {
