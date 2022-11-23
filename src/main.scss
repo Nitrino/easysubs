@@ -87,6 +87,15 @@
   }
 }
 
+.es-settings__overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+}
+
 .es-settings-content {
   position: fixed;
   width: 800px;
@@ -101,16 +110,28 @@
 
   &__menu {
     flex: 0 220px;
-    padding: 25px;
 
     &__title {
       display: flex;
       align-items: center;
       font-size: 24px;
+      padding: 25px 0 0 25px;
+
       svg {
         width: 32px;
         margin-right: 16px;
       }
+    }
+
+    &__items {
+      margin-top: 44px;
+    }
+
+    &__item {
+      line-height: 52px;
+      background-color: #252836;
+      padding: 0 25px;
+      font-size: 18px;
     }
   }
 
@@ -119,6 +140,20 @@
     padding: 25px;
     background-color: #252836;
     border-radius: 25px 35px 35px 25px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    cursor: pointer;
+
+    &:after {
+      display: inline-block;
+      content: '\00d7';
+      font-size: 28px;
+      line-height: 18px;
+    }
   }
 }
 
