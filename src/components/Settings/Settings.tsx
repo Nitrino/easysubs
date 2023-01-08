@@ -4,6 +4,7 @@ import { useUnit } from 'effector-solid'
 import { Portal } from 'solid-js/web'
 import { LogoColor, LogoMono, Switch } from '@/components/ui'
 import { $enabled, setEnabledFx } from '@/models/global'
+import { EnableToggle } from './EnableToggle'
 
 interface SettingsProps {
   contentContainer: HTMLElement | null
@@ -38,6 +39,7 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
           <Switch defaultSelected={globalEnabled()} onChange={updateEnabled}>
             Enable
           </Switch>
+          <EnableToggle />
         </div>
         <div class="es-settings-content__close" onClick={() => props.onClose()} />
       </div>

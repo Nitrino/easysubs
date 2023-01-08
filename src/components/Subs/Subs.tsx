@@ -6,12 +6,15 @@ import { $video } from '@/models/videos'
 import { TSub, TSubItem } from '@/models/subs/types'
 import { getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
 import { TTranslation } from '@/models/translations/types'
+import { $translateLanguage } from '@/models/global'
 
 const SubItemTranslation: Component<{ text: string }> = (props) => {
+  const translateLanguage = useUnit($translateLanguage)
+
   const [quickTranslations, setQuickTranslations] = createSignal<string[]>()
 
   onMount(async () => {
-    const data = await getWordQuickTranslationFx({ text: props.text, lang: 'ru' })
+    const data = await getWordQuickTranslationFx({ text: props.text, lang: translateLanguage() })
     setQuickTranslations(data)
   })
 
@@ -24,9 +27,10 @@ const SubItemTranslation: Component<{ text: string }> = (props) => {
   )
 }
 const SubDescription: Component<{ text: string }> = (props) => {
+  const translateLanguage = useUnit($translateLanguage)
   const [translation, setTranslation] = createSignal<TTranslation | null>()
   onMount(async () => {
-    const data = await getWordTranslationFx({ text: props.text, lang: 'ru' })
+    const data = await getWordTranslationFx({ text: props.text, lang: translateLanguage() })
     setTranslation(data)
   })
 
