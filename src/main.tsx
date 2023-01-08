@@ -4,6 +4,7 @@ import { render } from 'solid-js/web'
 import { esRenderSetings, esSubsChanged, fetchServiceSubsFx } from '@/models/subs'
 import { $streaming, fetchCurrentStreamingFx } from '@/models/streamings'
 import { $video, getCurrentVideoFx, videoTimeUpdate } from '@/models/videos'
+import { $enabled } from '@/models/global'
 
 import { Subs } from './components/Subs'
 import { Settings } from './components/Settings'
@@ -15,6 +16,10 @@ fetchCurrentStreamingFx()
 const handleTimeUpdate = (event: VideoEvent) => {
   videoTimeUpdate(event.target.currentTime * 1000)
 }
+
+$enabled.watch((enabled) => {
+  document.documentElement.classList.toggle('es-enabled', enabled)
+})
 
 $streaming.watch((streaming) => {
   document.querySelector('html')?.classList.add('es-' + streaming.constructor.name.toLowerCase())

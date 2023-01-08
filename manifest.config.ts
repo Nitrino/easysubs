@@ -21,7 +21,7 @@ export default defineManifest(async (env) => ({
     service_worker: 'src/background.ts',
     type: 'module',
   },
-  permissions: ['webNavigation', 'scripting', 'tabs'],
+  permissions: ['webNavigation', 'scripting', 'tabs', 'storage'],
   content_scripts: [
     {
       js: ['src/main.tsx'],

@@ -1,12 +1,26 @@
 import { Component, createSignal, Show } from 'solid-js'
+import { useUnit } from 'effector-solid'
+
 import { Portal } from 'solid-js/web'
-import { LogoColor, LogoMono } from '@/components/ui'
+import { LogoColor, LogoMono, Switch } from '@/components/ui'
+import { $enabled, setEnabledFx } from '@/models/global'
 
 interface SettingsProps {
   contentContainer: HTMLElement | null
 }
 
 const SettingsContent: Component<{ onClose: () => void }> = (props) => {
+  const globalEnabled = useUnit($enabled)
+
+  const updateEnabled = (isSelected: boolean) => {
+    setEnabledFx(isSelected)
+    if (isSelected) {
+      document.body.classList.add('es-enabled')
+    } else {
+      document.body.classList.remove('es-enabled')
+    }
+  }
+
   return (
     <div class="es-settings__overlay">
       <div class="es-settings-content">
@@ -19,7 +33,12 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
             <div class="es-settings-content__menu__item">General settings</div>
           </div>
         </div>
-        <div class="es-settings-content__main">CONTENT</div>
+        <div class="es-settings-content__main">
+          <p>GENERAL</p>
+          <Switch defaultSelected={globalEnabled()} onChange={updateEnabled}>
+            Enable
+          </Switch>
+        </div>
         <div class="es-settings-content__close" onClick={() => props.onClose()} />
       </div>
     </div>
@@ -30,8 +49,6 @@ export const Settings: Component<SettingsProps> = () => {
   const [showSettings, setShowSettings] = createSignal(false)
 
   const handleClick = () => {
-    console.log('+++++++++++++', showSettings())
-
     setShowSettings(!showSettings())
   }
   return (
