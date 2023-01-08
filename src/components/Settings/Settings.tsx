@@ -1,9 +1,8 @@
 import { Component, createSignal, Show } from 'solid-js'
-import { useUnit } from 'effector-solid'
-
 import { Portal } from 'solid-js/web'
-import { LogoColor, LogoMono, Switch } from '@/components/ui'
-import { $enabled, setEnabledFx } from '@/models/global'
+
+import { LogoColor, LogoMono } from '@/components/ui'
+import { TranslateLanguage } from './TranslateLanguage'
 import { EnableToggle } from './EnableToggle'
 
 interface SettingsProps {
@@ -11,17 +10,6 @@ interface SettingsProps {
 }
 
 const SettingsContent: Component<{ onClose: () => void }> = (props) => {
-  const globalEnabled = useUnit($enabled)
-
-  const updateEnabled = (isSelected: boolean) => {
-    setEnabledFx(isSelected)
-    if (isSelected) {
-      document.body.classList.add('es-enabled')
-    } else {
-      document.body.classList.remove('es-enabled')
-    }
-  }
-
   return (
     <div class="es-settings__overlay">
       <div class="es-settings-content">
@@ -36,10 +24,8 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
         </div>
         <div class="es-settings-content__main">
           <p>GENERAL</p>
-          <Switch defaultSelected={globalEnabled()} onChange={updateEnabled}>
-            Enable
-          </Switch>
           <EnableToggle />
+          <TranslateLanguage />
         </div>
         <div class="es-settings-content__close" onClick={() => props.onClose()} />
       </div>
