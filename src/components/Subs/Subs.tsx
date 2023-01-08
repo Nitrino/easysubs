@@ -6,7 +6,7 @@ import { $video } from '@/models/videos'
 import { TSub, TSubItem } from '@/models/subs/types'
 import { getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
 import { TTranslation } from '@/models/translations/types'
-import { $translateLanguage } from '@/models/global'
+import { $translateLanguage, $autoPause, setAutoPauseFx } from '@/models/global'
 
 const SubItemTranslation: Component<{ text: string }> = (props) => {
   const translateLanguage = useUnit($translateLanguage)
@@ -85,18 +85,36 @@ const SubItem: Component<{ subItem: TSubItem }> = (props) => {
 
 const Sub: Component<{ sub: TSub; video: HTMLVideoElement }> = (props) => {
   return (
-    <div class="es-sub" onMouseEnter={() => props.video.pause()} onMouseLeave={() => props.video.play()}>
+    <div class="es-sub">
       <For each={props.sub.items}>{(subItem) => <SubItem subItem={subItem} />}</For>
     </div>
   )
 }
 
 export const Subs: Component = () => {
+  const autoPause = useUnit($autoPause)
   const subs = useUnit($currentSubs)
   const video = useUnit($video)
+
+  const handleOnMouseLeave = () => {
+    if (autoPause()) {
+      video()!.play()
+      setAutoPauseFx(false)
+    }
+  }
+
+  const handleOnMouseEnter = () => {
+    if (!video()!.paused) {
+      setAutoPauseFx(true)
+      video()!.pause()
+    }
+  }
+
   return (
-    <div id="es-subs">
-      <For each={subs()}>{(sub) => <Sub sub={sub} video={video()!} />}</For>
-    </div>
+    <Show when={video() !== null}>
+      <div id="es-subs" onMouseLeave={handleOnMouseLeave} onMouseEnter={handleOnMouseEnter}>
+        <For each={subs()}>{(sub) => <Sub sub={sub} video={video()!} />}</For>
+      </div>
+    </Show>
   )
 }
