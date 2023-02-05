@@ -28,6 +28,7 @@ $streaming.watch((streaming) => {
   }
 
   esRenderSetings.watch(() => {
+    console.log('Event:', 'esRenderSetings')
     document.querySelectorAll('.es-settings').forEach((e) => e.remove())
     const buttonContainer = streaming.getSettingsButtonContainer()
     const contentContainer = streaming.getSettingsContentContainer()

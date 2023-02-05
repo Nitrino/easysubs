@@ -2,22 +2,27 @@ import { $wordTranslations, fetchWordQuickTranslationFx, saveTranslationFx, addT
 import { TTranslation } from './types'
 import translations from './api'
 
-$wordTranslations.on(saveTranslationFx.doneData, (state, translation) => [...state, translation])
+$wordTranslations.on(saveTranslationFx.doneData, (state, translation) => {
+  console.log('state', state)
+  console.log('translation', translation)
+  return [...state, translation]
+})
 $wordTranslations.on(addTranslationFx.doneData, (state, translation) => [...state, translation])
 
 fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
   // Try to find translation in store
   const translation = findTranslationInStore(wordTranslations, text, lang)
+
   if (translation) {
     return translation.quick_translations
   }
 
   // Try to find translation on server
-  // const translationFromServer = await findTranslationOnServer(text, 'en', lang)
-  // if (translationFromServer) {
-  //   addTranslationFx(translationFromServer)
-  //   return translationFromServer.quick_translations
-  // }
+  const translationFromServer = await findTranslationOnServer(text, 'en', lang)
+  if (translationFromServer) {
+    addTranslationFx(translationFromServer)
+    return translationFromServer.quick_translations
+  }
 
   // Try to fetch translation from google
   const gooogleResponse = await chrome.runtime.sendMessage({

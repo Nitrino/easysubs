@@ -79,6 +79,10 @@
   }
 }
 
+.es-settings {
+  display: inline-block;
+}
+
 .es-settings-icon {
   margin: 0 10px;
   cursor: pointer;
@@ -164,6 +168,45 @@
 
   #es {
     bottom: 130px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}
+
+.es-youtube.es-enabled {
+  .captions-text {
+    display: none !important;
+  }
+
+  .html5-video-player {
+    &.ytp-fullscreen {
+      padding-bottom: 0;
+
+      #easysubs {
+        bottom: 110px;
+      }
+    }
+  }
+
+  .es-settings {
+    vertical-align: top;
+  }
+
+  .es-settings-icon {
+    margin: 0 12px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      vertical-align: middle;
+    }
+  }
+
+  #es {
+    z-index: 30;
+    bottom: 80px;
 
     @media screen and (max-width: 1520px) {
       bottom: 100px;

@@ -1,13 +1,14 @@
 import KinoPub from '@/streamings/kinopub'
+import Youtube from '@/streamings/youtube'
 import Service from '@/streamings/service'
 import ServiceStub from '@/streamings/ServiceStub'
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector('title')?.textContent
-  // if (titleContent?.includes('YouTube') || window.location.host === 'www.youtube.com') {
-  //   document.querySelector('html')?.setAttribute('id', 'youtube')
-  //   return 'youtube'
-  // }
+  if (titleContent?.includes('YouTube') || window.location.host === 'www.youtube.com') {
+    document.querySelector('html')?.setAttribute('id', 'youtube')
+    return new Youtube()
+  }
   // if (titleContent?.includes('Netflix') || window.location.host === 'www.netflix.com') {
   //   document.querySelector('html')?.setAttribute('id', 'netflix')
   //   return 'netflix'

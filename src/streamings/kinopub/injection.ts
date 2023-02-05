@@ -1,6 +1,4 @@
 if (window.playerInstance) {
-  window.dispatchEvent(new CustomEvent('easysubsRenderSettings'))
-
   window.playerInstance.on('captionsChanged', () => {
     const track = window.playerInstance.getConfig().captionsTrack
     const label = track ? track.label : null
