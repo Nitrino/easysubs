@@ -23,9 +23,13 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
           </div>
         </div>
         <div class="es-settings-content__main">
-          <p>GENERAL</p>
-          <EnableToggle />
-          <TranslateLanguage />
+          <div class="es-settings-content__main__title">GENERAL</div>
+          <div class="es-settings-content__item">
+            <EnableToggle />
+          </div>
+          <div class="es-settings-content__item">
+            <TranslateLanguage />
+          </div>
         </div>
         <div class="es-settings-content__close" onClick={() => props.onClose()} />
       </div>

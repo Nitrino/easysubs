@@ -101,6 +101,13 @@
 }
 
 .es-settings-content {
+  all: revert;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
   position: fixed;
   width: 800px;
   height: 500px;
@@ -144,6 +151,14 @@
     padding: 25px;
     background-color: #252836;
     border-radius: 25px 35px 35px 25px;
+
+    &__title {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__item {
+    margin-bottom: 16px;
   }
 
   &__close {
