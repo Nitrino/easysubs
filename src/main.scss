@@ -116,7 +116,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 10000;
-  border-radius: 35px;
+  border-radius: 8px;
   display: flex;
 
   &__menu {
@@ -150,7 +150,7 @@
     flex: 1;
     padding: 25px;
     background-color: #252836;
-    border-radius: 25px 35px 35px 25px;
+    border-radius: 8px;
 
     &__title {
       margin-bottom: 16px;
