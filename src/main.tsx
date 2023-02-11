@@ -7,6 +7,7 @@ import { $video, getCurrentVideoFx, videoTimeUpdate } from '@/models/videos'
 import { $enabled } from '@/models/global'
 
 import { Subs } from './components/Subs'
+import { addKeyboardEventsListeners } from '@/utils/keyboardHandler'
 import { Settings } from './components/Settings'
 import './models/init'
 import './main.scss'
@@ -26,6 +27,7 @@ $streaming.watch((streaming) => {
   if (streaming == null) {
     return
   }
+  addKeyboardEventsListeners()
 
   esRenderSetings.watch(() => {
     console.log('Event:', 'esRenderSetings')

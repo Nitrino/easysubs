@@ -1,6 +1,6 @@
 import { Subtitles } from 'subtitle'
 import { textToSubItems } from './textToSubItems'
-import { TSubs } from '@/models/subs/types'
+import { TSub } from '@/models/subs/types'
 
 const cleanText = (text: string): string => {
   const tmpDiv = document.createElement('div')
@@ -11,7 +11,7 @@ const cleanText = (text: string): string => {
   return tmpDiv.textContent || ''
 }
 
-export const convertRawSubs = (rawSubs: Subtitles): TSubs => {
+export const convertRawSubs = (rawSubs: Subtitles): TSub[] => {
   return rawSubs.map((sub, index) => {
     return {
       id: index,

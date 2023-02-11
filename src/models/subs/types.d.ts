@@ -13,5 +13,3 @@ export type TSub = {
   cleanedText: string
   items: TSubItem[]
 }
-
-export type TSubs = TSub[]
