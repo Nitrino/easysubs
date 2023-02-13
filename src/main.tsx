@@ -14,8 +14,8 @@ import './main.scss'
 
 fetchCurrentStreamingFx()
 
-const handleTimeUpdate = (event: VideoEvent) => {
-  videoTimeUpdate(event.target.currentTime * 1000)
+const handleTimeUpdate = () => {
+  videoTimeUpdate()
 }
 
 $enabled.watch((enabled) => {

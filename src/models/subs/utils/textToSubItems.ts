@@ -5,7 +5,6 @@ const cleanWord = (word: string) => word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>{
 export const textToSubItems = (text: string): TSubItem[] => {
   const tmpDiv = document.createElement('div') as HTMLDivElement
   tmpDiv.innerHTML = text.replace(/(<\d+:\d+:\d+.\d+>)?<[/]?[c].*?>/g, '').replace(/[\r\n]+/g, '\r\n ')
-  console.log(text.replace(/(<\d+:\d+:\d+.\d+>)?<[/]?[c].*?>/g, '').replace(/[\r\n]+/g, '\r\n '))
 
   const items = Array.from(tmpDiv.childNodes)
 

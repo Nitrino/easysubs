@@ -140,9 +140,13 @@
 
     &__item {
       line-height: 52px;
-      background-color: #252836;
       padding: 0 25px;
       font-size: 18px;
+      cursor: pointer;
+
+      &--active {
+        background-color: #252836;
+      }
     }
   }
 
