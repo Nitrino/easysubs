@@ -18,8 +18,11 @@ export const EnableToggle: Component<AriaSwitchProps> = (props) => {
   }
 
   return (
-    <Switch {...props} defaultSelected={globalEnabled()} onChange={updateEnabled}>
-      Enable
-    </Switch>
+    <div class="es-settings-content__element">
+      <div class="es-settings-content__element__left">Enable</div>
+      <div class="es-settings-content__element__right">
+        <Switch {...props} defaultSelected={globalEnabled()} onChange={updateEnabled} />
+      </div>
+    </div>
   )
 }

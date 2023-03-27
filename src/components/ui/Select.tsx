@@ -33,7 +33,7 @@ function Popover(props: ParentProps<AriaOverlayProps>) {
         style={{
           position: 'absolute',
           width: '100%',
-          border: '1px solid gray',
+          border: 'none',
           background: 'lightgray',
           'margin-top': '4px',
         }}
@@ -59,7 +59,7 @@ const ListBox: Component<AriaListBoxProps & { state: ListState }> = (props) => {
           margin: 0,
           padding: 0,
           'list-style': 'none',
-          'max-height': '150px',
+          'max-height': '180px',
           overflow: 'auto',
         }}
       >
@@ -81,7 +81,7 @@ export const Option: Component<ParentProps<AriaListBoxOptionProps>> = (props) =>
       {...optionProps}
       ref={ref}
       style={{
-        background: isSelected() ? 'blueviolet' : isFocused() ? 'gray' : 'white',
+        background: isSelected() ? '#3A88A2' : isFocused() ? 'lightgray' : 'white',
         color: isSelected() ? 'white' : 'black',
         padding: '2px 5px',
         outline: 'none',
@@ -97,24 +97,39 @@ export const Select: Component<AriaSelectProps> = (props) => {
   let ref: HTMLButtonElement | undefined
 
   // Get props for child elements from useSelect
-  const { labelProps, triggerProps, valueProps, menuProps, state } = createSelect(props, () => ref)
+  const { triggerProps, valueProps, menuProps, state } = createSelect(props, () => ref)
 
   // Get props for the button based on the trigger props from useSelect
   const { buttonProps } = createButton(triggerProps, () => ref)
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      <div {...labelProps} style={{ 'margin-bottom': '4px' }}>
-        {props.label}
-      </div>
-      <HiddenSelect state={state} triggerRef={ref} label={props.label} name={props.name} />
+      <HiddenSelect state={state} triggerRef={ref} name={props.name} />
       <button
         {...buttonProps}
         ref={ref}
-        style={{ height: '30px', 'font-size': '14px', color: '#252836', border: 'none', 'border-radius': '4px' }}
+        style={{
+          height: '24px',
+          width: '140px',
+          'font-size': '14px',
+          color: '#252836',
+          border: 'none',
+          'border-radius': '4px',
+          'white-space': 'nowrap',
+          'text-align': 'left',
+          padding: '0 8px',
+          'box-sizing': 'border-box',
+        }}
       >
-        <span {...valueProps}>{state.selectedItem()?.children ?? 'Select an option'}</span>
-        <span aria-hidden="true" style={{ 'padding-left': '5px' }}>
+        <span
+          {...valueProps}
+          style={{
+            'text-align': 'left',
+          }}
+        >
+          {state.selectedItem()?.children ?? 'Select an option'}
+        </span>
+        <span aria-hidden="true" style={{ 'padding-left': '5px', position: 'absolute', right: '8px', top: '6px' }}>
           ▼
         </span>
       </button>

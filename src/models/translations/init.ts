@@ -18,13 +18,14 @@ fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
   }
 
   // Try to find translation on server
-  const translationFromServer = await findTranslationOnServer(text, 'en', lang)
-  if (translationFromServer) {
-    addTranslationFx(translationFromServer)
-    return translationFromServer.quick_translations
-  }
+  // const translationFromServer = await findTranslationOnServer(text, 'en', lang)
+  // if (translationFromServer) {
+  //   addTranslationFx(translationFromServer)
+  //   return translationFromServer.quick_translations
+  // }
 
   // Try to fetch translation from google
+
   const gooogleResponse = await chrome.runtime.sendMessage({
     type: 'translateWordFull',
     lang: lang,
@@ -32,6 +33,8 @@ fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
   })
 
   const data = gooogleResponse[1][0][0][5][0][4] as string[]
+  console.log('data', data)
+
   saveTranslationFx({
     source: text,
     source_lang: 'en',

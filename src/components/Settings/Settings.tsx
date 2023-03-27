@@ -27,53 +27,45 @@ const Tab: Component<{ children: string; isActive: boolean; tabId: number; onCli
 const SettingsContent: Component<{ onClose: () => void }> = (props) => {
   const [getTab, setTab] = createSignal(0)
   return (
-    <div class="es-settings__overlay">
-      <div class="es-settings-content">
-        <div class="es-settings-content__menu">
-          <div class="es-settings-content__menu__title">
-            <LogoColor />
-            Easysubs
-          </div>
-          <div class="es-settings-content__menu__items">
-            <Tab
-              isActive={getTab() === 0}
-              tabId={0}
-              onClick={() => {
-                setTab(0)
-              }}
-            >
-              General settings
-            </Tab>
-            <Tab
-              isActive={getTab() === 1}
-              tabId={1}
-              onClick={() => {
-                setTab(1)
-              }}
-            >
-              Subtitless
-            </Tab>
-          </div>
+    <div class="es-settings-content">
+      <div class="es-settings-content__menu">
+        <div class="es-settings-content__menu__items">
+          <Tab
+            isActive={getTab() === 0}
+            tabId={0}
+            onClick={() => {
+              setTab(0)
+            }}
+          >
+            General
+          </Tab>
+          <Tab
+            isActive={getTab() === 1}
+            tabId={1}
+            onClick={() => {
+              setTab(1)
+            }}
+          >
+            Subtitles
+          </Tab>
         </div>
-        <div class="es-settings-content__main">
-          <Show when={getTab() === 0}>
-            <div class="es-settings-content__main__title">GENERAL</div>
-            <div class="es-settings-content__item">
-              <EnableToggle />
-            </div>
-            <div class="es-settings-content__item">
-              <TranslateLanguage />
-            </div>
-          </Show>
-          <Show when={getTab() === 1}>
-            <div class="es-settings-content__main__title">SUBTITLES</div>
-            <div class="es-settings-content__item">
-              <SubsDelay />
-            </div>
-          </Show>
-        </div>
-        <div class="es-settings-content__close" onClick={() => props.onClose()} />
       </div>
+      <div class="es-settings-content__main">
+        <Show when={getTab() === 0}>
+          <div class="es-settings-content__item">
+            <EnableToggle />
+          </div>
+          <div class="es-settings-content__item">
+            <TranslateLanguage />
+          </div>
+        </Show>
+        <Show when={getTab() === 1}>
+          <div class="es-settings-content__item">
+            <SubsDelay />
+          </div>
+        </Show>
+      </div>
+      <div class="es-settings-content__close" onClick={() => props.onClose()} />
     </div>
   )
 }
@@ -90,9 +82,7 @@ export const Settings: Component<SettingsProps> = () => {
         <LogoMono />
       </div>
       <Show when={showSettings()}>
-        <Portal>
-          <SettingsContent onClose={() => setShowSettings(false)} />
-        </Portal>
+        <SettingsContent onClose={() => setShowSettings(false)} />
       </Show>
     </>
   )

@@ -15,14 +15,14 @@ export const TranslateLanguage: Component<AriaSelectProps> = (props) => {
   }
 
   return (
-    <Select
-      {...props}
-      defaultSelectedKey={translateLanguage()}
-      onSelectionChange={updateTranslateLanguage}
-      label="Translation language"
-    >
-      <For each={languages}>{(language) => <Item key={language.value}>{language.label}</Item>}</For>
-    </Select>
+    <div class="es-settings-content__element">
+      <div class="es-settings-content__element__left">Translation language</div>
+      <div class="es-settings-content__element__right">
+        <Select {...props} defaultSelectedKey={translateLanguage()} onSelectionChange={updateTranslateLanguage}>
+          <For each={languages}>{(language) => <Item key={language.value}>{language.label}</Item>}</For>
+        </Select>
+      </div>
+    </div>
   )
 }
 
