@@ -1,8 +1,9 @@
-import { Component, For, createSignal, Show, onMount } from 'solid-js'
+import { Component, For, createSignal, Show, onMount, createEffect } from 'solid-js'
 import { useUnit } from 'effector-solid'
 
 import { $currentSubs } from '@/models/subs'
 import { $video } from '@/models/videos'
+import { $subsSize } from '@/models/subs'
 import { TSub, TSubItem } from '@/models/subs/types'
 import { getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
 import { TTranslation } from '@/models/translations/types'
@@ -95,6 +96,15 @@ export const Subs: Component = () => {
   const autoPause = useUnit($autoPause)
   const subs = useUnit($currentSubs)
   const video = useUnit($video)
+  const subsSize = useUnit($subsSize)
+  const [fontSize, setFontSize] = createSignal(38)
+
+  createEffect(() => {
+    const videoElement = video()
+    if (videoElement) {
+      setFontSize(((videoElement.clientWidth / 100) * subsSize()) / 43)
+    }
+  })
 
   const handleOnMouseLeave = () => {
     if (autoPause()) {
@@ -112,7 +122,12 @@ export const Subs: Component = () => {
 
   return (
     <Show when={video() !== null}>
-      <div id="es-subs" onMouseLeave={handleOnMouseLeave} onMouseEnter={handleOnMouseEnter}>
+      <div
+        id="es-subs"
+        style={{ 'font-size': `${fontSize()}px` }}
+        onMouseLeave={handleOnMouseLeave}
+        onMouseEnter={handleOnMouseEnter}
+      >
         <For each={subs()}>{(sub) => <Sub sub={sub} video={video()!} />}</For>
       </div>
     </Show>

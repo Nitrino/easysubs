@@ -1,20 +1,23 @@
-import { Component } from 'solid-js'
+import { Component, JSX } from 'solid-js'
 import { useUnit } from 'effector-solid'
 
 import { $subsDelay, updateSubsDelayFx } from '@/models/subs'
+import { ArrowLeft, ArrowLeftDouble, ArrowRight, ArrowRightDouble } from '@/components/ui'
 
-const DelayButton: Component<{ children: string; onClick: () => void }> = (props) => {
+const DelayButton: Component<{ children: JSX.Element; onClick: () => void }> = (props) => {
   return (
     <button
       onClick={() => props.onClick()}
       style={{
-        'border-radius': '8px',
-        border: '1px solid #525298',
+        border: 'none',
         background: '#252836',
         color: '#fff',
-        'line-height': '16px',
-        'margin-right': '8px',
-        'font-size': '14px',
+        width: '16px',
+        height: '16px',
+        cursor: 'pointer',
+        appearance: 'none',
+        padding: '0',
+        'margin-right': '4px',
       }}
     >
       {props.children}
@@ -25,27 +28,31 @@ export const SubsDelay: Component = () => {
   const subsDelay = useUnit($subsDelay)
   return (
     <div class="es-settings-content__element">
-      <div class="es-settings-content__element__left">Subtitles delay</div>
-      <div class="es-settings-content__element__right" style={{ 'flex-direction': 'column' }}>
-        <div style={{ display: 'flex', 'justify-content': 'center' }}>
-          <DelayButton onClick={() => updateSubsDelayFx(subsDelay() - 0.25)}>-0.25</DelayButton>
-          <DelayButton onClick={() => updateSubsDelayFx(subsDelay() - 1)}>-1</DelayButton>
-          <DelayButton onClick={() => updateSubsDelayFx(subsDelay() - 5)}>-5</DelayButton>
-        </div>
+      <div class="es-settings-content__element__left">Subtitles delay:</div>
+      <div class="es-settings-content__element__right">
+        <DelayButton onClick={() => updateSubsDelayFx(subsDelay() - 1)}>
+          <ArrowLeftDouble />
+        </DelayButton>
+        <DelayButton onClick={() => updateSubsDelayFx(subsDelay() - 0.25)}>
+          <ArrowLeft />
+        </DelayButton>
         <div
           style={{
             'line-height': '32px',
             background: '#252836',
             'text-align': 'center',
+            'min-width': '48px',
+            padding: '0 8px',
           }}
         >
           {subsDelay()}s
         </div>
-        <div style={{ display: 'flex', 'justify-content': 'center' }}>
-          <DelayButton onClick={() => updateSubsDelayFx(subsDelay() + 0.25)}>+0.25</DelayButton>
-          <DelayButton onClick={() => updateSubsDelayFx(subsDelay() + 1)}>+1</DelayButton>
-          <DelayButton onClick={() => updateSubsDelayFx(subsDelay() + 5)}>+5</DelayButton>
-        </div>
+        <DelayButton onClick={() => updateSubsDelayFx(subsDelay() + 0.25)}>
+          <ArrowRight />
+        </DelayButton>
+        <DelayButton onClick={() => updateSubsDelayFx(subsDelay() + 1)}>
+          <ArrowRightDouble />
+        </DelayButton>
       </div>
     </div>
   )

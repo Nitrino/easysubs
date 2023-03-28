@@ -1,11 +1,11 @@
 import { Component, createSignal, Show } from 'solid-js'
-import { Portal } from 'solid-js/web'
 import cn from 'classnames'
 
-import { LogoColor, LogoMono } from '@/components/ui'
+import { LogoMono } from '@/components/ui'
 import { TranslateLanguage } from './TranslateLanguage'
 import { EnableToggle } from './EnableToggle'
 import { SubsDelay } from './SubsDelay'
+import { SubsSize } from './SubsSize'
 
 interface SettingsProps {
   contentContainer: HTMLElement | null
@@ -62,6 +62,7 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
         <Show when={getTab() === 1}>
           <div class="es-settings-content__item">
             <SubsDelay />
+            <SubsSize />
           </div>
         </Show>
       </div>
