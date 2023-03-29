@@ -6,6 +6,7 @@ import { TranslateLanguage } from './TranslateLanguage'
 import { EnableToggle } from './EnableToggle'
 import { SubsDelay } from './SubsDelay'
 import { SubsSize } from './SubsSize'
+import { CustomSubs } from './CustomSubs'
 
 interface SettingsProps {
   contentContainer: HTMLElement | null
@@ -63,6 +64,7 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
           <div class="es-settings-content__item">
             <SubsDelay />
             <SubsSize />
+            <CustomSubs />
           </div>
         </Show>
       </div>

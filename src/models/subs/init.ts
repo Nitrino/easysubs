@@ -9,6 +9,7 @@ import {
   $subsDelay,
   $subsSize,
   fetchSubsFx,
+  fetchCustomSubsFx,
   updateCurrentSubsFx,
   updateSubsDelayFx,
   updatesubsSizeFx,
@@ -17,7 +18,7 @@ import {
 import { getCurrentSubs } from './utils/getCurrentSubs'
 import { $video, videoTimeUpdate } from '@/models/videos'
 
-$rawSubs.on(fetchSubsFx.doneData, (_, subs) => subs)
+$rawSubs.on([fetchSubsFx.doneData, fetchCustomSubsFx.doneData], (_, subs) => subs)
 $rawSubs.on(resyncSubsFx.doneData, (subs, { currentDelay, delay }) => resync(subs, (delay - currentDelay) * 1000))
 $subsDelay.on(updateSubsDelayFx.doneData, (_, delay) => delay)
 $subsSize.on(updatesubsSizeFx.doneData, (_, size) => size)

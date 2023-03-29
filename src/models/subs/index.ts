@@ -19,6 +19,7 @@ export const esSubsChanged = createEvent<string>()
 export const esRenderSetings = createEvent()
 
 export const fetchSubsFx = createEffect<{ language: string; streaming: Service }, Captions>()
+export const fetchCustomSubsFx = createEffect<Captions, Captions>((subs) => subs)
 export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>()
 export const updateSubsDelayFx = createEffect<number, number>()
 export const updatesubsSizeFx = createEffect<number, number>((size) => size)
