@@ -1,4 +1,4 @@
-import { stringify } from 'querystring'
+import qs from 'qs'
 
 export type TWordTranslate = {
   original: string
@@ -56,7 +56,7 @@ class GoogleTranslateFetcher {
       },
       at: this.extract('SNlM0e', googleTranslatePageText),
     }
-    const url = this.#baseUrl + '/_/TranslateWebserverUi/data/batchexecute?' + stringify(data.query)
+    const url = this.#baseUrl + '/_/TranslateWebserverUi/data/batchexecute?' + qs.stringify(data.query)
     const payload = JSON.stringify([[text.replace(/(\r\n|\n|\r)/gm, ''), 'auto', lang, true]])
     const req = JSON.stringify([[['MkEWBc', payload, null, 'generic']]])
     const body = 'f.req=' + encodeURIComponent(req) + '&at=' + data.at
