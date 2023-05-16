@@ -6,7 +6,7 @@ import { $currentSubs, $subsBackgroundOpacity } from '@/models/subs'
 import { $video } from '@/models/videos'
 import { $subsSize } from '@/models/subs'
 import { TSub, TSubItem } from '@/models/subs/types'
-import { getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
+import { fetchFullTranslationFx, getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
 import { TTranslation } from '@/models/translations/types'
 import { $translateLanguage, $autoPause, setAutoPauseFx } from '@/models/global'
 import { $subsBackground } from '@/models/subs'
@@ -22,10 +22,29 @@ const SubItemTranslation: Component<{ text: string }> = (props) => {
   })
 
   return (
-    <div class="es-sub-item-translation">
-      <For each={quickTranslations()}>
-        {(quickTranslation) => <div class="es-sub-item-translation-item">{quickTranslation}</div>}
-      </For>
+    <div class="es-word-translation">
+      <div class="es-word-translation-original">{props.text}</div>
+      <br />
+      <div class='es-word-quick-translations'>
+        {quickTranslations()?.map((tr) => tr.replaceAll(" ", "\xa0")).join(", ")}
+      </div>
+    </div>
+  )
+}
+
+const SubFullTranslation: Component<{ text: string }> = (props) => {
+  const translateLanguage = useUnit($translateLanguage)
+
+  const [translation, setTranslation] = createSignal<string>()
+
+  onMount(async () => {
+    const data = await fetchFullTranslationFx({ text: props.text, lang: translateLanguage() })
+    setTranslation(data)
+  })
+
+  return (
+    <div class="es-full-translation">
+      {translation()}
     </div>
   )
 }
@@ -39,7 +58,7 @@ const SubDescription: Component<{ text: string }> = (props) => {
 
   return (
     <Show when={translation() !== null && translation() !== undefined}>
-      <div class="es-sub-item-translation">DESCRIPTION</div>
+      <div class="es-word-translation">DESCRIPTION</div>
     </Show>
   )
 }
@@ -65,13 +84,15 @@ const SubItem: Component<{ subItem: TSubItem }> = (props) => {
 
   return (
     <>
-      <span class="es-sub-item">
+      <span
+        class="es-sub-item"
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+      >
         <pre
           // eslint-disable-next-line solid/no-innerhtml
           innerHTML={props.subItem.text}
           class={props.subItem.tag}
-          onMouseEnter={handleOnMouseEnter}
-          onMouseLeave={handleOnMouseLeave}
           onClick={handleClick}
         />
         <Show when={showTranslation()}>
@@ -87,13 +108,22 @@ const SubItem: Component<{ subItem: TSubItem }> = (props) => {
 }
 
 const Sub: Component<{ sub: TSub; video: HTMLVideoElement }> = (props) => {
+  const [showTranslation, setShowTranslation] = createSignal(false)
   const subsBackground = useUnit($subsBackground)
   const subsBackgroundOpacity = useUnit($subsBackgroundOpacity)
   return (
-    <div class="es-sub" style={{
-      background: `rgba(0, 0, 0, ${subsBackground() ? subsBackgroundOpacity() / 100 : 0})`
-    }}>
+    <div
+      class="es-sub"
+      onClick={() => setShowTranslation(true)}
+      onmouseleave={() => setShowTranslation(false)}
+      style={{
+        background: `rgba(0, 0, 0, ${subsBackground() ? subsBackgroundOpacity() / 100 : 0})`
+      }}
+    >
       <For each={props.sub.items}>{(subItem) => <SubItem subItem={subItem} />}</For>
+      <Show when={showTranslation()}>
+        <SubFullTranslation text={props.sub.cleanedText} />
+      </Show>
     </div>
   )
 }

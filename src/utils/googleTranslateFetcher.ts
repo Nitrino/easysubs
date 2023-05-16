@@ -20,7 +20,7 @@ class GoogleTranslateFetcher {
   }
 
   // Get full text translation
-  async getTextTranslation({ text, lang }: TRequest): Promise<string> {
+  async getFullTextTranslation({ text, lang }: TRequest): Promise<string> {
     const resp = await this.get({ text, lang })
     const content = this.getResponseContent(resp)
     return this.getTextTranslate(content)

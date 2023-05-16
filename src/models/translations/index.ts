@@ -14,6 +14,8 @@ export const fetchWordQuickTranslationFx = createEffect<
   TTranslation['quick_translations']
 >()
 
+export const fetchFullTranslationFx = createEffect<{ text: string; lang: string; }, string>()
+
 export const getWordTranslationFx = attach<
   { text: string; lang: string },
   typeof $wordTranslations,

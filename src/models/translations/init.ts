@@ -1,4 +1,4 @@
-import { $wordTranslations, fetchWordQuickTranslationFx, saveTranslationFx, addTranslationFx } from './'
+import { $wordTranslations, fetchWordQuickTranslationFx, saveTranslationFx, addTranslationFx, fetchFullTranslationFx } from './'
 import { TTranslation } from './types'
 import translations from './api'
 
@@ -42,6 +42,17 @@ fetchWordQuickTranslationFx.use(async ({ text, lang, wordTranslations }) => {
     translation: { translate: gooogleResponse },
   })
   return data.map((t) => t[0])
+})
+
+fetchFullTranslationFx.use(async ({ text, lang }) => {
+  const gooogleResponse = await chrome.runtime.sendMessage({
+    type: 'translateFullText',
+    lang: lang,
+    text: text,
+  })
+
+  console.log("gooogleResponse", gooogleResponse);
+  return gooogleResponse
 })
 
 saveTranslationFx.use(async (rawTranslation) => {

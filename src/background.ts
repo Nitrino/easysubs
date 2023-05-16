@@ -13,5 +13,10 @@ chrome.runtime.onMessage.addListener(function (request, _sender, sendResponse) {
       .getWordFullTranslation({ text: request.text, lang: request.lang })
       .then((respData: unknown) => sendResponse(respData))
   }
+  if (request.type === 'translateFullText') {
+    googleTranslateFetcher
+      .getFullTextTranslation({ text: request.text, lang: request.lang })
+      .then((respData: unknown) => sendResponse(respData))
+  }
   return true
 })
