@@ -1,5 +1,6 @@
 import { Component, For, createSignal, Show, onMount, createEffect } from 'solid-js'
 import { useUnit } from 'effector-solid'
+import cn from 'classnames'
 
 import { $currentSubs } from '@/models/subs'
 import { $video } from '@/models/videos'
@@ -7,7 +8,7 @@ import { $subsSize } from '@/models/subs'
 import { TSub, TSubItem } from '@/models/subs/types'
 import { getWordQuickTranslationFx, getWordTranslationFx } from '@/models/translations'
 import { TTranslation } from '@/models/translations/types'
-import { $translateLanguage, $autoPause, setAutoPauseFx } from '@/models/global'
+import { $translateLanguage, $autoPause, $subsBackground, setAutoPauseFx } from '@/models/global'
 
 const SubItemTranslation: Component<{ text: string }> = (props) => {
   const translateLanguage = useUnit($translateLanguage)
@@ -85,8 +86,9 @@ const SubItem: Component<{ subItem: TSubItem }> = (props) => {
 }
 
 const Sub: Component<{ sub: TSub; video: HTMLVideoElement }> = (props) => {
+  const subsBackground = useUnit($subsBackground)
   return (
-    <div class="es-sub">
+    <div class={cn("es-sub", {"disabled-background": !subsBackground()})}>
       <For each={props.sub.items}>{(subItem) => <SubItem subItem={subItem} />}</For>
     </div>
   )
