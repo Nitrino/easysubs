@@ -12,8 +12,12 @@ import {
   fetchCustomSubsFx,
   updateCurrentSubsFx,
   updateSubsDelayFx,
-  updatesubsSizeFx,
+  updateSubsSizeFx,
   resyncSubsFx,
+  $subsBackground,
+  updateSubsBackgroundFx,
+  $subsBackgroundOpacity,
+  updateSubsBackgroundOpacityFx,
 } from '.'
 import { getCurrentSubs } from './utils/getCurrentSubs'
 import { $video, videoTimeUpdate } from '@/models/videos'
@@ -21,7 +25,9 @@ import { $video, videoTimeUpdate } from '@/models/videos'
 $rawSubs.on([fetchSubsFx.doneData, fetchCustomSubsFx.doneData], (_, subs) => subs)
 $rawSubs.on(resyncSubsFx.doneData, (subs, { currentDelay, delay }) => resync(subs, (delay - currentDelay) * 1000))
 $subsDelay.on(updateSubsDelayFx.doneData, (_, delay) => delay)
-$subsSize.on(updatesubsSizeFx.doneData, (_, size) => size)
+$subsSize.on(updateSubsSizeFx.doneData, (_, size) => size)
+$subsBackground.on(updateSubsBackgroundFx.doneData, (_, enabled) => enabled)
+$subsBackgroundOpacity.on(updateSubsBackgroundOpacityFx.doneData, (_, size) => size)
 $currentSubs.on(updateCurrentSubsFx.doneData, (state, subs) => {
   if (isEqual(state, subs)) {
     return undefined

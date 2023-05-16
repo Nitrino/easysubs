@@ -8,6 +8,7 @@ import { SubsDelay } from './SubsDelay'
 import { SubsSize } from './SubsSize'
 import { CustomSubs } from './CustomSubs'
 import { SubsBackground } from './SubsBackground'
+import { SubsBackgroundOpacity } from './SubsBackgroundOpacity'
 
 interface SettingsProps {
   contentContainer: HTMLElement | null
@@ -67,6 +68,7 @@ const SettingsContent: Component<{ onClose: () => void }> = (props) => {
             <SubsSize />
             <CustomSubs />
             <SubsBackground />
+            <SubsBackgroundOpacity />
           </div>
         </Show>
       </div>

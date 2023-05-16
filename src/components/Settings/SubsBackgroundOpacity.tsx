@@ -1,10 +1,10 @@
 import { Component, JSX } from 'solid-js'
 import { useUnit } from 'effector-solid'
 
-import { $subsSize, updateSubsSizeFx } from '@/models/subs'
+import { $subsBackgroundOpacity, updateSubsBackgroundOpacityFx } from '@/models/subs'
 import { PlusIcon, MinusIcon } from '@/components/ui'
 
-const FONT_SIZE_STEP = 5
+const OPACITY_STEP = 5
 
 const SizeButton: Component<{ children: JSX.Element; onClick: () => void }> = (props) => {
   return (
@@ -26,13 +26,21 @@ const SizeButton: Component<{ children: JSX.Element; onClick: () => void }> = (p
     </button>
   )
 }
-export const SubsSize: Component = () => {
-  const subsSize = useUnit($subsSize)
+
+export const SubsBackgroundOpacity: Component = () => {
+  const subsBackgroundOpacity = useUnit($subsBackgroundOpacity)
+
+  const handleClick = (step: number) => {
+    const newValue = subsBackgroundOpacity() + step
+    if (newValue >= 0 && newValue <= 100) {
+      updateSubsBackgroundOpacityFx(newValue)
+    }
+  }
   return (
     <div class="es-settings-content__element">
-      <div class="es-settings-content__element__left">Subtitles size:</div>
+      <div class="es-settings-content__element__left">Backgound opacity:</div>
       <div class="es-settings-content__element__right">
-        <SizeButton onClick={() => updateSubsSizeFx(subsSize() - FONT_SIZE_STEP)}>
+        <SizeButton onClick={() => handleClick(-OPACITY_STEP)}>
           <MinusIcon />
         </SizeButton>
         <div
@@ -44,9 +52,9 @@ export const SubsSize: Component = () => {
             padding: '0 8px',
           }}
         >
-          {subsSize()}%
+          {subsBackgroundOpacity()}%
         </div>
-        <SizeButton onClick={() => updateSubsSizeFx(subsSize() + FONT_SIZE_STEP)}>
+        <SizeButton onClick={() => handleClick(OPACITY_STEP)}>
           <PlusIcon />
         </SizeButton>
       </div>

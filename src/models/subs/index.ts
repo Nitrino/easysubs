@@ -14,6 +14,8 @@ export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle))
 export const $currentSubs = createStore<TSub[]>([])
 export const $subsDelay = createStore<number>(0)
 export const $subsSize = withPersist(createStore<number>(100, { name: 'es-subs-size' }))
+export const $subsBackground = withPersist(createStore<boolean>(true, { name: 'es-subs-background' }))
+export const $subsBackgroundOpacity = withPersist(createStore<number>(50, { name: 'es-subs-background-opacity' }))
 
 export const esSubsChanged = createEvent<string>()
 export const esRenderSetings = createEvent()
@@ -22,7 +24,9 @@ export const fetchSubsFx = createEffect<{ language: string; streaming: Service }
 export const fetchCustomSubsFx = createEffect<Captions, Captions>((subs) => subs)
 export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>()
 export const updateSubsDelayFx = createEffect<number, number>()
-export const updatesubsSizeFx = createEffect<number, number>((size) => size)
+export const updateSubsSizeFx = createEffect<number, number>((size) => size)
+export const updateSubsBackgroundFx = createEffect<boolean, boolean>((value) => value)
+export const updateSubsBackgroundOpacityFx = createEffect<number, number>((value) => value)
 export const resyncSubsFx = createEffect<
   { currentDelay: number; delay: number },
   { currentDelay: number; delay: number }
