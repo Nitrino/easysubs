@@ -1,129 +1,97 @@
-<p align="center">
-  <img height="80" src="./logo.png">
-</p>
-<p align="center">
-  <h2 align="center">Learn languages with fun 🎉</h2>
-</p>
+<div align="center">
+<img src="public/icon-128.png" alt="logo"/>
+<h1> Chrome Extension Boilerplate with<br/>React + Vite + TypeScript</h1>
 
-Browser extension to learn languages by watching movies and TV shows.
+![](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![](https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![](https://badges.aleen42.com/src/vitejs.svg)
+![GitHub action badge](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/actions/workflows/build-zip.yml/badge.svg)
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/Jonghakseo/chrome-extension-boilerplate-react-viteFactions&count_bg=%23#222222&title_bg=%23#454545&title=😀&edge_flat=true" alt="hits"/>
 
-## WARNING
 
-**The master branch contains version 2.0 which is currently under active development.  
-You can find the release version in the [v1.0 branch](https://github.com/Nitrino/easysubs/tree/v1.0)**
+> This project is listed in the [Awesome Vite](https://github.com/vitejs/awesome-vite)
 
-## Installation
+</div>
 
-The extension supports Chrome, Firefox, Opera and Yandex. It should also work in other browsers that have WebExtensions API support, but it hasn't been tested yet.
+## Table of Contents
 
-**Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github) and [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github).**
+- [Intro](#intro)
+- [Features](#features)
+- [Installation](#installation)
+  - [Procedures](#procedures)
+- [Screenshots](#screenshots)
+  - [NewTab](#newtab)
+  - [Popup](#popup)  
+- [Sample](#sample)
+- [Documents](#documents)
 
-<a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
-  <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
-</a>
-<span><img width="30px"></img></span>
-<a href="https://addons.mozilla.org/en-US/firefox/addon/easysubs/?utm_source=github&utm_medium=social&utm_campaign=github"
-  class="btn -store cover__store" target="_blank">
-  <img src="./docs/img/firefox-store.svg" alt="firefox store" width="220px">
-</a>
+## Intro <a name="intro"></a>
+This boilerplate is made for creating chrome extensions using React and Typescript.
+> The focus was on improving the build speed and development experience with Vite.
 
-## Build
+## Features <a name="features"></a>
+- [React 18](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [Vite](https://vitejs.dev/)
+- [SASS](https://sass-lang.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [Chrome Extension Manifest Version 3](https://developer.chrome.com/docs/extensions/mv3/intro/)
+- HRR(Hot Rebuild & Refresh/Reload)
 
-1. Install node 12+
-2. Clone repo `git clone git@github.com:Nitrino/easysubs.git`
-3. Go to folder and install dependencies `cd easysubs && npm i`
-4. Build extension `npm run build`
+## Installation <a name="installation"></a>
 
-## Manual install
+### Procedures <a name="procedures"></a>
+1. Clone this repository.
+2. Change `name` and `description` in package.json => **Auto synchronize with manifest** 
+3. Run `yarn install` or `npm i` (check your node version >= 16.6, recommended >= 18)
+4. Run `yarn dev` or `npm run dev`
+5. Load Extension on Chrome
+   1. Open - Chrome browser
+   2. Access - chrome://extensions
+   3. Check - Developer mode
+   4. Find - Load unpacked extension
+   5. Select - `dist` folder in this project (after dev or build)
+6. If you want to build in production, Just run `yarn build` or `npm run build`.
 
-1. Download and unzip [latest version](https://github.com/Nitrino/easysubs/releases)
-2. Open extensions page in browser:
-   - For Chrome: `chrome://extensions/`
-   - For Firefox: `about:debugging#/runtime/this-firefox`
-   - For Opera: `opera://extensions`
-   - For Yandex browser: `browser://tune/`
-3. Turn on developer mode (for all except Yandex browser)
-4. Load unpacked extension:
-   - For Chrome and Opera: Click to `Load unpacked` button and select folder
-   - For Firefox: Click to `Load temporary Add-on...` button and select folder
-   - For Yandex browser: Drag and drop folder to extensions page
+## Screenshots <a name="screenshots"></a>
 
-## Features
+### New Tab <a name="newtab"></a>
 
-### Integration with multiple video services
+<img width="971" src="https://user-images.githubusercontent.com/53500778/162631646-cd40976b-b737-43d0-8e6a-6ac090a2e2d4.png">
 
-The list of services will expand at the request of users.  
-To use the plugin, you must have a subscription to the desired service.
+### Popup <a name="popup"></a>
 
-**Now supported:**
+<img width="314" alt="popup" src="https://user-images.githubusercontent.com/53500778/203561728-23517d46-12e3-4139-8a4f-e0b2f22a6ab3.png">
 
-- [Youtube (videos and originals)](https://www.youtube.com)
-- [Netflix](https://www.netflix.com)
-- [KinoPub](https://kino.pub)
-- [Coursera](https://www.coursera.org)
-- [English With Fun](https://english-with-fun.com)
+## Sample <a name="sample"></a>
+- https://github.com/Jonghakseo/drag-gpt-extension
+- https://github.com/Jonghakseo/pr-commit-noti
 
-### Word and full subtitle translation
+## Documents <a name="documents"></a>
+- [Vite Plugin](https://vitejs.dev/guide/api-plugin.html)
+- [ChromeExtension](https://developer.chrome.com/docs/extensions/mv3/)
+- [Rollup](https://rollupjs.org/guide/en/)
+- [Rollup-plugin-chrome-extension](https://www.extend-chrome.dev/rollup-plugin)
 
-Just hover over the word that you want to translate. The video will automatically pause and then start playing when you remove the cursor from the subtitles.  
-In the translation popup of the word, you can see alternative translations with the frequency of use.
-![word translation](screenshots/word.png)
 
-Click on the subtitles to translate the whole sentence.
-![word translation](screenshots/full-sub.png)
+## Star History
 
-### Export words to learning services
+[![Star History Chart](https://api.star-history.com/svg?repos=Jonghakseo/chrome-extension-boilerplate-react-vite&type=Date)](https://star-history.com/#Jonghakseo/chrome-extension-boilerplate-react-vite&Date)
 
-The list of services will expand at the request of users.
 
-**Now supported:**
 
-- [LinguaLeo](https://lingualeo.com),
-- [Puzzle English](https://puzzle-english.com)
+---
+## Thanks To
 
-For the export to work, you must be logged in to the learning service that you want to use (make sure it's the same browser). Then select the desired service in the extension settings.
+| [Jetbrains](https://jb.gg/OpenSourceSupport)                                                                           | [Jackson Hong](https://www.linkedin.com/in/j-acks0n/)                                            |
+|--------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| <img width="100" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo."> | <img width="100" src='https://avatars.githubusercontent.com/u/23139754?v=4' alt='Jackson Hong'/> |
 
-![word translation](screenshots/select-service.png)
 
-After which a ➕(plus) icon will appear near the words of the translation, by clicking on which the word is exported to the selected service.
+---
 
-![word translation](screenshots/export-to-service.png)
-
-### Rewind to previous and next subtitle
-
-Rewind to the previous sentence by pressing ⬅️ (left arrow).  
-Rewind to the next sentence by pressing ➡️ (right arrow).
-
-Rewind only works if the next/previous sentence is less than 5 seconds apart from the current sentence. Otherwise it'll rewinds 5 seconds.  
-To force rewinding to the next/previous sentence use `alt (option for macOS) + arrow button`.
-
-![word translation](screenshots/navigation.png)
-
-### Subtitle progress bar
-
-At the bottom of the player, there is a subtitles progress bar to simplify navigation between subtitles.  
-Click on the progress bar to rewind the video to the desired spot.
-
-![word translation](screenshots/progressbar.png)
-
-### Subtitle settings and custom subtitles
-
-The extension allows you to adjust the size of the subtitles and their delay.
-The default subtitle delay step is 0.25 seconds.  
-`alt (option for macOS) + click the ➕ or ➖ buttons` changes the delay by 1 second.  
-`shift + click the ➕ or ➖ buttons` changes the delay by 5 seconds.
-
-You can also upload your own custom subtitles. Supported are `srt` and `vtt` formats.
-
-![word translation](screenshots/subtitles-settings.png)
-
-### Additional features
-
-- Show all available audio tracks and subtitles on Netflix regardless of region.
-
-## Contributing
-
-We are open to community help.  
-To report a bug or feature offer, create [issue](https://github.com/Nitrino/easysubs/issues) and describe the question in detail.
-
-You can also implement the desired feature and send a [pull request](https://github.com/Nitrino/easysubs/pulls). We recommend discussing the feature in issues tracker before implementation. This will help reduce your time.
+[Jonghakseo](https://nookpi.tistory.com/)
