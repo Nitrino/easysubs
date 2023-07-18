@@ -19,9 +19,11 @@
   "dependencies": {
     "effector": "^22.8.6",
     "effector-react": "^22.5.3",
+    "m3u8-parser": "^7.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "subtitle": "^4.2.1"
+    "stream-browserify": "^3.0.0",
+    "subtitle": "^3.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.5.0",

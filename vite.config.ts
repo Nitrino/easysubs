@@ -26,6 +26,7 @@ export default defineConfig({
       "@src": srcDir,
       "@assets": assetsDir,
       "@pages": pagesDir,
+      "node:stream": "stream-browserify",
     },
   },
   plugins: [
