@@ -65,10 +65,10 @@ $streaming.watch((streaming) => {
   //   render(() => <Subs />, subsNode);
   // });
 
-  const root = document.createElement("div");
-  root.id = "easysubs";
-  document.body.append(root);
-  createRoot(root).render(<App />);
+  // const root = document.createElement("div");
+  // root.id = "easysubs";
+  // document.body.append(root);
+  // createRoot(root).render(<App />);
 
   streaming.init();
 });

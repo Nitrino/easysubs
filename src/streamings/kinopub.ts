@@ -1,7 +1,8 @@
 import { Parser } from "m3u8-parser";
 import { parse } from "subtitle";
 
-import { esRenderSetings, esSubsChanged } from "@src/models/subs";
+import { esSubsChanged } from "@src/models/subs";
+import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 
 class KinoPub implements Service {
@@ -15,7 +16,7 @@ class KinoPub implements Service {
   }
 
   public init(): void {
-    console.log("++++++++++++ KINOPUB INIT ++++++++++++");
+    console.debug("++++++++++++ KINOPUB INIT ++++++++++++");
     this.injectScript();
 
     window.addEventListener(
@@ -85,6 +86,8 @@ class KinoPub implements Service {
   }
 
   private handleKinopubFirstFrame(event: CustomEvent) {
+    console.debug("++++++++++++ KINOPUB FIRST FRAME ++++++++++++");
+
     this.videoPlaylistUrl = event.detail;
     if (this.subsName) {
       esSubsChanged(this.subsName);

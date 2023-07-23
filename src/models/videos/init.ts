@@ -43,3 +43,7 @@ move.prev.use(async ({ video, subs }) => {
     video.currentTime -= TIME_SEEK_TIME / 1000;
   }
 });
+
+$video.watch((video) => {
+  console.log("video", video);
+});

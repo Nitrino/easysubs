@@ -1,6 +1,7 @@
 import { parse } from "subtitle";
 
-import { esRenderSetings, esSubsChanged } from "@src/models/subs";
+import { esSubsChanged } from "@src/models/subs";
+import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 
 class Youtube implements Service {

@@ -1,6 +1,6 @@
-console.log("kinopub.js loaded");
+console.debug("kinopub.js loaded");
 if (window.playerInstance) {
-  console.log("kinopub.js playerInstance exists");
+  console.debug("kinopub.js playerInstance exists");
   window.playerInstance.on("captionsChanged", () => {
     const track = window.playerInstance.getConfig().captionsTrack;
     const label = track ? track.label : null;
@@ -11,7 +11,7 @@ if (window.playerInstance) {
 
   window.playerInstance.on("firstFrame", () => {
     const playlistUrl = window.playerInstance.getConfig().playlistItem.file;
-    console.log("kinopubFirstFrame+++++++++++");
+    console.debug("kinopubFirstFrame+++++++++++");
     window.dispatchEvent(
       new CustomEvent("kinopubFirstFrame", { detail: playlistUrl })
     );
