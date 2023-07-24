@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 
-import { $subs } from "@src/models/subs";
-import { useStore } from "effector-react";
+import { $currentSubs } from "@src/models/subs";
+import { useStore, useUnit } from "effector-react";
 import { $video } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
 import { $translateLanguage } from "@src/models/settings";
@@ -9,9 +9,10 @@ import { $translateLanguage } from "@src/models/settings";
 type TSubsProps = {};
 
 export const Subs: FC<TSubsProps> = () => {
-  const subs = useStore($subs);
+  const currentSubs = useStore($currentSubs);
   const video = useStore($video);
   const [showTranslation, setShowTranslation] = useState(false);
+  // const [subsBackground, subsBackgroundOpacity] = useUnit($subsBackground);
 
   const handleOnMouseLeave = () => {
     video.play();
@@ -25,11 +26,12 @@ export const Subs: FC<TSubsProps> = () => {
 
   return (
     <div id="es-subs" onMouseLeave={handleOnMouseLeave} onMouseEnter={handleOnMouseEnter}>
-      {subs.map((sub) => (
+      {currentSubs.map((sub) => (
         <div className="es-sub" onClick={() => setShowTranslation(true)} onMouseLeave={() => setShowTranslation(false)}>
-          {/* {
-            sub.items.map((item) => (<SubItem subItem={subItem} />)
-          } */}
+          {sub.items.map((item) => (
+            <SubItem subItem={item} />
+          ))}
+
           {/* <For each={props.sub.items}>{(subItem) => <SubItem subItem={subItem} />}</For>
         <Show when={showTranslation()}>
           <SubFullTranslation text={props.sub.cleanedText} />
@@ -55,28 +57,18 @@ const SubItem: FC<{ subItem: TSubItem }> = ({ subItem }) => {
     setShowTranslation(false);
   };
 
-  const textClass = () => {
-    switch (subItem.tag) {
-      case "b":
-        return "font-bold";
-      case "i":
-        return "italic";
-      case "u":
-        return "underline";
-      default:
-        return "";
-    }
-  };
-
   return (
     <>
-      <span className="es-sub-item" onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-        <pre className={textClass()} onClick={handleClick}>
-          {subItem.text}
-        </pre>
+      <pre
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+        className={`es-sub-item ${subItem.tag}`}
+        onClick={handleClick}
+      >
+        {subItem.text}
         {showTranslation && <SubItemTranslation text={subItem.cleanedText} />}
-      </span>
-      <pre className="inline"> </pre>
+      </pre>
+      <pre className="es-sub-item-space"> </pre>
     </>
   );
 };
@@ -87,10 +79,12 @@ const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   const [quickTranslations, setQuickTranslations] = useState<string[]>();
 
   return (
-    <div>
-      <div>{text}</div>
+    <div className="es-word-translation">
+      <div className="es-word-translation-original">{text}</div>
       <br />
-      <div>{quickTranslations?.map((tr) => tr.replaceAll(" ", "\xa0")).join(", ")}</div>
+      <div className="es-word-quick-translations">
+        {quickTranslations?.map((tr) => tr.replaceAll(" ", "\xa0")).join(", ")}
+      </div>
     </div>
   );
 };

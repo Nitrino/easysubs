@@ -6,6 +6,7 @@ import { esRenderSetings } from "@src/models/settings";
 import { esSubsChanged } from "@src/models/subs";
 import { $video, getCurrentVideoFx, videoTimeUpdate } from "@src/models/videos";
 import { Settings } from "@src/pages/content/components/Settings";
+import { Subs } from "./components/Subs";
 
 refreshOnUpdate("pages/content");
 
@@ -51,7 +52,7 @@ $streaming.watch((streaming) => {
     const subsNode = document.createElement("div");
     subsNode.id = "es";
     subsContainer?.appendChild(subsNode);
-    // render(() => <Subs />, subsNode);
+    createRoot(subsNode).render(<Subs />);
   });
 
   streaming.init();

@@ -1,13 +1,10 @@
 import { TSubItem } from "@src/models/types";
 
-const cleanWord = (word: string) =>
-  word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>{}[\]\\/]/gi, "");
+const cleanWord = (word: string) => word.replace(/[~!@#№$%^&*()_|+\-=?;:",.<>{}[\]\\/]/gi, "");
 
 export const textToSubItems = (text: string): TSubItem[] => {
   const tmpDiv = document.createElement("div") as HTMLDivElement;
-  tmpDiv.innerHTML = text
-    .replace(/(<\d+:\d+:\d+.\d+>)?<[/]?[c].*?>/g, "")
-    .replace(/[\r\n]+/g, "\r\n ");
+  tmpDiv.innerHTML = text.replace(/(<\d+:\d+:\d+.\d+>)?<[/]?[c].*?>/g, "").replace(/[\r\n]+/g, "\r\n ");
 
   const items = Array.from(tmpDiv.childNodes);
 

@@ -1,49 +1,16 @@
-import {
-  createStore,
-  createEffect,
-  createEvent,
-  UnitValue,
-  attach,
-  split,
-} from "effector";
-import { TMoveDirection } from "../types";
-import { $currentSubs, $subs } from "../subs";
+import { createStore, createEffect, createEvent, UnitValue, attach, sample } from "effector";
+import { esRenderSetings } from "../settings";
+import { debug } from "patronum";
 
 export const $video = createStore<HTMLVideoElement | null>(null);
-export const getCurrentVideoFx = createEffect<void, HTMLVideoElement>();
+export const getCurrentVideoFx = createEffect<void, HTMLVideoElement>(() => document.querySelector("video"));
 export const videoTimeUpdate = createEvent<void>("videoTimeUpdate");
 
-export const move = {
-  all: createMoveToSubsFx(),
-  prev: createMoveToSubsFx(),
-  next: createMoveToSubsFx(),
-};
-
-split({
-  source: move.all,
-  match: (params) => params.direction,
-  cases: {
-    next: move.next,
-    prev: move.prev,
-  },
+sample({
+  clock: esRenderSetings,
+  target: getCurrentVideoFx,
 });
 
-export const moveToSubsFx = attach({
-  effect: move.all,
-  source: { video: $video, subs: $subs, currentSubs: $currentSubs },
-  mapParams: (direction: TMoveDirection, data) => {
-    return { direction: direction, ...data };
-  },
-});
+$video.on(getCurrentVideoFx.doneData, (_, video) => video);
 
-function createMoveToSubsFx() {
-  return createEffect<
-    {
-      direction: TMoveDirection;
-      video: UnitValue<typeof $video>;
-      subs: UnitValue<typeof $subs>;
-      currentSubs: UnitValue<typeof $currentSubs>;
-    },
-    void
-  >();
-}
+debug($video);
