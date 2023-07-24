@@ -1,5 +1,8 @@
 import { FC, PropsWithChildren, useState } from "react";
 import cn from "classnames";
+import { Toggle } from "../ui/Toggle";
+import { useUnit } from "effector-react";
+import { $enabled, enableToggleChanged } from "@src/models/settings";
 
 interface TabProps {
   isActive: boolean;
@@ -21,6 +24,7 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [enabled, handleEnableToggleChanged] = useUnit([$enabled, enableToggleChanged]);
   const [activeTab, setActiveTab] = useState(0);
   return (
     <div className="es-settings-content">
@@ -50,8 +54,10 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         {activeTab === 0 && (
           <>
             <div className="es-settings-content__item">
-              ENABLE_TOOGLE
-              {/* <EnableToggle /> */}
+              <label className="easysubs-label easysubs-settings__item">
+                <span className="easysubs-label__text">ENABLED</span>
+                <Toggle isEnabled={enabled} onChange={handleEnableToggleChanged} />
+              </label>
             </div>
             <div className="es-settings-content__item">
               TRANSLATE_LANGUAGE

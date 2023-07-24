@@ -1,0 +1,271 @@
+#es {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: white;
+
+  pre {
+    background-color: transparent;
+    font: inherit;
+  }
+
+  .i {
+    font-style: italic;
+  }
+  .b {
+    font-weight: bold;
+  }
+  .u {
+    text-decoration: underline;
+  }
+
+  .es-sub {
+    text-align: center;
+    line-height: 1.25;
+    padding: 0 10px;
+  }
+
+  .es-sub-item {
+    display: inline;
+    position: relative;
+
+    pre {
+      display: inline;
+    }
+
+    &:hover {
+      color: #3a88a2;
+      cursor: pointer;
+    }
+  }
+  .es-sub-item-space {
+    display: inline;
+  }
+
+  .es-word-translation {
+    text-align: left;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate3d(-50%, -100%, 0);
+    padding: 10px 25px;
+    background-color: #1e1e1e;
+    border-radius: 0.4em;
+    font-size: 16px;
+    max-width: fit-content;
+    font-style: normal;
+    white-space: normal;
+    box-sizing: content-box;
+    color: #fff;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-top-color: #1e1e1e;
+      border-bottom: 0;
+      margin-left: -10px;
+      margin-bottom: -10px;
+    }
+  }
+
+  .es-word-translation-original {
+    font-weight: 600;
+  }
+
+  .es-word-quick-translations {
+    white-space: break-spaces;
+  }
+
+  .es-full-translation {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translate3d(-50%, -100%, 0);
+    padding: 10px 25px;
+    background-color: #1e1e1e;
+    border-radius: 0.4em;
+    font-size: 16px;
+    width: 100%;
+    font-style: normal;
+    white-space: normal;
+    box-sizing: content-box;
+    color: #fff;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-top-color: #1e1e1e;
+      border-bottom: 0;
+      margin-left: -10px;
+      margin-bottom: -10px;
+    }
+  }
+}
+
+.es-settings {
+  display: inline-block;
+}
+
+.es-settings-icon {
+  margin: 0 10px;
+  cursor: pointer;
+  svg {
+    width: 24px;
+  }
+}
+
+.es-settings-content {
+  all: revert;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background-color: #1f1d2b;
+  right: 36px;
+  bottom: 116px;
+  z-index: 10000;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  &__menu {
+    display: flex;
+
+    &__items {
+      display: flex;
+    }
+
+    &__item {
+      line-height: 52px;
+      padding: 0 18px;
+      font-size: 18px;
+      cursor: pointer;
+
+      &:first-child {
+        border-radius: 8px 0 0 0;
+      }
+
+      &--active {
+        background-color: #252836;
+      }
+    }
+  }
+
+  &__main {
+    flex: 1;
+    padding: 16px;
+    background-color: #252836;
+    border-radius: 0 0 8px 8px;
+  }
+
+  &__item {
+    margin-bottom: 8px;
+  }
+
+  &__element {
+    display: flex;
+
+    &__left {
+      display: flex;
+      flex: 1;
+      text-align: right;
+      align-items: center;
+      justify-content: flex-end;
+      margin-right: 8px;
+    }
+
+    &__right {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      margin-left: 8px;
+
+      label {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    cursor: pointer;
+
+    &:after {
+      display: inline-block;
+      content: "\00d7";
+      font-size: 28px;
+      line-height: 18px;
+    }
+  }
+}
+
+.es-kinopub.es-enabled {
+  .jw-captions.jw-captions-enabled {
+    display: none;
+  }
+
+  #es {
+    bottom: 130px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}
+
+.es-youtube.es-enabled {
+  .captions-text {
+    display: none !important;
+  }
+
+  .html5-video-player {
+    &.ytp-fullscreen {
+      padding-bottom: 0;
+
+      #easysubs {
+        bottom: 110px;
+      }
+    }
+  }
+
+  .es-settings {
+    vertical-align: top;
+  }
+
+  .es-settings-icon {
+    margin: 0 12px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      vertical-align: middle;
+    }
+  }
+
+  #es {
+    z-index: 30;
+    bottom: 80px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}

@@ -1,7 +1,10 @@
-import { createStore, createEvent } from "effector";
+import { createStore, createEvent, sample, createEffect } from "effector";
 import { withPersist } from "@src/utils/withPersist";
+import { debug } from "patronum";
 
 export const $enabled = withPersist(createStore<boolean>(true, { name: "es-enabled" }));
+export const enableToggleChanged = createEvent<boolean>();
+export const enableToggleChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
 
 export const $translateLanguage = withPersist(
   createStore<string>(window.navigator.language.split("-")[0], {
@@ -15,3 +18,16 @@ export const $subsBackgroundOpacity = withPersist(createStore<number>(50, { name
 export const $autoPause = withPersist(createStore<boolean>(false, { name: "es-auto-pause" }));
 
 export const esRenderSetings = createEvent();
+
+sample({
+  clock: enableToggleChanged,
+  target: enableToggleChangeFx,
+});
+
+$enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
+
+$enabled.watch((isEnables) => {
+  document.body.classList.toggle("es-enabled", isEnables);
+});
+
+debug($enabled);
