@@ -17,6 +17,7 @@
   },
   "type": "module",
   "dependencies": {
+    "classnames": "^2.3.2",
     "effector": "^22.8.6",
     "effector-react": "^22.5.3",
     "m3u8-parser": "^7.0.0",
