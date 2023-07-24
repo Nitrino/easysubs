@@ -86,8 +86,6 @@ class KinoPub implements Service {
   }
 
   private handleKinopubFirstFrame(event: CustomEvent) {
-    console.debug("++++++++++++ KINOPUB FIRST FRAME ++++++++++++");
-
     this.videoPlaylistUrl = event.detail;
     if (this.subsName) {
       esSubsChanged(this.subsName);

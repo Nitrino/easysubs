@@ -34,7 +34,7 @@ type FullTranslation = {
   items: FullTranslationItem[];
 };
 
-export type TTranslation = {
+export type TWordTranslation = {
   source: string;
   source_lang: string;
   target_lang: string;

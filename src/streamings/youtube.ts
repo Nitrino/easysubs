@@ -22,18 +22,9 @@ class Youtube implements Service {
       type: "injectScript",
       service: "youtube",
     });
-    window.addEventListener(
-      "esYoutubeCaptionsData",
-      this.handleCaptionsData as EventListener
-    );
-    window.addEventListener(
-      "esYoutubeCaptionsChanged",
-      this.handleCaptionsChanges as EventListener
-    );
-    window.addEventListener(
-      "esYoutubeLoaded",
-      this.handleLoaded as EventListener
-    );
+    window.addEventListener("esYoutubeCaptionsData", this.handleCaptionsData as EventListener);
+    window.addEventListener("esYoutubeCaptionsChanged", this.handleCaptionsChanges as EventListener);
+    window.addEventListener("esYoutubeLoaded", this.handleLoaded as EventListener);
   }
 
   public async getSubs(label: string) {
@@ -56,24 +47,19 @@ class Youtube implements Service {
   }
 
   public getSettingsButtonContainer() {
-    const selector = document.querySelector(
-      ".ytp-right-controls > .ytp-size-button"
-    );
-    if (selector === null)
-      throw new Error("Settings button container not found");
+    const selector = document.querySelector(".ytp-right-controls > .ytp-size-button");
+    if (selector === null) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector(".html5-video-player");
-    if (selector === null)
-      throw new Error("Settings content container not found");
+    if (selector === null) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
   private getVideoId(): string {
-    const regExpression =
-      /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExpression = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = window.location.href.match(regExpression);
     if (match && match[2].length === 11) {
       return match[2];
@@ -84,10 +70,7 @@ class Youtube implements Service {
 
   private handleCaptionsData(event: CustomEvent): void {
     const urlObject = new URL(event.detail);
-    const lang =
-      urlObject.searchParams.get("tlang") ||
-      urlObject.searchParams.get("lang") ||
-      "";
+    const lang = urlObject.searchParams.get("tlang") || urlObject.searchParams.get("lang") || "";
     const videoId = urlObject.searchParams.get("v") || "";
     this.subCache[videoId] = {};
     this.subCache[videoId][lang] = urlObject.href;

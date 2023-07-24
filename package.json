@@ -20,6 +20,7 @@
     "effector": "^22.8.6",
     "effector-react": "^22.5.3",
     "m3u8-parser": "^7.0.0",
+    "patronum": "^1.19.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "stream-browserify": "^3.0.0",

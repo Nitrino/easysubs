@@ -1,10 +1,4 @@
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  attach,
-  UnitValue,
-} from "effector";
+import { createStore, createEvent, createEffect, attach, UnitValue, sample } from "effector";
 import { Captions } from "subtitle";
 import { convertRawSubs } from "@src/utils/convertRawSubs";
 import { TSub } from "../types";
@@ -14,43 +8,30 @@ import type Service from "@src/streamings/service";
 
 import { $streaming } from "../streamings";
 import { withPersist } from "@src/utils/withPersist";
+import { debug } from "patronum";
 
-export const $rawSubs = createStore<Captions>([]);
+export const $rawSubs = createStore<Captions>([], { name: "rawSubs" });
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
-export const $currentSubs = createStore<TSub[]>([]);
+export const $currentSubs = createStore<TSub[]>([], { name: "currentSubs" });
 
 export const esSubsChanged = createEvent<string>();
 
-export const fetchSubsFx = createEffect<
-  { language: string; streaming: Service },
-  Captions
->();
-export const fetchCustomSubsFx = createEffect<Captions, Captions>(
-  (subs) => subs
+export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(({ streaming, language }) =>
+  streaming.getSubs(language)
 );
-export const updateCurrentSubsFx = createEffect<
-  { subs: TSub[]; video: UnitValue<typeof $video> },
-  TSub[]
->();
-export const updateSubsDelayFx = createEffect<number, number>();
-export const updateSubsSizeFx = createEffect<number, number>((size) => size);
-export const updateSubsBackgroundFx = createEffect<boolean, boolean>(
-  (value) => value
-);
-export const updateSubsBackgroundOpacityFx = createEffect<number, number>(
-  (value) => value
-);
-export const resyncSubsFx = createEffect<
-  { currentDelay: number; delay: number },
-  { currentDelay: number; delay: number }
->((data) => data);
 
-export const fetchServiceSubsFx = attach<
-  string,
-  typeof $streaming,
-  typeof fetchSubsFx
->({
-  effect: fetchSubsFx,
+sample({
+  clock: esSubsChanged,
   source: $streaming,
-  mapParams: (language, streaming) => ({ language, streaming }),
+  fn: (streaming, language) => ({ streaming, language }),
+  target: fetchSubsFx,
 });
+// export const fetchCustomSubsFx = createEffect<Captions, Captions>(
+//   (subs) => subs
+// );
+// export const updateCurrentSubsFx = createEffect<
+//   { subs: TSub[]; video: UnitValue<typeof $video> },
+//   TSub[]
+// >();
+
+debug({ $rawSubs, $subs, $currentSubs });
