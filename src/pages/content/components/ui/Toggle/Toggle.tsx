@@ -1,11 +1,11 @@
 import { FC } from "react";
 
-type TToggleProps = {
+export interface ToggleProps {
   isEnabled: boolean;
   onChange: (value: boolean) => void;
-};
+}
 
-export const Toggle: FC<TToggleProps> = ({ isEnabled, onChange }) => {
+export const Toggle: FC<ToggleProps> = ({ isEnabled, onChange }) => {
   return (
     <div className="toggle">
       <input

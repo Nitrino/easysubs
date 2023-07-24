@@ -11,6 +11,10 @@ export const $translateLanguage = withPersist(
     name: "es-translate-language",
   })
 );
+
+export const translateLanguageChanged = createEvent<string>();
+export const translateLanguageChangeFx = createEffect<string, string>((value) => value);
+
 export const $subsSize = withPersist(createStore<number>(100, { name: "es-subs-size" }));
 export const $subsBackground = withPersist(createStore<boolean>(true, { name: "es-subs-background" }));
 export const $subsBackgroundOpacity = withPersist(createStore<number>(50, { name: "es-subs-background-opacity" }));
@@ -24,10 +28,16 @@ sample({
   target: enableToggleChangeFx,
 });
 
+sample({
+  clock: translateLanguageChanged,
+  target: translateLanguageChangeFx,
+});
+
 $enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
+$translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 
 $enabled.watch((isEnables) => {
   document.body.classList.toggle("es-enabled", isEnables);
 });
 
-debug($enabled);
+debug($enabled, $translateLanguage);
