@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useState } from "react";
 import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
+import { LearningService } from "./LearningService";
 
 interface TabProps {
   isActive: boolean;
@@ -56,6 +57,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
             <div className="es-settings-content__item">
               <TranslateLanguage />
+            </div>
+            <div className="es-settings-content__item">
+              <LearningService />
             </div>
           </>
         )}

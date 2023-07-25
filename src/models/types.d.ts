@@ -42,4 +42,7 @@ export type TWordTranslation = {
   full_translations: FullTranslation[];
   examples: string[];
 };
+
 export type TGoogleTranslation = unknown;
+
+export type TLearningService = "lingualeo" | "puzzle-english" | "disabled";
