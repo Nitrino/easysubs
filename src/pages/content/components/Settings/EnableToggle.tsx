@@ -8,10 +8,10 @@ export const EnableToggle: FC = () => {
 
   return (
     <div className="es-settings-content__element">
-      <label className="es-label">
-        <span>Enabled</span>
+      <div className="es-settings-content__element__left">Enabled</div>
+      <div className="es-settings-content__element__right">
         <Toggle isEnabled={enabled} onChange={handleEnableToggleChanged} />
-      </label>
+      </div>
     </div>
   );
 };

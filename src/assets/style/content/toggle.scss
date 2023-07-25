@@ -1,18 +1,12 @@
-.es-label {
-  display: inline-flex;
-  align-items: center;
+.es-toggle {
+  isolation: isolate;
+  position: relative;
+  height: 20px;
+  width: 40px;
+  border-radius: 15px;
+  background: #d6d6d6;
+  overflow: hidden;
   cursor: pointer;
-  font-weight: normal;
-
-  .toggle {
-    isolation: isolate;
-    position: relative;
-    height: 20px;
-    width: 40px;
-    border-radius: 15px;
-    background: #d6d6d6;
-    overflow: hidden;
-  }
 
   .toggle-inner {
     z-index: 2;
