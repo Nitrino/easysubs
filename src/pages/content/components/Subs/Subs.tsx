@@ -1,19 +1,20 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { $currentSubs } from "@src/models/subs";
 import { useStore, useUnit } from "effector-react";
 import { $video } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
-import { $subsBackground, $subsBackgroundOpacity, $translateLanguage } from "@src/models/settings";
+import { $subsBackground, $subsBackgroundOpacity, $translateLanguage, $subsFontSize } from "@src/models/settings";
 
 type TSubsProps = {};
 
 export const Subs: FC<TSubsProps> = () => {
-  const [video, currentSubs, subsBackground, subsBackgroundOpacity] = useUnit([
+  const [video, currentSubs, subsBackground, subsBackgroundOpacity, subsFontSize] = useUnit([
     $video,
     $currentSubs,
     $subsBackground,
     $subsBackgroundOpacity,
+    $subsFontSize,
   ]);
   const [showTranslation, setShowTranslation] = useState(false);
 
@@ -28,7 +29,12 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   return (
-    <div id="es-subs" onMouseLeave={handleOnMouseLeave} onMouseEnter={handleOnMouseEnter}>
+    <div
+      id="es-subs"
+      onMouseLeave={handleOnMouseLeave}
+      onMouseEnter={handleOnMouseEnter}
+      style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
+    >
       {currentSubs.map((sub) => (
         <div
           className="es-sub"

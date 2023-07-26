@@ -1,6 +1,6 @@
-import { FC, PropsWithChildren } from "react";
+import { FC } from "react";
 import { useUnit } from "effector-react";
-import { $subsDelay, subsDelayButtonPressed } from "@src/models/settings";
+import { $subsDelay, subsDelayButtonPressed } from "@src/models/subs";
 import { ArrowBackDouble } from "./assets/ArrowBackDouble";
 import { ArrowForward } from "./assets/ArrowForward";
 import { ArrowBack } from "./assets/ArrowBack";

@@ -1,7 +1,8 @@
 import { createStore, createEvent, sample, createEffect } from "effector";
-import { withPersist } from "@src/utils/withPersist";
 import { debug } from "patronum";
-import { TLearningService } from "../types";
+
+import { withPersist } from "@src/utils/withPersist";
+import { TLearningService, TSub } from "../types";
 
 export const $enabled = withPersist(createStore<boolean>(true, { name: "es-enabled" }));
 export const enableToggleChanged = createEvent<boolean>();
@@ -15,13 +16,9 @@ export const $learningService = withPersist(createStore<TLearningService>("disab
 export const learningServiceChanged = createEvent<TLearningService>();
 export const learningServiceChangeFx = createEffect<TLearningService, TLearningService>((value) => value);
 
-export const $subsDelay = createStore<number>(0);
-export const subsDelayButtonPressed = createEvent<number>();
-export const subsDelayChangeFx = createEffect<number, number>((value) => value);
-
-export const $subsSize = withPersist(createStore<number>(100));
-export const subsSizeButtonPressed = createEvent<number>();
-export const subsSizeChangeFx = createEffect<number, number>((value) => value);
+export const $subsFontSize = withPersist(createStore<number>(100));
+export const subsFontSizeButtonPressed = createEvent<number>();
+export const subsFontSizeChangeFx = createEffect<number, number>((value) => value);
 
 export const $subsBackground = withPersist(createStore<boolean>(true));
 export const subsBackgroundButtonPressed = createEvent<boolean>();
@@ -51,13 +48,8 @@ sample({
 });
 
 sample({
-  clock: subsDelayButtonPressed,
-  target: subsDelayChangeFx,
-});
-
-sample({
-  clock: subsSizeButtonPressed,
-  target: subsSizeChangeFx,
+  clock: subsFontSizeButtonPressed,
+  target: subsFontSizeChangeFx,
 });
 
 sample({
@@ -74,8 +66,7 @@ sample({
 $enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
-$subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
-$subsSize.on(subsSizeChangeFx.doneData, (_, subsSize) => subsSize);
+$subsFontSize.on(subsFontSizeChangeFx.doneData, (_, subsFontSize) => subsFontSize);
 $subsBackground.on(subsBackgroundToggleFx.doneData, (_, value) => value);
 $subsBackgroundOpacity.on(subsBackgroundOpacityChangeFx.doneData, (_, value) => value);
 
@@ -83,4 +74,4 @@ $enabled.watch((isEnables) => {
   document.body.classList.toggle("es-enabled", isEnables);
 });
 
-debug($enabled, $translateLanguage, $learningService, $subsDelay, $subsSize, $subsBackground);
+debug($enabled, $translateLanguage, $learningService, $subsFontSize, $subsBackground);

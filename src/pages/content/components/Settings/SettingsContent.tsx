@@ -4,7 +4,7 @@ import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
 import { LearningService } from "./LearningService";
 import { SubsDelay } from "./SubsDelay";
-import { SubsSize } from "./SubsSize";
+import { SubsFontSize } from "./SubsFontSize";
 import { SubsBackground } from "./SubsBackground";
 import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 
@@ -68,12 +68,20 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
           </>
         )}
         {activeTab === 1 && (
-          <div className="es-settings-content__item">
-            <SubsDelay />
-            <SubsSize />
-            <SubsBackground />
-            <SubsBackgroundOpacity />
-          </div>
+          <>
+            <div className="es-settings-content__item">
+              <SubsDelay />
+            </div>
+            <div className="es-settings-content__item">
+              <SubsFontSize />
+            </div>
+            <div className="es-settings-content__item">
+              <SubsBackground />
+            </div>
+            <div className="es-settings-content__item">
+              <SubsBackgroundOpacity />
+            </div>
+          </>
         )}
       </div>
       <div className="es-settings-content__close" onClick={() => onClose()} />
