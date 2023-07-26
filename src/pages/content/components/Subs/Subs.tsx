@@ -4,15 +4,18 @@ import { $currentSubs } from "@src/models/subs";
 import { useStore, useUnit } from "effector-react";
 import { $video } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
-import { $translateLanguage } from "@src/models/settings";
+import { $subsBackground, $subsBackgroundOpacity, $translateLanguage } from "@src/models/settings";
 
 type TSubsProps = {};
 
 export const Subs: FC<TSubsProps> = () => {
-  const currentSubs = useStore($currentSubs);
-  const video = useStore($video);
+  const [video, currentSubs, subsBackground, subsBackgroundOpacity] = useUnit([
+    $video,
+    $currentSubs,
+    $subsBackground,
+    $subsBackgroundOpacity,
+  ]);
   const [showTranslation, setShowTranslation] = useState(false);
-  // const [subsBackground, subsBackgroundOpacity] = useUnit($subsBackground);
 
   const handleOnMouseLeave = () => {
     video.play();
@@ -27,7 +30,14 @@ export const Subs: FC<TSubsProps> = () => {
   return (
     <div id="es-subs" onMouseLeave={handleOnMouseLeave} onMouseEnter={handleOnMouseEnter}>
       {currentSubs.map((sub) => (
-        <div className="es-sub" onClick={() => setShowTranslation(true)} onMouseLeave={() => setShowTranslation(false)}>
+        <div
+          className="es-sub"
+          onClick={() => setShowTranslation(true)}
+          onMouseLeave={() => setShowTranslation(false)}
+          style={{
+            background: `rgba(0, 0, 0, ${subsBackground ? subsBackgroundOpacity / 100 : 0})`,
+          }}
+        >
           {sub.items.map((item) => (
             <SubItem subItem={item} />
           ))}
