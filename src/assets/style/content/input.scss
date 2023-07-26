@@ -1,0 +1,10 @@
+.es-input {
+  display: none;
+
+  &__label {
+    border: 1px solid #fff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}

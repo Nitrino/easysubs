@@ -7,6 +7,7 @@ import { SubsDelay } from "./SubsDelay";
 import { SubsFontSize } from "./SubsFontSize";
 import { SubsBackground } from "./SubsBackground";
 import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
+import { CustomSubs } from "./CustomSubs";
 
 interface TabProps {
   isActive: boolean;
@@ -80,6 +81,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
             <div className="es-settings-content__item">
               <SubsBackgroundOpacity />
+            </div>
+            <div className="es-settings-content__item">
+              <CustomSubs />
             </div>
           </>
         )}

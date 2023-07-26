@@ -16,10 +16,10 @@ export const esSubsChanged = createEvent<string>();
 export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(({ streaming, language }) =>
   streaming.getSubs(language)
 );
-
 export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>(
   ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)
 );
+export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
 
 export const $subsDelay = createStore<number>(0);
 export const subsDelayButtonPressed = createEvent<number>();
@@ -55,7 +55,7 @@ sample({
   target: subsResyncFx,
 });
 
-$rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData], (_, subs) => subs);
+$rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
 $currentSubs.on(updateCurrentSubsFx.doneData, (_, subs) => subs);
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 
