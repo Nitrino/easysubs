@@ -1,5 +1,5 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
-import KinoPub from "@src/streamings/kinopub";
+import { TWordTranslate, googleTranslateFetcher } from "@src/utils/googleTranslateFetcher";
 
 reloadOnUpdate("pages/background");
 
@@ -18,13 +18,23 @@ reloadOnUpdate("pages/content/style.scss");
 
 console.log("background loaded");
 
-chrome.runtime.onMessage.addListener(async function (
-  message,
-  _sender,
-  sendResponse
-) {
+chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   console.log("read: ", message);
 
-  // TODO: Add translations
+  if (message.type === "translateWord") {
+    googleTranslateFetcher
+      .getWordTranslation({ text: message.text, lang: message.language })
+      .then((respData: TWordTranslate) => sendResponse(respData));
+  }
+  if (message.type === "translateWordFull") {
+    googleTranslateFetcher
+      .getWordFullTranslation({ text: message.text, lang: message.language })
+      .then((respData: unknown) => sendResponse(respData));
+  }
+  if (message.type === "translateFullText") {
+    googleTranslateFetcher
+      .getFullTextTranslation({ text: message.text, lang: message.language })
+      .then((respData: unknown) => sendResponse(respData));
+  }
   return true;
 });

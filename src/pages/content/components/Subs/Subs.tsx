@@ -1,10 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { $currentSubs } from "@src/models/subs";
-import { useStore, useUnit } from "effector-react";
+import { useUnit } from "effector-react";
 import { $video } from "@src/models/videos";
-import { TSub, TSubItem } from "@src/models/types";
-import { $subsBackground, $subsBackgroundOpacity, $translateLanguage, $subsFontSize } from "@src/models/settings";
+import { TSubItem, TWordTranslation } from "@src/models/types";
+import { $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
+import { requestWordTranslation, $currentWordTranslation, cleanWordTranslation } from "@src/models/translations";
 
 type TSubsProps = {};
 
@@ -90,16 +91,30 @@ const SubItem: FC<{ subItem: TSubItem }> = ({ subItem }) => {
 };
 
 const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
-  const translateLanguage = useStore($translateLanguage);
+  const [currentWordTranslation, handleRequestWordTranslation, handleCleanWordTranslation] = useUnit([
+    $currentWordTranslation,
+    requestWordTranslation,
+    cleanWordTranslation,
+  ]);
 
-  const [quickTranslations, setQuickTranslations] = useState<string[]>();
+  useEffect(() => {
+    handleRequestWordTranslation(text);
+    return () => {
+      handleCleanWordTranslation();
+    };
+  }, []);
+
+  if (!currentWordTranslation) {
+    return null;
+  }
 
   return (
     <div className="es-word-translation">
       <div className="es-word-translation-original">{text}</div>
       <br />
       <div className="es-word-quick-translations">
-        {quickTranslations?.map((tr) => tr.replaceAll(" ", "\xa0")).join(", ")}
+        {/* {currentWordTranslation.quick_translations?.map((tr) => tr.replaceAll(" ", "\xa0")).join(", ")} */}
+        {currentWordTranslation?.main}
       </div>
     </div>
   );

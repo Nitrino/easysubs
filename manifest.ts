@@ -37,6 +37,7 @@ const manifest: chrome.runtime.ManifestV3 = {
   ],
   devtools_page: "src/pages/devtools/index.html",
   permissions: ["webNavigation", "scripting", "tabs", "storage"],
+  host_permissions: ["https://translate.google.com/*"],
   // host_permissions: ["https://*/*"],
   web_accessible_resources: [
     {
