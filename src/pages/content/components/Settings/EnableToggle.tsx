@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Toggle, ToggleProps } from "../ui/Toggle";
+import { Toggle } from "../ui/Toggle";
 import { useUnit } from "effector-react";
 import { $enabled, enableToggleChanged } from "@src/models/settings";
 

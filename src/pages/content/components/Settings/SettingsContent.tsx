@@ -3,6 +3,10 @@ import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
 import { LearningService } from "./LearningService";
+import { SubsDelay } from "./SubsDelay";
+import { SubsSize } from "./SubsSize";
+import { SubsBackground } from "./SubsBackground";
+import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 
 interface TabProps {
   isActive: boolean;
@@ -65,15 +69,10 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         )}
         {activeTab === 1 && (
           <div className="es-settings-content__item">
-            SubsDelay
-            <br />
-            SubsSize
-            <br />
-            CustomSubs
-            <br />
-            SubsBackground
-            <br />
-            SubsBackgroundOpacity
+            <SubsDelay />
+            <SubsSize />
+            <SubsBackground />
+            <SubsBackgroundOpacity />
           </div>
         )}
       </div>
