@@ -8,7 +8,7 @@ import { SubsFontSize } from "./SubsFontSize";
 import { SubsBackground } from "./SubsBackground";
 import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 import { CustomSubs } from "./CustomSubs";
-import { EnableProgressBar } from "./EnableProgressbar";
+import { EnableProgressBar } from "./EnableProgressBar";
 
 interface TabProps {
   isActive: boolean;

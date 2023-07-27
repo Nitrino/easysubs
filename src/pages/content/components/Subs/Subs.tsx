@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from "react";
+import { useUnit } from "effector-react";
 
 import { $currentSubs } from "@src/models/subs";
-import { useUnit } from "effector-react";
 import { $video } from "@src/models/videos";
-import { TSubItem, TWordTranslation } from "@src/models/types";
+import { TSubItem } from "@src/models/types";
 import { $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
 import {
   requestWordTranslation,
@@ -13,6 +13,7 @@ import {
   requestSubTranslation,
   cleanSubTranslation,
 } from "@src/models/translations";
+import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 
 type TSubsProps = {};
 
@@ -25,6 +26,13 @@ export const Subs: FC<TSubsProps> = () => {
     $subsFontSize,
   ]);
   const [showTranslation, setShowTranslation] = useState(false);
+
+  useEffect(() => {
+    addKeyboardEventsListeners();
+    return () => {
+      removeKeyboardEventsListeners();
+    };
+  }, []);
 
   const handleOnMouseLeave = () => {
     video.play();

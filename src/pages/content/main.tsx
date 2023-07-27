@@ -8,6 +8,7 @@ import { $video, getCurrentVideoFx, videoTimeUpdate } from "@src/models/videos";
 import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
 import { ProgressBar } from "./components/ProgressBar";
+import { removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 
 refreshOnUpdate("pages/content");
 
@@ -48,6 +49,7 @@ $streaming.watch((streaming) => {
   esSubsChanged.watch((language) => {
     console.log("Event:", "esSubsChanged");
     console.log("Language:", language);
+    removeKeyboardEventsListeners();
     document.querySelectorAll("#es").forEach((e) => e.remove());
     const subsContainer = streaming.getSubsContainer();
     const subsNode = document.createElement("div");

@@ -1,9 +1,7 @@
 import { ReactElement, useEffect, useState, useRef, FC } from "react";
 import { useUnit } from "effector-react";
 
-// import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "../../utils/keyboardHelpers";
-// import { moveToTime, getCurrentTime } from "../../utils/videoHelpers";
-import { $video } from "@src/models/videos";
+import { $video, moveToTimeRequested } from "@src/models/videos";
 import { $subs } from "@src/models/subs";
 import { getCurrentVideoTime } from "@src/utils/getCurrentVideoTime";
 
@@ -17,14 +15,14 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
   const animateRef = useRef<number>();
 
   function handleClick(event: any) {
-    // if (!video || !progressBarRef.current) {
-    //   return;
-    // }
-    // const time = getCurrentVideoTime(video);
-    // const leftBorder = time - TIME_PERIOD / 2;
-    // const msInPx = TIME_PERIOD / progressBarRef.current.clientWidth;
-    // const moveTime = leftBorder + event.nativeEvent.offsetX * msInPx;
-    // moveToTime(video, moveTime);
+    if (!video || !progressBarRef.current) {
+      return;
+    }
+    const time = getCurrentVideoTime(video);
+    const leftBorder = time - TIME_PERIOD / 2;
+    const msInPx = TIME_PERIOD / progressBarRef.current.clientWidth;
+    const moveTime = leftBorder + event.nativeEvent.offsetX * msInPx;
+    moveToTimeRequested(moveTime);
   }
 
   // Updating the rendering state of the progress bar

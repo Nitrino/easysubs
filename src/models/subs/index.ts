@@ -29,34 +29,4 @@ export const subsResyncFx = createEffect<
   Captions
 >(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
 
-sample({
-  clock: esSubsChanged,
-  source: $streaming,
-  fn: (streaming, language) => ({ streaming, language }),
-  target: fetchSubsFx,
-});
-
-sample({
-  clock: [videoTimeUpdate, $rawSubs],
-  source: { subs: $subs, video: $video },
-  fn: ({ subs, video }, _) => ({ subs, video }),
-  target: updateCurrentSubsFx,
-});
-
-sample({
-  clock: subsDelayButtonPressed,
-  target: subsDelayChangeFx,
-});
-
-sample({
-  clock: subsDelayButtonPressed,
-  source: { rawSubs: $rawSubs, subsDelay: $subsDelay },
-  fn: ({ rawSubs, subsDelay }, delay) => ({ rawSubs, subsDelay, delay }),
-  target: subsResyncFx,
-});
-
-$rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
-$currentSubs.on(updateCurrentSubsFx.doneData, (_, subs) => subs);
-$subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
-
 debug($rawSubs, $subs, $currentSubs, $subsDelay, subsResyncFx);
