@@ -1,5 +1,8 @@
 .es-settings {
   display: inline-block;
+  line-height: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 .es-settings-icon {
@@ -12,6 +15,7 @@
 
 .es-settings-content {
   all: revert;
+  line-height: 16px;
   margin-block-start: 1em;
   margin-block-end: 1em;
   font-size: 16px;
@@ -28,6 +32,8 @@
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
 
   &__menu {
     display: flex;

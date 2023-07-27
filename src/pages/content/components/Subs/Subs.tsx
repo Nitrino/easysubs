@@ -48,6 +48,11 @@ export const Subs: FC<TSubsProps> = () => {
     }
   };
 
+  const handleOnClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setShowTranslation(true);
+  };
+
   return (
     <Draggable>
       <div
@@ -59,7 +64,7 @@ export const Subs: FC<TSubsProps> = () => {
         {currentSubs.map((sub) => (
           <div
             className="es-sub"
-            onClick={() => setShowTranslation(true)}
+            onClick={handleOnClick}
             onMouseLeave={() => setShowTranslation(false)}
             style={{
               background: `rgba(0, 0, 0, ${subsBackground ? subsBackgroundOpacity / 100 : 0})`,

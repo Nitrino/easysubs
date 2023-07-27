@@ -56,3 +56,9 @@
     box-sizing: border-box;
   }
 }
+
+.es-coursera.es-enabled.es-progress-bar-enabled {
+  .rc-ControlBar {
+    margin-bottom: 15px;
+  }
+}

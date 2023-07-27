@@ -1,9 +1,12 @@
 #es {
+  display: none;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   font-size: 24px;
   color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
 
   * {
     all: revert;
@@ -146,6 +149,28 @@
   }
 }
 
+.es-enabled {
+  #es {
+    display: block;
+  }
+}
+
+.es-youtube {
+  .es-settings {
+    vertical-align: top;
+  }
+
+  .es-settings-icon {
+    margin: 0 12px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      vertical-align: middle;
+    }
+  }
+}
+
 .es-youtube.es-enabled {
   .captions-text {
     display: none !important;
@@ -161,8 +186,23 @@
     }
   }
 
+  #es {
+    z-index: 30;
+    bottom: 80px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}
+
+.es-coursera {
   .es-settings {
     vertical-align: top;
+  }
+
+  .es-settings-content {
+    bottom: 50px;
   }
 
   .es-settings-icon {
@@ -175,12 +215,17 @@
     }
   }
 
-  #es {
-    z-index: 30;
-    bottom: 80px;
+  .video-main-player-container {
+    position: relative;
+  }
+}
 
-    @media screen and (max-width: 1520px) {
-      bottom: 100px;
-    }
+.es-coursera.es-enabled {
+  #es {
+    bottom: 7vh;
+  }
+
+  video::-webkit-media-text-track-container {
+    display: none;
   }
 }

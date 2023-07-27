@@ -1,10 +1,11 @@
-.es-input {
-  display: none;
+input.es-input {
+  display: none !important;
+}
 
-  &__label {
-    border: 1px solid #fff;
-    padding: 4px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
+.es-input__label {
+  border: 1px solid #fff;
+  padding: 4px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 400 !important;
 }
