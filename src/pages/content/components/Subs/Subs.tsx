@@ -14,6 +14,7 @@ import {
   cleanSubTranslation,
 } from "@src/models/translations";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
+import Draggable from "react-draggable";
 
 type TSubsProps = {};
 
@@ -48,28 +49,30 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   return (
-    <div
-      id="es-subs"
-      onMouseLeave={handleOnMouseLeave}
-      onMouseEnter={handleOnMouseEnter}
-      style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
-    >
-      {currentSubs.map((sub) => (
-        <div
-          className="es-sub"
-          onClick={() => setShowTranslation(true)}
-          onMouseLeave={() => setShowTranslation(false)}
-          style={{
-            background: `rgba(0, 0, 0, ${subsBackground ? subsBackgroundOpacity / 100 : 0})`,
-          }}
-        >
-          {sub.items.map((item) => (
-            <SubItem subItem={item} />
-          ))}
-          {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
-        </div>
-      ))}
-    </div>
+    <Draggable>
+      <div
+        id="es-subs"
+        onMouseLeave={handleOnMouseLeave}
+        onMouseEnter={handleOnMouseEnter}
+        style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
+      >
+        {currentSubs.map((sub) => (
+          <div
+            className="es-sub"
+            onClick={() => setShowTranslation(true)}
+            onMouseLeave={() => setShowTranslation(false)}
+            style={{
+              background: `rgba(0, 0, 0, ${subsBackground ? subsBackgroundOpacity / 100 : 0})`,
+            }}
+          >
+            {sub.items.map((item) => (
+              <SubItem subItem={item} />
+            ))}
+            {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
+          </div>
+        ))}
+      </div>
+    </Draggable>
   );
 };
 

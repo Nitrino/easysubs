@@ -25,6 +25,7 @@
     "qs": "^6.11.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-draggable": "^4.4.5",
     "stream-browserify": "^3.0.0",
     "subtitle": "^3.0.0"
   },
