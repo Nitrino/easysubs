@@ -7,6 +7,7 @@ import { esSubsChanged } from "@src/models/subs";
 import { $video, getCurrentVideoFx, videoTimeUpdate } from "@src/models/videos";
 import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
+import { ProgressBar } from "./components/ProgressBar";
 
 refreshOnUpdate("pages/content");
 
@@ -53,6 +54,12 @@ $streaming.watch((streaming) => {
     subsNode.id = "es";
     subsContainer?.appendChild(subsNode);
     createRoot(subsNode).render(<Subs />);
+
+    document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
+    const progressBarNode = document.createElement("div");
+    progressBarNode.classList.add("es-progress-bar");
+    subsContainer?.appendChild(progressBarNode);
+    createRoot(progressBarNode).render(<ProgressBar />);
   });
 
   streaming.init();

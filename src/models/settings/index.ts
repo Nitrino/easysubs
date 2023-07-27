@@ -4,9 +4,13 @@ import { debug } from "patronum";
 import { withPersist } from "@src/utils/withPersist";
 import { TLearningService, TSub } from "../types";
 
-export const $enabled = withPersist(createStore<boolean>(true, { name: "es-enabled" }));
+export const $enabled = withPersist(createStore<boolean>(true));
 export const enableToggleChanged = createEvent<boolean>();
 export const enableToggleChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
+
+export const $progressBarEnabled = withPersist(createStore<boolean>(true));
+export const progressBarEnabledChanged = createEvent<boolean>();
+export const progressBarEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
 
 export const $translateLanguage = withPersist(createStore<string>(window.navigator.language.split("-")[0]));
 export const translateLanguageChanged = createEvent<string>();
@@ -28,13 +32,18 @@ export const $subsBackgroundOpacity = withPersist(createStore<number>(50));
 export const subsBackgroundOpacityButtonPressed = createEvent<number>();
 export const subsBackgroundOpacityChangeFx = createEffect<number, number>((value) => value);
 
-export const $autoPause = withPersist(createStore<boolean>(false, { name: "es-auto-pause" }));
+export const $autoPause = withPersist(createStore<boolean>(false));
 
 export const esRenderSetings = createEvent();
 
 sample({
   clock: enableToggleChanged,
   target: enableToggleChangeFx,
+});
+
+sample({
+  clock: progressBarEnabledChanged,
+  target: progressBarEnabledChangeFx,
 });
 
 sample({
@@ -64,6 +73,7 @@ sample({
 });
 
 $enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
+$progressBarEnabled.on(progressBarEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
 $subsFontSize.on(subsFontSizeChangeFx.doneData, (_, subsFontSize) => subsFontSize);
@@ -72,6 +82,10 @@ $subsBackgroundOpacity.on(subsBackgroundOpacityChangeFx.doneData, (_, value) => 
 
 $enabled.watch((isEnables) => {
   document.body.classList.toggle("es-enabled", isEnables);
+});
+
+$progressBarEnabled.watch((isEnables) => {
+  document.body.classList.toggle("es-progress-bar-enabled", isEnables);
 });
 
 debug($enabled, $translateLanguage, $learningService, $subsFontSize, $subsBackground);

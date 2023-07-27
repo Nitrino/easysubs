@@ -8,6 +8,7 @@ import { SubsFontSize } from "./SubsFontSize";
 import { SubsBackground } from "./SubsBackground";
 import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 import { CustomSubs } from "./CustomSubs";
+import { EnableProgressBar } from "./EnableProgressbar";
 
 interface TabProps {
   isActive: boolean;
@@ -59,6 +60,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
           <>
             <div className="es-settings-content__item">
               <EnableToggle />
+            </div>
+            <div className="es-settings-content__item">
+              <EnableProgressBar />
             </div>
             <div className="es-settings-content__item">
               <TranslateLanguage />
