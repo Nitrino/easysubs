@@ -1,4 +1,4 @@
-import { sample } from "effector";
+import { sample, split } from "effector";
 import {
   $currentSubs,
   $rawSubs,
@@ -6,8 +6,10 @@ import {
   $subsDelay,
   esSubsChanged,
   fetchSubsFx,
+  resetSubs,
   subsDelayButtonPressed,
   subsDelayChangeFx,
+  subsRequested,
   subsResyncFx,
   updateCurrentSubsFx,
   updateCustomSubsFx,
@@ -15,8 +17,20 @@ import {
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
 
+split({
+  source: esSubsChanged,
+  match: {
+    hasLanguage: (language) => !!language,
+    noLanguage: (language) => !language,
+  },
+  cases: {
+    hasLanguage: subsRequested,
+    noLanguage: resetSubs,
+  },
+});
+
 sample({
-  clock: esSubsChanged,
+  clock: subsRequested,
   source: $streaming,
   fn: (streaming, language) => ({ streaming, language }),
   target: fetchSubsFx,
@@ -42,5 +56,6 @@ sample({
 });
 
 $rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
+$rawSubs.reset(resetSubs);
 $currentSubs.on(updateCurrentSubsFx.doneData, (_, subs) => subs);
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);

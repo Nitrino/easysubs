@@ -3,7 +3,7 @@ import { debug } from "patronum";
 import { Captions, resync } from "subtitle";
 
 import { convertRawSubs } from "@src/utils/convertRawSubs";
-import { $video, videoTimeUpdate } from "@src/models/videos";
+import { $video } from "@src/models/videos";
 import { getCurrentSubs } from "@src/utils/getCurrentSubs";
 import type { TSub } from "../types";
 import type Service from "@src/streamings/service";
@@ -13,6 +13,9 @@ export const $rawSubs = createStore<Captions>([], { name: "rawSubs" });
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
 export const $currentSubs = createStore<TSub[]>([], { name: "currentSubs" });
 export const esSubsChanged = createEvent<string>();
+export const subsRequested = createEvent<string>();
+export const fetchSubs = createEvent<{ streaming: Service; language: string }>();
+export const resetSubs = createEvent<string>();
 export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(({ streaming, language }) =>
   streaming.getSubs(language)
 );
@@ -29,4 +32,4 @@ export const subsResyncFx = createEffect<
   Captions
 >(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
 
-debug($rawSubs, $subs, $currentSubs, $subsDelay, subsResyncFx);
+debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx);

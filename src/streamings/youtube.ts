@@ -18,10 +18,7 @@ class Youtube implements Service {
   }
 
   public init(): void {
-    chrome.runtime.sendMessage({
-      type: "injectScript",
-      service: "youtube",
-    });
+    this.injectScript();
     window.addEventListener("esYoutubeCaptionsData", this.handleCaptionsData as EventListener);
     window.addEventListener("esYoutubeCaptionsChanged", this.handleCaptionsChanges as EventListener);
     window.addEventListener("esYoutubeLoaded", this.handleLoaded as EventListener);
@@ -81,7 +78,16 @@ class Youtube implements Service {
   }
 
   private handleLoaded() {
+    console.log("handleLoaded");
+
     esRenderSetings();
+  }
+
+  private injectScript() {
+    const script = document.createElement("script");
+    script.src = chrome.runtime.getURL("assets/js/youtube.js");
+    script.type = "module";
+    document.head.prepend(script);
   }
 }
 

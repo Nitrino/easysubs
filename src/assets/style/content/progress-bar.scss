@@ -35,11 +35,24 @@
   }
 }
 
-.es-kinopub.es-enabled.es-progress-bar-enabled {
+.es-enabled.es-progress-bar-enabled {
   .es-progress-bar {
     display: block;
   }
+}
+
+.es-kinopub.es-enabled.es-progress-bar-enabled {
   .jw-controlbar {
     bottom: 15px;
+  }
+}
+.es-youtube.es-enabled.es-progress-bar-enabled {
+  .ytp-chrome-bottom,
+  .ytp-gradient-bottom {
+    bottom: 15px;
+  }
+  .html5-video-player {
+    padding-bottom: 15px;
+    box-sizing: border-box;
   }
 }

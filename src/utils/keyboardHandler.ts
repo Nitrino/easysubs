@@ -17,16 +17,12 @@ export const keyboardHandler = (event: KeyboardEvent) => {
 };
 
 export const addKeyboardEventsListeners = () => {
-  console.log("addKeyboardEventsListeners");
-
   keyboardEvents.forEach((eventType) => {
     document.addEventListener(eventType as any, keyboardHandler, true);
   });
 };
 
 export const removeKeyboardEventsListeners = () => {
-  console.log("removeKeyboardEventsListeners");
-
   keyboardEvents.forEach((eventType) => {
     document.removeEventListener(eventType as any, keyboardHandler, true);
   });

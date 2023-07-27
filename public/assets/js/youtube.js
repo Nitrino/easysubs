@@ -8,16 +8,11 @@ window.setInterval(() => {
       window.isLoaded = true;
       window.dispatchEvent(new CustomEvent("esYoutubeLoaded"));
 
-      if (
-        subsToggleElement &&
-        subsToggleElement.getAttribute("aria-pressed") === "true"
-      ) {
+      if (subsToggleElement && subsToggleElement.getAttribute("aria-pressed") === "true") {
         player.toggleSubtitles();
         player.toggleSubtitles();
       } else {
-        window.dispatchEvent(
-          new CustomEvent("esYoutubeCaptionsChanged", { detail: "" })
-        );
+        window.dispatchEvent(new CustomEvent("esYoutubeCaptionsChanged", { detail: "" }));
       }
     }
   } else {
@@ -25,14 +20,9 @@ window.setInterval(() => {
   }
 
   if (subsToggleElement) {
-    if (
-      window.subtitlesEnabled &&
-      subsToggleElement.getAttribute("aria-pressed") === "false"
-    ) {
+    if (window.subtitlesEnabled && subsToggleElement.getAttribute("aria-pressed") === "false") {
       window.subtitlesEnabled = false;
-      window.dispatchEvent(
-        new CustomEvent("esYoutubeCaptionsChanged", { detail: "" })
-      );
+      window.dispatchEvent(new CustomEvent("esYoutubeCaptionsChanged", { detail: "" }));
     }
   }
 }, 500);
@@ -42,15 +32,9 @@ window.setInterval(() => {
       const urlObject = new URL(url);
       if (urlObject.pathname === "/api/timedtext") {
         window.subtitlesEnabled = true;
-        const lang =
-          urlObject.searchParams.get("tlang") ||
-          urlObject.searchParams.get("lang");
-        window.dispatchEvent(
-          new CustomEvent("esYoutubeCaptionsData", { detail: urlObject.href })
-        );
-        window.dispatchEvent(
-          new CustomEvent("esYoutubeCaptionsChanged", { detail: lang })
-        );
+        const lang = urlObject.searchParams.get("tlang") || urlObject.searchParams.get("lang");
+        window.dispatchEvent(new CustomEvent("esYoutubeCaptionsData", { detail: urlObject.href }));
+        window.dispatchEvent(new CustomEvent("esYoutubeCaptionsChanged", { detail: lang }));
       }
     }
     open.call(this, method, url, true);
