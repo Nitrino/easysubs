@@ -5,6 +5,10 @@
   font-size: 24px;
   color: white;
 
+  * {
+    all: revert;
+  }
+
   pre {
     background-color: transparent;
     font: inherit;
@@ -49,15 +53,23 @@
     top: 0px;
     left: 50%;
     transform: translate3d(-50%, -100%, 0);
-    padding: 10px 25px;
+    padding: 16px 24px;
     background-color: #1e1e1e;
     border-radius: 0.4em;
     font-size: 16px;
-    max-width: fit-content;
     font-style: normal;
     white-space: normal;
     box-sizing: content-box;
     color: #fff;
+    box-sizing: border-box;
+
+    hr {
+      margin: 4px auto 6px;
+      height: 1px;
+      background-color: #666;
+      width: 60%;
+      border: 0;
+    }
 
     &:after {
       content: "";
@@ -76,10 +88,14 @@
 
   .es-word-translation-original {
     font-weight: 600;
+    text-align: center;
+    font-smooth: antialiased;
   }
 
   .es-word-quick-translations {
     white-space: break-spaces;
+    width: max-content;
+    max-width: 160px;
   }
 
   .es-full-translation {

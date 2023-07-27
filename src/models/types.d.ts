@@ -36,11 +36,9 @@ type FullTranslation = {
 
 export type TWordTranslation = {
   source: string;
-  source_lang: string;
-  target_lang: string;
-  quick_translations: string[];
-  full_translations: FullTranslation[];
-  examples: string[];
+  target_language: string;
+  translations: string[];
+  synonyms: string[];
 };
 
 export type TGoogleTranslation = unknown;

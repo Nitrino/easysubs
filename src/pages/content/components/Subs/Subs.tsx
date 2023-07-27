@@ -20,7 +20,7 @@ export const Subs: FC<TSubsProps> = () => {
   const [showTranslation, setShowTranslation] = useState(false);
 
   const handleOnMouseLeave = () => {
-    video.play();
+    // video.play();
   };
 
   const handleOnMouseEnter = () => {
@@ -110,11 +110,10 @@ const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
 
   return (
     <div className="es-word-translation">
-      <div className="es-word-translation-original">{text}</div>
-      <br />
+      <div className="es-word-translation-original">{text.toLowerCase()}</div>
+      <hr />
       <div className="es-word-quick-translations">
-        {/* {currentWordTranslation.quick_translations?.map((tr) => tr.replaceAll(" ", "\xa0")).join(", ")} */}
-        {currentWordTranslation?.main}
+        {currentWordTranslation.translations.map((tr) => tr.replaceAll(" ", "\xa0").toLowerCase()).join(", ")}
       </div>
     </div>
   );
