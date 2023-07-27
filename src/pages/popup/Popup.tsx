@@ -1,24 +1,34 @@
-import React from "react";
-import logo from "@assets/img/logo.svg";
-import "@pages/popup/Popup.css";
-
 const Popup = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="text-lime-400">
-          Edit <code>src/pages/popup/Popup.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-      </header>
+    <div className="content">
+      <div className="header">Easysubs</div>
+      <menu>
+        <li>
+          <a target="_blank" href={chrome.i18n.getMessage("homePageUrl")} rel="noreferrer">
+            {chrome.i18n.getMessage("homePage")}
+          </a>
+        </li>
+        <li>
+          <a target="_blank" href="https://github.com/Nitrino/easysubs" rel="noreferrer">
+            Github
+          </a>
+        </li>
+        <li>
+          <a target="_blank" href="https://github.com/Nitrino/easysubs/issues" rel="noreferrer">
+            Report bugs
+          </a>
+        </li>
+        <li>
+          <a target="_blank" href="https://github.com/Nitrino/easysubs/issues" rel="noreferrer">
+            Suggest features
+          </a>
+        </li>
+        <li>
+          <a target="_blank" href="https://t.me/easysubs_ext" rel="noreferrer">
+            Support chat
+          </a>
+        </li>
+      </menu>
     </div>
   );
 };
