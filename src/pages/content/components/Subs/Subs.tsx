@@ -5,7 +5,14 @@ import { useUnit } from "effector-react";
 import { $video } from "@src/models/videos";
 import { TSubItem, TWordTranslation } from "@src/models/types";
 import { $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
-import { requestWordTranslation, $currentWordTranslation, cleanWordTranslation } from "@src/models/translations";
+import {
+  requestWordTranslation,
+  $currentWordTranslation,
+  cleanWordTranslation,
+  $currentSubTranslation,
+  requestSubTranslation,
+  cleanSubTranslation,
+} from "@src/models/translations";
 
 type TSubsProps = {};
 
@@ -20,7 +27,7 @@ export const Subs: FC<TSubsProps> = () => {
   const [showTranslation, setShowTranslation] = useState(false);
 
   const handleOnMouseLeave = () => {
-    // video.play();
+    video.play();
   };
 
   const handleOnMouseEnter = () => {
@@ -48,11 +55,7 @@ export const Subs: FC<TSubsProps> = () => {
           {sub.items.map((item) => (
             <SubItem subItem={item} />
           ))}
-
-          {/* <For each={props.sub.items}>{(subItem) => <SubItem subItem={subItem} />}</For>
-        <Show when={showTranslation()}>
-          <SubFullTranslation text={props.sub.cleanedText} />
-        </Show> */}
+          {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
         </div>
       ))}
     </div>
@@ -117,4 +120,27 @@ const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
       </div>
     </div>
   );
+};
+
+const SubFullTranslation: FC<{ text: string }> = ({ text }) => {
+  const [currentSubTranslation, handleRequestSubTranslation, handleCleanSubTranslation] = useUnit([
+    $currentSubTranslation,
+    requestSubTranslation,
+    cleanSubTranslation,
+  ]);
+
+  useEffect(() => {
+    console.log("SubFullTranslation", text);
+
+    handleRequestSubTranslation(text);
+    return () => {
+      handleCleanSubTranslation();
+    };
+  }, []);
+
+  if (!currentSubTranslation) {
+    return null;
+  }
+
+  return <div className="es-full-translation">{currentSubTranslation}</div>;
 };

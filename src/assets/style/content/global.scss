@@ -103,7 +103,6 @@
     top: -10px;
     left: 50%;
     transform: translate3d(-50%, -100%, 0);
-    padding: 10px 25px;
     background-color: #1e1e1e;
     border-radius: 0.4em;
     font-size: 16px;
@@ -112,6 +111,9 @@
     white-space: normal;
     box-sizing: content-box;
     color: #fff;
+    padding: 16px 24px;
+    box-sizing: border-box;
+    white-space: pre-wrap;
 
     &:after {
       content: "";

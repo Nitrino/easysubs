@@ -4,11 +4,23 @@ import { debug } from "patronum";
 import { TWordTranslation } from "../types";
 import { $translateLanguage } from "../settings";
 
-export const $wordTranslations = createStore<TWordTranslation[]>([], { name: "wordTranslations" });
-export const $currentWordTranslation = createStore<TWordTranslation>(null, { name: "currentWordTranslation" });
-
+export const $wordTranslations = createStore<TWordTranslation[]>([]);
+export const $currentWordTranslation = createStore<TWordTranslation>(null);
 export const requestWordTranslation = createEvent<string>();
 export const cleanWordTranslation = createEvent();
+
+export const $currentSubTranslation = createStore<string>(null);
+export const requestSubTranslation = createEvent<string>();
+export const cleanSubTranslation = createEvent();
+export const fetchSubTranslationFx = createEffect<{ source: string; language: string }, string>(
+  async ({ source, language }) => {
+    return await chrome.runtime.sendMessage({
+      type: "translateFullText",
+      language: language,
+      text: source,
+    });
+  }
+);
 
 export const fetchWordTranslationFx = createEffect<
   { source: string; language: string; translation: TWordTranslation | null },
@@ -78,10 +90,24 @@ $wordTranslations.on(fetchWordTranslationFx.doneData, (allTranslation, translati
   translation,
 ]);
 
+sample({
+  clock: requestSubTranslation,
+  source: $translateLanguage,
+  fn: (language, source) => ({ source, language }),
+  target: fetchSubTranslationFx,
+});
+
+$currentSubTranslation.on(fetchSubTranslationFx.doneData, (_, translation) => translation);
+$currentSubTranslation.reset(cleanSubTranslation);
+
 debug(
   $wordTranslations,
   $currentWordTranslation,
   requestWordTranslation,
   cleanWordTranslation,
-  fetchWordTranslationFx.doneData
+  fetchWordTranslationFx.doneData,
+  $currentSubTranslation,
+  requestSubTranslation,
+  cleanSubTranslation,
+  fetchSubTranslationFx.doneData
 );

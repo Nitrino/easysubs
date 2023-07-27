@@ -45,19 +45,20 @@ class GoogleTranslateFetcher {
     const data = {
       query: {
         rpcids: "MkEWBc",
+        "source-path": "/",
         "f.sid": this.extract("FdrFJe", googleTranslatePageText),
         bl: this.extract("cfb2h", googleTranslatePageText),
         hl: "en",
         "soc-app": 1,
         "soc-platform": 1,
         "soc-device": 1,
-        _reqid: Math.floor(1000 + Math.random() * 9000),
+        _reqid: Math.floor(100000 + Math.random() * 900000),
         rt: "c",
       },
       at: this.extract("SNlM0e", googleTranslatePageText),
     };
     const url = this.#baseUrl + "/_/TranslateWebserverUi/data/batchexecute?" + qs.stringify(data.query);
-    const payload = JSON.stringify([[text.replace(/(\r\n|\n|\r)/gm, ""), "auto", lang, true]]);
+    const payload = JSON.stringify([[text, "auto", lang, 1], []]);
     const req = JSON.stringify([[["MkEWBc", payload, null, "generic"]]]);
     const body = "f.req=" + encodeURIComponent(req) + "&at=" + data.at;
     const headers = { "content-type": "application/x-www-form-urlencoded;charset=UTF-8" };
@@ -66,6 +67,7 @@ class GoogleTranslateFetcher {
       method: "POST",
       body: body,
       headers: headers,
+      referrerPolicy: "origin",
     });
     return await resp.text();
   }
