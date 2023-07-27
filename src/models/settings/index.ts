@@ -2,7 +2,8 @@ import { createStore, createEvent, sample, createEffect } from "effector";
 import { debug } from "patronum";
 
 import { withPersist } from "@src/utils/withPersist";
-import { TLearningService, TSub } from "../types";
+import { TLearningService } from "../types";
+import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 
 export const $enabled = withPersist(createStore<boolean>(true));
 export const enableToggleChanged = createEvent<boolean>();
@@ -11,6 +12,17 @@ export const enableToggleChangeFx = createEffect<boolean, boolean>((isEnabled) =
 export const $progressBarEnabled = withPersist(createStore<boolean>(true));
 export const progressBarEnabledChanged = createEvent<boolean>();
 export const progressBarEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
+
+export const $moveBySubsEnabled = withPersist(createStore<boolean>(true));
+export const moveBySubsEnabledChanged = createEvent<boolean>();
+export const moveBySubsEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => {
+  if (isEnabled) {
+    addKeyboardEventsListeners();
+  } else {
+    removeKeyboardEventsListeners();
+  }
+  return isEnabled;
+});
 
 export const $translateLanguage = withPersist(createStore<string>(window.navigator.language.split("-")[0]));
 export const translateLanguageChanged = createEvent<string>();
@@ -47,6 +59,11 @@ sample({
 });
 
 sample({
+  clock: moveBySubsEnabledChanged,
+  target: moveBySubsEnabledChangeFx,
+});
+
+sample({
   clock: translateLanguageChanged,
   target: translateLanguageChangeFx,
 });
@@ -74,6 +91,7 @@ sample({
 
 $enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
 $progressBarEnabled.on(progressBarEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
+$moveBySubsEnabled.on(moveBySubsEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
 $subsFontSize.on(subsFontSizeChangeFx.doneData, (_, subsFontSize) => subsFontSize);
@@ -87,5 +105,8 @@ $enabled.watch((isEnables) => {
 $progressBarEnabled.watch((isEnables) => {
   document.body.classList.toggle("es-progress-bar-enabled", isEnables);
 });
+$moveBySubsEnabled.watch((isEnables) => {
+  document.body.classList.toggle("es-move-by-subs-enabled", isEnables);
+});
 
-debug($enabled, $translateLanguage, $learningService, $subsFontSize, $subsBackground);
+debug($enabled, $translateLanguage, $learningService, $subsFontSize, $subsBackground, $moveBySubsEnabled);

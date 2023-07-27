@@ -4,7 +4,7 @@ import { useUnit } from "effector-react";
 import { $currentSubs } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 import { TSubItem } from "@src/models/types";
-import { $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
+import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
 import {
   requestWordTranslation,
   $currentWordTranslation,
@@ -18,17 +18,20 @@ import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/
 type TSubsProps = {};
 
 export const Subs: FC<TSubsProps> = () => {
-  const [video, currentSubs, subsBackground, subsBackgroundOpacity, subsFontSize] = useUnit([
+  const [video, currentSubs, subsBackground, subsBackgroundOpacity, subsFontSize, moveBySubsEnabled] = useUnit([
     $video,
     $currentSubs,
     $subsBackground,
     $subsBackgroundOpacity,
     $subsFontSize,
+    $moveBySubsEnabled,
   ]);
   const [showTranslation, setShowTranslation] = useState(false);
 
   useEffect(() => {
-    addKeyboardEventsListeners();
+    if (moveBySubsEnabled) {
+      addKeyboardEventsListeners();
+    }
     return () => {
       removeKeyboardEventsListeners();
     };

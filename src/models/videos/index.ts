@@ -72,13 +72,6 @@ sample({
 });
 
 sample({
-  clock: esRenderSetings,
-  target: getCurrentVideoFx,
-});
-
-$video.on(getCurrentVideoFx.doneData, (_, video) => video);
-
-sample({
   clock: moveKeyPressed,
   source: { video: $video, subs: $subs, currentSubs: $currentSubs },
   fn: ({ video, subs, currentSubs }, direction) => ({ video, subs, currentSubs, direction }),

@@ -9,6 +9,7 @@ import { SubsBackground } from "./SubsBackground";
 import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 import { CustomSubs } from "./CustomSubs";
 import { EnableProgressBar } from "./EnableProgressBar";
+import { MoveBySubs } from "./MoveBySubs";
 
 interface TabProps {
   isActive: boolean;
@@ -63,6 +64,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
             <div className="es-settings-content__item">
               <EnableProgressBar />
+            </div>
+            <div className="es-settings-content__item">
+              <MoveBySubs />
             </div>
             <div className="es-settings-content__item">
               <TranslateLanguage />
