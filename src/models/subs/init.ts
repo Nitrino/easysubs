@@ -1,59 +1,61 @@
-import { sample } from 'effector'
-import isEqual from 'lodash/isEqual'
-import { resync } from 'subtitle'
-
+import { sample, split } from "effector";
 import {
-  $subs,
-  $rawSubs,
   $currentSubs,
+  $rawSubs,
+  $subs,
   $subsDelay,
-  $subsSize,
+  esSubsChanged,
   fetchSubsFx,
-  fetchCustomSubsFx,
+  resetSubs,
+  subsDelayButtonPressed,
+  subsDelayChangeFx,
+  subsRequested,
+  subsResyncFx,
   updateCurrentSubsFx,
-  updateSubsDelayFx,
-  updateSubsSizeFx,
-  resyncSubsFx,
-  $subsBackground,
-  updateSubsBackgroundFx,
-  $subsBackgroundOpacity,
-  updateSubsBackgroundOpacityFx,
-} from '.'
-import { getCurrentSubs } from './utils/getCurrentSubs'
-import { $video, videoTimeUpdate } from '@/models/videos'
+  updateCustomSubsFx,
+} from ".";
+import { $streaming } from "../streamings";
+import { $video, videoTimeUpdate } from "../videos";
 
-$rawSubs.on([fetchSubsFx.doneData, fetchCustomSubsFx.doneData], (_, subs) => subs)
-$rawSubs.on(resyncSubsFx.doneData, (subs, { currentDelay, delay }) => resync(subs, (delay - currentDelay) * 1000))
-$subsDelay.on(updateSubsDelayFx.doneData, (_, delay) => delay)
-$subsSize.on(updateSubsSizeFx.doneData, (_, size) => size)
-$subsBackground.on(updateSubsBackgroundFx.doneData, (_, enabled) => enabled)
-$subsBackgroundOpacity.on(updateSubsBackgroundOpacityFx.doneData, (_, size) => size)
-$currentSubs.on(updateCurrentSubsFx.doneData, (state, subs) => {
-  if (isEqual(state, subs)) {
-    return undefined
-  }
-  return subs
-})
+split({
+  source: esSubsChanged,
+  match: {
+    hasLanguage: (language) => !!language,
+    noLanguage: (language) => !language,
+  },
+  cases: {
+    hasLanguage: subsRequested,
+    noLanguage: resetSubs,
+  },
+});
 
-fetchSubsFx.use(async ({ language, streaming }) => streaming.getSubs(language))
-updateCurrentSubsFx.use(async ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000))
-updateSubsDelayFx.use(async (delay) => delay)
+sample({
+  clock: subsRequested,
+  source: $streaming,
+  fn: (streaming, language) => ({ streaming, language }),
+  target: fetchSubsFx,
+});
 
 sample({
   clock: [videoTimeUpdate, $rawSubs],
   source: { subs: $subs, video: $video },
   fn: ({ subs, video }, _) => ({ subs, video }),
   target: updateCurrentSubsFx,
-})
+});
 
 sample({
-  clock: updateSubsDelayFx,
-  source: $subsDelay,
-  fn: (currentDelay, delay) => ({ currentDelay, delay }),
-  target: resyncSubsFx,
-})
+  clock: subsDelayButtonPressed,
+  target: subsDelayChangeFx,
+});
 
-$subs.watch((subs) => console.log('SUBS ', subs))
-$rawSubs.watch((subs) => console.log('$rawSubs ', subs))
-$currentSubs.watch((subs) => console.log('$currentSubs ', subs))
-$subsDelay.watch((delay) => console.log('$subsDelay ', delay))
+sample({
+  clock: subsDelayButtonPressed,
+  source: { rawSubs: $rawSubs, subsDelay: $subsDelay },
+  fn: ({ rawSubs, subsDelay }, delay) => ({ rawSubs, subsDelay, delay }),
+  target: subsResyncFx,
+});
+
+$rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
+$rawSubs.reset(resetSubs);
+$currentSubs.on(updateCurrentSubsFx.doneData, (_, subs) => subs);
+$subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);

@@ -1,20 +1,20 @@
-import { Captions } from 'subtitle'
+import { Captions } from "@src/models/types";
 
 interface Service {
   // Getting subtitles from a service
-  getSubs: (language: string) => Promise<Captions>
+  getSubs: (language: string) => Promise<Captions>;
 
   // Player container selector, required to render subtitles
-  getSubsContainer: () => HTMLElement
+  getSubsContainer: () => HTMLElement;
 
   // Selector for injecting the application icon in the player
-  getSettingsButtonContainer: () => HTMLElement
+  getSettingsButtonContainer: () => HTMLElement;
 
   // Selector for rendering extension settings inside the player container
-  getSettingsContentContainer: () => HTMLElement
+  getSettingsContentContainer: () => HTMLElement;
 
   // Init the service
-  init: () => void
+  init: () => void;
 }
 
-export default Service
+export default Service;

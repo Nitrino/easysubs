@@ -1,0 +1,304 @@
+#es {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+
+  * {
+    all: revert;
+  }
+
+  pre {
+    background-color: transparent;
+    font: inherit;
+  }
+
+  .i {
+    font-style: italic;
+  }
+  .b {
+    font-weight: bold;
+  }
+  .u {
+    text-decoration: underline;
+  }
+
+  .es-sub {
+    text-align: center;
+    line-height: 1.25;
+    padding: 0 10px;
+    cursor: pointer;
+  }
+
+  .es-sub-item {
+    display: inline;
+    position: relative;
+
+    pre {
+      display: inline;
+    }
+
+    &:hover {
+      color: #3a88a2;
+      cursor: pointer;
+    }
+  }
+  .es-sub-item-space {
+    display: inline;
+  }
+
+  .es-word-translation {
+    text-align: left;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate3d(-50%, -100%, 0);
+    padding: 16px 24px;
+    background-color: #1e1e1e;
+    border-radius: 0.4em;
+    font-size: 16px;
+    font-style: normal;
+    white-space: normal;
+    box-sizing: content-box;
+    color: #fff;
+    box-sizing: border-box;
+
+    hr {
+      margin: 4px auto 6px;
+      height: 1px;
+      background-color: #666;
+      width: 60%;
+      border: 0;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-top-color: #1e1e1e;
+      border-bottom: 0;
+      margin-left: -10px;
+      margin-bottom: -10px;
+    }
+  }
+
+  .es-word-translation-original {
+    font-weight: 600;
+    text-align: center;
+    font-smooth: antialiased;
+  }
+
+  .es-word-quick-translations {
+    white-space: break-spaces;
+    width: max-content;
+    max-width: 160px;
+  }
+
+  .es-full-translation {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translate3d(-50%, -100%, 0);
+    background-color: #1e1e1e;
+    border-radius: 0.4em;
+    font-size: 16px;
+    width: 100%;
+    font-style: normal;
+    white-space: normal;
+    box-sizing: content-box;
+    color: #fff;
+    padding: 16px 24px;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-top-color: #1e1e1e;
+      border-bottom: 0;
+      margin-left: -10px;
+      margin-bottom: -10px;
+    }
+  }
+}
+
+.es-kinopub.es-enabled {
+  .jw-captions.jw-captions-enabled {
+    display: none;
+  }
+
+  #es {
+    bottom: 130px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}
+
+.es-enabled {
+  #es {
+    display: block;
+  }
+}
+
+.es-youtube {
+  .es-settings {
+    vertical-align: top;
+  }
+
+  .es-settings-icon {
+    margin: 0 12px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      vertical-align: middle;
+    }
+  }
+}
+
+.es-youtube.es-enabled {
+  .captions-text {
+    display: none !important;
+  }
+
+  .html5-video-player {
+    &.ytp-fullscreen {
+      padding-bottom: 0;
+
+      #easysubs {
+        bottom: 110px;
+      }
+    }
+  }
+
+  #es {
+    z-index: 30;
+    bottom: 80px;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 100px;
+    }
+  }
+}
+
+.es-coursera {
+  .es-settings {
+    vertical-align: top;
+  }
+
+  .es-settings-content {
+    bottom: 50px;
+  }
+
+  .es-settings-icon {
+    margin: 0 12px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      vertical-align: middle;
+    }
+  }
+
+  .video-main-player-container {
+    position: relative;
+  }
+}
+
+.es-coursera.es-enabled {
+  #es {
+    bottom: 7vh;
+  }
+
+  video::-webkit-media-text-track-container {
+    display: none;
+  }
+}
+
+.es-netflix {
+  .es-settings-content {
+    bottom: 120px;
+    right: 85px;
+  }
+
+  .es-settings-icon {
+    svg {
+      opacity: 1;
+      transition: transform 350ms cubic-bezier(0.86, 0, 0.07, 1);
+    }
+
+    &:hover {
+      svg {
+        transform: scale(1.13);
+      }
+    }
+  }
+
+  .es-settings {
+    // height: 2.4rem;
+    width: 52px;
+    margin-right: 30px;
+
+    // @media screen and (min-width: 854px) {
+    //   height: 5.2rem;
+    //   width: 5.2rem;
+    //   margin-right: 2rem;
+    // }
+
+    // @media screen and (min-width: 1440px) {
+    //   margin-right: 39px;
+    // }
+
+    &-icon {
+      width: 44px;
+      margin: 0;
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+        @media screen and (min-width: 854px) {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+}
+
+.es-netflix.es-enabled {
+  #es {
+    bottom: 21vh;
+
+    @media screen and (min-width: 1440px) {
+      bottom: 26vh;
+    }
+  }
+
+  .player-timedtext {
+    display: none !important;
+  }
+
+  hr {
+    border: none;
+  }
+
+  .watch-video--selector-audio-subtitle {
+    overflow-y: auto;
+  }
+}

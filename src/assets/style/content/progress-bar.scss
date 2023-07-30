@@ -1,0 +1,64 @@
+.es-progress-bar {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  height: 15px;
+  width: 100%;
+  z-index: 11;
+  background-color: #171717;
+
+  &:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    bottom: 0;
+    height: 15px;
+    width: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1296ba;
+  }
+
+  &-container {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  &-element {
+    background-color: #707070;
+    position: absolute;
+    height: 7px;
+    bottom: 4px;
+    border-radius: 7px;
+    pointer-events: none;
+  }
+}
+
+.es-enabled.es-progress-bar-enabled {
+  .es-progress-bar {
+    display: block;
+  }
+}
+
+.es-kinopub.es-enabled.es-progress-bar-enabled {
+  .jw-controlbar {
+    bottom: 15px;
+  }
+}
+.es-youtube.es-enabled.es-progress-bar-enabled {
+  .ytp-chrome-bottom,
+  .ytp-gradient-bottom {
+    bottom: 15px;
+  }
+  .html5-video-player {
+    padding-bottom: 15px;
+    box-sizing: border-box;
+  }
+}
+
+.es-coursera.es-enabled.es-progress-bar-enabled {
+  .rc-ControlBar {
+    margin-bottom: 15px;
+  }
+}

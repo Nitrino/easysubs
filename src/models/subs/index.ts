@@ -1,39 +1,41 @@
-import { createStore, createEvent, createEffect, attach, UnitValue } from 'effector'
-import { Captions } from 'subtitle'
-import { convertRawSubs } from './utils/convertRawSubs'
-import { TSub } from './types'
-import { $video } from '@/models/videos'
+import { createStore, createEvent, createEffect, attach, UnitValue, sample, StoreValue } from "effector";
+import { debug } from "patronum";
+import { resync } from "subtitle";
 
-import type Service from '@/streamings/service'
+import { convertRawSubs } from "@src/utils/convertRawSubs";
+import { $video } from "@src/models/videos";
+import { getCurrentSubs } from "@src/utils/getCurrentSubs";
+import type { Captions, TSub } from "../types";
+import type Service from "@src/streamings/service";
+import { $streaming } from "../streamings";
 
-import { $streaming } from '../streamings'
-import { withPersist } from '@/models/utils/withPersist'
+export const $rawSubs = createStore<Captions>([], { name: "rawSubs" });
+export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
+export const $currentSubs = createStore<TSub[]>([], { name: "currentSubs" });
+export const esSubsChanged = createEvent<string>();
+export const subsRequested = createEvent<string>();
+export const fetchSubs = createEvent<{ streaming: Service; language: string }>();
+export const resetSubs = createEvent<string>();
+export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(
+  async ({ streaming, language }) => {
+    try {
+      return await streaming.getSubs(language);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>(
+  ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)
+);
+export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
 
-export const $rawSubs = createStore<Captions>([])
-export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle))
-export const $currentSubs = createStore<TSub[]>([])
-export const $subsDelay = createStore<number>(0)
-export const $subsSize = withPersist(createStore<number>(100, { name: 'es-subs-size' }))
-export const $subsBackground = withPersist(createStore<boolean>(true, { name: 'es-subs-background' }))
-export const $subsBackgroundOpacity = withPersist(createStore<number>(50, { name: 'es-subs-background-opacity' }))
+export const $subsDelay = createStore<number>(0);
+export const subsDelayButtonPressed = createEvent<number>();
+export const subsDelayChangeFx = createEffect<number, number>((value) => value);
+export const subsResyncFx = createEffect<
+  { rawSubs: Captions; subsDelay: StoreValue<typeof $subsDelay>; delay: number },
+  Captions
+>(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
 
-export const esSubsChanged = createEvent<string>()
-export const esRenderSetings = createEvent()
-
-export const fetchSubsFx = createEffect<{ language: string; streaming: Service }, Captions>()
-export const fetchCustomSubsFx = createEffect<Captions, Captions>((subs) => subs)
-export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>()
-export const updateSubsDelayFx = createEffect<number, number>()
-export const updateSubsSizeFx = createEffect<number, number>((size) => size)
-export const updateSubsBackgroundFx = createEffect<boolean, boolean>((value) => value)
-export const updateSubsBackgroundOpacityFx = createEffect<number, number>((value) => value)
-export const resyncSubsFx = createEffect<
-  { currentDelay: number; delay: number },
-  { currentDelay: number; delay: number }
->((data) => data)
-
-export const fetchServiceSubsFx = attach<string, typeof $streaming, typeof fetchSubsFx>({
-  effect: fetchSubsFx,
-  source: $streaming,
-  mapParams: (language, streaming) => ({ language, streaming }),
-})
+debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx);

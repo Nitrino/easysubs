@@ -1,0 +1,19 @@
+.es-settings-button {
+  border: none;
+  background: #252836;
+  color: #fff;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  appearance: none;
+  padding: 0;
+  margin-right: 4px;
+
+  &__value {
+    line-height: 20px;
+    background: #252836;
+    text-align: center;
+    min-width: 48px;
+    padding: 0 8px;
+  }
+}
