@@ -1,4 +1,4 @@
-import { Captions } from "subtitle";
+import { Captions } from "@src/models/types";
 
 interface Service {
   // Getting subtitles from a service

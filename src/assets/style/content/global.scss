@@ -229,3 +229,76 @@
     display: none;
   }
 }
+
+.es-netflix {
+  .es-settings-content {
+    bottom: 120px;
+    right: 85px;
+  }
+
+  .es-settings-icon {
+    svg {
+      opacity: 1;
+      transition: transform 350ms cubic-bezier(0.86, 0, 0.07, 1);
+    }
+
+    &:hover {
+      svg {
+        transform: scale(1.13);
+      }
+    }
+  }
+
+  .es-settings {
+    // height: 2.4rem;
+    width: 52px;
+    margin-right: 30px;
+
+    // @media screen and (min-width: 854px) {
+    //   height: 5.2rem;
+    //   width: 5.2rem;
+    //   margin-right: 2rem;
+    // }
+
+    // @media screen and (min-width: 1440px) {
+    //   margin-right: 39px;
+    // }
+
+    &-icon {
+      width: 44px;
+      margin: 0;
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+        @media screen and (min-width: 854px) {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+}
+
+.es-netflix.es-enabled {
+  #es {
+    bottom: 21vh;
+
+    @media screen and (min-width: 1440px) {
+      bottom: 26vh;
+    }
+  }
+
+  .player-timedtext {
+    display: none !important;
+  }
+
+  hr {
+    border: none;
+  }
+
+  .watch-video--selector-audio-subtitle {
+    overflow-y: auto;
+  }
+}

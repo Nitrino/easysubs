@@ -1,11 +1,11 @@
 import { createStore, createEvent, createEffect, attach, UnitValue, sample, StoreValue } from "effector";
 import { debug } from "patronum";
-import { Captions, resync } from "subtitle";
+import { resync } from "subtitle";
 
 import { convertRawSubs } from "@src/utils/convertRawSubs";
 import { $video } from "@src/models/videos";
 import { getCurrentSubs } from "@src/utils/getCurrentSubs";
-import type { TSub } from "../types";
+import type { Captions, TSub } from "../types";
 import type Service from "@src/streamings/service";
 import { $streaming } from "../streamings";
 
@@ -16,8 +16,14 @@ export const esSubsChanged = createEvent<string>();
 export const subsRequested = createEvent<string>();
 export const fetchSubs = createEvent<{ streaming: Service; language: string }>();
 export const resetSubs = createEvent<string>();
-export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(({ streaming, language }) =>
-  streaming.getSubs(language)
+export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(
+  async ({ streaming, language }) => {
+    try {
+      return await streaming.getSubs(language);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 );
 export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>(
   ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)

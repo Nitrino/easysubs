@@ -1,3 +1,5 @@
+import type { subTitleType } from "subtitle";
+
 export type TMoveDirection = "next" | "prev";
 
 export type TSubItem = {
@@ -44,3 +46,5 @@ export type TWordTranslation = {
 export type TGoogleTranslation = unknown;
 
 export type TLearningService = "lingualeo" | "puzzle-english" | "disabled";
+
+export type Captions = subTitleType[];

@@ -1,8 +1,9 @@
 import { createStore, createEffect, createEvent, StoreValue, sample } from "effector";
-import { esRenderSetings } from "../settings";
 import { debug } from "patronum";
 import { $currentSubs, $subs } from "../subs";
 import { TMoveDirection } from "../types";
+import { moveVideoToTime } from "@src/utils/moveVideoToTime";
+import { $streaming } from "../streamings";
 
 const TIME_SEEK_TIME = 5000;
 
@@ -17,10 +18,11 @@ type TMoveFX = {
   video: StoreValue<typeof $video>;
   subs: StoreValue<typeof $subs>;
   currentSubs: StoreValue<typeof $currentSubs>;
+  streaming: StoreValue<typeof $streaming>;
   direction: TMoveDirection;
 };
 export const moveKeyPressed = createEvent<TMoveDirection>();
-export const moveFx = createEffect<TMoveFX, void>(({ video, subs, direction }) => {
+export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, direction }) => {
   if (video === null) {
     return;
   }
@@ -28,15 +30,12 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, direction }) =
   if (direction === "next") {
     const currentTime = video.currentTime * 1000;
     const nextSub = subs.find((sub) => sub.start > currentTime);
-    console.log("nextSub", nextSub);
-    console.log("video.currentTime", video.currentTime);
-
     const isNextSubClose = nextSub && nextSub.start - currentTime <= TIME_SEEK_TIME;
 
     if (nextSub && isNextSubClose) {
-      video.currentTime = nextSub.start / 1000;
+      moveVideoToTime(video, streaming, nextSub.start);
     } else {
-      video.currentTime += TIME_SEEK_TIME / 1000;
+      moveVideoToTime(video, streaming, currentTime + TIME_SEEK_TIME);
     }
   }
 
@@ -50,31 +49,32 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, direction }) =
     const isPrevSubClose = prevSub && currentTime - prevSub.end <= TIME_SEEK_TIME;
 
     if (prevSub && isPrevSubClose) {
-      video.currentTime = prevSub.start / 1000;
+      moveVideoToTime(video, streaming, prevSub.start);
     } else {
-      video.currentTime -= TIME_SEEK_TIME / 1000;
+      moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
     }
   }
 });
 
 export const moveToTimeRequested = createEvent<number>();
-export const moveToTimeFx = createEffect<{ video: StoreValue<typeof $video>; time: number }, void>(
-  ({ video, time }) => {
-    video.currentTime = time / 1000;
-  }
-);
+export const moveToTimeFx = createEffect<
+  { video: StoreValue<typeof $video>; streaming: StoreValue<typeof $streaming>; time: number },
+  void
+>(({ video, streaming, time }) => {
+  moveVideoToTime(video, streaming, time);
+});
 
 sample({
   clock: moveToTimeRequested,
-  source: { video: $video },
-  fn: ({ video }, time) => ({ video, time }),
+  source: { video: $video, streaming: $streaming },
+  fn: ({ video, streaming }, time) => ({ video, streaming, time }),
   target: moveToTimeFx,
 });
 
 sample({
   clock: moveKeyPressed,
-  source: { video: $video, subs: $subs, currentSubs: $currentSubs },
-  fn: ({ video, subs, currentSubs }, direction) => ({ video, subs, currentSubs, direction }),
+  source: { video: $video, subs: $subs, currentSubs: $currentSubs, streaming: $streaming },
+  fn: ({ video, subs, currentSubs, streaming }, direction) => ({ video, subs, currentSubs, streaming, direction }),
   target: moveFx,
 });
 

@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
-import { parse, Captions } from "subtitle";
+import { parse } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
 
 class Coursera implements Service {
@@ -19,7 +19,7 @@ class Coursera implements Service {
     window.addEventListener("esCourseraSubtitlesChanged", this.handleCourseraSubtitlesChanged as EventListener);
   }
 
-  public async getSubs(language: string): Promise<Captions> {
+  public async getSubs(language: string) {
     if (!language) return parse("");
     const track: HTMLTrackElement | null = document.querySelector(`track[srclang="${language}"]`);
 

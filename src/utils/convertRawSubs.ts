@@ -1,4 +1,4 @@
-import { Captions } from "subtitle";
+import { Captions } from "@src/models/types";
 import { textToSubItems } from "./textToSubItems";
 import { TSub } from "@src/models/types";
 
@@ -15,8 +15,8 @@ export const convertRawSubs = (rawSubs: Captions): TSub[] => {
   return rawSubs.map((sub, index) => {
     return {
       id: index,
-      start: sub.start,
-      end: sub.end,
+      start: Number(sub.start),
+      end: Number(sub.end),
       text: sub.text,
       cleanedText: cleanText(sub.text),
       items: textToSubItems(sub.text),

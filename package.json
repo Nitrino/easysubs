@@ -27,7 +27,7 @@
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.5",
     "stream-browserify": "^3.0.0",
-    "subtitle": "^3.0.0"
+    "subtitle": "^2.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.5.0",
@@ -37,6 +37,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.2.4",
+    "@types/subtitle": "^2.0.3",
     "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "5.56.0",
     "@typescript-eslint/parser": "5.38.1",
