@@ -5,9 +5,8 @@ import { resync } from "subtitle";
 import { convertRawSubs } from "@src/utils/convertRawSubs";
 import { $video } from "@src/models/videos";
 import { getCurrentSubs } from "@src/utils/getCurrentSubs";
-import type { Captions, TSub } from "../types";
+import type { Captions, TPhrasalVerb, TSub } from "../types";
 import type Service from "@src/streamings/service";
-import { $streaming } from "../streamings";
 
 export const $rawSubs = createStore<Captions>([], { name: "rawSubs" });
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
@@ -31,6 +30,8 @@ export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue
 export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
 
 export const $subsDelay = createStore<number>(0);
+export const $activePhrasalVerb = createStore<TPhrasalVerb>(null);
+export const activePhrasalVerbChanged = createEvent<TPhrasalVerb>();
 export const subsDelayButtonPressed = createEvent<number>();
 export const subsDelayChangeFx = createEffect<number, number>((value) => value);
 export const subsResyncFx = createEffect<
@@ -38,4 +39,4 @@ export const subsResyncFx = createEffect<
   Captions
 >(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
 
-debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx);
+debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, $activePhrasalVerb);

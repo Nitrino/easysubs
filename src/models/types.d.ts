@@ -48,3 +48,10 @@ export type TGoogleTranslation = unknown;
 export type TLearningService = "lingualeo" | "puzzle-english" | "disabled";
 
 export type Captions = subTitleType[];
+
+export type TPhrasalVerb = {
+  key: string;
+  text: string;
+  indexes: number[];
+  translations: string[];
+};

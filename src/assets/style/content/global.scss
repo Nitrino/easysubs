@@ -46,6 +46,10 @@
       color: #3a88a2;
       cursor: pointer;
     }
+
+    &-highlighted {
+      color: #3a88a2;
+    }
   }
   .es-sub-item-space {
     display: inline;
@@ -98,8 +102,8 @@
 
   .es-word-quick-translations {
     white-space: break-spaces;
-    width: max-content;
-    max-width: 160px;
+    width: min-content;
+    min-width: 120px;
   }
 
   .es-full-translation {
