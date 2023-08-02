@@ -4,7 +4,13 @@ import { useUnit } from "effector-react";
 import { $activePhrasalVerb, $currentSubs, activePhrasalVerbChanged } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TPhrasalVerb, TSub, TSubItem } from "@src/models/types";
-import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
+import {
+  $autoPause,
+  $moveBySubsEnabled,
+  $subsBackground,
+  $subsBackgroundOpacity,
+  $subsFontSize,
+} from "@src/models/settings";
 import {
   requestWordTranslation,
   $currentWordTranslation,

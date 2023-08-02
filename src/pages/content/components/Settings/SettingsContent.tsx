@@ -10,6 +10,7 @@ import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 import { CustomSubs } from "./CustomSubs";
 import { EnableProgressBar } from "./EnableProgressBar";
 import { MoveBySubs } from "./MoveBySubs";
+import { AutoPauseBySubs } from "./AutoPauseBySubs";
 
 interface TabProps {
   isActive: boolean;
@@ -61,6 +62,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
           <>
             <div className="es-settings-content__item">
               <EnableToggle />
+            </div>
+            <div className="es-settings-content__item">
+              <AutoPauseBySubs />
             </div>
             <div className="es-settings-content__item">
               <EnableProgressBar />

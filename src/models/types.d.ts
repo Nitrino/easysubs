@@ -1,6 +1,6 @@
 import type { subTitleType } from "subtitle";
 
-export type TMoveDirection = "next" | "prev";
+export type TMoveDirection = "next" | "prev" | "current";
 
 export type TSubItem = {
   text: string;

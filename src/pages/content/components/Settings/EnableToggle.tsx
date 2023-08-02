@@ -6,11 +6,6 @@ import { $enabled, enableToggleChanged } from "@src/models/settings";
 export const EnableToggle: FC = () => {
   const [enabled, handleEnableToggleChanged] = useUnit([$enabled, enableToggleChanged]);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    handleEnableToggleChanged;
-  };
   return (
     <div className="es-settings-content__element">
       <div className="es-settings-content__element__left">Enabled</div>

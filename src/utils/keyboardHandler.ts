@@ -14,6 +14,13 @@ export const keyboardHandler = (event: KeyboardEvent) => {
       moveKeyPressed("next");
     }
   }
+  if (event.code === "ArrowDown") {
+    event.stopPropagation();
+    event.preventDefault();
+    if (event.type === "keydown") {
+      moveKeyPressed("current");
+    }
+  }
 };
 
 export const addKeyboardEventsListeners = () => {

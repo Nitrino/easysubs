@@ -4,7 +4,6 @@ import { $currentSubs, $subs } from "../subs";
 import { TMoveDirection } from "../types";
 import { moveVideoToTime } from "@src/utils/moveVideoToTime";
 import { $streaming } from "../streamings";
-import { esRenderSetings } from "../settings";
 
 const TIME_SEEK_TIME = 5000;
 
@@ -27,7 +26,7 @@ type TMoveFX = {
   direction: TMoveDirection;
 };
 export const moveKeyPressed = createEvent<TMoveDirection>();
-export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, direction }) => {
+export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, direction, currentSubs }) => {
   if (video === null) {
     return;
   }
@@ -57,6 +56,13 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
       moveVideoToTime(video, streaming, prevSub.start);
     } else {
       moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
+    }
+  }
+
+  if (direction === "current") {
+    if (currentSubs.length > 0) {
+      moveVideoToTime(video, streaming, currentSubs[0].start);
+      video.play();
     }
   }
 });

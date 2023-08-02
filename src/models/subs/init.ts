@@ -15,9 +15,14 @@ import {
   subsResyncFx,
   updateCurrentSubsFx,
   updateCustomSubsFx,
+  autoPauseFx,
+  updatePrevCurrentSubsFx,
+  $prevCurrentSubs,
 } from ".";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
+import { $autoPause } from "../settings";
+import { debug } from "patronum";
 
 split({
   source: esSubsChanged,
@@ -44,6 +49,12 @@ sample({
   fn: ({ subs, video }, _) => ({ subs, video }),
   target: updateCurrentSubsFx,
 });
+sample({
+  clock: videoTimeUpdate,
+  source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause },
+  fn: ({ currentSubs, video, autoPause }, _) => ({ currentSubs, video, autoPause }),
+  target: autoPauseFx,
+});
 
 sample({
   clock: subsDelayButtonPressed,
@@ -59,6 +70,11 @@ sample({
 
 $rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
 $rawSubs.reset(resetSubs);
-$currentSubs.on(updateCurrentSubsFx.doneData, (_, subs) => subs);
+$currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
+  JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs
+);
+
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 $activePhrasalVerb.on(activePhrasalVerbChanged, (_, phrasalVerb) => phrasalVerb);
+
+debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, $activePhrasalVerb, autoPauseFx, $currentSubs);

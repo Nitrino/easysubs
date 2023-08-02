@@ -45,6 +45,8 @@ export const subsBackgroundOpacityButtonPressed = createEvent<number>();
 export const subsBackgroundOpacityChangeFx = createEffect<number, number>((value) => value);
 
 export const $autoPause = withPersist(createStore<boolean>(false));
+export const autoPauseChanged = createEvent<boolean>();
+$autoPause.on(autoPauseChanged, (_, value) => value);
 
 export const esRenderSetings = createEvent();
 
