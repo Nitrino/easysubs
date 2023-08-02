@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 
 import { $activePhrasalVerb, $currentSubs, activePhrasalVerbChanged } from "@src/models/subs";
-import { $video } from "@src/models/videos";
+import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TPhrasalVerb, TSub, TSubItem } from "@src/models/types";
 import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
 import {
@@ -21,11 +21,13 @@ import { joinTranslations } from "@src/utils/joinTranslations";
 type TSubsProps = {};
 
 export const Subs: FC<TSubsProps> = () => {
-  const [video, currentSubs, subsFontSize, moveBySubsEnabled] = useUnit([
+  const [video, currentSubs, subsFontSize, moveBySubsEnabled, wasPaused, handleWasPausedChanged] = useUnit([
     $video,
     $currentSubs,
     $subsFontSize,
     $moveBySubsEnabled,
+    $wasPaused,
+    wasPausedChanged,
   ]);
 
   useEffect(() => {
@@ -38,11 +40,18 @@ export const Subs: FC<TSubsProps> = () => {
   }, []);
 
   const handleOnMouseLeave = () => {
-    video.play();
+    if (wasPaused) {
+      video.play();
+      console.log("handleWasPausedChanged false");
+      handleWasPausedChanged(false);
+    }
   };
 
   const handleOnMouseEnter = () => {
     if (!video.paused) {
+      console.log("handleWasPausedChanged true");
+
+      handleWasPausedChanged(true);
       video.pause();
     }
   };
