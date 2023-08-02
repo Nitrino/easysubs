@@ -4,6 +4,6 @@ export const moveVideoToTime = (video: HTMLVideoElement, streaming: Service, tim
   if (streaming.constructor.name.toLowerCase() === "netflix") {
     window.dispatchEvent(new CustomEvent("esNetflixSeek", { detail: time }));
   } else {
-    video.currentTime += time / 1000;
+    video.currentTime = time / 1000;
   }
 };
