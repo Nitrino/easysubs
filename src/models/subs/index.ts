@@ -1,5 +1,4 @@
 import { createStore, createEvent, createEffect, attach, UnitValue, sample, StoreValue } from "effector";
-import { debug } from "patronum";
 import { resync } from "subtitle";
 
 import { convertRawSubs } from "@src/utils/convertRawSubs";
@@ -21,12 +20,7 @@ export const autoPauseFx = createEffect<
     autoPause: StoreValue<typeof $autoPause>;
   },
   void
->(({ currentSubs, video, autoPause }) => {
-  const timeDiff = currentSubs[0].end - video.currentTime * 1000;
-  if (autoPause && timeDiff < 250 && timeDiff > 0) {
-    video.pause();
-  }
-});
+>(({ video }) => video.pause());
 
 export const subsRequested = createEvent<string>();
 export const fetchSubs = createEvent<{ streaming: Service; language: string }>();

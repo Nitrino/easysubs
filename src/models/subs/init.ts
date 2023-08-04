@@ -16,8 +16,6 @@ import {
   updateCurrentSubsFx,
   updateCustomSubsFx,
   autoPauseFx,
-  updatePrevCurrentSubsFx,
-  $prevCurrentSubs,
 } from ".";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
@@ -53,6 +51,10 @@ sample({
   clock: videoTimeUpdate,
   source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause },
   fn: ({ currentSubs, video, autoPause }, _) => ({ currentSubs, video, autoPause }),
+  filter: ({ currentSubs, video, autoPause }) => {
+    const timeDiff = currentSubs[0].end - video.currentTime * 1000;
+    return autoPause && timeDiff < 250 && timeDiff > 0;
+  },
   target: autoPauseFx,
 });
 
@@ -77,4 +79,4 @@ $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 $activePhrasalVerb.on(activePhrasalVerbChanged, (_, phrasalVerb) => phrasalVerb);
 
-debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, $activePhrasalVerb, autoPauseFx, $currentSubs);
+debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, $activePhrasalVerb, autoPauseFx.doneData, $currentSubs);
