@@ -10,7 +10,7 @@ export const LearningService: FC<HTMLProps<HTMLSelectElement>> = (props) => {
 
   return (
     <div className="es-settings-content__element">
-      <div className="es-settings-content__element__left">Learning Service</div>
+      <div className="es-settings-content__element__left">Learning service</div>
       <div className="es-settings-content__element__right">
         <Select
           {...props}

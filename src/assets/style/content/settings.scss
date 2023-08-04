@@ -8,8 +8,15 @@
 .es-settings-icon {
   margin: 0 10px;
   cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+
+  &:hover {
+    color: #fff;
+  }
+
   svg {
     width: 24px;
+    fill: currentColor;
   }
 }
 
@@ -18,13 +25,13 @@
   line-height: 16px;
   margin-block-start: 1em;
   margin-block-end: 1em;
-  font-size: 16px;
+  font-size: 15px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
   position: absolute;
-  width: 400px;
-  height: 400px;
+  height: 270px;
+  width: 340px;
   background-color: #1f1d2b;
   right: 36px;
   bottom: 116px;
@@ -45,7 +52,7 @@
     &__item {
       line-height: 46px;
       padding: 0 16px;
-      font-size: 18px;
+      font-size: 15px;
       cursor: pointer;
 
       &:first-child {

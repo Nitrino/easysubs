@@ -9,7 +9,7 @@ export const TranslateLanguage: FC<HTMLProps<HTMLSelectElement>> = (props) => {
 
   return (
     <div className="es-settings-content__element">
-      <div className="es-settings-content__element__left">Translation language</div>
+      <div className="es-settings-content__element__left">Translate to</div>
       <div className="es-settings-content__element__right">
         <Select
           {...props}
