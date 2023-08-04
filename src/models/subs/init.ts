@@ -52,8 +52,10 @@ sample({
   source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause },
   fn: ({ currentSubs, video, autoPause }, _) => ({ currentSubs, video, autoPause }),
   filter: ({ currentSubs, video, autoPause }) => {
-    const timeDiff = currentSubs[0].end - video.currentTime * 1000;
-    return autoPause && timeDiff < 250 && timeDiff > 0;
+    if (currentSubs[0]) {
+      const timeDiff = currentSubs[0].end - video.currentTime * 1000;
+      return autoPause && timeDiff < 250 && timeDiff > 0;
+    }
   },
   target: autoPauseFx,
 });
