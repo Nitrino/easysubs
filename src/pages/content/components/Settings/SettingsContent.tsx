@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, useRef, useState } from "react";
 import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
@@ -11,6 +11,7 @@ import { CustomSubs } from "./CustomSubs";
 import { EnableProgressBar } from "./EnableProgressBar";
 import { MoveBySubs } from "./MoveBySubs";
 import { AutoPauseBySubs } from "./AutoPauseBySubs";
+import { useClickOutside } from "@src/hooks/useClickOutside";
 
 interface TabProps {
   isActive: boolean;
@@ -33,8 +34,12 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState(0);
+  const contentRef = useRef();
+
+  useClickOutside(contentRef, onClose);
+
   return (
-    <div className="es-settings-content">
+    <div className="es-settings-content" ref={contentRef}>
       <div className="es-settings-content__menu">
         <div className="es-settings-content__menu__items">
           <Tab

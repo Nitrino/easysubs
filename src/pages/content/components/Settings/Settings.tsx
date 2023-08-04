@@ -15,9 +15,14 @@ type TSettingsProps = {
 export const Settings: FC<TSettingsProps> = () => {
   const [showSettings, setShowSettings] = useState(false);
   const streaming = useStore($streaming);
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    setShowSettings(!showSettings);
+  };
   return (
     <>
-      <div className="es-settings-icon" onClick={() => setShowSettings(!showSettings)}>
+      <div className="es-settings-icon" onClick={handleClick}>
         <MonoLogo />
       </div>
       {showSettings &&
