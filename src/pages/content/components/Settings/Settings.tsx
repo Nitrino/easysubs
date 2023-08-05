@@ -7,6 +7,7 @@ import "../../style.scss";
 import { useStore } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
 import { MonoLogo } from "./assets/MonoLogo";
+import { Toaster } from "react-hot-toast";
 
 type TSettingsProps = {
   contentContainer: HTMLElement;
@@ -30,6 +31,12 @@ export const Settings: FC<TSettingsProps> = () => {
           <SettingsContent onClose={() => setShowSettings(false)} />,
           streaming.getSettingsContentContainer()
         )}
+      {createPortal(
+        <div className="es-toast">
+          <Toaster />
+        </div>,
+        document.querySelector("body")
+      )}
     </>
   );
 };

@@ -36,5 +36,22 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .getFullTextTranslation({ text: message.text, lang: message.language })
       .then((respData: unknown) => sendResponse(respData));
   }
+
+  if (message.type === "postFormDataRequest") {
+    console.log("postFormDataRequest: ", message);
+
+    const formData = new FormData();
+    for (const key in message.data) {
+      formData.append(key, message.data[key].toString());
+    }
+
+    fetch(message.url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((resp) => resp.json())
+      .then((data) => sendResponse(data));
+  }
+
   return true;
 });

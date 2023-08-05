@@ -2,8 +2,8 @@ import { createStore, createEvent, sample, createEffect } from "effector";
 import { debug } from "patronum";
 
 import { withPersist } from "@src/utils/withPersist";
-import { TLearningService } from "../types";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
+import { TLearningService } from "../types";
 
 export const $enabled = withPersist(createStore<boolean>(true));
 export const enableToggleChanged = createEvent<boolean>();

@@ -5,7 +5,7 @@ import { $activePhrasalVerb, $currentSubs, activePhrasalVerbChanged } from "@src
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TPhrasalVerb, TSub, TSubItem } from "@src/models/types";
 import {
-  $autoPause,
+  $learningService,
   $moveBySubsEnabled,
   $subsBackground,
   $subsBackgroundOpacity,
@@ -23,6 +23,11 @@ import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/
 import Draggable from "react-draggable";
 import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
 import { joinTranslations } from "@src/utils/joinTranslations";
+import { PlusIcon } from "./assets/PlusIcon";
+import { LinguaLeo } from "@src/learning-service/linguaLeo";
+import { PuzzleEnglish } from "@src/learning-service/puzzleEnglish";
+import ILearningService from "@src/learning-service/learningService";
+import toast from "react-hot-toast";
 
 type TSubsProps = {};
 
@@ -166,11 +171,23 @@ const SubItem: FC<TSubItemProps> = ({ subItem, phrasalVerbs, index }) => {
 };
 
 const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
-  const [currentWordTranslation, handleRequestWordTranslation, handleCleanWordTranslation] = useUnit([
+  const [currentWordTranslation, learningService, handleRequestWordTranslation, handleCleanWordTranslation] = useUnit([
     $currentWordTranslation,
+    $learningService,
     requestWordTranslation,
     cleanWordTranslation,
   ]);
+
+  const [service, setService] = useState<ILearningService>(null);
+
+  useEffect(() => {
+    if (learningService === "lingualeo") {
+      setService(new LinguaLeo());
+    }
+    if (learningService === "puzzle-english") {
+      setService(new PuzzleEnglish());
+    }
+  }, [learningService]);
 
   useEffect(() => {
     handleRequestWordTranslation(text);
@@ -183,11 +200,33 @@ const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     return null;
   }
 
+  const handleAddWord = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (service) {
+      service
+        .addWord(text.toLowerCase(), joinTranslations(currentWordTranslation.translations), {})
+        .then((value) => {
+          toast.success(value);
+        })
+        .catch((error) => {
+          toast.error(error);
+        });
+    }
+  };
+
   return (
     <div className="es-word-translation">
       <div className="es-word-translation-original">{text.toLowerCase()}</div>
       <hr />
-      <div className="es-word-quick-translations">{joinTranslations(currentWordTranslation.translations)}</div>
+      <div className="es-word-quick-translations">
+        {service && (
+          <button className="es-settings-button" onClick={handleAddWord}>
+            <PlusIcon fill={service.color} />
+          </button>
+        )}
+        <div className="es-word-quick-translations-values">{joinTranslations(currentWordTranslation.translations)}</div>
+      </div>
     </div>
   );
 };
