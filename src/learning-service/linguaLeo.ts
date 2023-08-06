@@ -7,7 +7,7 @@ export class LinguaLeo implements ILearningService {
     this.color = "#FFC900";
   }
 
-  public addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
+  public async addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
     const url = new URL("https://api.lingualeo.com/addword");
     const data = {
       word: word,

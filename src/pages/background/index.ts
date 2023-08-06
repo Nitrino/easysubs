@@ -52,6 +52,16 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .then((resp) => resp.json())
       .then((data) => sendResponse(data));
   }
+  if (message.type === "post") {
+    console.log("Post request: ", message);
+
+    fetch(message.url, {
+      method: "POST",
+      body: JSON.stringify(message.data),
+    })
+      .then((resp) => resp.json())
+      .then((data) => sendResponse(data));
+  }
 
   return true;
 });

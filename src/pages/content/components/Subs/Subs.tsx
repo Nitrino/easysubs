@@ -28,6 +28,7 @@ import { LinguaLeo } from "@src/learning-service/linguaLeo";
 import { PuzzleEnglish } from "@src/learning-service/puzzleEnglish";
 import ILearningService from "@src/learning-service/learningService";
 import toast from "react-hot-toast";
+import { Anki } from "@src/learning-service/anki";
 
 type TSubsProps = {};
 
@@ -181,6 +182,9 @@ const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   const [service, setService] = useState<ILearningService>(null);
 
   useEffect(() => {
+    if (learningService === "anki") {
+      setService(new Anki());
+    }
     if (learningService === "lingualeo") {
       setService(new LinguaLeo());
     }

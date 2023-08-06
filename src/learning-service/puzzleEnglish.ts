@@ -7,14 +7,14 @@ export class PuzzleEnglish implements ILearningService {
     this.color = "#88BA28";
   }
 
-  public addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
+  public async addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
     const url = "https://puzzle-english.com/api2/userDictionary/addWord";
     const data = {
       post_id: 0,
       word: word,
       translation: translation,
       piece_index: 0,
-      ...(aditionalData["partOfSpeech"] ? { part_of_speech: aditionalData["partOfSpeech"] } : null),
+      part_of_speech: aditionalData["partOfSpeech"] ?? "verb",
     };
 
     return new Promise((resolve, reject) => {

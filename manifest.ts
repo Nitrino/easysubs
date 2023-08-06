@@ -28,7 +28,10 @@ const manifest: chrome.runtime.ManifestV3 = {
     },
   ],
   permissions: ["webNavigation", "scripting", "tabs", "storage"],
-  host_permissions: ["https://translate.google.com/*"],
+  host_permissions: ["https://translate.google.com/*", "http://localhost:8765/*"],
+  content_security_policy: {
+    extension_pages: "script-src 'self'; object-src 'self'",
+  },
   web_accessible_resources: [
     {
       resources: ["assets/js/*.js", "assets/css/*.css", "icon-128.png", "icon-34.png"],
@@ -38,3 +41,29 @@ const manifest: chrome.runtime.ManifestV3 = {
 };
 
 export default manifest;
+
+// export default defineManifest(async (env) => ({
+//   manifest_version: 3,
+//   name: "Easysubs",
+//   version: `${major}.${minor}.${patch}.${label}`,
+//   version_name: version,
+//   action: {
+//     default_popup: "index.html",
+//   },
+//   background: {
+//     service_worker: "src/background.ts",
+//     type: "module",
+//   },
+//   permissions: ["webNavigation", "scripting", "tabs"],
+//   content_scripts: [
+//     {
+//       js: ["src/main.tsx"],
+//       run_at: "document_end",
+//       matches: ["<all_urls>"],
+//     },
+//   ],
+//   host_permissions: ["https://translate.google.com/*", "http://localhost:4000/*"],
+//   content_security_policy: {
+//     extension_pages: "script-src 'self'; object-src 'self'",
+//   },
+// }));
