@@ -250,6 +250,8 @@
   }
 
   .es-settings-icon {
+    color: #fff;
+
     svg {
       opacity: 1;
       transition: transform 350ms cubic-bezier(0.86, 0, 0.07, 1);
@@ -257,7 +259,7 @@
 
     &:hover {
       svg {
-        transform: scale(1.13);
+        transform: scale(1.3);
       }
     }
   }
