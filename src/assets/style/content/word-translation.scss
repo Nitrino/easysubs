@@ -1,0 +1,116 @@
+.es-word-translation {
+  width: max-content;
+  max-width: 360px;
+  text-align: left;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate3d(-50%, -100%, 0);
+  padding: 16px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  font-size: 16px;
+  font-style: normal;
+  white-space: normal;
+  box-sizing: content-box;
+  color: #fff;
+  box-sizing: border-box;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: #1e1e1e;
+    border-bottom: 0;
+    margin-left: -10px;
+    margin-bottom: -10px;
+  }
+
+  .es-word-main {
+    font-weight: 600;
+    font-weight: 16px;
+    text-align: center;
+    font-smooth: antialiased;
+  }
+
+  .es-word-original-hr {
+    height: 1px;
+    margin: 4px auto;
+    width: 50%;
+    border: 0;
+    background: rgba(#fff, 0.5);
+  }
+
+  .es-word-original-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .es-word-original-sound-icon {
+    width: 14px;
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
+    svg {
+      width: 100%;
+    }
+  }
+}
+
+.es-translation-variants {
+  margin: 12px 0;
+  font-size: 14px;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0 4px;
+  }
+}
+
+.es-translation-variant {
+  svg {
+    vertical-align: middle;
+  }
+}
+
+.es-translation-variant-word {
+  max-width: 120px;
+}
+
+.es-translation-variant-part-of-speach {
+  text-align: left;
+  color: #737373;
+  padding: 0 16px;
+}
+
+.es-translation-variant-synonyms {
+  color: #bbbbbb;
+  flex: 1;
+}
+
+.es-translation-services-hr {
+  height: 1px;
+  margin: 0 auto 8px auto;
+  border: 0;
+  background: rgba(#fff, 0.5);
+}
+.es-translation-services {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.es-translation-service {
+  width: 20px;
+
+  img {
+    width: 100%;
+  }
+}

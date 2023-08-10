@@ -51,66 +51,6 @@
     display: inline;
   }
 
-  .es-word-translation {
-    text-align: left;
-    position: absolute;
-    top: 0px;
-    left: 50%;
-    transform: translate3d(-50%, -100%, 0);
-    padding: 16px 24px;
-    background-color: #1e1e1e;
-    border-radius: 0.4em;
-    font-size: 16px;
-    font-style: normal;
-    white-space: normal;
-    box-sizing: content-box;
-    color: #fff;
-    box-sizing: border-box;
-
-    hr {
-      margin: 4px auto 6px;
-      height: 1px;
-      background-color: #666;
-      width: 60%;
-      border: 0;
-    }
-
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border: 10px solid transparent;
-      border-top-color: #1e1e1e;
-      border-bottom: 0;
-      margin-left: -10px;
-      margin-bottom: -10px;
-    }
-  }
-
-  .es-word-translation-original {
-    font-weight: 600;
-    text-align: center;
-    font-smooth: antialiased;
-  }
-
-  .es-word-quick-translations {
-    display: flex;
-    align-items: center;
-
-    svg {
-      margin-top: 2px;
-    }
-  }
-
-  .es-word-quick-translations-values {
-    white-space: break-spaces;
-    width: min-content;
-    min-width: 120px;
-  }
-
   .es-full-translation {
     position: absolute;
     top: -10px;

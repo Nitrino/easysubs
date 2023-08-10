@@ -36,11 +36,39 @@ type FullTranslation = {
   items: FullTranslationItem[];
 };
 
+export type TTranslateAlternativeItem = [string, null, string[], number, boolean];
+export type TTranslateAlternative = [string, TTranslateAlternativeItem[], string, string, number];
+export type TPartOfSpeach =
+  | "noun"
+  | "pronoun"
+  | "verb"
+  | "adjective"
+  | "adverb"
+  | "preposition"
+  | "conjunction"
+  | "interjection"
+  | "abbreviation"
+  | "prefix"
+  | "article"
+  | "numeral"
+  | "auxiliary verb"
+  | "particle";
+
+return `unknown number ${val}`;
+
+export type TWordTranslationItem = {
+  word: string;
+  partOfSpeech: TPartOfSpeach;
+  synonyms: string[];
+  popularity: number;
+};
+
 export type TWordTranslation = {
   source: string;
-  target_language: string;
-  translations: string[];
-  synonyms: string[];
+  mainTranslation: string;
+  targetLanguage: string;
+  translations: TWordTranslationItem[];
+  transcription: string;
 };
 
 export type TGoogleTranslation = unknown;

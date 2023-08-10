@@ -63,5 +63,14 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .then((data) => sendResponse(data));
   }
 
+  if (message.type === "speak") {
+    console.log("speak request: ", message);
+    chrome.tts.speak(message.text, function () {
+      if (chrome.runtime.lastError) {
+        console.log("Error: " + chrome.runtime.lastError.message);
+      }
+    });
+  }
+
   return true;
 });

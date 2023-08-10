@@ -1,34 +1,16 @@
 import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
+import Draggable from "react-draggable";
 
 import { $activePhrasalVerb, $currentSubs, activePhrasalVerbChanged } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TPhrasalVerb, TSub, TSubItem } from "@src/models/types";
-import {
-  $learningService,
-  $moveBySubsEnabled,
-  $subsBackground,
-  $subsBackgroundOpacity,
-  $subsFontSize,
-} from "@src/models/settings";
-import {
-  requestWordTranslation,
-  $currentWordTranslation,
-  cleanWordTranslation,
-  $currentSubTranslation,
-  requestSubTranslation,
-  cleanSubTranslation,
-} from "@src/models/translations";
+import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
+import { $currentSubTranslation, requestSubTranslation, cleanSubTranslation } from "@src/models/translations";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
-import Draggable from "react-draggable";
 import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
 import { joinTranslations } from "@src/utils/joinTranslations";
-import { PlusIcon } from "./assets/PlusIcon";
-import { LinguaLeo } from "@src/learning-service/linguaLeo";
-import { PuzzleEnglish } from "@src/learning-service/puzzleEnglish";
-import ILearningService from "@src/learning-service/learningService";
-import toast from "react-hot-toast";
-import { Anki } from "@src/learning-service/anki";
+import { SubItemTranslation } from "./SubItemTranslation";
 
 type TSubsProps = {};
 
@@ -171,76 +153,12 @@ const SubItem: FC<TSubItemProps> = ({ subItem, phrasalVerbs, index }) => {
   );
 };
 
-const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
-  const [currentWordTranslation, learningService, handleRequestWordTranslation, handleCleanWordTranslation] = useUnit([
-    $currentWordTranslation,
-    $learningService,
-    requestWordTranslation,
-    cleanWordTranslation,
-  ]);
-
-  const [service, setService] = useState<ILearningService>(null);
-
-  useEffect(() => {
-    if (learningService === "anki") {
-      setService(new Anki());
-    }
-    if (learningService === "lingualeo") {
-      setService(new LinguaLeo());
-    }
-    if (learningService === "puzzle-english") {
-      setService(new PuzzleEnglish());
-    }
-  }, [learningService]);
-
-  useEffect(() => {
-    handleRequestWordTranslation(text);
-    return () => {
-      handleCleanWordTranslation();
-    };
-  }, []);
-
-  if (!currentWordTranslation) {
-    return null;
-  }
-
-  const handleAddWord = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (service) {
-      service
-        .addWord(text.toLowerCase(), joinTranslations(currentWordTranslation.translations), {})
-        .then((value) => {
-          toast.success(value);
-        })
-        .catch((error) => {
-          toast.error(error);
-        });
-    }
-  };
-
-  return (
-    <div className="es-word-translation">
-      <div className="es-word-translation-original">{text.toLowerCase()}</div>
-      <hr />
-      <div className="es-word-quick-translations">
-        {service && (
-          <button className="es-settings-button" onClick={handleAddWord}>
-            <PlusIcon fill={service.color} />
-          </button>
-        )}
-        <div className="es-word-quick-translations-values">{joinTranslations(currentWordTranslation.translations)}</div>
-      </div>
-    </div>
-  );
-};
-
 const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phrasalVerb }) => {
   return (
     <div className="es-word-translation">
       <div className="es-word-translation-original">{phrasalVerb.text}</div>
       <hr />
-      <div className="es-word-quick-translations">{joinTranslations(phrasalVerb.translations)}</div>
+      <div className="es-word-word-translations">{joinTranslations(phrasalVerb.translations)}</div>
     </div>
   );
 };
@@ -253,8 +171,6 @@ const SubFullTranslation: FC<{ text: string }> = ({ text }) => {
   ]);
 
   useEffect(() => {
-    console.log("SubFullTranslation", text);
-
     handleRequestSubTranslation(text);
     return () => {
       handleCleanSubTranslation();
