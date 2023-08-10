@@ -4,8 +4,8 @@ const Popup = () => {
       <div className="header">Easysubs</div>
       <menu>
         <li>
-          <a target="_blank" href={chrome.i18n.getMessage("homePageUrl")} rel="noreferrer">
-            {chrome.i18n.getMessage("homePage")}
+          <a target="_blank" href="https://easysubs.co" rel="noreferrer">
+            Home
           </a>
         </li>
         <li>
