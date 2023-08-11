@@ -10,6 +10,7 @@ import { $autoPause } from "../settings";
 
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
+export const $subsLanguage = createStore<string>("auto");
 export const $currentSubs = createStore<TSub[]>([]);
 export const $prevCurrentSubs = createStore<TSub[]>([]);
 export const esSubsChanged = createEvent<string>();
@@ -49,3 +50,11 @@ export const subsResyncFx = createEffect<
   { rawSubs: Captions; subsDelay: StoreValue<typeof $subsDelay>; delay: number },
   Captions
 >(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
+
+export const subsLanguageDetectFx = createEffect<TSub[], string>(async (subs) => {
+  return await chrome.runtime.sendMessage({
+    type: "getTextLanguage",
+    language: "en",
+    text: subs[Math.floor(Math.random() * subs.length)].cleanedText,
+  });
+});

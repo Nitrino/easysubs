@@ -16,6 +16,8 @@ import {
   updateCurrentSubsFx,
   updateCustomSubsFx,
   autoPauseFx,
+  $subsLanguage,
+  subsLanguageDetectFx,
 } from ".";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
@@ -72,6 +74,11 @@ sample({
   target: subsResyncFx,
 });
 
+sample({
+  clock: $subs,
+  target: subsLanguageDetectFx,
+});
+
 $rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
@@ -80,5 +87,6 @@ $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, 
 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 $activePhrasalVerb.on(activePhrasalVerbChanged, (_, phrasalVerb) => phrasalVerb);
+$subsLanguage.on(subsLanguageDetectFx.doneData, (_, lang) => lang);
 
 debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, $activePhrasalVerb, autoPauseFx.doneData, $currentSubs);

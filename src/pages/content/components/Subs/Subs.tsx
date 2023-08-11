@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
-import { $activePhrasalVerb, $currentSubs, activePhrasalVerbChanged } from "@src/models/subs";
+import { $activePhrasalVerb, $currentSubs, $subsLanguage, activePhrasalVerbChanged } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TPhrasalVerb, TSub, TSubItem } from "@src/models/types";
 import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
@@ -69,10 +69,16 @@ export const Subs: FC<TSubsProps> = () => {
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
   const [phrasalVerbs, setPhrasalVerbs] = useState<TPhrasalVerb[]>([]);
-  const [subsBackground, subsBackgroundOpacity] = useUnit([$subsBackground, $subsBackgroundOpacity]);
+  const [subsBackground, subsBackgroundOpacity, subsLanguage] = useUnit([
+    $subsBackground,
+    $subsBackgroundOpacity,
+    $subsLanguage,
+  ]);
 
   useEffect(() => {
-    setPhrasalVerbs(findPhrasalVerbs(sub.text));
+    if (subsLanguage === "en") {
+      setPhrasalVerbs(findPhrasalVerbs(sub.text));
+    }
     return () => {
       setPhrasalVerbs([]);
     };

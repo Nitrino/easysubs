@@ -36,6 +36,11 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .getFullTextTranslation({ text: message.text, lang: message.language })
       .then((respData: unknown) => sendResponse(respData));
   }
+  if (message.type === "getTextLanguage") {
+    googleTranslateFetcher
+      .getTextLanguage({ text: message.text, lang: message.language })
+      .then((respData: unknown) => sendResponse(respData));
+  }
 
   if (message.type === "postFormDataRequest") {
     console.log("postFormDataRequest: ", message);

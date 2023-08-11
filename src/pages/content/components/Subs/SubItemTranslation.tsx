@@ -17,14 +17,16 @@ import urbandictionaryIcon from "@assets/img/icons/urbandictionary.png";
 import youglishIcon from "@assets/img/icons/youglish.png";
 import ILearningService from "@src/learning-service/learningService";
 import { TWordTranslationItem } from "@src/models/types";
+import { $subsLanguage } from "@src/models/subs";
 
 export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
-  const [currentWordTranslation, learningService, handleRequestWordTranslation, handleCleanWordTranslation] = useUnit([
-    $currentWordTranslation,
-    $learningService,
-    requestWordTranslation,
-    cleanWordTranslation,
-  ]);
+  const [
+    currentWordTranslation,
+    learningService,
+    handleRequestWordTranslation,
+    handleCleanWordTranslation,
+    subsLanguage,
+  ] = useUnit([$currentWordTranslation, $learningService, requestWordTranslation, cleanWordTranslation, $subsLanguage]);
 
   const [service, setService] = useState<ILearningService>(null);
 
@@ -106,33 +108,41 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
           </tbody>
         </table>
       </div>
-      <hr className="es-translation-services-hr" />
-      <div className="es-translation-services">
-        <a
-          className="es-translation-service"
-          href={`https://dictionary.cambridge.org/dictionary/english/${text.toLowerCase()}`}
-          target="_blank"
-        >
-          <img src={cambridgeIcon} alt="cambridge dictionary" />
-        </a>
-        <a className="es-translation-service" href={`https://forvo.com/search/${text.toLowerCase()}`} target="_blank">
-          <img src={forvoIcon} alt="forvo" />
-        </a>
-        <a
-          className="es-translation-service"
-          href={`https://www.urbandictionary.com/define.php?term=${text.toLowerCase()}`}
-          target="_blank"
-        >
-          <img src={urbandictionaryIcon} alt="urban dictionary" />
-        </a>
-        <a
-          className="es-translation-service"
-          href={`https://youglish.com/pronounce/${text.toLowerCase()}/english`}
-          target="_blank"
-        >
-          <img src={youglishIcon} alt="youglish" />
-        </a>
-      </div>
+      {subsLanguage === "en" && (
+        <>
+          <hr className="es-translation-services-hr" />
+          <div className="es-translation-services">
+            <a
+              className="es-translation-service"
+              href={`https://dictionary.cambridge.org/dictionary/english/${text.toLowerCase()}`}
+              target="_blank"
+            >
+              <img src={cambridgeIcon} alt="cambridge dictionary" />
+            </a>
+            <a
+              className="es-translation-service"
+              href={`https://forvo.com/search/${text.toLowerCase()}`}
+              target="_blank"
+            >
+              <img src={forvoIcon} alt="forvo" />
+            </a>
+            <a
+              className="es-translation-service"
+              href={`https://www.urbandictionary.com/define.php?term=${text.toLowerCase()}`}
+              target="_blank"
+            >
+              <img src={urbandictionaryIcon} alt="urban dictionary" />
+            </a>
+            <a
+              className="es-translation-service"
+              href={`https://youglish.com/pronounce/${text.toLowerCase()}/english`}
+              target="_blank"
+            >
+              <img src={youglishIcon} alt="youglish" />
+            </a>
+          </div>
+        </>
+      )}
     </div>
   );
 };
