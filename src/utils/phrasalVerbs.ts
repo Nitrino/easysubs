@@ -45,7 +45,7 @@ export const PHRASAL_VERBS = {
   },
   "add on": {
     derivatives: ["adds on", "adding on", "added on"],
-    translations: [],
+    translations: ["прибавлять"],
   },
   "add on to": {
     derivatives: ["adds on to", "adding on to", "added on to"],
@@ -111,7 +111,7 @@ export const PHRASAL_VERBS = {
   },
   "answer to": {
     derivatives: ["answers to", "answering to", "answered to"],
-    translations: [],
+    translations: ["соответствовать"],
   },
   "argue down": {
     translations: [],
@@ -379,7 +379,7 @@ export const PHRASAL_VERBS = {
     translations: [],
   },
   "be off": {
-    translations: [],
+    translations: ["быть свободным (от работы)"],
   },
   "be on about": {
     translations: [],
@@ -740,7 +740,7 @@ export const PHRASAL_VERBS = {
   },
   "book in": {
     derivatives: ["books in", "booking in", "booked in"],
-    translations: [],
+    translations: ["регистрироваться"],
   },
   "book into": {
     translations: [],
@@ -845,7 +845,7 @@ export const PHRASAL_VERBS = {
   },
   "box off": {
     derivatives: ["boxes off", "boxing off", "boxed off"],
-    translations: [],
+    translations: ["окружать"],
   },
   "box up": {
     derivatives: ["boxes up", "boxing up", "boxed up"],
@@ -873,7 +873,6 @@ export const PHRASAL_VERBS = {
   "break down": {
     derivatives: ["breaks down", "breaking down", "broke down", "broken down"],
     translations: ["ломать", "взломать", "ломать", "преодолеть", "разрушать"],
-    tags: ["ESSENTIAL"],
   },
   "break for": {
     derivatives: ["breaks for", "breaking for", "broke for", "broken for"],
@@ -1022,7 +1021,7 @@ export const PHRASAL_VERBS = {
   },
   "bring round": {
     derivatives: ["brings round", "bringing round", "brought round"],
-    translations: [],
+    translations: ["приводить в чувство"],
   },
   "bring through": {
     derivatives: ["brings through", "bringing through", "brought through"],
@@ -1187,7 +1186,7 @@ export const PHRASAL_VERBS = {
   },
   "bump along": {
     derivatives: ["bumps along", "bumping along", "bumped along"],
-    translations: [],
+    translations: ["трястись по"],
   },
   "bump into": {
     derivatives: ["bumps into", "bumping into", "bumped into"],
@@ -1207,10 +1206,10 @@ export const PHRASAL_VERBS = {
   },
   "bundle off": {
     derivatives: ["bundles off", "bundling off", "bundled off"],
-    translations: [],
+    translations: ["отсылать"],
   },
   "bundle out": {
-    translations: [],
+    translations: ["быстро уходить"],
   },
   "bundle up": {
     derivatives: ["bundles up", "bundling up", "bundled up"],
@@ -1257,7 +1256,7 @@ export const PHRASAL_VERBS = {
   },
   "burst into": {
     derivatives: ["bursts into", "bursting into"],
-    translations: [],
+    translations: ["врываться"],
   },
   "burst out": {
     derivatives: ["bursts out", "bursting out"],
@@ -1431,7 +1430,6 @@ export const PHRASAL_VERBS = {
   "carry on": {
     derivatives: ["carries on", "carrying on", "carried on"],
     translations: ["продолжать", "продолжать", "продолжаться", "продолжить", "продолжать"],
-    tags: ["ESSENTIAL"],
   },
   "carry on with": {
     derivatives: ["carry on", "carries on", "carrying on", "carried on"],
@@ -1562,7 +1560,7 @@ export const PHRASAL_VERBS = {
   },
   "chance on": {
     derivatives: ["chances on", "chancing on", "chanced on"],
-    translations: [],
+    translations: ["случайно наткнуться на"],
   },
   "chance upon": {
     derivatives: ["chance on", "chances on", "chancing on", "chanced on"],
@@ -1612,7 +1610,7 @@ export const PHRASAL_VERBS = {
   },
   "chase up": {
     derivatives: ["chases up", "chasing up", "chased up"],
-    translations: [],
+    translations: ["напоминать"],
   },
   "chat away": {
     derivatives: ["chats away", "chatting away", "chatted away"],
@@ -2134,7 +2132,6 @@ export const PHRASAL_VERBS = {
   "come on": {
     derivatives: ["comes on", "coming on", "came on"],
     translations: ["быстрее", "вперед", "да ладно", "давай", "давайте"],
-    tags: ["ESSENTIAL"],
   },
   "come on to": {
     derivatives: ["comes on to", "coming on to", "came on to"],
@@ -2477,7 +2474,6 @@ export const PHRASAL_VERBS = {
   "cross out": {
     derivatives: ["crosses out", "crossing out", "crossed out"],
     translations: ["вычеркивать", "вычеркивать", "вычеркнуть", "зачеркнуть", "зачеркивать"],
-    tags: ["ESSENTIAL"],
   },
   "cross over": {
     derivatives: ["crosses over", "crossing over", "crossed over"],
@@ -2505,7 +2501,7 @@ export const PHRASAL_VERBS = {
   },
   "cry off": {
     derivatives: ["cries off", "crying off", "cried off"],
-    translations: [],
+    translations: ["отказываться"],
   },
   "cry out": {
     derivatives: ["cries out", "crying out", "cried out"],
@@ -2723,7 +2719,7 @@ export const PHRASAL_VERBS = {
     translations: ["утихать", "утихнуть", "утихать, успокаиваться"],
   },
   "die for": {
-    derivatives: ["die", "dies", "dying", "died"],
+    derivatives: ["die for", "dies for", "dying for", "died for"],
     translations: ["умереть за", "умереть из-за", "умереть ради", "умирать за", "умирать ради"],
   },
   "die off": {
@@ -3466,7 +3462,6 @@ export const PHRASAL_VERBS = {
   "fall over": {
     derivatives: ["falls over", "falling over", "fell over", "fallen over"],
     translations: ["падать, опрокидываться"],
-    tags: ["ESSENTIAL"],
   },
   "fall through": {
     derivatives: ["falls through", "falling through", "fell through", "fallen through"],
@@ -3500,7 +3495,7 @@ export const PHRASAL_VERBS = {
   },
   "fasten on": {
     derivatives: ["fastens on", "fastening on", "fastened on"],
-    translations: [],
+    translations: ["сосредотачиваться на"],
   },
   "fasten onto": {
     derivatives: ["fasten on", "fastens on", "fastening on", "fastened on"],
@@ -3592,7 +3587,7 @@ export const PHRASAL_VERBS = {
   },
   "fetch up": {
     derivatives: ["fetches up", "fetching up", "fetched up"],
-    translations: [],
+    translations: ["оказаться"],
   },
   "fiddle about": {
     derivatives: ["fiddle around", "fiddles around", "fiddling around", "fiddled around"],
@@ -3611,7 +3606,7 @@ export const PHRASAL_VERBS = {
   },
   "fight down": {
     derivatives: ["fights down", "fighting down", "fought down"],
-    translations: [],
+    translations: ["подавлять"],
   },
   "fight it out": {
     derivatives: ["fight out", "fights out", "fighting out", "fought out"],
@@ -3648,7 +3643,6 @@ export const PHRASAL_VERBS = {
   "fill in": {
     derivatives: ["fills in", "filling in", "filled in"],
     translations: ["заполнять", "заполнить", "заполнять"],
-    tags: ["ESSENTIAL"],
   },
   "fill in for": {
     derivatives: ["fill in", "fills in", "filling in", "filled in"],
@@ -3660,7 +3654,6 @@ export const PHRASAL_VERBS = {
   "fill out": {
     derivatives: ["fills out", "filling out", "filled out"],
     translations: ["заполнить", "заполнять"],
-    tags: ["ESSENTIAL"],
   },
   "fill up": {
     derivatives: ["fills up", "filling up", "filled up"],
@@ -3877,7 +3870,7 @@ export const PHRASAL_VERBS = {
   },
   "float around": {
     derivatives: ["floats around", "floating around", "floated around"],
-    translations: [],
+    translations: ["носиться в воздухе"],
   },
   "flog off": {
     translations: [],
@@ -4005,7 +3998,7 @@ export const PHRASAL_VERBS = {
   },
   "force back": {
     derivatives: ["forces back", "forcing back", "forced back"],
-    translations: [],
+    translations: ["отражать натиск"],
   },
   "force down": {
     derivatives: ["forces down", "forcing down", "forced down"],
@@ -4142,7 +4135,7 @@ export const PHRASAL_VERBS = {
   },
   "fuss over": {
     derivatives: ["fusses over", "fussing over", "fussed over"],
-    translations: [],
+    translations: ["трястись над"],
   },
   "gad about": {
     translations: ["разъезжать", "слоняться"],
@@ -4177,7 +4170,7 @@ export const PHRASAL_VERBS = {
   },
   "gasp out": {
     derivatives: ["gasps out", "gasping out", "gasped out"],
-    translations: [],
+    translations: ["выпаливать"],
   },
   "gather in": {
     derivatives: ["gathers in", "gathering in", "gathered in"],
@@ -4383,7 +4376,6 @@ export const PHRASAL_VERBS = {
   "get on": {
     derivatives: ["gets on", "getting on", "got on"],
     translations: ["ладить", "входить", "жить", "заняться", "ладить"],
-    tags: ["ESSENTIAL"],
   },
   "get on at": {
     derivatives: ["gets on at", "getting on at", "got on at"],
@@ -4394,7 +4386,7 @@ export const PHRASAL_VERBS = {
   },
   "get on to": {
     derivatives: ["get onto", "gets onto", "getting onto", "got onto"],
-    translations: [],
+    translations: ["переходить к"],
   },
   "get on with": {
     derivatives: ["gets on with", "getting on with", "got on with"],
@@ -4440,7 +4432,7 @@ export const PHRASAL_VERBS = {
   },
   "get round to": {
     derivatives: ["gets round to", "getting round to", "got round to"],
-    translations: [],
+    translations: ["собираться сделать что-либо"],
   },
   "get through": {
     derivatives: ["gets through", "getting through", "got through"],
@@ -4535,7 +4527,6 @@ export const PHRASAL_VERBS = {
   "give up": {
     derivatives: ["gives up", "giving up", "gave up", "given up"],
     translations: ["прекращать", "бросать", "бросить", "завязывать с", "капитулировать"],
-    tags: ["ESSENTIAL"],
   },
   "give up on": {
     derivatives: ["gives up on", "giving up on", "gave up on", "given up on"],
@@ -4703,7 +4694,6 @@ export const PHRASAL_VERBS = {
   "go off": {
     derivatives: ["goes off", "going off", "went off", "gone off"],
     translations: ["выстреливать, взрываться", "взорваться", "выстрелить", "звучать", "испортиться"],
-    tags: ["ESSENTIAL"],
   },
   "go off with": {
     derivatives: ["goes off with", "going off with", "went off with", "gone off with"],
@@ -4712,7 +4702,6 @@ export const PHRASAL_VERBS = {
   "go on": {
     derivatives: ["goes on", "going on", "went on", "gone on"],
     translations: ["продолжать", "идти на", "отправиться в", "перейти", "поехать в"],
-    tags: ["ESSENTIAL"],
   },
   "go on about": {
     derivatives: ["go on", "goes on", "going on", "went on", "gone on"],
@@ -4720,7 +4709,7 @@ export const PHRASAL_VERBS = {
   },
   "go on at": {
     derivatives: ["goes on at", "going on at", "went on at", "gone on at"],
-    translations: [],
+    translations: ["приставать к"],
   },
   "go on to": {
     derivatives: ["go on", "goes on", "going on", "went on", "gone on"],
@@ -4942,7 +4931,6 @@ export const PHRASAL_VERBS = {
   "grow up": {
     derivatives: ["grows up", "growing up", "grew up", "grown up"],
     translations: ["вырастать", "взрослеть", "возмужать", "вырастать", "вырасти"],
-    tags: ["ESSENTIAL"],
   },
   "grow up on": {
     derivatives: ["grows up on", "growing up on", "grew up on", "grown up on"],
@@ -5436,7 +5424,6 @@ export const PHRASAL_VERBS = {
   "hold on": {
     derivatives: ["holds on", "holding on", "held on"],
     translations: ["держать(ся)", "держаться", "подождать", "постой", "продержать"],
-    tags: ["ESSENTIAL"],
   },
   "hold on to": {
     derivatives: ["holds on to", "holding on to", "held on to"],
@@ -5463,7 +5450,7 @@ export const PHRASAL_VERBS = {
   },
   "hold over": {
     derivatives: ["holds over", "holding over", "held over"],
-    translations: [],
+    translations: ["откладывать"],
   },
   "hold to": {
     derivatives: ["holds to", "holding to", "held to"],
@@ -5562,7 +5549,6 @@ export const PHRASAL_VERBS = {
   "hurry up": {
     derivatives: ["hurries up", "hurrying up", "hurried up"],
     translations: ["поторапливать(ся)", "поторопиться", "торопиться", "поторапливаться"],
-    tags: ["ESSENTIAL"],
   },
   "hush up": {
     derivatives: ["hushes up", "hushing up", "hushed up"],
@@ -5826,7 +5812,7 @@ export const PHRASAL_VERBS = {
   },
   "keep off": {
     derivatives: ["keeps off", "keeping off", "kept off"],
-    translations: [],
+    translations: ["обходить, избегать"],
   },
   "keep on": {
     derivatives: ["keeps on", "keeping on", "kept on"],
@@ -5953,7 +5939,7 @@ export const PHRASAL_VERBS = {
   },
   "knock about": {
     derivatives: ["knock around", "knocks around", "knocking around", "knocked around"],
-    translations: [],
+    translations: ["околачиваться"],
   },
   "knock around": {
     derivatives: ["knocks around", "knocking around", "knocked around"],
@@ -5966,7 +5952,6 @@ export const PHRASAL_VERBS = {
   "knock down": {
     derivatives: ["knocks down", "knocking down", "knocked down"],
     translations: ["сносить", "выбить", "сбить", "сломать", "снести"],
-    tags: ["ESSENTIAL"],
   },
   "knock it off!": {
     translations: [],
@@ -5988,7 +5973,6 @@ export const PHRASAL_VERBS = {
   "knock over": {
     derivatives: ["knocks over", "knocking over", "knocked over"],
     translations: ["опрокинуть"],
-    tags: ["ESSENTIAL"],
   },
   "knock together": {
     derivatives: ["knocks together", "knocking together", "knocked together"],
@@ -6171,11 +6155,11 @@ export const PHRASAL_VERBS = {
   },
   "lead off": {
     derivatives: ["leads off", "leading off", "led off"],
-    translations: [],
+    translations: ["отходить от"],
   },
   "lead on": {
     derivatives: ["leads on", "leading on", "led on"],
-    translations: [],
+    translations: ["водить за нос"],
   },
   "lead on to": {
     derivatives: ["leads on to", "leading on to", "led on to"],
@@ -6459,7 +6443,7 @@ export const PHRASAL_VERBS = {
   },
   "lock away": {
     derivatives: ["locks away", "locking away", "locked away"],
-    translations: [],
+    translations: ["заключать под стражу"],
   },
   "lock down": {
     translations: ["заблокировать", "закрыть", "запереть", "перекрыть"],
@@ -6496,7 +6480,7 @@ export const PHRASAL_VERBS = {
     translations: ["входить в систему", "входить в систему", "выполнять вход", "зарегистрироваться", "заходить"],
   },
   "log into": {
-    translations: [],
+    translations: ["входить в"],
   },
   "log off": {
     derivatives: ["logs off", "logging off", "logged off"],
@@ -6595,7 +6579,6 @@ export const PHRASAL_VERBS = {
   "look up": {
     derivatives: ["looks up", "looking up", "looked up"],
     translations: ["искать (в справочнике)", "искать", "поискать", "посмотреть", "смотреть вверх"],
-    tags: ["ESSENTIAL"],
   },
   "look up to": {
     derivatives: ["looks up to", "looking up to", "looked up to"],
@@ -6756,7 +6739,7 @@ export const PHRASAL_VERBS = {
   },
   "mark down": {
     derivatives: ["marks down", "marking down", "marked down"],
-    translations: [],
+    translations: ["снижать, уценивать"],
   },
   "mark down as": {
     derivatives: ["marks down as", "marking down as", "marked down as"],
@@ -6764,7 +6747,7 @@ export const PHRASAL_VERBS = {
   },
   "mark off": {
     derivatives: ["marks off", "marking off", "marked off"],
-    translations: [],
+    translations: ["отмечать"],
   },
   "mark out": {
     derivatives: ["marks out", "marking out", "marked out"],
@@ -6778,7 +6761,7 @@ export const PHRASAL_VERBS = {
   },
   "mark up": {
     derivatives: ["marks up", "marking up", "marked up"],
-    translations: [],
+    translations: ["повышать, добавлять стоимость"],
   },
   "marry in": {
     translations: ["пожениться в"],
@@ -7019,7 +7002,7 @@ export const PHRASAL_VERBS = {
   },
   "muddle along": {
     derivatives: ["muddles along", "muddling along", "muddled along"],
-    translations: [],
+    translations: ["справляться кое-как"],
   },
   "muddle through": {
     derivatives: ["muddles through", "muddling through", "muddled through"],
@@ -7409,7 +7392,6 @@ export const PHRASAL_VERBS = {
   "pay back": {
     derivatives: ["pays back", "paying back", "paid back"],
     translations: ["возвращать деньги", "вернуть", "возвращать", "возвращать деньги", "заплатить"],
-    tags: ["ESSENTIAL"],
   },
   "pay down": {
     translations: [],
@@ -7554,7 +7536,7 @@ export const PHRASAL_VERBS = {
   },
   "pick off": {
     derivatives: ["picks off", "picking off", "picked off"],
-    translations: [],
+    translations: ["методично сбивать, отстреливать"],
   },
   "pick on": {
     derivatives: ["picks on", "picking on", "picked on"],
@@ -8017,7 +7999,7 @@ export const PHRASAL_VERBS = {
   },
   "pour into": {
     derivatives: ["pours into", "pouring into", "poured into"],
-    translations: [],
+    translations: ["устремляться в"],
   },
   "pour out": {
     derivatives: ["pours out", "pouring out", "poured out"],
@@ -8303,7 +8285,7 @@ export const PHRASAL_VERBS = {
   },
   "push off": {
     derivatives: ["pushes off", "pushing off", "pushed off"],
-    translations: [],
+    translations: ["убираться"],
   },
   "push on": {
     derivatives: ["pushes on", "pushing on", "pushed on"],
@@ -8343,7 +8325,6 @@ export const PHRASAL_VERBS = {
   "put away": {
     derivatives: ["puts away", "putting away"],
     translations: ["убирать", "засадить", "убирать", "убрать", "упрятать"],
-    tags: ["ESSENTIAL"],
   },
   "put back": {
     derivatives: ["puts back", "putting back"],
@@ -8355,7 +8336,7 @@ export const PHRASAL_VERBS = {
   },
   "put by": {
     derivatives: ["puts by", "putting by"],
-    translations: [],
+    translations: ["откладывать"],
   },
   "put down": {
     derivatives: ["puts down", "putting down"],
@@ -8387,7 +8368,7 @@ export const PHRASAL_VERBS = {
   },
   "put in for": {
     derivatives: ["puts in for", "putting in for"],
-    translations: [],
+    translations: ["подавать заявление на"],
   },
   "put into": {
     derivatives: ["puts into", "putting into"],
@@ -8408,7 +8389,6 @@ export const PHRASAL_VERBS = {
   "put out": {
     derivatives: ["puts out", "putting out"],
     translations: ["вывести", "выметать", "затушить", "погасить", "потушить"],
-    tags: ["ESSENTIAL"],
   },
   "put over": {
     derivatives: ["puts over", "putting over"],
@@ -8899,7 +8879,7 @@ export const PHRASAL_VERBS = {
     translations: [],
   },
   "root about": {
-    translations: [],
+    translations: ["рыться"],
   },
   "root around": {
     translations: ["копаться"],
@@ -9146,7 +9126,7 @@ export const PHRASAL_VERBS = {
   },
   "rush through": {
     derivatives: ["rushes through", "rushing through", "rushed through"],
-    translations: [],
+    translations: ["делать в спешке"],
   },
   "rustle up": {
     derivatives: ["rustles up", "rustling up", "rustled up"],
@@ -9258,7 +9238,7 @@ export const PHRASAL_VERBS = {
   },
   "score out": {
     derivatives: ["scores out", "scoring out", "scored out"],
-    translations: [],
+    translations: ["вычеркивать"],
   },
   "scout about": {
     translations: [],
@@ -9342,12 +9322,9 @@ export const PHRASAL_VERBS = {
     derivatives: ["scrubs up", "scrubbing up", "scrubbed up"],
     translations: [],
   },
-  "scuzz up": {
-    translations: [],
-  },
   "seal in": {
     derivatives: ["seals in", "sealing in", "sealed in"],
-    translations: [],
+    translations: ["запечатывать", "заклеить", "изолировать"],
   },
   "seal off": {
     derivatives: ["seals off", "sealing off", "sealed off"],
@@ -9488,7 +9465,7 @@ export const PHRASAL_VERBS = {
   },
   "set about": {
     derivatives: ["sets about", "setting about"],
-    translations: [],
+    translations: ["приступать к"],
   },
   "set against": {
     derivatives: ["sets against", "setting against"],
@@ -9667,7 +9644,7 @@ export const PHRASAL_VERBS = {
     translations: [],
   },
   "shoot out": {
-    translations: [],
+    translations: ["стремглав выбегать"],
   },
   "shoot through": {
     derivatives: ["shoots through", "shooting through", "shot through"],
@@ -9690,7 +9667,7 @@ export const PHRASAL_VERBS = {
   },
   "shout down": {
     derivatives: ["shouts down", "shouting down", "shouted down"],
-    translations: [],
+    translations: ["заглушать криками"],
   },
   "shout out": {
     derivatives: ["shouts out", "shouting out", "shouted out"],
@@ -9710,12 +9687,11 @@ export const PHRASAL_VERBS = {
   },
   "show around": {
     derivatives: ["shows around", "showing around", "showed around", "shown around"],
-    tags: ["ESSENTIAL"],
     translations: [],
   },
   "show in": {
     derivatives: ["shows in", "showing in", "showed in", "shown in"],
-    translations: [],
+    translations: ["проводить внутрь"],
   },
   "show off": {
     derivatives: ["shows off", "showing off", "showed off", "shown off"],
@@ -9723,7 +9699,7 @@ export const PHRASAL_VERBS = {
   },
   "show out": {
     derivatives: ["shows out", "showing out", "showed out", "shown out"],
-    translations: [],
+    translations: ["провожать к выходу"],
   },
   "show over": {
     derivatives: ["shows over", "showing over", "showed over", "shown over"],
@@ -9731,7 +9707,6 @@ export const PHRASAL_VERBS = {
   },
   "show round": {
     derivatives: ["shows round", "showing round", "showed round", "shown round"],
-    tags: ["ESSENTIAL"],
     translations: [],
   },
   "show through": {
@@ -9816,7 +9791,7 @@ export const PHRASAL_VERBS = {
   },
   "sign away": {
     derivatives: ["signs away", "signing away", "signed away"],
-    translations: [],
+    translations: ["передавать"],
   },
   "sign for": {
     derivatives: ["signs for", "signing for", "signed for"],
@@ -10134,7 +10109,6 @@ export const PHRASAL_VERBS = {
   "slow down": {
     derivatives: ["slows down", "slowing down", "slowed down"],
     translations: ["замедлять(ся)", "замедлить", "замедлиться", "замедлять", "затормозить"],
-    tags: ["ESSENTIAL"],
   },
   "slow up": {
     derivatives: ["slow down", "slows down", "slowing down", "slowed down"],
@@ -10267,7 +10241,7 @@ export const PHRASAL_VERBS = {
   },
   "sound off": {
     derivatives: ["sounds off", "sounding off", "sounded off"],
-    translations: [],
+    translations: ["высказаться о"],
   },
   "sound out": {
     derivatives: ["sounds out", "sounding out", "sounded out"],
@@ -10304,7 +10278,6 @@ export const PHRASAL_VERBS = {
   "speak up": {
     derivatives: ["speaks up", "speaking up", "spoke up", "spoken up"],
     translations: ["говорить громко и отчетливо", "высказаться", "высказываться", "говорить громче", "заговорить"],
-    tags: ["ESSENTIAL"],
   },
   "speak up for": {
     derivatives: ["speaks up for", "speaking up for", "spoke up for", "spoken up for"],
@@ -11308,7 +11281,6 @@ export const PHRASAL_VERBS = {
   "take off": {
     derivatives: ["takes off", "taking off", "took off", "taken off"],
     translations: ["взлетать", "взлетать", "взлететь", "идти", "снимать"],
-    tags: ["ESSENTIAL"],
   },
   "take on": {
     derivatives: ["takes on", "taking on", "took on", "taken on"],
@@ -11579,7 +11551,6 @@ export const PHRASAL_VERBS = {
   "throw away": {
     derivatives: ["throws away", "throwing away", "threw away", "thrown away"],
     translations: ["выбрасывать", "выбрасывать", "выбросить", "выкинуть", "отбросить"],
-    tags: ["ESSENTIAL"],
   },
   "throw back": {
     derivatives: ["throws back", "throwing back", "threw back", "thrown back"],
@@ -11978,7 +11949,6 @@ export const PHRASAL_VERBS = {
   "try on": {
     derivatives: ["tries on", "trying on", "tried on"],
     translations: ["примерять", "мерить", "попробовать на", "примерить", "примерять"],
-    tags: ["ESSENTIAL"],
   },
   "try out": {
     derivatives: ["tries out", "trying out", "tried out"],
@@ -12002,7 +11972,7 @@ export const PHRASAL_VERBS = {
   },
   "tuck up": {
     derivatives: ["tucks up", "tucking up", "tucked up"],
-    translations: [],
+    translations: ["укрывать"],
   },
   "tumble down": {
     derivatives: ["tumbles down", "tumbling down", "tumbled down"],
@@ -12054,7 +12024,6 @@ export const PHRASAL_VERBS = {
   "turn down": {
     derivatives: ["turns down", "turning down", "turned down"],
     translations: ["отказывать(ся)", "выключить", "отвергать", "отвергнуть", "отказать"],
-    tags: ["ESSENTIAL"],
   },
   "turn in": {
     derivatives: ["turns in", "turning in", "turned in"],
@@ -12095,7 +12064,6 @@ export const PHRASAL_VERBS = {
   "turn up": {
     derivatives: ["turns up", "turning up", "turned up"],
     translations: ["появляться", "находиться", "объявляться", "появиться", "появляться"],
-    tags: ["ESSENTIAL"],
   },
   "type in": {
     derivatives: ["types in", "typing in", "typed in"],
@@ -12222,7 +12190,6 @@ export const PHRASAL_VERBS = {
   "wake up": {
     derivatives: ["wakes up", "waking up", "woke up", "woken up"],
     translations: ["просыпаться", "будить", "вставать", "очнуться", "пробудиться"],
-    tags: ["ESSENTIAL"],
   },
   "wake up to": {
     derivatives: ["wakes up to", "waking up to", "woke up to", "woken up to"],
@@ -12265,7 +12232,6 @@ export const PHRASAL_VERBS = {
   "walk on": {
     derivatives: ["walks on", "walking on", "walked on"],
     translations: ["гулять по", "пройти по", "ходить на", "ходить по"],
-    tags: ["ESSENTIAL"],
   },
   "walk out": {
     derivatives: ["walks out", "walking out", "walked out"],
@@ -12362,7 +12328,6 @@ export const PHRASAL_VERBS = {
   "wash up": {
     derivatives: ["washes up", "washing up", "washed up"],
     translations: ["мыть посуду", "мыть посуду", "мыться", "помыться", "умыться"],
-    tags: ["ESSENTIAL"],
   },
   "waste away": {
     derivatives: ["wastes away", "wasting away", "wasted away"],
