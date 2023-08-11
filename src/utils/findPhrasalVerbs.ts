@@ -9,7 +9,6 @@ export const findPhrasalVerbs = (text: string): TPhrasalVerb[] => {
 
   Object.entries(PHRASAL_VERBS).forEach(([key, item]) => {
     const phrasalVerbList: string[] = [key, ...(item["derivatives"] ?? [])];
-
     for (const phrasalVerb of phrasalVerbList) {
       const phrasalVerbWords = phrasalVerb.match(/[^ ]+/g);
       if (words.includes(phrasalVerbWords[0])) {

@@ -1,6 +1,7 @@
 .es-word-translation {
   width: max-content;
   max-width: 360px;
+  min-width: 200px;
   text-align: left;
   position: absolute;
   top: 0px;
@@ -67,30 +68,44 @@
 .es-translation-variants {
   margin: 12px 0;
   font-size: 14px;
-
-  table {
-    border-collapse: separate;
-    border-spacing: 0 4px;
-  }
+  display: grid;
+  grid-template-columns: fit-content(120px) auto 1fr;
+  column-gap: 16px;
+  row-gap: 4px;
+  align-items: center;
 }
 
-.es-translation-variant {
-  svg {
-    vertical-align: middle;
-  }
+.es-translation-phrasal-verbs-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  margin: 12px 0;
 }
 
 .es-translation-variant-word {
-  max-width: 120px;
+  hyphens: auto;
+  display: flex;
+  align-items: center;
+
+  .es-settings-button {
+    flex: 0 0 14px;
+
+    svg {
+      vertical-align: middle;
+      width: 100%;
+      padding-bottom: 2px;
+    }
+  }
 }
 
 .es-translation-variant-part-of-speach {
   text-align: left;
   color: #737373;
-  padding: 0 16px;
 }
 
 .es-translation-variant-synonyms {
+  width: fit-content;
   color: #bbbbbb;
   flex: 1;
 }

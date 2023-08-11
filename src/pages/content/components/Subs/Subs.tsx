@@ -11,6 +11,7 @@ import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/
 import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
 import { joinTranslations } from "@src/utils/joinTranslations";
 import { SubItemTranslation } from "./SubItemTranslation";
+import { PhrasalVerbTranslation } from "./PhrasalVerbTranslation";
 
 type TSubsProps = {};
 
@@ -156,16 +157,6 @@ const SubItem: FC<TSubItemProps> = ({ subItem, phrasalVerbs, index }) => {
       </pre>
       <pre className="es-sub-item-space"> </pre>
     </>
-  );
-};
-
-const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phrasalVerb }) => {
-  return (
-    <div className="es-word-translation">
-      <div className="es-word-translation-original">{phrasalVerb.text}</div>
-      <hr />
-      <div className="es-word-word-translations">{joinTranslations(phrasalVerb.translations)}</div>
-    </div>
   );
 };
 

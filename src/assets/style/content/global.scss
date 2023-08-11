@@ -58,7 +58,7 @@
     transform: translate3d(-50%, -100%, 0);
     background-color: #1e1e1e;
     border-radius: 0.4em;
-    font-size: 16px;
+    font-size: 18px;
     width: 100%;
     font-style: normal;
     white-space: normal;
@@ -67,6 +67,7 @@
     padding: 16px 24px;
     box-sizing: border-box;
     white-space: pre-wrap;
+    text-wrap: balance;
 
     &:after {
       content: "";

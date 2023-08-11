@@ -1,6 +1,10 @@
+export type TAditionalData = {
+  context?: string;
+  partOfSpeech?: string;
+};
 interface ILearningService {
   color: string;
-  addWord: (word: string, translation: string, aditionalData: Record<string, string>) => Promise<string>;
+  addWord: (word: string, translation: string, aditionalData: TAditionalData) => Promise<string>;
 }
 
 export default ILearningService;

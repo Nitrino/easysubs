@@ -1,4 +1,4 @@
-import ILearningService from "./learningService";
+import ILearningService, { TAditionalData } from "./learningService";
 
 const ANKI_API_VERSION = 6;
 const ANKI_DESK = "Easysubs";
@@ -11,7 +11,7 @@ export class Anki implements ILearningService {
     this.color = "#0d6efd";
   }
 
-  public async addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
+  public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
     const createDeskResult = await chrome.runtime.sendMessage({
       type: "post",
       url: ANKI_URL,

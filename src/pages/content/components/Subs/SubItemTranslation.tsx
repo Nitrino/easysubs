@@ -3,9 +3,6 @@ import { useUnit } from "effector-react";
 
 import { $learningService } from "@src/models/settings";
 import { $currentWordTranslation, cleanWordTranslation, requestWordTranslation } from "@src/models/translations";
-import { Anki } from "@src/learning-service/anki";
-import { LinguaLeo } from "@src/learning-service/linguaLeo";
-import { PuzzleEnglish } from "@src/learning-service/puzzleEnglish";
 import toast from "react-hot-toast";
 import { SoundIcon } from "./assets/SoundIcon";
 import { PlusIcon } from "./assets/PlusIcon";
@@ -18,6 +15,7 @@ import youglishIcon from "@assets/img/icons/youglish.png";
 import ILearningService from "@src/learning-service/learningService";
 import { TWordTranslationItem } from "@src/models/types";
 import { $subsLanguage } from "@src/models/subs";
+import { getLearningService } from "@src/utils/getLearningService";
 
 export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   const [
@@ -31,15 +29,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   const [service, setService] = useState<ILearningService>(null);
 
   useEffect(() => {
-    if (learningService === "anki") {
-      setService(new Anki());
-    }
-    if (learningService === "lingualeo") {
-      setService(new LinguaLeo());
-    }
-    if (learningService === "puzzle-english") {
-      setService(new PuzzleEnglish());
-    }
+    setService(getLearningService(learningService));
   }, [learningService]);
 
   useEffect(() => {
@@ -53,10 +43,10 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     return null;
   }
 
-  const handleAddWord = (wors: string, translation: TWordTranslationItem) => {
+  const handleAddWord = (word: string, translation: TWordTranslationItem) => {
     if (service) {
       service
-        .addWord(wors.toLowerCase(), translation.word, {})
+        .addWord(word.toLowerCase(), translation.word, { partOfSpeech: translation.partOfSpeech })
         .then((value) => {
           toast.success(value);
         })
@@ -76,37 +66,32 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
       <hr className="es-word-original-hr" />
       <div className="es-word-original-info">
         <div className="es-word-original">{text.toLowerCase()}</div>
-        {currentWordTranslation.transcription && <div>/{currentWordTranslation.transcription}/</div>}
         <div className="es-word-original-sound-icon" onClick={handlePlaySound}>
           <SoundIcon />
         </div>
       </div>
       <div className="es-translation-variants">
-        <table>
-          <tbody>
-            {currentWordTranslation.translations.length > 0 &&
-              currentWordTranslation.translations.map((translation) => (
-                <tr className="es-translation-variant">
-                  {service && (
-                    <td>
-                      <button
-                        className="es-settings-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddWord(currentWordTranslation.source, translation);
-                        }}
-                      >
-                        <PlusIcon fill={service.color} />
-                      </button>
-                    </td>
-                  )}
-                  <td className="es-translation-variant-word">{translation.word}</td>
-                  <td className="es-translation-variant-part-of-speach">{translation.partOfSpeech}</td>
-                  <td className="es-translation-variant-synonyms">{joinTranslations(translation.synonyms)}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        {currentWordTranslation.translations.length > 0 &&
+          currentWordTranslation.translations.map((translation) => (
+            <>
+              <div className="es-translation-variant-word">
+                {service && (
+                  <button
+                    className="es-settings-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddWord(currentWordTranslation.source, translation);
+                    }}
+                  >
+                    <PlusIcon fill={service.color} />
+                  </button>
+                )}
+                <div>{translation.word}</div>
+              </div>
+              <div className="es-translation-variant-part-of-speach">{translation.partOfSpeech}</div>
+              <div className="es-translation-variant-synonyms">{joinTranslations(translation.synonyms)}</div>
+            </>
+          ))}
       </div>
       {subsLanguage === "en" && (
         <>

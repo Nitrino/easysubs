@@ -1,4 +1,4 @@
-import ILearningService from "./learningService";
+import ILearningService, { TAditionalData } from "./learningService";
 
 export class LinguaLeo implements ILearningService {
   public color: string;
@@ -7,7 +7,7 @@ export class LinguaLeo implements ILearningService {
     this.color = "#FFC900";
   }
 
-  public async addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
+  public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
     const url = new URL("https://api.lingualeo.com/addword");
     const data = {
       word: word,

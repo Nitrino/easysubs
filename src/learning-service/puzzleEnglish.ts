@@ -1,4 +1,4 @@
-import ILearningService from "./learningService";
+import ILearningService, { TAditionalData } from "./learningService";
 
 export class PuzzleEnglish implements ILearningService {
   public color: string;
@@ -7,7 +7,7 @@ export class PuzzleEnglish implements ILearningService {
     this.color = "#88BA28";
   }
 
-  public async addWord(word: string, translation: string, aditionalData: Record<string, string>): Promise<string> {
+  public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
     const url = "https://puzzle-english.com/api2/userDictionary/addWord";
     const data = {
       post_id: 0,
