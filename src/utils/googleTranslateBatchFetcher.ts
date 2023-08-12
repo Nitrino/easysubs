@@ -12,7 +12,7 @@ type TRequest = {
   lang: string;
 };
 
-class GoogleTranslateFetcher {
+class GoogleTranslateBatchFetcher {
   #baseUrl: string;
 
   constructor() {
@@ -122,4 +122,4 @@ class GoogleTranslateFetcher {
   }
 }
 
-export const googleTranslateFetcher = new GoogleTranslateFetcher();
+export const googleTranslateBatchFetcher = new GoogleTranslateBatchFetcher();

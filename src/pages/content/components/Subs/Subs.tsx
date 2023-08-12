@@ -12,6 +12,7 @@ import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
 import { joinTranslations } from "@src/utils/joinTranslations";
 import { SubItemTranslation } from "./SubItemTranslation";
 import { PhrasalVerbTranslation } from "./PhrasalVerbTranslation";
+import { SubFullTranslation } from "./SubFullTranslation";
 
 type TSubsProps = {};
 
@@ -158,25 +159,4 @@ const SubItem: FC<TSubItemProps> = ({ subItem, phrasalVerbs, index }) => {
       <pre className="es-sub-item-space"> </pre>
     </>
   );
-};
-
-const SubFullTranslation: FC<{ text: string }> = ({ text }) => {
-  const [currentSubTranslation, handleRequestSubTranslation, handleCleanSubTranslation] = useUnit([
-    $currentSubTranslation,
-    requestSubTranslation,
-    cleanSubTranslation,
-  ]);
-
-  useEffect(() => {
-    handleRequestSubTranslation(text);
-    return () => {
-      handleCleanSubTranslation();
-    };
-  }, []);
-
-  if (!currentSubTranslation) {
-    return null;
-  }
-
-  return <div className="es-full-translation">{currentSubTranslation}</div>;
 };

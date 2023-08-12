@@ -1,14 +1,8 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
-import { TWordTranslate, googleTranslateFetcher } from "@src/utils/googleTranslateFetcher";
+import { TWordTranslate, googleTranslateBatchFetcher } from "@src/utils/googleTranslateBatchFetcher";
+import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";
 
 reloadOnUpdate("pages/background");
-
-async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`.
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
-}
 
 /**
  * Extension reloading is necessary because the browser automatically caches the css.
@@ -22,22 +16,22 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   console.log("read: ", message);
 
   if (message.type === "translateWord") {
-    googleTranslateFetcher
+    googleTranslateBatchFetcher
       .getWordTranslation({ text: message.text, lang: message.language })
       .then((respData: TWordTranslate) => sendResponse(respData));
   }
   if (message.type === "translateWordFull") {
-    googleTranslateFetcher
+    googleTranslateBatchFetcher
       .getWordFullTranslation({ text: message.text, lang: message.language })
       .then((respData: unknown) => sendResponse(respData));
   }
   if (message.type === "translateFullText") {
-    googleTranslateFetcher
+    googleTranslateSingleFetcher
       .getFullTextTranslation({ text: message.text, lang: message.language })
       .then((respData: unknown) => sendResponse(respData));
   }
   if (message.type === "getTextLanguage") {
-    googleTranslateFetcher
+    googleTranslateBatchFetcher
       .getTextLanguage({ text: message.text, lang: message.language })
       .then((respData: unknown) => sendResponse(respData));
   }

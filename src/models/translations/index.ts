@@ -15,11 +15,17 @@ export const requestSubTranslation = createEvent<string>();
 export const cleanSubTranslation = createEvent();
 export const fetchSubTranslationFx = createEffect<{ source: string; language: string }, string>(
   async ({ source, language }) => {
-    return await chrome.runtime.sendMessage({
-      type: "translateFullText",
-      language: language,
-      text: source,
-    });
+    try {
+      const resp = await chrome.runtime.sendMessage({
+        type: "translateFullText",
+        language: language,
+        text: source,
+      });
+
+      return JSON.parse(resp)["sentences"][0]["trans"];
+    } catch (error) {
+      console.error(error);
+    }
   }
 );
 
@@ -33,8 +39,6 @@ export const fetchWordTranslationFx = createEffect<
       language: language,
       text: source,
     });
-
-    console.log("++result", result);
 
     const transcription: string = result[0][0];
     const mainTranslation: string = result[1][0][0][5][0][0];
