@@ -1,23 +1,13 @@
-import { FC, useEffect } from "react";
-import { useUnit } from "effector-react";
+import { FC } from "react";
+import { useGate, useUnit } from "effector-react";
 
-import { $currentSubTranslation, cleanSubTranslation, requestSubTranslation } from "@src/models/translations";
+import { $currentSubTranslation, $subTranslationPendings, SubTranslationGate } from "@src/models/translations";
 
 export const SubFullTranslation: FC<{ text: string }> = ({ text }) => {
-  const [currentSubTranslation, handleRequestSubTranslation, handleCleanSubTranslation] = useUnit([
-    $currentSubTranslation,
-    requestSubTranslation,
-    cleanSubTranslation,
-  ]);
+  useGate(SubTranslationGate, text);
+  const [currentSubTranslation, subTranslationPendings] = useUnit([$currentSubTranslation, $subTranslationPendings]);
 
-  useEffect(() => {
-    handleRequestSubTranslation(text);
-    return () => {
-      handleCleanSubTranslation();
-    };
-  }, []);
-
-  if (!currentSubTranslation) {
+  if (!currentSubTranslation || subTranslationPendings[text]) {
     return null;
   }
 

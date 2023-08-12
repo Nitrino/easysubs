@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { useUnit } from "effector-react";
+import { useGate, useUnit } from "effector-react";
 
 import { $learningService } from "@src/models/settings";
-import { $currentWordTranslation, cleanWordTranslation, requestWordTranslation } from "@src/models/translations";
+import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGate } from "@src/models/translations";
 import toast from "react-hot-toast";
 import { SoundIcon } from "./assets/SoundIcon";
 import { PlusIcon } from "./assets/PlusIcon";
@@ -18,13 +18,13 @@ import { $subsLanguage } from "@src/models/subs";
 import { getLearningService } from "@src/utils/getLearningService";
 
 export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
-  const [
-    currentWordTranslation,
-    learningService,
-    handleRequestWordTranslation,
-    handleCleanWordTranslation,
-    subsLanguage,
-  ] = useUnit([$currentWordTranslation, $learningService, requestWordTranslation, cleanWordTranslation, $subsLanguage]);
+  useGate(WordTranslationsGate, text);
+  const [currentWordTranslation, learningService, subsLanguage, wordTranslationsPendings] = useUnit([
+    $currentWordTranslation,
+    $learningService,
+    $subsLanguage,
+    $wordTranslationsPendings,
+  ]);
 
   const [service, setService] = useState<ILearningService>(null);
 
@@ -32,14 +32,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     setService(getLearningService(learningService));
   }, [learningService]);
 
-  useEffect(() => {
-    handleRequestWordTranslation(text);
-    return () => {
-      handleCleanWordTranslation();
-    };
-  }, []);
-
-  if (!currentWordTranslation) {
+  if (!currentWordTranslation || wordTranslationsPendings[text]) {
     return null;
   }
 

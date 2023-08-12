@@ -2,14 +2,17 @@ import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
-import { $activePhrasalVerb, $currentSubs, $subsLanguage, activePhrasalVerbChanged } from "@src/models/subs";
+import { $currentSubs } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
-import { TPhrasalVerb, TSub, TSubItem } from "@src/models/types";
+import { TSub, TSubItem } from "@src/models/types";
 import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
-import { $currentSubTranslation, requestSubTranslation, cleanSubTranslation } from "@src/models/translations";
+import {
+  $findPhrasalVerbsPendings,
+  subItemMouseEntered,
+  subItemMouseLeft,
+  $currentPhrasalVerb,
+} from "@src/models/translations";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
-import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
-import { joinTranslations } from "@src/utils/joinTranslations";
 import { SubItemTranslation } from "./SubItemTranslation";
 import { PhrasalVerbTranslation } from "./PhrasalVerbTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
@@ -70,26 +73,20 @@ export const Subs: FC<TSubsProps> = () => {
 
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
-  const [phrasalVerbs, setPhrasalVerbs] = useState<TPhrasalVerb[]>([]);
-  const [subsBackground, subsBackgroundOpacity, subsLanguage] = useUnit([
+  const [subsBackground, subsBackgroundOpacity, findPhrasalVerbsPendings] = useUnit([
     $subsBackground,
     $subsBackgroundOpacity,
-    $subsLanguage,
+    $findPhrasalVerbsPendings,
   ]);
-
-  useEffect(() => {
-    if (subsLanguage === "en") {
-      setPhrasalVerbs(findPhrasalVerbs(sub.text));
-    }
-    return () => {
-      setPhrasalVerbs([]);
-    };
-  }, [sub.cleanedText]);
 
   const handleOnClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setShowTranslation(true);
   };
+
+  if (findPhrasalVerbsPendings[sub.text]) {
+    return null;
+  }
 
   return (
     <div
@@ -101,7 +98,7 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
       }}
     >
       {sub.items.map((item, index) => (
-        <SubItem subItem={item} index={index} phrasalVerbs={phrasalVerbs} />
+        <SubItem subItem={item} index={index} />
       ))}
       {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
     </div>
@@ -111,50 +108,53 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
 type TSubItemProps = {
   subItem: TSubItem;
   index: number;
-  phrasalVerbs: TPhrasalVerb[];
+  // phrasalVerbs: TPhrasalVerb[];
 };
 
-const SubItem: FC<TSubItemProps> = ({ subItem, phrasalVerbs, index }) => {
-  const [activePhrasalVerb, handleActivePhrasalVerbChanged] = useUnit([$activePhrasalVerb, activePhrasalVerbChanged]);
+const SubItem: FC<TSubItemProps> = ({ subItem, index }) => {
+  const [currentPhrasalVerb, handleSubItemMouseEntered, handleSubItemMouseLeft, findPhrasalVerbsPendings] = useUnit([
+    $currentPhrasalVerb,
+    subItemMouseEntered,
+    subItemMouseLeft,
+    $findPhrasalVerbsPendings,
+  ]);
   const [showTranslation, setShowTranslation] = useState(false);
-  const [phrasalVerb, setPhrasalVerb] = useState<TPhrasalVerb>(null);
-
-  useEffect(() => {
-    setPhrasalVerb(getPhrasalVerb(subItem.cleanedText));
-  }, [activePhrasalVerb, phrasalVerbs]);
-
-  const getPhrasalVerb = (word: string): TPhrasalVerb | undefined => {
-    return phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.includes(word));
-  };
 
   const handleOnMouseLeave = () => {
     setShowTranslation(false);
-    handleActivePhrasalVerbChanged(null);
+    handleSubItemMouseLeft();
   };
 
-  const handleOnMouseEnter = (phrasalVerb: TPhrasalVerb) => {
+  const handleOnMouseEnter = () => {
     setShowTranslation(true);
-    handleActivePhrasalVerbChanged(phrasalVerb);
+    handleSubItemMouseEntered(subItem.cleanedText);
   };
 
   const handleClick = () => {
     setShowTranslation(false);
-    handleActivePhrasalVerbChanged(null);
+    handleSubItemMouseLeft();
   };
 
   return (
     <>
       <pre
-        onMouseEnter={() => handleOnMouseEnter(phrasalVerb)}
+        onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}
         className={`es-sub-item ${subItem.tag} ${
-          activePhrasalVerb?.indexes?.includes(index) ? "es-sub-item-highlighted" : ""
+          currentPhrasalVerb?.indexes?.includes(index) ? "es-sub-item-highlighted" : ""
         }`}
         onClick={handleClick}
       >
         {subItem.text}
-        {showTranslation && !phrasalVerb && <SubItemTranslation text={subItem.cleanedText} />}
-        {showTranslation && phrasalVerb && <PhrasalVerbTranslation phrasalVerb={phrasalVerb} />}
+        {!findPhrasalVerbsPendings[subItem.cleanedText] && showTranslation && (
+          <>
+            {currentPhrasalVerb ? (
+              <PhrasalVerbTranslation phrasalVerb={currentPhrasalVerb} />
+            ) : (
+              <SubItemTranslation text={subItem.cleanedText} />
+            )}
+          </>
+        )}
       </pre>
       <pre className="es-sub-item-space"> </pre>
     </>

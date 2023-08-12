@@ -42,8 +42,6 @@ export const updatePrevCurrentSubsFx = createEffect<TSub[], TSub[]>((subs) => su
 export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
 
 export const $subsDelay = createStore<number>(0);
-export const $activePhrasalVerb = createStore<TPhrasalVerb>(null);
-export const activePhrasalVerbChanged = createEvent<TPhrasalVerb>();
 export const subsDelayButtonPressed = createEvent<number>();
 export const subsDelayChangeFx = createEffect<number, number>((value) => value);
 export const subsResyncFx = createEffect<

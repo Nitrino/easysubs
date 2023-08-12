@@ -1661,7 +1661,7 @@ export const PHRASAL_VERBS = {
     translations: ["выезжать", "брать", "взглянуть на", "взять", "выезжать"],
   },
   "check out of": {
-    derivatives: ["check out", "checks out", "checking out", "checked out"],
+    derivatives: ["check out of", "checks out of", "checking out of", "checked out of"],
     translations: ["выезжать"],
   },
   "check over": {

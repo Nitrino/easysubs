@@ -2,16 +2,14 @@ import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 
 import { TPhrasalVerb } from "@src/models/types";
-import { cleanWordTranslation, requestWordTranslation } from "@src/models/translations";
 import { $learningService } from "@src/models/settings";
-import { $subsLanguage } from "@src/models/subs";
 import ILearningService from "@src/learning-service/learningService";
 import { getLearningService } from "@src/utils/getLearningService";
 import toast from "react-hot-toast";
 import { PlusIcon } from "./assets/PlusIcon";
 
 export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phrasalVerb }) => {
-  const [learningService] = useUnit([$learningService, requestWordTranslation, cleanWordTranslation, $subsLanguage]);
+  const [learningService] = useUnit([$learningService]);
 
   const [service, setService] = useState<ILearningService>(null);
 

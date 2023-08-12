@@ -4,8 +4,6 @@ import {
   $rawSubs,
   $subs,
   $subsDelay,
-  $activePhrasalVerb,
-  activePhrasalVerbChanged,
   esSubsChanged,
   fetchSubsFx,
   resetSubs,
@@ -86,7 +84,6 @@ $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, 
 );
 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
-$activePhrasalVerb.on(activePhrasalVerbChanged, (_, phrasalVerb) => phrasalVerb);
 $subsLanguage.on(subsLanguageDetectFx.doneData, (_, lang) => lang);
 
-debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, $activePhrasalVerb, autoPauseFx.doneData, $currentSubs);
+debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, autoPauseFx.doneData, $currentSubs);
