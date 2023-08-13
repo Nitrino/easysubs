@@ -75,8 +75,6 @@ The list of services will be extended in response to user requests.
 
 To export, you'll need to be logged in to the service you want to use (make sure it's the same browser). Then select the service you want to use in the extension settings.
 
-![word translation](screenshots/select-service.webp)
-
 A ➕(plus) icon will then appear next to the words in the translation, and clicking on it will export the word to the selected service.
 
 ![word translation](screenshots/export-to-service.webp)
