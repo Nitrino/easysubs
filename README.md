@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="80" src="./logo.jpg">
+  <img height="80" src="./logo.png">
 </p>
 <p align="center">
   <h2 align="center">Learn languages with fun 🎉</h2>
