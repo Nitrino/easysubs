@@ -143,15 +143,18 @@ $wordTranslations.on(fetchWordTranslationFx.doneData, (allTranslation, translati
   ...allTranslation,
   translation,
 ]);
+
 $wordTranslationsPendings.on(fetchWordTranslationFx, (pendings, { source }) => ({
   ...pendings,
   [source]: true,
 }));
+
 $wordTranslationsPendings.on(fetchWordTranslationFx.finally, (pendings, { params: { source } }) => {
   const copy = { ...pendings };
   delete copy[source];
   return copy;
 });
+
 sample({
   clock: WordTranslationsGate.open,
   target: requestWordTranslation,
