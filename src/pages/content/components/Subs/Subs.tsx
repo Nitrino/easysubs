@@ -108,7 +108,6 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
 type TSubItemProps = {
   subItem: TSubItem;
   index: number;
-  // phrasalVerbs: TPhrasalVerb[];
 };
 
 const SubItem: FC<TSubItemProps> = ({ subItem, index }) => {
