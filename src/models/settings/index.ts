@@ -9,6 +9,9 @@ export const $enabled = withPersist(createStore<boolean>(true));
 export const enableToggleChanged = createEvent<boolean>();
 export const enableToggleChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
 
+export const $activeSettingsTab = withPersist(createStore<number>(0));
+export const activeSettingsTabChanged = createEvent<number>();
+
 export const $progressBarEnabled = withPersist(createStore<boolean>(true));
 export const progressBarEnabledChanged = createEvent<boolean>();
 export const progressBarEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
@@ -99,6 +102,7 @@ $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
 $subsFontSize.on(subsFontSizeChangeFx.doneData, (_, subsFontSize) => subsFontSize);
 $subsBackground.on(subsBackgroundToggleFx.doneData, (_, value) => value);
 $subsBackgroundOpacity.on(subsBackgroundOpacityChangeFx.doneData, (_, value) => value);
+$activeSettingsTab.on(activeSettingsTabChanged, (_, value) => value);
 
 $enabled.watch((isEnables) => {
   document.body.classList.toggle("es-enabled", isEnables);

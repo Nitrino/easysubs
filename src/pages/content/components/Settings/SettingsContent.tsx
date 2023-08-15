@@ -12,6 +12,8 @@ import { EnableProgressBar } from "./EnableProgressBar";
 import { MoveBySubs } from "./MoveBySubs";
 import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
+import { useUnit } from "effector-react";
+import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
 
 interface TabProps {
   isActive: boolean;
@@ -33,7 +35,7 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeSettingsTab, handleActiveSettingsTabChanged] = useUnit([$activeSettingsTab, activeSettingsTabChanged]);
   const contentRef = useRef();
 
   useClickOutside(contentRef, onClose);
@@ -43,19 +45,19 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
       <div className="es-settings-content__menu">
         <div className="es-settings-content__menu__items">
           <Tab
-            isActive={activeTab === 0}
+            isActive={activeSettingsTab === 0}
             tabId={0}
             onClick={() => {
-              setActiveTab(0);
+              handleActiveSettingsTabChanged(0);
             }}
           >
             General
           </Tab>
           <Tab
-            isActive={activeTab === 1}
+            isActive={activeSettingsTab === 1}
             tabId={1}
             onClick={() => {
-              setActiveTab(1);
+              handleActiveSettingsTabChanged(1);
             }}
           >
             Subtitles
@@ -63,7 +65,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         </div>
       </div>
       <div className="es-settings-content__main">
-        {activeTab === 0 && (
+        {activeSettingsTab === 0 && (
           <>
             <div className="es-settings-content__item">
               <EnableToggle />
@@ -85,11 +87,8 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
           </>
         )}
-        {activeTab === 1 && (
+        {activeSettingsTab === 1 && (
           <>
-            <div className="es-settings-content__item">
-              <SubsDelay />
-            </div>
             <div className="es-settings-content__item">
               <SubsFontSize />
             </div>
@@ -98,6 +97,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
             <div className="es-settings-content__item">
               <SubsBackgroundOpacity />
+            </div>
+            <div className="es-settings-content__item">
+              <SubsDelay />
             </div>
             <div className="es-settings-content__item">
               <CustomSubs />
