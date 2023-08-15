@@ -14,7 +14,7 @@ export const SubsBackgroundOpacity: FC = () => {
 
   return (
     <div className="es-settings-content__element">
-      <div className="es-settings-content__element__left">Backgound opacity</div>
+      <div className="es-settings-content__element__left">Background opacity</div>
       <div className="es-settings-content__element__right">
         <button
           className="es-settings-button"
