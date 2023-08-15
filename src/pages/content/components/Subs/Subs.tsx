@@ -138,7 +138,7 @@ const SubItem: FC<TSubItemProps> = ({ subItem, index }) => {
     <>
       <pre
         onMouseEnter={handleOnMouseEnter}
-        // onMouseLeave={handleOnMouseLeave}
+        onMouseLeave={handleOnMouseLeave}
         className={`es-sub-item ${subItem.tag} ${
           currentPhrasalVerb?.indexes?.includes(index) ? "es-sub-item-highlighted" : ""
         }`}
