@@ -69,3 +69,4 @@ waitForElement(function (player) {
     window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: window.currentLanguage }));
   }
 });
+// Path: public/assets/js/netflix.js
