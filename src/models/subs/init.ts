@@ -16,6 +16,8 @@ import {
   autoPauseFx,
   $subsLanguage,
   subsLanguageDetectFx,
+  $subsTitle,
+  subsReloadRequested,
 } from ".";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
@@ -77,6 +79,14 @@ sample({
   target: subsLanguageDetectFx,
 });
 
+sample({
+  clock: subsReloadRequested,
+  source: { subsTitle: $subsTitle, rawSubs: $rawSubs },
+  filter: ({ subsTitle, rawSubs }) => subsTitle && rawSubs.length > 0,
+  fn: ({ subsTitle }) => subsTitle,
+  target: esSubsChanged,
+});
+
 $rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
@@ -85,5 +95,15 @@ $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, 
 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 $subsLanguage.on(subsLanguageDetectFx.doneData, (_, lang) => lang);
+$subsTitle.on(esSubsChanged, (_, value) => value);
 
-debug($rawSubs, $subs, $subsDelay, subsResyncFx, fetchSubsFx, autoPauseFx.doneData, $currentSubs);
+debug(
+  $rawSubs,
+  $subsDelay,
+  subsResyncFx,
+  autoPauseFx.doneData,
+  $currentSubs,
+  subsReloadRequested,
+  $subsTitle,
+  esSubsChanged
+);

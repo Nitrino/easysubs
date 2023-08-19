@@ -12,6 +12,13 @@ reloadOnUpdate("pages/content/style.scss");
 
 console.log("background loaded");
 
+chrome.webNavigation.onHistoryStateUpdated.addListener(
+  (e) => {
+    chrome.tabs.sendMessage(e.tabId, { action: "urlChanged" });
+  },
+  { url: [{ hostSuffix: "netflix.com", pathPrefix: "/watch/" }] }
+);
+
 chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   console.log("read: ", message);
 

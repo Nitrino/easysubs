@@ -3,7 +3,7 @@ import refreshOnUpdate from "virtual:reload-on-update-in-view";
 
 import { $streaming, fetchCurrentStreamingFx } from "@src/models/streamings";
 import { esRenderSetings } from "@src/models/settings";
-import { esSubsChanged } from "@src/models/subs";
+import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
 import { $video, getCurrentVideoFx, videoTimeUpdate } from "@src/models/videos";
 import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
@@ -17,6 +17,14 @@ fetchCurrentStreamingFx();
 const handleTimeUpdate = () => {
   videoTimeUpdate();
 };
+
+chrome.runtime.onMessage.addListener((data) => {
+  console.log("Message URL:", data);
+
+  if (data.action === "urlChanged") {
+    subsReloadRequested();
+  }
+});
 
 $streaming.watch((streaming) => {
   console.log("streaming changed", streaming);
@@ -46,23 +54,23 @@ $streaming.watch((streaming) => {
     createRoot(settingNode).render(<Settings contentContainer={contentContainer} />);
   });
 
-  esSubsChanged.watch((language) => {
-    console.log("Event:", "esSubsChanged");
-    console.log("Language:", language);
-    removeKeyboardEventsListeners();
-    document.querySelectorAll("#es").forEach((e) => e.remove());
-    const subsContainer = streaming.getSubsContainer();
-    const subsNode = document.createElement("div");
-    subsNode.id = "es";
-    subsContainer?.appendChild(subsNode);
-    createRoot(subsNode).render(<Subs />);
-
-    document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
-    const progressBarNode = document.createElement("div");
-    progressBarNode.classList.add("es-progress-bar");
-    subsContainer?.appendChild(progressBarNode);
-    createRoot(progressBarNode).render(<ProgressBar />);
-  });
-
   streaming.init();
+});
+
+esSubsChanged.watch((language) => {
+  console.log("Event:", "esSubsChanged");
+  console.log("Language:", language);
+  removeKeyboardEventsListeners();
+  document.querySelectorAll("#es").forEach((e) => e.remove());
+  const subsContainer = $streaming.getState().getSubsContainer();
+  const subsNode = document.createElement("div");
+  subsNode.id = "es";
+  subsContainer?.appendChild(subsNode);
+  createRoot(subsNode).render(<Subs />);
+
+  document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
+  const progressBarNode = document.createElement("div");
+  progressBarNode.classList.add("es-progress-bar");
+  subsContainer?.appendChild(progressBarNode);
+  createRoot(progressBarNode).render(<ProgressBar />);
 });

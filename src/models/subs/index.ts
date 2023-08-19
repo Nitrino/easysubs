@@ -11,6 +11,7 @@ import { $autoPause } from "../settings";
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
 export const $subsLanguage = createStore<string>("auto");
+export const $subsTitle = createStore<string>(null);
 export const $currentSubs = createStore<TSub[]>([]);
 export const $prevCurrentSubs = createStore<TSub[]>([]);
 export const esSubsChanged = createEvent<string>();
@@ -24,6 +25,7 @@ export const autoPauseFx = createEffect<
 >(({ video }) => video.pause());
 
 export const subsRequested = createEvent<string>();
+export const subsReloadRequested = createEvent();
 export const fetchSubs = createEvent<{ streaming: Service; language: string }>();
 export const resetSubs = createEvent<string>();
 export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(

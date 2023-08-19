@@ -2,7 +2,6 @@ import { Captions, TSubItem } from "@src/models/types";
 import { TSub } from "@src/models/types";
 import { textToWords } from "./textToWords";
 import { cleanWord } from "./cleanWord";
-import { findPhrasalVerbs } from "./findPhrasalVerbs";
 
 const cleanText = (text: string): string => {
   const tmpDiv = document.createElement("div");
@@ -15,7 +14,7 @@ const cleanText = (text: string): string => {
 
 export const convertRawSubs = (rawSubs: Captions): TSub[] => {
   return rawSubs.map((sub, index) => {
-    const words = textToWords(sub.text);
+    const words = textToWords(sub.text).filter((word) => word);
     const items: TSubItem[] = words.map((word: string) => {
       return {
         text: word,
