@@ -1,7 +1,7 @@
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
-import { parse } from "subtitle";
-import { esSubsChanged } from "@src/models/subs";
+import { parse, subTitleType } from "subtitle";
+import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
 
 const WEBVTT = "webvtt-lssdh-ios8";
 const SUB_TYPES = {
@@ -26,15 +26,24 @@ type TTrack = {
   };
 };
 
+type TTrackChanged = {
+  isForcedNarrative: boolean;
+  rawTrackType: "SUBTITLES" | "CLOSEDCAPTIONS";
+  bcp47: string;
+};
+
+type TSubCache = {
+  videoId: string;
+  title: string;
+  url: string;
+  data?: subTitleType[];
+};
+
 class Netflix implements Service {
-  private subCache: {
-    [moveId: string]: {
-      [lang: string]: string;
-    };
-  };
+  private subCache: TSubCache[];
 
   constructor() {
-    this.subCache = {};
+    this.subCache = [];
 
     this.handleNetflixData = this.handleNetflixData.bind(this);
     this.handleNetflixVideoReady = this.handleNetflixVideoReady.bind(this);
@@ -42,9 +51,11 @@ class Netflix implements Service {
 
     setInterval(() => {
       const videoControlContainer = document.querySelector(".watch-video--bottom-controls-container");
+      const subsContainer = document.querySelector(".watch-video--player-view");
       const easysubsSettings = document.querySelector(".es-settings");
-      if (videoControlContainer && !easysubsSettings) {
+      if (videoControlContainer && subsContainer && !easysubsSettings) {
         esRenderSetings();
+        subsReloadRequested();
       }
     }, 100);
   }
@@ -56,17 +67,21 @@ class Netflix implements Service {
     window.addEventListener("esNetflixSubtitlesChanged", this.handleNetflixSubtitlesChanged as EventListener);
   }
 
-  public async getSubs(language: string) {
-    if (language === "") return parse("");
+  public async getSubs(title: string) {
+    if (title === "") return parse("");
 
-    const ccLanguage = language + SUB_TYPES.closedcaptions;
-    const subsList = this.subCache[this.getMoveId()];
-    const langKey = Object.keys(subsList).find((key) => key === language || key === ccLanguage) || "";
+    const moveId = this.getMoveId();
+    const subCacheItem = this.subCache.find((item) => item.videoId == moveId && item.title === title);
 
-    const subUri = subsList[langKey];
-    const resp = await fetch(subUri);
+    const resp = await fetch(subCacheItem.url);
     const data = await resp.text();
 
+    if (subCacheItem.data) {
+      return subCacheItem.data;
+    }
+
+    const parsedSubs = parse(data);
+    subCacheItem.data = parsedSubs;
     return parse(data);
   }
 
@@ -93,6 +108,8 @@ class Netflix implements Service {
 
   // Injectes the script into the service page
   private injectScript(): void {
+    console.log("injectScript");
+
     const script = document.createElement("script");
     script.src = chrome.runtime.getURL("assets/js/netflix.js");
     script.type = "module";
@@ -101,35 +118,42 @@ class Netflix implements Service {
 
   // Convert the response of the Netflix server to a convenient format and save it to the cache
   private handleNetflixData(event: CustomEvent): void {
+    console.log("handleNetflixData", event.detail);
+
     if (!["EPISODE", "MOVIE"].includes(event.detail.viewableType)) {
       return;
     }
 
     console.log("handleNetflixData", event.detail.timedtexttracks);
 
-    this.subCache[event.detail.movieId] = {};
     const tracks: TTrack[] = event.detail.timedtexttracks;
+    console.log("tracks", tracks);
+
     tracks.forEach((track) => {
       if (track.isNoneTrack) {
         return;
       }
 
-      let type = SUB_TYPES[track.rawTrackType];
-      if (typeof type === "undefined") type = `[${track.rawTrackType}]`;
-      const lang = track.language + type + (track.isForcedNarrative ? "-forced" : "");
+      const title = this.getTrackTitle(track);
 
       if (track.ttDownloadables[WEBVTT]?.urls) {
-        this.subCache[event.detail.movieId][lang] = this.randomProperty(track.ttDownloadables[WEBVTT].urls).url;
+        this.subCache.push({
+          videoId: event.detail.movieId,
+          title: title,
+          url: this.randomProperty(track.ttDownloadables[WEBVTT].urls).url,
+        });
       }
     });
   }
 
   private handleNetflixVideoReady() {
+    console.log("handleNetflixVideoReady");
     esRenderSetings();
   }
 
-  private handleNetflixSubtitlesChanged(event: CustomEvent) {
-    esSubsChanged(event.detail);
+  private handleNetflixSubtitlesChanged(event: CustomEvent<TTrackChanged>) {
+    console.log("handleNetflixSubtitlesChanged", event.detail);
+    esSubsChanged(this.getTrackChangedTitle(event.detail));
   }
 
   private getMoveId(): string {
@@ -141,6 +165,28 @@ class Netflix implements Service {
     const keys = Object.keys(obj);
     return obj[keys[(keys.length * Math.random()) << 0]];
   };
+
+  private getTrackTitle(track: TTrack): string {
+    let postfix = "";
+    if (track.isForcedNarrative) {
+      postfix = "-forced";
+    }
+    if (track.rawTrackType === "closedcaptions") {
+      postfix = "[cc]";
+    }
+    return track.language + postfix;
+  }
+
+  private getTrackChangedTitle(track: TTrackChanged): string {
+    let postfix = "";
+    if (track.isForcedNarrative) {
+      postfix = "-forced";
+    }
+    if (track.rawTrackType === "CLOSEDCAPTIONS") {
+      postfix = "[cc]";
+    }
+    return track.bcp47 + postfix;
+  }
 }
 
 export default Netflix;

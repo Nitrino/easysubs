@@ -1,6 +1,6 @@
+console.log("Netflix script loaded");
 const parseMock = JSON.parse;
 const stringifyMock = JSON.stringify;
-const jsonMock = JSON;
 
 // Override the standard JSON.parse function.
 // This is required to intercept subtitles from the server response.
@@ -17,7 +17,7 @@ JSON.parse = function () {
 // This is required for the Netflix server to respond with subtitles in vtt format.
 // Also here we request all available audio tracks and subtitles, regardless of the region
 JSON.stringify = function (response) {
-  if (!response) return jsonMock.stringify.apply(this, arguments);
+  if (!response) return stringifyMock.apply(this, arguments);
   const data = parseMock(stringifyMock.apply(this, arguments));
 
   let modified = false;
@@ -50,22 +50,30 @@ window.addEventListener("esNetflixSeek", handleSeek);
 function waitForElement(callBack) {
   window.setTimeout(function () {
     const player = getPlayer();
-    if (player && document.querySelector(".watch-video--player-view")) {
+    if (player && player.isReady() && document.querySelector(".watch-video--player-view")) {
       callBack(player);
     } else {
       waitForElement(callBack);
     }
-  }, 500);
+  }, 1000);
 }
 
-waitForElement(function (player) {
-  window.isLoaded = true;
-  // We send a message to the extension that the player has loaded and is ready to play
-  window.dispatchEvent(new CustomEvent("esNetflixVideoReady"));
+const playerHandler = () => {
+  waitForElement(function (player) {
+    const handleHistoryChange = (data) => {
+      console.log("history changed", data);
+      playerHandler();
+      window.netflix.appContext.state.history.removeChangeListener(handleHistoryChange);
+    };
 
-  if (window.currentLanguage !== player.getTimedTextTrack().bcp47) {
-    window.currentLanguage = player.getTimedTextTrack().bcp47;
-    // When changing subtitles, we send an event to the extension
-    window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: window.currentLanguage }));
-  }
-});
+    window.netflix.appContext.state.history.addChangeListener(handleHistoryChange);
+    window.dispatchEvent(new CustomEvent("esNetflixVideoReady"));
+    window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: player.getTimedTextTrack() }));
+
+    player.addEventListener("timedtexttrackchanged", (data) => {
+      window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: player.getTimedTextTrack() }));
+    });
+  });
+};
+
+playerHandler();
