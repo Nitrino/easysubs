@@ -24,9 +24,10 @@ type TMoveFX = {
   currentSubs: StoreValue<typeof $currentSubs>;
   streaming: StoreValue<typeof $streaming>;
   direction: TMoveDirection;
+  force: boolean;
 };
-export const moveKeyPressed = createEvent<TMoveDirection>();
-export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, direction, currentSubs }) => {
+export const moveKeyPressed = createEvent<{ direction: TMoveDirection; force: boolean }>();
+export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, direction, currentSubs, force }) => {
   if (video === null) {
     return;
   }
@@ -36,7 +37,7 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
     const nextSub = subs.find((sub) => sub.start > currentTime);
     const isNextSubClose = nextSub && nextSub.start - currentTime <= TIME_SEEK_TIME;
 
-    if (nextSub && isNextSubClose) {
+    if (nextSub && (force || isNextSubClose)) {
       moveVideoToTime(video, streaming, nextSub.start);
     } else {
       moveVideoToTime(video, streaming, currentTime + TIME_SEEK_TIME);
@@ -52,7 +53,7 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
 
     const isPrevSubClose = prevSub && currentTime - prevSub.end <= TIME_SEEK_TIME;
 
-    if (prevSub && isPrevSubClose) {
+    if (prevSub && (force || isPrevSubClose)) {
       moveVideoToTime(video, streaming, prevSub.start);
     } else {
       moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
@@ -85,7 +86,14 @@ sample({
 sample({
   clock: moveKeyPressed,
   source: { video: $video, subs: $subs, currentSubs: $currentSubs, streaming: $streaming },
-  fn: ({ video, subs, currentSubs, streaming }, direction) => ({ video, subs, currentSubs, streaming, direction }),
+  fn: ({ video, subs, currentSubs, streaming }, { direction, force }) => ({
+    video,
+    subs,
+    currentSubs,
+    streaming,
+    direction,
+    force,
+  }),
   target: moveFx,
 });
 

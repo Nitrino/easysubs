@@ -1,24 +1,25 @@
 import { moveKeyPressed } from "@src/models/videos";
 
 const keyboardEvents = ["keyup", "keydown", "keypress"];
+
 export const keyboardHandler = (event: KeyboardEvent) => {
   if (event.code === "ArrowLeft") {
     event.stopPropagation();
     if (event.type === "keydown") {
-      moveKeyPressed("prev");
+      moveKeyPressed({ direction: "prev", force: event.altKey });
     }
   }
   if (event.code === "ArrowRight") {
     event.stopPropagation();
     if (event.type === "keydown") {
-      moveKeyPressed("next");
+      moveKeyPressed({ direction: "next", force: event.altKey });
     }
   }
   if (event.code === "ArrowDown") {
     event.stopPropagation();
     event.preventDefault();
     if (event.type === "keydown") {
-      moveKeyPressed("current");
+      moveKeyPressed({ direction: "current", force: false });
     }
   }
 };
