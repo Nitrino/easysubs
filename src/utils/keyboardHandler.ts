@@ -3,6 +3,7 @@ import { moveKeyPressed } from "@src/models/videos";
 const keyboardEvents = ["keyup", "keydown", "keypress"];
 
 export const keyboardHandler = (event: KeyboardEvent) => {
+  event.preventDefault();
   if (event.code === "ArrowLeft") {
     event.stopPropagation();
     if (event.type === "keydown") {
