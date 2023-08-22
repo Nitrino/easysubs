@@ -105,5 +105,6 @@ debug(
   $currentSubs,
   subsReloadRequested,
   $subsTitle,
-  esSubsChanged
+  esSubsChanged,
+  subsLanguageDetectFx
 );

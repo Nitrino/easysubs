@@ -265,3 +265,12 @@
     bottom: 50px;
   }
 }
+
+.es-netflix.es-netflix-ad-showing {
+  #es {
+    display: none !important;
+  }
+  .es-progress-bar {
+    display: none !important;
+  }
+}

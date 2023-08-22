@@ -1,4 +1,3 @@
-console.log("Netflix script loaded");
 const parseMock = JSON.parse;
 const stringifyMock = JSON.stringify;
 
@@ -41,8 +40,13 @@ function getPlayer() {
 }
 
 function handleSeek(event) {
-  console.log("handleSeek", event.detail);
   getPlayer().seek(event.detail);
+}
+
+function getAdBreaks() {
+  const videoPlayer = window.netflix.appContext.state.playerApp.getAPI().videoPlayer;
+  const sessionId = videoPlayer.getAllPlayerSessionIds()[0];
+  videoPlayer.getPlaybackStateBySessionId(sessionId);
 }
 
 window.addEventListener("esNetflixSeek", handleSeek);
@@ -55,13 +59,20 @@ function waitForElement(callBack) {
     } else {
       waitForElement(callBack);
     }
-  }, 1000);
+  }, 300);
+}
+function getCurrentBreak(player) {
+  const videoPlayer = window.netflix.appContext.state.playerApp.getAPI().videoPlayer;
+  const sessionId = videoPlayer.getAllPlayerSessionIds()[0];
+  const adBreaks = videoPlayer.getPlaybackStateBySessionId(sessionId).adBreaks;
+  const currentTime = player.getCurrentTime();
+  const currentBreak = adBreaks.findLast((ad) => ad.locationMs <= currentTime);
+  return currentBreak;
 }
 
 const playerHandler = () => {
   waitForElement(function (player) {
     const handleHistoryChange = (data) => {
-      console.log("history changed", data);
       playerHandler();
       window.netflix.appContext.state.history.removeChangeListener(handleHistoryChange);
     };
@@ -69,7 +80,17 @@ const playerHandler = () => {
     window.netflix.appContext.state.history.addChangeListener(handleHistoryChange);
     window.dispatchEvent(new CustomEvent("esNetflixVideoReady"));
     window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: player.getTimedTextTrack() }));
+    const currentBreak = getCurrentBreak(player);
+    if (currentBreak.ads) {
+      window.dispatchEvent(new CustomEvent("esNetflixAddStateChanged", { detail: { currentBreak: currentBreak } }));
+    }
 
+    player.addEventListener("adsstatechanged", (data) => {
+      const currentBreak = getCurrentBreak(player);
+      if (currentBreak.ads) {
+        window.dispatchEvent(new CustomEvent("esNetflixAddStateChanged", { detail: { currentBreak: currentBreak } }));
+      }
+    });
     player.addEventListener("timedtexttrackchanged", (data) => {
       window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: player.getTimedTextTrack() }));
     });
@@ -77,3 +98,22 @@ const playerHandler = () => {
 };
 
 playerHandler();
+
+const observer = new MutationObserver((mutations, obs) => {
+  const adDiv = document.querySelector(".watch-video--adsInfo-container");
+  if (adDiv && !window.adShowed) {
+    window.adShowed = true;
+    document.body.classList.toggle("es-netflix-ad-showing");
+  }
+  if (!adDiv && window.adShowed) {
+    window.adShowed = false;
+    document.body.classList.toggle("es-netflix-ad-showing");
+    const currentTime = document.querySelector("video").currentTime * 1000;
+    window.dispatchEvent(new CustomEvent("esNetflixAddHide", { detail: currentTime }));
+  }
+});
+
+observer.observe(document, {
+  childList: true,
+  subtree: true,
+});
