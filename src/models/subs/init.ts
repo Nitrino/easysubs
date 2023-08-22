@@ -18,6 +18,7 @@ import {
   subsLanguageDetectFx,
   $subsTitle,
   subsReloadRequested,
+  ES_CUSTOM_SUB_LABEL,
 } from ".";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
@@ -39,6 +40,7 @@ split({
 sample({
   clock: subsRequested,
   source: $streaming,
+  filter: (_, language) => language != ES_CUSTOM_SUB_LABEL,
   fn: (streaming, language) => ({ streaming, language }),
   target: fetchSubsFx,
 });
@@ -76,6 +78,7 @@ sample({
 
 sample({
   clock: $subs,
+  filter: (subs) => subs.length > 0,
   target: subsLanguageDetectFx,
 });
 
@@ -96,6 +99,7 @@ $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 $subsLanguage.on(subsLanguageDetectFx.doneData, (_, lang) => lang);
 $subsTitle.on(esSubsChanged, (_, value) => value);
+$subsTitle.on(updateCustomSubsFx.doneData, () => ES_CUSTOM_SUB_LABEL);
 
 debug(
   $rawSubs,

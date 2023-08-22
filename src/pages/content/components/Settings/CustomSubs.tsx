@@ -2,7 +2,7 @@ import { ChangeEvent, FC } from "react";
 import { useUnit } from "effector-react";
 import { parse } from "subtitle";
 
-import { updateCustomSubsFx } from "@src/models/subs";
+import { ES_CUSTOM_SUB_LABEL, esSubsChanged, updateCustomSubsFx } from "@src/models/subs";
 
 export const CustomSubs: FC = () => {
   const [handleUpdateCustomSubsFx] = useUnit([updateCustomSubsFx]);
@@ -15,6 +15,7 @@ export const CustomSubs: FC = () => {
       const data = reader.result;
       if (typeof data === "string") {
         handleUpdateCustomSubsFx(parse(data));
+        esSubsChanged(ES_CUSTOM_SUB_LABEL);
       }
     };
     reader.readAsText(file);

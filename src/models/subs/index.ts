@@ -8,6 +8,7 @@ import type { Captions, TPhrasalVerb, TSub } from "../types";
 import type Service from "@src/streamings/service";
 import { $autoPause } from "../settings";
 
+export const ES_CUSTOM_SUB_LABEL = "custom";
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
 export const $subsLanguage = createStore<string>("auto");
@@ -52,9 +53,13 @@ export const subsResyncFx = createEffect<
 >(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
 
 export const subsLanguageDetectFx = createEffect<TSub[], string>(async (subs) => {
-  return await chrome.runtime.sendMessage({
-    type: "getTextLanguage",
-    language: "en",
-    text: subs[Math.floor(Math.random() * subs.length)].cleanedText,
-  });
+  try {
+    return await chrome.runtime.sendMessage({
+      type: "getTextLanguage",
+      language: "en",
+      text: subs[Math.floor(Math.random() * subs.length)].cleanedText,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
