@@ -18,14 +18,6 @@ const handleTimeUpdate = () => {
   videoTimeUpdate();
 };
 
-chrome.runtime.onMessage.addListener((data) => {
-  console.log("Message URL:", data);
-
-  if (data.action === "urlChanged") {
-    subsReloadRequested();
-  }
-});
-
 $streaming.watch((streaming) => {
   console.log("streaming changed", streaming);
 

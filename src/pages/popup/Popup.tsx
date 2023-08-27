@@ -17,7 +17,7 @@ const Popup = () => {
     const host = await getTabUrl();
     chrome.permissions.request(
       {
-        permissions: ["webNavigation", "scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
+        permissions: ["scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
         origins: [host],
       },
       (granted) => {
