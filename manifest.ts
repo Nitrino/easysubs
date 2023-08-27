@@ -1,8 +1,5 @@
 import packageJson from "./package.json";
 
-/**
- * After changing, please reload the extension at `chrome://extensions`
- */
 const manifest: chrome.runtime.ManifestV3 = {
   manifest_version: 3,
   name: packageJson.name,
@@ -21,13 +18,20 @@ const manifest: chrome.runtime.ManifestV3 = {
   },
   content_scripts: [
     {
-      matches: ["http://*/*", "https://*/*", "<all_urls>"],
+      matches: [
+        "https://www.netflix.com/*",
+        "https://www.youtube.com/*",
+        "https://www.coursera.org/*",
+        "https://kinopub.net/*",
+        "https://kino.pub/*",
+      ],
       js: ["src/pages/content/index.js"],
-      // KEY for cache invalidation
       css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
   ],
-  permissions: ["webNavigation", "scripting", "tabs", "storage", "tts"],
+  permissions: ["webNavigation", "scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
+  optional_host_permissions: ["*://*/*"],
+  optional_permissions: [],
   host_permissions: ["https://translate.google.com/*", "http://localhost:8765/*"],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",

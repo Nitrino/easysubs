@@ -1,6 +1,9 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
+
 import { TWordTranslate, googleTranslateBatchFetcher } from "@src/utils/googleTranslateBatchFetcher";
 import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";
+
+import "webext-dynamic-content-scripts";
 
 reloadOnUpdate("pages/background");
 

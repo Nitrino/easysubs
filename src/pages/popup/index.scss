@@ -4,9 +4,8 @@ body {
   font-size: 13px;
   background: #262a32;
   color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -28,6 +27,7 @@ body {
       list-style: none;
       line-height: 2;
       padding: 0 20px;
+      cursor: pointer;
 
       &:hover {
         background: rgba(#fff, 0.1);
@@ -36,6 +36,11 @@ body {
       a {
         color: #fff;
         text-decoration: none;
+
+        &.es-popup-kinopub {
+          font-weight: bold;
+          color: #ed734b;
+        }
       }
     }
   }

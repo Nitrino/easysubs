@@ -27,7 +27,8 @@
     "react-draggable": "^4.4.5",
     "react-hot-toast": "^2.4.1",
     "stream-browserify": "^3.0.0",
-    "subtitle": "^2.0.5"
+    "subtitle": "^2.0.5",
+    "webext-dynamic-content-scripts": "^9.2.2"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.5.0",
