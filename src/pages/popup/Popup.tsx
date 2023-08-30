@@ -26,6 +26,18 @@ const Popup = () => {
     );
   };
 
+  const handleFaqLinkClick = () => {
+    chrome.runtime.onInstalled.addListener(function (object) {
+      let optionsUrl = chrome.runtime.getURL("src/pages/options/index.html");
+
+      if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        chrome.tabs.create({ url: optionsUrl }, function (tab) {
+          console.log("New tab launched with options page");
+        });
+      }
+    });
+  };
+
   return (
     <div className="content">
       <div className="header">Easysubs</div>
@@ -39,6 +51,9 @@ const Popup = () => {
           <a className="es-popup-kinopub" onClick={handleRequestPermissions}>
             Enable on Kinopub
           </a>
+        </li>
+        <li>
+          <a onClick={handleFaqLinkClick}>FAQ</a>
         </li>
         <li>
           <a target="_blank" href="https://github.com/Nitrino/easysubs" rel="noreferrer">

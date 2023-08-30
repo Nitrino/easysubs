@@ -15,6 +15,15 @@ reloadOnUpdate("pages/content/style.scss");
 
 console.log("background loaded");
 
+chrome.runtime.onInstalled.addListener(function (object) {
+  let optionsUrl = chrome.runtime.getURL("src/pages/options/index.html");
+
+  if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    chrome.tabs.create({ url: optionsUrl }, function (tab) {
+      console.log("New tab launched with options page");
+    });
+  }
+});
 
 chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   console.log("read: ", message);
