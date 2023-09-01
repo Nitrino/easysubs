@@ -20,8 +20,11 @@ const handleTimeUpdate = () => {
 
 $streaming.watch((streaming) => {
   console.log("streaming changed", streaming);
-
-  document.body.classList.toggle("es-" + streaming.constructor.name.toLowerCase());
+  let name = streaming.constructor.name.toLowerCase();
+  if (name == "netflixonflight") {
+    name = "netflix";
+  }
+  document.body.classList.add("es-" + name);
 
   if (streaming == null) {
     return;
@@ -60,9 +63,11 @@ esSubsChanged.watch((language) => {
   subsContainer?.appendChild(subsNode);
   createRoot(subsNode).render(<Subs />);
 
-  document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
-  const progressBarNode = document.createElement("div");
-  progressBarNode.classList.add("es-progress-bar");
-  subsContainer?.appendChild(progressBarNode);
-  createRoot(progressBarNode).render(<ProgressBar />);
+  if (!$streaming.getState().isOnFlight()) {
+    document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
+    const progressBarNode = document.createElement("div");
+    progressBarNode.classList.add("es-progress-bar");
+    subsContainer?.appendChild(progressBarNode);
+    createRoot(progressBarNode).render(<ProgressBar />);
+  }
 });

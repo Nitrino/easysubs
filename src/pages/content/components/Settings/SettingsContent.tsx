@@ -14,6 +14,7 @@ import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
 import { useUnit } from "effector-react";
 import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
+import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
 
 interface TabProps {
   isActive: boolean;
@@ -84,6 +85,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
             <div className="es-settings-content__item">
               <LearningService />
+            </div>
+            <div className="es-settings-content__item">
+              <EnableNetflixOnFlight />
             </div>
           </>
         )}

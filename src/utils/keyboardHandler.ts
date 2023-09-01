@@ -1,3 +1,4 @@
+import { $streaming } from "@src/models/streamings";
 import { moveKeyPressed } from "@src/models/videos";
 
 const keyboardEvents = ["keyup", "keydown", "keypress"];
@@ -25,6 +26,9 @@ export const keyboardHandler = (event: KeyboardEvent) => {
 };
 
 export const addKeyboardEventsListeners = () => {
+  if ($streaming.getState().isOnFlight()) {
+    return;
+  }
   keyboardEvents.forEach((eventType) => {
     document.addEventListener(eventType as any, keyboardHandler, true);
   });

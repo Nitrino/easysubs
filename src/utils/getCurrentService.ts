@@ -2,6 +2,7 @@ import KinoPub from "@src/streamings/kinopub";
 import Youtube from "@src/streamings/youtube";
 import Coursera from "@src/streamings/coursera";
 import Netflix from "@src/streamings/netflix";
+import NetflixOnFlight from "@src/streamings/netflixOnFlight";
 import Service from "@src/streamings/service";
 import ServiceStub from "@src/streamings/serviceStub";
 
@@ -13,7 +14,11 @@ export const getCurrentService = (): Service => {
   }
   if (titleContent?.includes("Netflix") || window.location.host === "www.netflix.com") {
     document.querySelector("html")?.setAttribute("id", "netflix");
-    return new Netflix();
+    if (document.body.classList.contains("es-netflix-on-flight")) {
+      return new NetflixOnFlight();
+    } else {
+      return new Netflix();
+    }
   }
   if (titleContent?.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]') != null) {
     document.querySelector("html")?.setAttribute("id", "kinopub");

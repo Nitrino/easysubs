@@ -53,6 +53,10 @@ class Coursera implements Service {
     return selector as HTMLElement;
   }
 
+  public isOnFlight() {
+    return false;
+  }
+
   private handleCourseraRenderSettings(event: CustomEvent) {
     esRenderSetings();
   }

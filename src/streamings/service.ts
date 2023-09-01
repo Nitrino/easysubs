@@ -13,6 +13,9 @@ interface Service {
   // Selector for rendering extension settings inside the player container
   getSettingsContentContainer: () => HTMLElement;
 
+  // Check if the service is on flight
+  isOnFlight: () => boolean;
+
   // Init the service
   init: () => void;
 }

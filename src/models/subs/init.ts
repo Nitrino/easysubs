@@ -19,6 +19,7 @@ import {
   $subsTitle,
   subsReloadRequested,
   ES_CUSTOM_SUB_LABEL,
+  rawSubsAdded,
 } from ".";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
@@ -90,7 +91,23 @@ sample({
   target: esSubsChanged,
 });
 
-$rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
+$rawSubs.on(
+  [fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData, rawSubsAdded],
+  (_, subs) => subs
+);
+
+$rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
+  const lastSub = oldSubs[oldSubs.length - 1];
+  if (!lastSub) {
+    return [...oldSubs, ...newSubs];
+  }
+  if (lastSub.text != newSubs[0].text && lastSub.start != newSubs[0].start) {
+    const subs = oldSubs.slice(0, -1);
+    lastSub.end = lastSub.start;
+    return [...subs, ...[lastSub], ...newSubs];
+  }
+});
+
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
   JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs
@@ -103,6 +120,7 @@ $subsTitle.on(updateCustomSubsFx.doneData, () => ES_CUSTOM_SUB_LABEL);
 
 debug(
   $rawSubs,
+  $subs,
   $subsDelay,
   subsResyncFx,
   autoPauseFx.doneData,

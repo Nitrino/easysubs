@@ -4,6 +4,7 @@ import { debug } from "patronum";
 import { withPersist } from "@src/utils/withPersist";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { TLearningService } from "../types";
+import { fetchCurrentStreamingFx } from "../streamings";
 
 export const $enabled = withPersist(createStore<boolean>(true));
 export const enableToggleChanged = createEvent<boolean>();
@@ -15,6 +16,10 @@ export const activeSettingsTabChanged = createEvent<number>();
 export const $progressBarEnabled = withPersist(createStore<boolean>(true));
 export const progressBarEnabledChanged = createEvent<boolean>();
 export const progressBarEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
+
+export const $netflixOnFlightEnabled = withPersist(createStore<boolean>(false));
+export const netflixOnFlightEnabledChanged = createEvent<boolean>();
+export const netflixOnFlightEnabledChangedFx = createEffect<boolean, void>(() => location.reload());
 
 export const $moveBySubsEnabled = withPersist(createStore<boolean>(true));
 export const moveBySubsEnabledChanged = createEvent<boolean>();
@@ -96,6 +101,7 @@ sample({
 
 $enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
 $progressBarEnabled.on(progressBarEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
+$netflixOnFlightEnabled.on(netflixOnFlightEnabledChanged, (_, isEnabled) => isEnabled);
 $moveBySubsEnabled.on(moveBySubsEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
@@ -104,15 +110,24 @@ $subsBackground.on(subsBackgroundToggleFx.doneData, (_, value) => value);
 $subsBackgroundOpacity.on(subsBackgroundOpacityChangeFx.doneData, (_, value) => value);
 $activeSettingsTab.on(activeSettingsTabChanged, (_, value) => value);
 
-$enabled.watch((isEnables) => {
-  document.body.classList.toggle("es-enabled", isEnables);
+$enabled.watch((isEnabled) => {
+  document.body.classList.toggle("es-enabled", isEnabled);
 });
 
-$progressBarEnabled.watch((isEnables) => {
-  document.body.classList.toggle("es-progress-bar-enabled", isEnables);
+sample({
+  clock: netflixOnFlightEnabledChanged,
+  target: netflixOnFlightEnabledChangedFx,
 });
-$moveBySubsEnabled.watch((isEnables) => {
-  document.body.classList.toggle("es-move-by-subs-enabled", isEnables);
+
+$progressBarEnabled.watch((isEnabled) => {
+  document.body.classList.toggle("es-progress-bar-enabled", isEnabled);
+});
+$moveBySubsEnabled.watch((isEnabled) => {
+  document.body.classList.toggle("es-move-by-subs-enabled", isEnabled);
+});
+$netflixOnFlightEnabled.watch((isEnabled) => {
+  document.body.classList.toggle("es-netflix-on-flight", isEnabled);
+  fetchCurrentStreamingFx();
 });
 
 debug($enabled, $translateLanguage, $learningService, $subsFontSize, $subsBackground, $moveBySubsEnabled);

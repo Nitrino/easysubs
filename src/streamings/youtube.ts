@@ -55,6 +55,10 @@ class Youtube implements Service {
     return selector as HTMLElement;
   }
 
+  public isOnFlight() {
+    return false;
+  }
+
   private getVideoId(): string {
     const regExpression = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = window.location.href.match(regExpression);

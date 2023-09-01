@@ -1,10 +1,10 @@
-import { createStore, createEvent, createEffect, attach, UnitValue, sample, StoreValue } from "effector";
+import { createStore, createEvent, createEffect, UnitValue, StoreValue } from "effector";
 import { resync } from "subtitle";
 
 import { convertRawSubs } from "@src/utils/convertRawSubs";
 import { $video } from "@src/models/videos";
 import { getCurrentSubs } from "@src/utils/getCurrentSubs";
-import type { Captions, TPhrasalVerb, TSub } from "../types";
+import type { Captions, TSub } from "../types";
 import type Service from "@src/streamings/service";
 import { $autoPause } from "../settings";
 
@@ -42,6 +42,7 @@ export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue
   ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)
 );
 export const updatePrevCurrentSubsFx = createEffect<TSub[], TSub[]>((subs) => subs);
+export const rawSubsAdded = createEvent<Captions>();
 export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
 
 export const $subsDelay = createStore<number>(0);

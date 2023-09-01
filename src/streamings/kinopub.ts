@@ -70,6 +70,10 @@ class KinoPub implements Service {
     return selector as HTMLElement;
   }
 
+  public isOnFlight() {
+    return false;
+  }
+
   private handleKinopubFirstFrame(event: CustomEvent) {
     this.videoPlaylistUrl = event.detail;
     if (this.subsName) {

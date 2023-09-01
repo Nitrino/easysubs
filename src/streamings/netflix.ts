@@ -138,6 +138,10 @@ class Netflix implements Service {
     return selector as HTMLElement;
   }
 
+  public isOnFlight() {
+    return false;
+  }
+
   // Injectes the script into the service page
   private injectScript(): void {
     console.log("injectScript");
