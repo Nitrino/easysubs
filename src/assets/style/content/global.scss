@@ -274,3 +274,25 @@
     display: none !important;
   }
 }
+
+.es-plex {
+  #es {
+    bottom: 200px;
+  }
+
+  .es-settings-icon {
+    justify-content: center;
+    display: flex;
+    margin: 0 3px;
+
+    svg {
+      height: 20px;
+    }
+  }
+}
+
+.es-plex.es-enabled {
+  .libjass-subs {
+    display: none !important;
+  }
+}

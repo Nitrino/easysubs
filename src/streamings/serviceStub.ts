@@ -26,6 +26,11 @@ class ServiceStub implements Service {
     throw new Error("Not Implimented streaming service");
     return window.document.body;
   }
+
+  public isOnFlight() {
+    throw new Error("Not Implimented streaming service");
+    return false;
+  }
 }
 
 export default ServiceStub;

@@ -5,6 +5,7 @@ import Netflix from "@src/streamings/netflix";
 import NetflixOnFlight from "@src/streamings/netflixOnFlight";
 import Service from "@src/streamings/service";
 import ServiceStub from "@src/streamings/serviceStub";
+import Plex from "@src/streamings/plex";
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
@@ -19,6 +20,9 @@ export const getCurrentService = (): Service => {
     } else {
       return new Netflix();
     }
+  }
+  if (window.location.host === "app.plex.tv" || document.querySelector("body div")?.id === "plex") {
+    return new Plex();
   }
   if (titleContent?.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]') != null) {
     document.querySelector("html")?.setAttribute("id", "kinopub");
