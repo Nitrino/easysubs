@@ -28,6 +28,7 @@ const manifest: chrome.runtime.ManifestV3 = {
         "https://kinopub.cc/*",
         "https://app.plex.tv/*",
         "https://plex.ukrapka.tech/*",
+        "https://www.udemy.com/*",
       ],
       js: ["src/pages/content/index.js"],
       css: ["assets/css/contentStyle<KEY>.chunk.css"],

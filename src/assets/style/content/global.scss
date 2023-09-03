@@ -304,3 +304,35 @@
     display: none !important;
   }
 }
+
+.es-plex.es-enabled {
+  .libjass-subs {
+    display: none !important;
+  }
+}
+
+.es-udemy {
+  #es {
+    bottom: 80px;
+  }
+
+  .es-settings-content {
+    bottom: 56px;
+  }
+
+  .es-settings-icon {
+    justify-content: center;
+    display: flex;
+    margin: 0 3px;
+
+    svg {
+      height: 22px;
+    }
+  }
+}
+
+.es-udemy.es-enabled {
+  div[data-purpose="captions-cue-text"] {
+    display: none !important;
+  }
+}

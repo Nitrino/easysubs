@@ -6,6 +6,7 @@ import NetflixOnFlight from "@src/streamings/netflixOnFlight";
 import Service from "@src/streamings/service";
 import ServiceStub from "@src/streamings/serviceStub";
 import Plex from "@src/streamings/plex";
+import Udemy from "@src/streamings/udemy";
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
@@ -23,6 +24,10 @@ export const getCurrentService = (): Service => {
   }
   if (window.location.host === "app.plex.tv" || document.querySelector("body div")?.id === "plex") {
     return new Plex();
+  }
+
+  if (window.location.host === "www.udemy.com" || titleContent?.includes("Udemy")) {
+    return new Udemy();
   }
   if (titleContent?.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]') != null) {
     document.querySelector("html")?.setAttribute("id", "kinopub");
