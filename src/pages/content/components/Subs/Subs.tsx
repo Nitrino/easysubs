@@ -5,7 +5,13 @@ import Draggable from "react-draggable";
 import { $currentSubs } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
-import { $moveBySubsEnabled, $subsBackground, $subsBackgroundOpacity, $subsFontSize } from "@src/models/settings";
+import {
+  $autoStopEnabled,
+  $moveBySubsEnabled,
+  $subsBackground,
+  $subsBackgroundOpacity,
+  $subsFontSize,
+} from "@src/models/settings";
 import {
   $findPhrasalVerbsPendings,
   subItemMouseEntered,
@@ -20,14 +26,8 @@ import { SubFullTranslation } from "./SubFullTranslation";
 type TSubsProps = {};
 
 export const Subs: FC<TSubsProps> = () => {
-  const [video, currentSubs, subsFontSize, moveBySubsEnabled, wasPaused, handleWasPausedChanged] = useUnit([
-    $video,
-    $currentSubs,
-    $subsFontSize,
-    $moveBySubsEnabled,
-    $wasPaused,
-    wasPausedChanged,
-  ]);
+  const [video, currentSubs, subsFontSize, moveBySubsEnabled, wasPaused, handleWasPausedChanged, autoStopEnabled] =
+    useUnit([$video, $currentSubs, $subsFontSize, $moveBySubsEnabled, $wasPaused, wasPausedChanged, $autoStopEnabled]);
 
   useEffect(() => {
     if (moveBySubsEnabled) {
@@ -47,6 +47,9 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   const handleOnMouseEnter = () => {
+    if (!autoStopEnabled) {
+      return;
+    }
     if (!video.paused) {
       console.log("handleWasPausedChanged true");
 

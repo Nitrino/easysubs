@@ -17,6 +17,9 @@ export const $progressBarEnabled = withPersist(createStore<boolean>(true));
 export const progressBarEnabledChanged = createEvent<boolean>();
 export const progressBarEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
 
+export const $autoStopEnabled = withPersist(createStore<boolean>(true));
+export const autoStopEnabledChanged = createEvent<boolean>();
+
 export const $netflixOnFlightEnabled = withPersist(createStore<boolean>(false));
 export const netflixOnFlightEnabledChanged = createEvent<boolean>();
 export const netflixOnFlightEnabledChangedFx = createEffect<boolean, void>(() => location.reload());
@@ -101,6 +104,7 @@ sample({
 
 $enabled.on(enableToggleChangeFx.doneData, (_, isEnabled) => isEnabled);
 $progressBarEnabled.on(progressBarEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
+$autoStopEnabled.on(autoStopEnabledChanged, (_, isEnabled) => isEnabled);
 $netflixOnFlightEnabled.on(netflixOnFlightEnabledChanged, (_, isEnabled) => isEnabled);
 $moveBySubsEnabled.on(moveBySubsEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);

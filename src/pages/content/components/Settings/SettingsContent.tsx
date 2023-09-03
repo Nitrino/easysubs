@@ -15,6 +15,7 @@ import { useClickOutside } from "@src/hooks/useClickOutside";
 import { useUnit } from "effector-react";
 import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
 import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
+import { EnableAutoStop } from "./EnableAutoStop";
 
 interface TabProps {
   isActive: boolean;
@@ -63,6 +64,15 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
           >
             Subtitles
           </Tab>
+          <Tab
+            isActive={activeSettingsTab === 2}
+            tabId={2}
+            onClick={() => {
+              handleActiveSettingsTabChanged(2);
+            }}
+          >
+            Experiments
+          </Tab>
         </div>
       </div>
       <div className="es-settings-content__main">
@@ -86,9 +96,6 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             <div className="es-settings-content__item">
               <LearningService />
             </div>
-            <div className="es-settings-content__item">
-              <EnableNetflixOnFlight />
-            </div>
           </>
         )}
         {activeSettingsTab === 1 && (
@@ -107,6 +114,16 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
             <div className="es-settings-content__item">
               <CustomSubs />
+            </div>
+          </>
+        )}
+        {activeSettingsTab === 2 && (
+          <>
+            <div className="es-settings-content__item">
+              <EnableNetflixOnFlight />
+            </div>
+            <div className="es-settings-content__item">
+              <EnableAutoStop />
             </div>
           </>
         )}
