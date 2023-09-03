@@ -336,3 +336,22 @@
     display: none !important;
   }
 }
+
+.es-kinopoisk {
+  #es {
+    bottom: 200px;
+  }
+
+  .es-settings-icon {
+    svg {
+      width: 36px;
+      color: #fff;
+    }
+  }
+}
+
+.es-kinopoisk.es-enabled {
+  div[data-tid="SubtitlesPortalRoot"] {
+    display: none !important;
+  }
+}

@@ -29,6 +29,7 @@ const manifest: chrome.runtime.ManifestV3 = {
         "https://app.plex.tv/*",
         "https://plex.ukrapka.tech/*",
         "https://www.udemy.com/course/*/learn/lecture/*",
+        "https://hd.kinopoisk.ru/*",
       ],
       js: ["src/pages/content/index.js"],
       css: ["assets/css/contentStyle<KEY>.chunk.css"],

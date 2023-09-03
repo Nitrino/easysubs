@@ -7,6 +7,7 @@ import Service from "@src/streamings/service";
 import ServiceStub from "@src/streamings/serviceStub";
 import Plex from "@src/streamings/plex";
 import Udemy from "@src/streamings/udemy";
+import Kinopoisk from "@src/streamings/kinopoisk";
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
@@ -29,17 +30,20 @@ export const getCurrentService = (): Service => {
   if (window.location.host === "www.udemy.com" || titleContent?.includes("Udemy")) {
     return new Udemy();
   }
-  if (titleContent?.includes("Кинопаб") || document.querySelector('meta[content="Кинопаб"]') != null) {
+  if (
+    titleContent?.includes("Кинопаб") ||
+    document.querySelector('meta[content="Кинопаб"]') != null ||
+    window.location.host === "moviesjoy.is"
+  ) {
     document.querySelector("html")?.setAttribute("id", "kinopub");
     return new KinoPub();
   }
-  // if (titleContent?.includes('English-With-Fun') || window.location.host === 'english-with-fun.com') {
-  //   document.querySelector('html')?.setAttribute('id', 'english-with-fun')
-  //   return 'englishwithfun'
-  // }
   if (titleContent?.includes("Coursera") || window.location.host === "www.coursera.org") {
     document.querySelector("html")?.setAttribute("id", "coursera");
     return new Coursera();
+  }
+  if (window.location.host === "hd.kinopoisk.ru") {
+    return new Kinopoisk();
   }
 
   return new ServiceStub();
