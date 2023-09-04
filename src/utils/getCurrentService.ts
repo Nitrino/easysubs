@@ -8,6 +8,7 @@ import ServiceStub from "@src/streamings/serviceStub";
 import Plex from "@src/streamings/plex";
 import Udemy from "@src/streamings/udemy";
 import Kinopoisk from "@src/streamings/kinopoisk";
+import Amazon from "@src/streamings/amazon";
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
@@ -44,6 +45,13 @@ export const getCurrentService = (): Service => {
   }
   if (window.location.host === "hd.kinopoisk.ru") {
     return new Kinopoisk();
+  }
+  if (
+    titleContent?.includes("Prime Video") ||
+    window.location.host.includes("amazon") ||
+    window.location.host.includes("primevideo")
+  ) {
+    return new Amazon();
   }
 
   return new ServiceStub();

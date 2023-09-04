@@ -4,9 +4,9 @@ import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 
-class Kinopoisk implements Service {
+class Amazon implements Service {
   constructor() {
-    waitForElement('[data-tid="SettingPopupButton"]', () => {
+    waitForElement("#dv-web-player video", () => {
       esRenderSetings();
     });
   }
@@ -14,15 +14,12 @@ class Kinopoisk implements Service {
   public init(): void {
     $video.watch((video) => {
       if (video) {
-        esSubsChanged("en");
-
-        waitForElement('div[data-tid="SubtitlesPortalRoot"]', () => {
-          const subtitleSource = document.querySelector('div[data-tid="SubtitlesPortalRoot"]');
+        waitForElement("#dv-web-player video, .tst-video-overlay-player-html5", () => {
+          esSubsChanged("en");
+          const subtitleSource = document.querySelector(".atvwebplayersdk-captions-overlay");
           const videoElement = document.querySelector("video");
           const subtitleObserver = new MutationObserver(() => {
-            const subtitleParts = subtitleSource.querySelectorAll("div[class*='Subtitles_text']");
-            console.log("subtitleSource", subtitleSource);
-            console.log("subtitleParts", subtitleParts);
+            const subtitleParts = subtitleSource.querySelectorAll(".atvwebplayersdk-captions-text");
 
             const subtitleContent = [...subtitleParts].map((el) => getText(el)).join("\n");
             console.log("subtitleContent", subtitleContent);
@@ -47,19 +44,19 @@ class Kinopoisk implements Service {
   }
 
   public getSubsContainer() {
-    const selector = document.querySelector("div[class*='styles_controlsLayer']");
+    const selector = document.querySelector(".atvwebplayersdk-overlays-container");
     if (selector === null) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
-    const selector = document.querySelector('[data-tid="SettingPopupButton"]');
+    const selector = document.querySelector(".atvwebplayersdk-options-wrapper");
     if (selector === null) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
-    const selector = document.querySelector("yaplayertag");
+    const selector = document.querySelector(".atvwebplayersdk-overlays-container");
     if (selector === null) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
@@ -83,7 +80,8 @@ function getText(node: ChildNode) {
 
 function waitForElement(selector, callBack) {
   window.setTimeout(function () {
-    if (document.querySelector(selector)) {
+    const element = document.querySelector(selector);
+    if (element && element.src !== "") {
       callBack();
     } else {
       waitForElement(selector, callBack);
@@ -91,4 +89,4 @@ function waitForElement(selector, callBack) {
   }, 300);
 }
 
-export default Kinopoisk;
+export default Amazon;

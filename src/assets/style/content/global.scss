@@ -355,3 +355,27 @@
     display: none !important;
   }
 }
+
+.es-amazon {
+  #es {
+    bottom: 150px;
+    font-weight: 400;
+  }
+
+  .atvwebplayersdk-captions-text {
+    display: none !important;
+  }
+
+  .es-settings-icon {
+    margin: 0;
+    margin-right: 1.5vw;
+    svg {
+      width: 26px;
+    }
+  }
+
+  .es-settings-content {
+    top: 64px;
+    font-weight: 400;
+  }
+}
