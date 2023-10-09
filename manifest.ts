@@ -33,6 +33,7 @@ const manifest: chrome.runtime.ManifestV3 = {
         "https://www.amazon.de/Amazon-Video/*",
         "https://www.primevideo.com/*",
         "https://www.amazon.de/*/video/*",
+        "https://inoriginal.online/*",
       ],
       js: ["src/pages/content/index.js"],
       css: ["assets/css/contentStyle<KEY>.chunk.css"],
