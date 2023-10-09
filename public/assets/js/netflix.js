@@ -81,13 +81,13 @@ const playerHandler = () => {
     window.dispatchEvent(new CustomEvent("esNetflixVideoReady"));
     window.dispatchEvent(new CustomEvent("esNetflixSubtitlesChanged", { detail: player.getTimedTextTrack() }));
     const currentBreak = getCurrentBreak(player);
-    if (currentBreak.ads) {
+    if (currentBreak && currentBreak.ads) {
       window.dispatchEvent(new CustomEvent("esNetflixAddStateChanged", { detail: { currentBreak: currentBreak } }));
     }
 
     player.addEventListener("adsstatechanged", (data) => {
       const currentBreak = getCurrentBreak(player);
-      if (currentBreak.ads) {
+      if (currentBreak && currentBreak.ads) {
         window.dispatchEvent(new CustomEvent("esNetflixAddStateChanged", { detail: { currentBreak: currentBreak } }));
       }
     });
