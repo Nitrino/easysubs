@@ -9,6 +9,7 @@ import Plex from "@src/streamings/plex";
 import Udemy from "@src/streamings/udemy";
 import Kinopoisk from "@src/streamings/kinopoisk";
 import Amazon from "@src/streamings/amazon";
+import Inoriginal from "@src/streamings/inoriginal";
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
@@ -45,6 +46,9 @@ export const getCurrentService = (): Service => {
   }
   if (window.location.host === "hd.kinopoisk.ru") {
     return new Kinopoisk();
+  }
+  if (window.location.host === "inoriginal.online") {
+    return new Inoriginal();
   }
   if (
     titleContent?.includes("Prime Video") ||

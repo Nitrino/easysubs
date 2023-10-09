@@ -379,3 +379,35 @@
     font-weight: 400;
   }
 }
+
+.es-inoriginal {
+  #es {
+    bottom: 140px;
+  }
+
+  #pjs_playerjs_subtitle {
+    display: none !important;
+  }
+
+  .es-settings-icon {
+    position: absolute;
+    top: -5px;
+    left: -75px;
+
+    svg {
+      opacity: 1;
+      color: #fff;
+      width: 30px;
+    }
+
+    &:hover {
+      svg {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .es-settings-content {
+    bottom: 90px;
+  }
+}
