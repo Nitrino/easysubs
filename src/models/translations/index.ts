@@ -107,7 +107,7 @@ const wordTranslationDataCombined = sample({
   fn: ({ wordTranslations, language }, source) => {
     const sourceLowerCase = source.toLowerCase();
     return {
-      translation: wordTranslations.find((t) => t.source === sourceLowerCase) ?? null,
+      translation: wordTranslations.find((t) => t?.source === sourceLowerCase) ?? null,
       source: sourceLowerCase,
       language: language,
     };
