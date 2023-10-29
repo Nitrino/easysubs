@@ -50,7 +50,10 @@ export const fetchSubTranslationFx = createEffect<{ source: string; language: st
         text: source,
       });
 
-      return JSON.parse(resp)["sentences"][0]["trans"];
+      const reponseText: string = JSON.parse(resp)
+        ["sentences"].map((sentence) => sentence["trans"])
+        .join(" ");
+      return reponseText;
     } catch (error) {
       console.error(error);
     }
