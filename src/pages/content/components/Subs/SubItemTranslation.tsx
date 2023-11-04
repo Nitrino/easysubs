@@ -50,7 +50,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   };
 
   const handlePlaySound = async () => {
-    await chrome.runtime.sendMessage({ type: "speak", text: currentWordTranslation.source });
+    await chrome.runtime.sendMessage({ type: "speak", text: currentWordTranslation.source, lang: subsLanguage });
   };
 
   return (
