@@ -43,7 +43,7 @@ const Popup = () => {
       <div className="header">Easysubs</div>
       <menu>
         <li>
-          <a target="_blank" href="https://easysubs.co" rel="noreferrer">
+          <a target="_blank" href="https://easysubs.cc" rel="noreferrer">
             Home
           </a>
         </li>
