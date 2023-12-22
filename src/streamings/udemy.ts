@@ -39,7 +39,7 @@ class Udemy implements Service {
   }
 
   public getSubsContainer() {
-    const selector = document.querySelector("div[class*='vjs-controls-']");
+    const selector = document.querySelector("video[class*='video-player--']").parentElement;
     if (selector === null) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
@@ -51,7 +51,7 @@ class Udemy implements Service {
   }
 
   public getSettingsContentContainer() {
-    const selector = document.querySelector("div[class*='vjs-controls-']");
+    const selector = document.querySelector("video[class*='video-player--']").parentElement;
     if (selector === null) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
