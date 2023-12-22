@@ -7,13 +7,15 @@ interface SelectProps extends HTMLProps<HTMLSelectElement> {
 export const Select: FC<SelectProps> = ({ value, onChange, options, ...props }) => {
   return (
     <select className="es-select" value={value} onChange={onChange} {...props}>
-      {options.map((language: { value: string; label: string }, index) => {
-        return (
-          <option value={language.value} key={index}>
-            {language.label}
-          </option>
-        );
-      })}
+      <optgroup>
+        {options.map((language: { value: string; label: string }, index) => {
+          return (
+            <option value={language.value} key={index}>
+              {language.label}
+            </option>
+          );
+        })}
+      </optgroup>
     </select>
   );
 };
