@@ -1,4 +1,4 @@
-import { createEvent, Store } from "effector";
+import { createEvent, StoreWritable } from "effector";
 
 type PersistConfig = {
   key?: string;
@@ -10,7 +10,7 @@ const defaultConfig = {
 };
 
 export const withPersist = <State>(
-  store: Store<State>,
+  store: StoreWritable<State>,
   config: PersistConfig = defaultConfig
 ) => {
   const name = store.shortName;
