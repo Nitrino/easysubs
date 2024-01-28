@@ -1,6 +1,13 @@
-import packageJson from "./package.json";
 
-const manifest: chrome.runtime.ManifestV3 = {
+import fs from 'node:fs';
+const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+
+/**
+ * After changing, please reload the extension at `chrome://extensions`
+ * @type {chrome.runtime.ManifestV3}
+ */
+
+const manifest = {
   manifest_version: 3,
   name: "Easysubs",
   version: packageJson.version,
@@ -34,9 +41,11 @@ const manifest: chrome.runtime.ManifestV3 = {
         "https://www.primevideo.com/*",
         "https://www.amazon.de/*/video/*",
         "https://inoriginal.online/*",
+        "http://*/*", "https://*/*", "<all_urls>"
       ],
-      js: ["src/pages/content/index.js"],
-      css: ["assets/css/contentStyle<KEY>.chunk.css"],
+      js: ["src/pages/contentInjected/index.js"],
+      // KEY for cache invalidation
+      css: ['assets/css/contentStyle<KEY>.chunk.css'],
     },
   ],
   permissions: ["scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],

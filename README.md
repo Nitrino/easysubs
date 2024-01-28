@@ -26,8 +26,8 @@ The extension supports Chrome, Firefox, Opera and Yandex. It should also work in
 
 1. Install node 18+
 2. Clone repo `git clone git@github.com:Nitrino/easysubs.git`
-3. Go to folder and install dependencies `cd easysubs && npm i`
-4. Build extension `npm run build`
+3. Go to folder and install dependencies `cd easysubs && pnpm i`
+4. Build extension `pnpm build`
 
 ## Manual install
 

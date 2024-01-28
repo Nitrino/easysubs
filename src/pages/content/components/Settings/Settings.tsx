@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";
 
-import "../../style.scss";
 import { useStore } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
 import { MonoLogo } from "./assets/MonoLogo";
