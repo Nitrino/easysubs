@@ -119,9 +119,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         )}
         {activeSettingsTab === 2 && (
           <>
-            <div className="es-settings-content__item">
+            {/* <div className="es-settings-content__item">
               <EnableNetflixOnFlight />
-            </div>
+            </div> */}
             <div className="es-settings-content__item">
               <EnableAutoStop />
             </div>

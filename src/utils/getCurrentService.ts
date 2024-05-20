@@ -25,13 +25,16 @@ export const getCurrentService = (): Service => {
       return new Netflix();
     }
   }
-  if (window.location.host === "app.plex.tv" || document.querySelector("body div")?.id === "plex") {
-    return new Plex();
-  }
+  // if (window.location.host === "app.plex.tv" || document.querySelector("body div")?.id === "plex") {
+  //   return new Plex();
+  // }
 
-  if (window.location.host === "www.udemy.com" || titleContent?.includes("Udemy")) {
-    return new Udemy();
-  }
+  // if (window.location.host === "www.udemy.com" || titleContent?.includes("Udemy")) {
+  //   return new Udemy();
+  // }
+  // if (window.location.host === "hd.kinopoisk.ru") {
+  //   return new Kinopoisk();
+  // }
   if (
     titleContent?.includes("Кинопаб") ||
     document.querySelector('meta[content="Кинопаб"]') != null ||
@@ -44,19 +47,17 @@ export const getCurrentService = (): Service => {
     document.querySelector("html")?.setAttribute("id", "coursera");
     return new Coursera();
   }
-  if (window.location.host === "hd.kinopoisk.ru") {
-    return new Kinopoisk();
-  }
+
   if (window.location.host === "inoriginal.online") {
     return new Inoriginal();
   }
-  if (
-    titleContent?.includes("Prime Video") ||
-    window.location.host.includes("amazon") ||
-    window.location.host.includes("primevideo")
-  ) {
-    return new Amazon();
-  }
+  // if (
+  //   titleContent?.includes("Prime Video") ||
+  //   window.location.host.includes("amazon") ||
+  //   window.location.host.includes("primevideo")
+  // ) {
+  //   return new Amazon();
+  // }
 
   return new ServiceStub();
 };
