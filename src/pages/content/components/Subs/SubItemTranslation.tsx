@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useGate, useUnit } from "effector-react";
+import { $learningService, $translateLanguage } from "@src/models/settings";
 
-import { $learningService } from "@src/models/settings";
 import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGate } from "@src/models/translations";
 import toast from "react-hot-toast";
 import { SoundIcon } from "./assets/SoundIcon";
@@ -16,13 +16,15 @@ import ILearningService from "@src/learning-service/learningService";
 import { TWordTranslationItem } from "@src/models/types";
 import { $subsLanguage } from "@src/models/subs";
 import { getLearningService } from "@src/utils/getLearningService";
+import { TranslateSelect } from "../ui/TranslateSelect";
 
 export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   useGate(WordTranslationsGate, text);
-  const [currentWordTranslation, learningService, subsLanguage, wordTranslationsPendings] = useUnit([
+  const [currentWordTranslation, learningService, subsLanguage, translateLanguage, wordTranslationsPendings] = useUnit([
     $currentWordTranslation,
     $learningService,
     $subsLanguage,
+    $translateLanguage,
     $wordTranslationsPendings,
   ]);
 
@@ -53,6 +55,16 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     await chrome.runtime.sendMessage({ type: "speak", text: currentWordTranslation.source, lang: subsLanguage });
   };
 
+  if (subsLanguage === translateLanguage) {
+    return (
+      <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
+        <div className="es-word-translation-languages">
+          <div>Select the translation language:</div>
+          <TranslateSelect />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
       <div className="es-word-main">{currentWordTranslation.mainTranslation}</div>

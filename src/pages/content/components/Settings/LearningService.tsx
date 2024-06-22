@@ -2,10 +2,13 @@ import { FC, HTMLProps } from "react";
 import { useUnit } from "effector-react";
 
 import { $learningService, learningServiceChanged } from "@src/models/settings";
-import { Select } from "../ui/Select";
 import { TLearningService } from "@src/models/types";
+import { Select } from "../ui/Select";
 
-export const LearningService: FC<HTMLProps<HTMLSelectElement>> = (props) => {
+const getServiceOption = (service: string) => {
+  return services.find((option) => option.value === service);
+};
+export const LearningService: FC<HTMLProps<HTMLSelectElement>> = () => {
   const [learningService, handleTranslateLanguageChanged] = useUnit([$learningService, learningServiceChanged]);
 
   return (
@@ -13,9 +16,8 @@ export const LearningService: FC<HTMLProps<HTMLSelectElement>> = (props) => {
       <div className="es-settings-content__element__left">Learning service</div>
       <div className="es-settings-content__element__right">
         <Select
-          {...props}
-          value={learningService}
-          onChange={(e) => handleTranslateLanguageChanged(e.currentTarget.value as TLearningService)}
+          value={getServiceOption(learningService)}
+          onChange={(option: { value: TLearningService }) => handleTranslateLanguageChanged(option.value)}
           options={services}
         />
       </div>

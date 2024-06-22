@@ -27,7 +27,7 @@ export const $findPhrasalVerbsPendings = createStore<Record<string, boolean>>({}
 export const $findCurrentPhrasalVerbPendings = createStore<Record<string, boolean>>({});
 export const SubItemGate = createGate<{ text: string }>("SubItemGate");
 export const findPhrasalVerbsFx = createEffect<{ subs: TSub[] }, TPhrasalVerb[]>(({ subs }) =>
-  subs.flatMap((sub) => findPhrasalVerbs(sub.cleanedText))
+  subs.flatMap((sub) => findPhrasalVerbs(sub.cleanedText)),
 );
 export const subItemMouseEntered = createEvent<string>();
 export const subItemMouseLeft = createEvent();
@@ -57,7 +57,7 @@ export const fetchSubTranslationFx = createEffect<{ source: string; language: st
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 
 export const fetchWordTranslationFx = createEffect<
@@ -139,7 +139,7 @@ sample({
 
 $currentWordTranslation.on(
   [fetchWordTranslationFx.doneData, updateCurrentWordTranslationFx.doneData],
-  (_, translation) => translation
+  (_, translation) => translation,
 );
 $currentWordTranslation.reset(WordTranslationsGate.close);
 $wordTranslations.on(fetchWordTranslationFx.doneData, (allTranslation, translation) => [
@@ -223,7 +223,14 @@ sample({
   target: findCurrentPhrasalVerbFx,
 });
 
-$wordTranslations.reset(translateLanguageChanged);
+$wordTranslations.reset($translateLanguage);
+
+sample({
+  clock: $translateLanguage,
+  source: $currentWordTranslation,
+  fn: (translations) => translations.source,
+  target: requestWordTranslation,
+});
 
 debug(
   $wordTranslations,
@@ -236,5 +243,5 @@ debug(
   fetchSubTranslationFx.doneData,
   findCurrentPhrasalVerbFx,
   $currentPhrasalVerb,
-  $currentPhrasalVerbs
+  $currentPhrasalVerbs,
 );

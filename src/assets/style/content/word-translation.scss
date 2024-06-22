@@ -65,6 +65,14 @@
   }
 }
 
+.es-word-translation-languages {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 210px;
+}
+
 .es-translation-variants {
   margin: 12px 0;
   font-size: 14px;
