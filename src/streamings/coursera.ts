@@ -5,6 +5,7 @@ import { esSubsChanged } from "@src/models/subs";
 
 class Coursera implements Service {
   private subsName: string | undefined;
+  private playerId: string | undefined;
 
   constructor() {
     this.handleCourseraRenderSettings = this.handleCourseraRenderSettings.bind(this);
@@ -12,9 +13,11 @@ class Coursera implements Service {
   }
 
   public init() {
-    setTimeout(() => {
-      this.injectScript();
-    }, 4000);
+    // setTimeout(() => {
+    //   console.log("Coursera init IBJECT SCRIPT");
+
+    this.injectScript();
+    // }, 4000);
     window.addEventListener("esCourseraRenderSettings", this.handleCourseraRenderSettings as EventListener);
     window.addEventListener("esCourseraSubtitlesChanged", this.handleCourseraSubtitlesChanged as EventListener);
   }
@@ -62,7 +65,13 @@ class Coursera implements Service {
   }
 
   private handleCourseraSubtitlesChanged(event: CustomEvent) {
-    this.subsName = event.detail;
+    const { lang, id } = event.detail;
+    if (this.playerId == id && this.subsName == lang) {
+      return;
+    }
+
+    this.subsName = lang;
+    this.playerId = id;
     esSubsChanged(this.subsName);
     esRenderSetings();
   }

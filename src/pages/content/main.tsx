@@ -3,7 +3,7 @@ import refreshOnUpdate from "virtual:reload-on-update-in-view";
 
 import { $streaming, fetchCurrentStreamingFx } from "@src/models/streamings";
 import { esRenderSetings } from "@src/models/settings";
-import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
+import { esSubsChanged } from "@src/models/subs";
 import { $video, getCurrentVideoFx, videoTimeUpdate } from "@src/models/videos";
 import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
