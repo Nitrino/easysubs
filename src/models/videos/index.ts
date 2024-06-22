@@ -3,7 +3,7 @@ import { debug } from "patronum";
 import { $currentSubs, $subs } from "../subs";
 import { TMoveDirection } from "../types";
 import { moveVideoToTime } from "@src/utils/moveVideoToTime";
-import { $streaming, fetchCurrentStreamingFx } from "../streamings";
+import { $streaming } from "../streamings";
 
 const TIME_SEEK_TIME = 5000;
 

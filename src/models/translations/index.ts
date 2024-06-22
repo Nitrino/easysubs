@@ -9,7 +9,7 @@ import {
   TWordTranslation,
   TWordTranslationItem,
 } from "../types";
-import { $translateLanguage } from "../settings";
+import { $translateLanguage, translateLanguageChanged } from "../settings";
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { createGate } from "effector-react";
 import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
@@ -222,6 +222,8 @@ sample({
   fn: ({ phrasalVerbs }, text) => ({ phrasalVerbs, text }),
   target: findCurrentPhrasalVerbFx,
 });
+
+$wordTranslations.reset(translateLanguageChanged);
 
 debug(
   $wordTranslations,
