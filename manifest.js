@@ -1,6 +1,5 @@
-
-import fs from 'node:fs';
-const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+import fs from "node:fs";
+const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 
 /**
  * After changing, please reload the extension at `chrome://extensions`
@@ -9,9 +8,9 @@ const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
 const manifest = {
   manifest_version: 3,
-  name: "Easysubs",
+  description: "__MSG_appName__",
   version: packageJson.version,
-  description: packageJson.description,
+  description: "__MSG_appDescription__",
   options_page: "src/pages/options/index.html",
   background: {
     service_worker: "src/pages/background/index.js",
@@ -22,7 +21,7 @@ const manifest = {
     default_icon: "icon-128.png",
   },
   icons: {
-    "128": "icon-128.png",
+    128: "icon-128.png",
   },
   content_scripts: [
     {
@@ -41,11 +40,13 @@ const manifest = {
         "https://www.primevideo.com/*",
         "https://www.amazon.de/*/video/*",
         "https://inoriginal.online/*",
-        "http://*/*", "https://*/*", "<all_urls>"
+        "http://*/*",
+        "https://*/*",
+        "<all_urls>",
       ],
       js: ["src/pages/contentInjected/index.js"],
       // KEY for cache invalidation
-      css: ['assets/css/contentStyle<KEY>.chunk.css'],
+      css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
   ],
   permissions: ["scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
