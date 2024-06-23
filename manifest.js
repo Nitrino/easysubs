@@ -8,7 +8,8 @@ const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 
 const manifest = {
   manifest_version: 3,
-  description: "__MSG_appName__",
+  default_locale: "en",
+  name: "__MSG_appName__",
   version: packageJson.version,
   description: "__MSG_appDescription__",
   options_page: "src/pages/options/index.html",
