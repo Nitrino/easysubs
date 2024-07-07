@@ -34,6 +34,11 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
 
   if (direction === "next") {
     const currentTime = video.currentTime * 1000;
+    if (currentSubs.length < 2) {
+      // use regular move if we don't have subs
+      moveVideoToTime(video, streaming, currentTime + TIME_SEEK_TIME);
+    }
+
     const nextSub = subs.find((sub) => sub.start > currentTime);
     const isNextSubClose = nextSub && nextSub.start - currentTime <= TIME_SEEK_TIME;
 
@@ -46,6 +51,11 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
 
   if (direction === "prev") {
     const currentTime = video.currentTime * 1000;
+    if (currentSubs.length < 2) {
+      // use regular move if we don't have subs
+      moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
+    }
+
     let prevSub = subs[currentSubs[0].id - 1];
 
     if (prevSub.end - prevSub.start < 20) {
@@ -54,8 +64,6 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
       // It's happening with youtube auto-generated subtitles
       prevSub = subs[currentSubs[0].id - 2];
     }
-
-    console.log("prevSub", prevSub);
 
     const isPrevSubClose = prevSub && currentTime - prevSub.end <= TIME_SEEK_TIME;
 
