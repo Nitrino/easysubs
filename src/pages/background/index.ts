@@ -16,10 +16,10 @@ reloadOnUpdate("pages/content/style.scss");
 console.log("background loaded");
 
 chrome.runtime.onInstalled.addListener(function (object) {
-  let optionsUrl = chrome.runtime.getURL("src/pages/options/index.html");
+  const onboardingUrl = "https://easysubs.cc/en/onboarding/";
 
   if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    chrome.tabs.create({ url: optionsUrl }, function (tab) {
+    chrome.tabs.create({ url: onboardingUrl }, function (tab) {
       console.log("New tab launched with options page");
     });
   }
