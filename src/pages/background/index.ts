@@ -16,7 +16,7 @@ reloadOnUpdate("pages/content/style.scss");
 console.log("background loaded");
 
 chrome.runtime.onInstalled.addListener(function (object) {
-  const onboardingUrl = "https://easysubs.cc/en/onboarding/";
+  const onboardingUrl = "https://easysubs.cc/onboarding/";
 
   if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
     chrome.tabs.create({ url: onboardingUrl }, function (tab) {
