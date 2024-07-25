@@ -7,23 +7,21 @@ function castTarget(target) {
       };
 }
 
-async function getTabUrl() {
+async function getTab() {
   const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  return tabs[0].url;
+  return tabs[0];
 }
 
 const Popup = () => {
   const handleRequestPermissions = async () => {
-    const host = await getTabUrl();
-    chrome.permissions.request(
-      {
-        permissions: ["scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
-        origins: [host],
-      },
-      (granted) => {
-        console.log("GRANTEEEEED", granted);
-      },
-    );
+    const tab = await getTab();
+    const isGranted = await chrome.permissions.request({
+      permissions: ["scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
+      origins: [tab.url],
+    });
+    if (isGranted) {
+      chrome.tabs.reload(tab.id);
+    }
   };
 
   const handleFaqLinkClick = () => {

@@ -23,7 +23,7 @@ const cacheInvalidationKeyRef = { current: generateKey() };
 
 export default defineConfig({
   esbuild: {
-    drop: ["console", "debugger"],
+    drop: isProduction ? ["console", "debugger"] : [],
   },
   resolve: {
     alias: {
