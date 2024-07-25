@@ -72,7 +72,10 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       body: JSON.stringify(message.data),
     })
       .then((resp) => resp.json())
-      .then((data) => sendResponse(data));
+      .then((data) => sendResponse(data))
+      .catch((error) => {
+        sendResponse({ error: error });
+      });
   }
 
   if (message.type === "speak") {

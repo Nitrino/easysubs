@@ -18,11 +18,15 @@ export class Anki implements ILearningService {
       data: { action: "createDeck", version: ANKI_API_VERSION, params: { deck: ANKI_DESK } },
     });
 
-    if (createDeskResult.error) {
-      return Promise.reject("Anki Error: " + JSON.stringify(createDeskResult));
+    if (createDeskResult.error === "connection error") {
+      return Promise.reject("Error connecting to Anki. Please make sure Anki is running and AnkiConnect is installed.");
     }
 
-    const assWordResult = await chrome.runtime.sendMessage({
+    if (createDeskResult.error) {
+      return Promise.reject("Anki Error: " + createDeskResult.error);
+    }
+
+    const addWordResult = await chrome.runtime.sendMessage({
       type: "post",
       url: ANKI_URL,
       data: {
@@ -41,8 +45,12 @@ export class Anki implements ILearningService {
       },
     });
 
-    if (assWordResult.error) {
-      return Promise.reject("Anki Error: " + JSON.stringify(assWordResult));
+    if (addWordResult.error) {
+      if (addWordResult.error === "cannot create note because it is a duplicate") {
+        return Promise.resolve("Word already exists in Anki");
+      }
+
+      return Promise.reject("Anki Error: " + addWordResult.error);
     } else {
       return Promise.resolve("Word added to Anki");
     }
