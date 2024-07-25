@@ -3,6 +3,8 @@ import { parse } from "subtitle";
 import Service from "./service";
 
 class ServiceStub implements Service {
+  name = "stub";
+
   public init(): void {
     throw new Error("Not Implimented streaming service");
   }

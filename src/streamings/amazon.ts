@@ -5,6 +5,8 @@ import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 
 class Amazon implements Service {
+  name = "amazon";
+
   constructor() {
     waitForElement("#dv-web-player video", () => {
       esRenderSetings();

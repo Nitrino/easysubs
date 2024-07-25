@@ -6,6 +6,8 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 
 class KinoPub implements Service {
+  name = "kinopub";
+
   private videoPlaylistUrl: string | undefined;
   private subsName: string | undefined;
 

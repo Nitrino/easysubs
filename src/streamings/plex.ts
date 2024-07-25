@@ -4,6 +4,8 @@ import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 
 class Plex implements Service {
+  name = "plex";
+
   constructor() {
     setInterval(() => {
       const subtitleContainer = document.querySelector(".libjass-subs");

@@ -4,6 +4,8 @@ import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 
 class Udemy implements Service {
+  name = "udemy";
+
   constructor() {
     waitForElement('[data-purpose="settings-button"]', () => {
       esRenderSetings();

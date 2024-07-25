@@ -23,6 +23,7 @@ type TPlaylist = {
 const BASE_URL = "https://inoriginal.online";
 
 class Inoriginal implements Service {
+  name = "inoriginal";
   private subsName: string | undefined;
   private episodes: TFolder[];
   private videoId: string;

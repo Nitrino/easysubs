@@ -5,6 +5,8 @@ import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 
 class Kinopoisk implements Service {
+  name = "kinopoisk";
+
   constructor() {
     waitForElement('[data-tid="SettingPopupButton"]', () => {
       esRenderSetings();

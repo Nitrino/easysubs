@@ -5,6 +5,8 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 
 class Youtube implements Service {
+  name = "youtube";
+
   private subCache: {
     [moveId: string]: {
       [lang: string]: string;

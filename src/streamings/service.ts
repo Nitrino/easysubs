@@ -1,6 +1,8 @@
 import { Captions } from "@src/models/types";
 
 interface Service {
+  name: string;
+
   // Getting subtitles from a service
   getSubs: (language: string) => Promise<Captions>;
 

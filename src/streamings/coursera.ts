@@ -4,6 +4,8 @@ import { parse } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
 
 class Coursera implements Service {
+  name = "coursera";
+
   private subsName: string | undefined;
   private playerId: string | undefined;
 

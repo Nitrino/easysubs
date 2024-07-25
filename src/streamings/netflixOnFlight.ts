@@ -4,6 +4,8 @@ import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 
 class NetflixOnFlight implements Service {
+  name = "netflix";
+
   constructor() {
     setInterval(() => {
       const videoControlContainer = document.querySelector(".watch-video--bottom-controls-container");

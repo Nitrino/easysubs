@@ -53,6 +53,8 @@ type TAdBreak = {
 };
 
 class Netflix implements Service {
+  name = "netflix";
+
   private subCache: TSubCache[];
   private adBreaks: TAdBreak[];
 

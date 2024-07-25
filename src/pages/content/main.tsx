@@ -20,11 +20,7 @@ const handleTimeUpdate = () => {
 
 $streaming.watch((streaming) => {
   console.log("streaming changed", streaming);
-  let name = streaming.constructor.name.toLowerCase();
-  if (name == "netflixonflight") {
-    name = "netflix";
-  }
-  document.body.classList.add("es-" + name);
+  document.body.classList.add("es-" + streaming.name);
 
   if (streaming == null) {
     return;
