@@ -1,4 +1,3 @@
-console.log("youtube.js loaded");
 window.setInterval(() => {
   const player = document.getElementById("movie_player");
   const subsToggleElement = document.querySelector(".ytp-subtitles-button");
