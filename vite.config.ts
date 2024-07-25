@@ -22,6 +22,9 @@ const enableHmrInBackgroundScript = true;
 const cacheInvalidationKeyRef = { current: generateKey() };
 
 export default defineConfig({
+  esbuild: {
+    drop: ["console", "debugger"],
+  },
   resolve: {
     alias: {
       "@root": rootDir,
