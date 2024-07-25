@@ -11,7 +11,7 @@ const customStyles = {
     minHeight: "24px",
     height: "24px",
   }),
-  menuPortal: (provided) => ({ ...provided, zIndex: 10000 }),
+  menuPortal: (provided) => ({ ...provided, zIndex: 10000, fontSize: "14px" }),
   menu: (provided) => ({ ...provided, zIndex: 10000 }),
   valueContainer: (provided, _state) => ({
     ...provided,
@@ -36,7 +36,7 @@ const theme = (theme) => ({
     ...theme.colors,
     neutral30: "white", //control/borderColor(focused)
     neutral80: "white", //input color
-    // primary: "black", //option bg color selected
+    primary: "#1296ba", //option bg color selected
     primary50: "white", // option bg color active(enavled or available)
   },
 });
