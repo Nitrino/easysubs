@@ -9,17 +9,17 @@ Browser extension to learn languages by watching movies and TV shows.
 
 ## Installation
 
-The extension supports Chrome, Firefox, Opera and Yandex. It should also work in other browsers that have WebExtensions API support, but it hasn't been tested yet.
+The extension supports Chrome and Chrome-based browsers. It should also work in other browsers that have WebExtensions API support, but it hasn't been tested yet.
 
 **Release version available on [Chrome Web Store](https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github)**
 
 <a href="https://chrome.google.com/webstore/detail/easysubs/ocelmccppkcibiflhhepafdjjomimddf?utm_source=github&utm_medium=social&utm_campaign=github" target="_blank">
-  <img src="./docs/img/chrome-store.png" alt="chrome store" width="220px">
+  <img src="./chrome-store.png" alt="chrome store" width="220px">
 </a>
 
 ## Build
 
-1. Install node 18+
+1. Install node 20+
 2. Clone repo `git clone git@github.com:Nitrino/easysubs.git`
 3. Go to folder and install dependencies `cd easysubs && pnpm i`
 4. Build extension `pnpm build`
