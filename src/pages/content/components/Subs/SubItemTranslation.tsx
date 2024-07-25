@@ -79,15 +79,15 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
         {currentWordTranslation.translations.length > 0 &&
           currentWordTranslation.translations.map((translation) => (
             <>
-              <div className="es-translation-variant-word">
+              <div
+                className="es-translation-variant-word"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAddWord(currentWordTranslation.source, translation);
+                }}
+              >
                 {service && (
-                  <button
-                    className="es-settings-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddWord(currentWordTranslation.source, translation);
-                    }}
-                  >
+                  <button className="es-settings-button">
                     <PlusIcon fill={service.color} />
                   </button>
                 )}
