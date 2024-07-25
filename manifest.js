@@ -12,7 +12,6 @@ const manifest = {
   name: "__MSG_appName__",
   version: packageJson.version,
   description: "__MSG_appDescription__",
-  options_page: "src/pages/options/index.html",
   background: {
     service_worker: "src/pages/background/index.js",
     type: "module",
