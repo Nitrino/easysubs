@@ -74,7 +74,7 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .then((resp) => resp.json())
       .then((data) => sendResponse(data))
       .catch((error) => {
-        sendResponse({ error: error });
+        sendResponse({ error: "connection error" });
       });
   }
 
