@@ -16,7 +16,7 @@ const Popup = () => {
   const handleRequestPermissions = async () => {
     const tab = await getTab();
     const isGranted = await chrome.permissions.request({
-      permissions: ["scripting", "tabs", "storage", "tts", "contextMenus", "activeTab"],
+      permissions: ["scripting", "tabs", "storage", "tts", "activeTab"],
       origins: [tab.url],
     });
     if (isGranted) {
