@@ -7,11 +7,6 @@
 
 Browser extension to learn languages by watching movies and TV shows.
 
-## WARNING
-
-**The master branch contains version 3.0 which is currently under active development.  
-You can find the release version in the [v1.0 branch](https://github.com/Nitrino/easysubs/tree/v1.0)**
-
 ## Installation
 
 The extension supports Chrome, Firefox, Opera and Yandex. It should also work in other browsers that have WebExtensions API support, but it hasn't been tested yet.
