@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";
 
-import { useStore } from "effector-react";
+import { useUnit } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
 import { MonoLogo } from "./assets/MonoLogo";
 import { Toaster } from "react-hot-toast";
@@ -14,7 +14,7 @@ type TSettingsProps = {
 
 export const Settings: FC<TSettingsProps> = () => {
   const [showSettings, setShowSettings] = useState(false);
-  const streaming = useStore($streaming);
+  const streaming = useUnit($streaming);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -28,13 +28,13 @@ export const Settings: FC<TSettingsProps> = () => {
       {showSettings &&
         createPortal(
           <SettingsContent onClose={() => setShowSettings(false)} />,
-          streaming.getSettingsContentContainer()
+          streaming.getSettingsContentContainer(),
         )}
       {createPortal(
         <div className="es-toast">
           <Toaster />
         </div>,
-        document.querySelector("body")
+        document.querySelector("body"),
       )}
     </>
   );
