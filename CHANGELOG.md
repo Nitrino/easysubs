@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.0.1 (12.08.2024)
+### Bugs
+
+- Fix LinguaLeo integration
+
 ## v3.0.0 (25.06.2024) 🎉🎉🎉
 **The new Easysubs chapter!**
 
