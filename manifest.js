@@ -46,7 +46,7 @@ const manifest = {
       css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
   ],
-  permissions: ["scripting", "storage", "tts", "activeTab"],
+  permissions: ["scripting", "storage", "activeTab"],
   optional_host_permissions: ["*://*/*"],
   optional_permissions: [],
   host_permissions: ["https://translate.google.com/*", "http://localhost:8765/*", "https://api.lingualeo.com/*"],

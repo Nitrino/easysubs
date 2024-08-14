@@ -52,7 +52,11 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   };
 
   const handlePlaySound = async () => {
-    await chrome.runtime.sendMessage({ type: "speak", text: currentWordTranslation.source, lang: subsLanguage });
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = currentWordTranslation.source;
+    msg.lang = subsLanguage;
+    msg.rate = 0.8;
+    window.speechSynthesis.speak(msg);
   };
 
   if (subsLanguage === translateLanguage) {
