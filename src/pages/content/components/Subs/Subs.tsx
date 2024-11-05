@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
-import Draggable from "react-draggable";
 
-import { $currentSubs } from "@src/models/subs";
+import { $currentPrevSubs, $currentSubs } from '@src/models/subs'
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
 import {
@@ -59,7 +58,8 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   return (
-    <Draggable>
+    <>
+      <SecondarySubs/>
       <div
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
@@ -70,12 +70,27 @@ export const Subs: FC<TSubsProps> = () => {
           <Sub sub={sub} />
         ))}
       </div>
-    </Draggable>
+    </>
   );
 };
 
+const SecondarySubs: FC = () => {
+  const [video, subsFontSize, secondarySubs] = useUnit([$video, $subsFontSize,$currentPrevSubs])
+
+  return (<div
+    id="es-prev"
+    style={{
+      fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px`
+    }}
+  >
+    {secondarySubs.map((sub) => (
+      <Sub sub={sub} />
+    ))}
+  </div>)
+}
+
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
-  const [showTranslation, setShowTranslation] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false)
   const [subsBackground, subsBackgroundOpacity, findPhrasalVerbsPendings] = useUnit([
     $subsBackground,
     $subsBackgroundOpacity,
