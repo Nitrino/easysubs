@@ -31,7 +31,7 @@ export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phra
   };
 
   return (
-    <div className="es-word-translation">
+    <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
       <div className="es-word-main">{phrasalVerb.text}</div>
       <hr className="es-word-original-hr" />
       <div className="es-word-original-info">
