@@ -71,10 +71,15 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       method: "POST",
       body: JSON.stringify(message.data),
     })
-      .then((resp) => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        return resp.json();
+      })
       .then((data) => sendResponse(data))
       .catch((error) => {
-        sendResponse({ error: "connection error" });
+        sendResponse({ error: error.message || error });
       });
   }
 
