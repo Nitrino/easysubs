@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.0.3 (09.01.2025)
+
+### Enhancements
+
+- Add save word button to main translation
+
 ## v3.0.2 (13.08.2024)
 
 ### Bugs
