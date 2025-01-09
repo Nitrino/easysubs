@@ -52,7 +52,8 @@ export type TPartOfSpeach =
   | "article"
   | "numeral"
   | "auxiliary verb"
-  | "particle";
+  | "particle"
+  | "unknown";
 
 return `unknown number ${val}`;
 

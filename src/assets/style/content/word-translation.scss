@@ -34,8 +34,9 @@
   .es-word-main {
     font-weight: 600;
     font-weight: 16px;
-    text-align: center;
     font-smooth: antialiased;
+    display: flex;
+    justify-content: center;
   }
 
   .es-word-original-hr {
@@ -51,7 +52,7 @@
     justify-content: center;
     align-items: center;
     font-size: 14px;
-    gap: 8px;
+    gap: 4px;
   }
 
   .es-word-original-sound-icon {

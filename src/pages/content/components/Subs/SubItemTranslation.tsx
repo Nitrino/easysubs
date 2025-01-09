@@ -69,15 +69,36 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
       </div>
     );
   }
+
   return (
     <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
-      <div className="es-word-main">{currentWordTranslation.mainTranslation}</div>
+      <div className="es-word-main">
+        <div
+          className="es-translation-variant-word"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAddWord(currentWordTranslation.source, {
+              word: currentWordTranslation.mainTranslation,
+              partOfSpeech: "unknown",
+              popularity: 0,
+              synonyms: [],
+            });
+          }}
+        >
+          {service && (
+            <button className="es-settings-button">
+              <PlusIcon fill={service.color} />
+            </button>
+          )}
+          <div>{currentWordTranslation.mainTranslation}</div>
+        </div>
+      </div>
       <hr className="es-word-original-hr" />
       <div className="es-word-original-info">
-        <div className="es-word-original">{text.toLowerCase()}</div>
         <div className="es-word-original-sound-icon" onClick={handlePlaySound}>
           <SoundIcon />
         </div>
+        <div className="es-word-original">{text.toLowerCase()}</div>
       </div>
       <div className="es-translation-variants">
         {currentWordTranslation.translations.length > 0 &&
