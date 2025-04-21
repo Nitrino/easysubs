@@ -1,6 +1,0 @@
-0:["MKP2gojmGq80LoKnVgkfp",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L1",[[],"$L2"]]]]
-3:I{"id":7767,"chunks":["272:static/chunks/webpack-53dcad8618f1d1a1.js","971:static/chunks/fd9d1056-bf9ff8e992eb2fee.js","596:static/chunks/596-5bc81d6cf860ad3e.js"],"name":"default","async":false}
-4:I{"id":7920,"chunks":["272:static/chunks/webpack-53dcad8618f1d1a1.js","971:static/chunks/fd9d1056-bf9ff8e992eb2fee.js","596:static/chunks/596-5bc81d6cf860ad3e.js"],"name":"default","async":false}
-2:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-1:[["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","loading":"$undefined","loadingStyles":"$undefined","hasLoading":false,"template":["$","$L4",null,{}],"templateStyles":"$undefined","notFound":["$","div",null,{"children":"Custom 404 Page"}],"notFoundStyles":[],"childProp":{"current":["$L5",null],"segment":"__PAGE__"},"styles":[]}],null]
-5:E{"digest":"NEXT_REDIRECT;replace;/en"}

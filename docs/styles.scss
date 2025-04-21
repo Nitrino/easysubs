@@ -1,0 +1,433 @@
+@mixin tablet {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+
+  @include phone {
+    font-size: 16px;
+  }
+}
+
+.bold {
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: #ed734b;
+  font-weight: 600;
+}
+
+main {
+  overflow: hidden;
+
+  .telegram_badge {
+    text-align: center;
+    color: #ffffff;
+    background-color: #151513;
+    font-weight: 600;
+    padding: 0.5em 0;
+  }
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 20px;
+  position: relative;
+
+  @include tablet {
+    max-width: 640px;
+  }
+}
+
+.block {
+  padding: 150px 0;
+
+  @include phone {
+    padding: 80px 0;
+  }
+
+  &.-dark {
+    background-color: #f5f5f5;
+  }
+
+  &__title {
+    font-size: 42px;
+    line-height: 1.23;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-weight: 600;
+    text-align: center;
+
+    @include tablet {
+      margin: 0 auto 30px 0;
+      max-width: 600px;
+    }
+
+    @include phone {
+      font-size: 30px;
+    }
+  }
+
+  &__subtitle {
+    margin: 0 auto;
+    max-width: 560px;
+    font-size: 24px;
+    line-height: 1.5;
+    text-align: center;
+
+    @include phone {
+      font-size: 20px;
+    }
+  }
+}
+
+.btn {
+  display: inline-block;
+  border-radius: 50px;
+  color: #fff;
+  font-weight: 600;
+
+  &.-main {
+    padding: 16px 60px;
+    background: #000;
+
+    @include phone {
+      padding: 16px 30px;
+    }
+  }
+
+  &.-second {
+    background: #1f5bff;
+    font-size: 14px;
+    padding: 12px 30px;
+  }
+}
+
+.languages {
+  position: absolute;
+  right: 0;
+  padding-right: 70px;
+  padding-top: 20px;
+
+  &__item {
+    text-decoration: underline;
+    &.-active {
+      text-decoration: none;
+    }
+  }
+}
+
+.cover {
+  display: flex;
+  align-items: center;
+
+  @include tablet {
+    flex-direction: column;
+  }
+
+  &__left {
+    flex: 1;
+    max-width: 460px;
+    padding-left: 100px;
+    margin: 0 20px;
+
+    @include tablet {
+      padding-left: 0;
+      margin: 0;
+    }
+
+    @include phone {
+      text-align: center;
+    }
+  }
+
+  &__app-name {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 15px;
+
+    @include phone {
+      justify-content: center;
+    }
+
+    &__text {
+      text-transform: uppercase;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+
+      .blue {
+        color: #ed734b;
+      }
+
+      .purple {
+        color: #4a86a7;
+      }
+    }
+
+    &__logo {
+      display: inline-block;
+      width: 26px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.17;
+
+    @include phone {
+      font-size: 26px;
+    }
+  }
+
+  &__subtitle {
+    margin-top: 17px;
+
+    @include phone {
+      font-size: 16px;
+    }
+  }
+
+  &__stores {
+    margin-top: 20px;
+
+    @include tablet {
+      margin-top: 30px;
+    }
+  }
+
+  &__store {
+    display: block;
+    margin-top: 20px;
+    max-width: 230px;
+
+    @include tablet {
+      padding-left: 0;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__manual {
+    margin-top: 30px;
+    font-size: 16px;
+
+    a {
+      color: #000;
+      text-decoration: underline;
+      text-decoration-color: #989898;
+    }
+  }
+
+  &__right {
+    flex: 1;
+    max-width: 60px;
+    margin: 0 20px;
+
+    @include tablet {
+      width: 100%;
+      max-width: 100%;
+      margin-top: 60px;
+    }
+
+    img {
+      max-height: 550px;
+      float: left;
+
+      @include tablet {
+        float: none;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.services {
+  &__list {
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include tablet {
+      flex-direction: column;
+      margin-top: 80px;
+    }
+  }
+
+  &__item {
+    flex: 1;
+    max-width: 220px;
+
+    @include tablet {
+      width: 100%;
+      max-width: 200px;
+      padding: 0;
+      margin-bottom: 60px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.features {
+  &__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 120px;
+
+    @include tablet {
+      flex-direction: column-reverse;
+      margin-top: 60px;
+      align-items: flex-start;
+    }
+
+    &.-reverse {
+      flex-direction: row-reverse;
+
+      @include tablet {
+        flex-direction: column-reverse;
+      }
+    }
+  }
+
+  &__text {
+    flex: 1;
+    max-width: 500px;
+    padding-right: 20px;
+    padding-left: 0;
+
+    @include tablet {
+      margin-top: 30px;
+      padding-right: 0 !important;
+      padding-left: 0 !important;
+    }
+
+    &__list {
+      margin: 15px 0;
+      padding-left: 15px;
+      list-style-type: none;
+    }
+
+    .features__item.-reverse & {
+      padding-right: 0;
+      padding-left: 20px;
+    }
+
+    &__title {
+      font-size: 26px;
+      line-height: 1.23;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__image {
+    flex: 1;
+    padding-left: 20px;
+    padding-right: 0;
+
+    @include tablet {
+      padding-right: 0 !important;
+      padding-left: 0 !important;
+    }
+
+    .features__item.-reverse & {
+      padding-left: 0;
+      padding-right: 20px;
+    }
+
+    img {
+      max-width: 650px;
+      float: left;
+
+      @include phone {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &__btn {
+    margin-top: 30px;
+  }
+}
+
+.install__store {
+  display: block;
+  max-width: 230px;
+  margin: 24px auto 0 auto;
+
+  @include tablet {
+    padding-left: 0;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.footer {
+  text-align: center;
+
+  &__text {
+    font-size: 26px;
+    line-height: 1.5;
+    font-weight: 600;
+
+    @include phone {
+      font-size: 20px;
+    }
+  }
+
+  &__social-networks {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+
+    &__item {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+  }
+}
+
+.privacy-page__logo {
+  margin-top: 30px;
+  display: inline-block;
+}
+
+.bold {
+  font-weight: bold;
+}
