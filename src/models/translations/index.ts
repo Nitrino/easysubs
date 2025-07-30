@@ -9,7 +9,7 @@ import {
   TWordTranslation,
   TWordTranslationItem,
 } from "../types";
-import { $translateLanguage, translateLanguageChanged } from "../settings";
+import { $translateLanguage, translateLanguageChanged, $translationService, $deeplApiKey } from "../settings";
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { createGate } from "effector-react";
 import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
@@ -41,21 +41,35 @@ export const $subTranslationPendings = createStore<Record<string, boolean>>({});
 export const SubTranslationGate = createGate<string>("SubTranslationGate");
 export const requestSubTranslation = createEvent<string>();
 export const cleanSubTranslation = createEvent();
-export const fetchSubTranslationFx = createEffect<{ source: string; language: string }, string>(
-  async ({ source, language }) => {
+export const fetchSubTranslationFx = createEffect<
+  { source: string; language: string; translationService: string; deeplApiKey: string }, 
+  string
+>(
+  async ({ source, language, translationService, deeplApiKey }) => {
     try {
       const resp = await chrome.runtime.sendMessage({
         type: "translateFullText",
         language: language,
         text: source,
+        translationService: translationService,
+        deeplApiKey: deeplApiKey,
       });
 
-      const reponseText: string = JSON.parse(resp)
-        ["sentences"].map((sentence) => sentence["trans"])
-        .join(" ");
-      return reponseText;
+      if (resp.error) {
+        throw new Error(resp.error);
+      }
+
+      if (translationService === "deepl") {
+        return resp;
+      } else {
+        const reponseText: string = JSON.parse(resp)
+          ["sentences"].map((sentence) => sentence["trans"])
+          .join(" ");
+        return reponseText;
+      }
     } catch (error) {
       console.error(error);
+      throw error;
     }
   },
 );
@@ -165,8 +179,17 @@ sample({
 
 sample({
   clock: requestSubTranslation,
-  source: $translateLanguage,
-  fn: (language, source) => ({ source, language }),
+  source: { 
+    language: $translateLanguage, 
+    translationService: $translationService, 
+    deeplApiKey: $deeplApiKey 
+  },
+  fn: ({ language, translationService, deeplApiKey }, source) => ({ 
+    source, 
+    language, 
+    translationService, 
+    deeplApiKey 
+  }),
   target: fetchSubTranslationFx,
 });
 

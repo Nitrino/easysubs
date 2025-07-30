@@ -49,13 +49,24 @@ const manifest = {
   permissions: ["scripting", "storage", "activeTab"],
   optional_host_permissions: ["*://*/*"],
   optional_permissions: [],
-  host_permissions: ["https://translate.google.com/*", "http://localhost:8765/*", "https://api.lingualeo.com/*"],
+  host_permissions: [
+    "https://translate.google.com/*",
+    "http://localhost:8765/*",
+    "https://api.lingualeo.com/*",
+    "https://api-free.deepl.com/*",
+    "https://api.deepl.com/*",
+  ],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",
   },
   web_accessible_resources: [
     {
-      resources: ["assets/js/*.js", "assets/css/*.css", "icon-128.png", "icon-34.png"],
+      resources: [
+        "assets/js/*.js",
+        "assets/css/*.css",
+        "icon-128.png",
+        "icon-34.png",
+      ],
       matches: ["*://*/*"],
     },
   ],
