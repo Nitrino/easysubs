@@ -4,6 +4,7 @@ import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
 import { TranslationService } from "./TranslationService";
 import { DeepLApiKeyModal } from "./DeepLApiKeyModal";
+import { ChatGPTApiKeyModal } from "./ChatGPTApiKeyModal";
 import { LearningService } from "./LearningService";
 import { SubsDelay } from "./SubsDelay";
 import { SubsFontSize } from "./SubsFontSize";
@@ -148,6 +149,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         <div className="es-settings-content__close" onClick={() => onClose()} />
       </div>
       {createPortal(<DeepLApiKeyModal />, document.querySelector("body"))}
+      {createPortal(<ChatGPTApiKeyModal />, document.querySelector("body"))}
     </>
   );
 };

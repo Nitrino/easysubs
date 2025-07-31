@@ -8,6 +8,7 @@ import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFe
 import { deeplTranslateFetcher } from "@src/utils/deeplTranslateFetcher";
 import { bingTranslateFetcher } from "@src/utils/bingTranslateFetcher";
 import { yandexTranslateFetcher } from "@src/utils/yandexTranslateFetcher";
+import { chatGPTTranslateFetcher } from "@src/utils/chatGPTTranslateFetcher";
 
 import "webext-dynamic-content-scripts";
 
@@ -60,6 +61,12 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
         .catch((error: Error) => sendResponse({ error: error.message }));
     } else if (translationService === "yandex") {
       yandexTranslateFetcher
+        .getFullTextTranslation({ text: message.text, lang: message.language })
+        .then((respData: string) => sendResponse(respData))
+        .catch((error: Error) => sendResponse({ error: error.message }));
+    } else if (translationService === "chatgpt") {
+      chatGPTTranslateFetcher.setApiKey(message.chatGPTApiKey, message.chatGPTModel);
+      chatGPTTranslateFetcher
         .getFullTextTranslation({ text: message.text, lang: message.language })
         .then((respData: string) => sendResponse(respData))
         .catch((error: Error) => sendResponse({ error: error.message }));
