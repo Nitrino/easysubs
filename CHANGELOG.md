@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.1.0 (31.07.2025)
+
+### Enhancements
+
+- Add ChatGPT translation service support
+- Add DeepL translation service support
+- Add Bing translation service support
+- Add Yandex translation service support
+
 ## v3.0.3 (09.01.2025)
 
 ### Enhancements
