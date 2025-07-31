@@ -7,6 +7,7 @@ import {
 import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";
 import { deeplTranslateFetcher } from "@src/utils/deeplTranslateFetcher";
 import { bingTranslateFetcher } from "@src/utils/bingTranslateFetcher";
+import { yandexTranslateFetcher } from "@src/utils/yandexTranslateFetcher";
 
 import "webext-dynamic-content-scripts";
 
@@ -54,6 +55,11 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
         .catch((error: Error) => sendResponse({ error: error.message }));
     } else if (translationService === "bing") {
       bingTranslateFetcher
+        .getFullTextTranslation({ text: message.text, lang: message.language })
+        .then((respData: string) => sendResponse(respData))
+        .catch((error: Error) => sendResponse({ error: error.message }));
+    } else if (translationService === "yandex") {
+      yandexTranslateFetcher
         .getFullTextTranslation({ text: message.text, lang: message.language })
         .then((respData: string) => sendResponse(respData))
         .catch((error: Error) => sendResponse({ error: error.message }));

@@ -58,6 +58,7 @@ const manifest = {
     "https://www2.deepl.com/*",
     "https://www.bing.com/*",
     "https://api-edge.cognitive.microsofttranslator.com/*",
+    "https://translate.yandex.net/*",
   ],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",
