@@ -76,6 +76,8 @@ export type TGoogleTranslation = unknown;
 
 export type TLearningService = "anki" | "lingualeo" | "puzzle-english" | "disabled";
 
+export type TTranslationService = "google" | "deepl";
+
 export type Captions = subTitleType[];
 
 export type TPhrasalVerb = {

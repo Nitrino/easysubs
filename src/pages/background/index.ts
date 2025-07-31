@@ -1,7 +1,11 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
 
-import { TWordTranslate, googleTranslateBatchFetcher } from "@src/utils/googleTranslateBatchFetcher";
+import {
+  TWordTranslate,
+  googleTranslateBatchFetcher,
+} from "@src/utils/googleTranslateBatchFetcher";
 import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";
+import { deeplTranslateFetcher } from "@src/utils/deeplTranslateFetcher";
 
 import "webext-dynamic-content-scripts";
 
@@ -39,9 +43,19 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .then((respData: unknown) => sendResponse(respData));
   }
   if (message.type === "translateFullText") {
-    googleTranslateSingleFetcher
-      .getFullTextTranslation({ text: message.text, lang: message.language })
-      .then((respData: unknown) => sendResponse(respData));
+    const translationService = message.translationService || "google";
+
+    if (translationService === "deepl") {
+      deeplTranslateFetcher.setApiKey(message.deeplApiKey);
+      deeplTranslateFetcher
+        .getFullTextTranslation({ text: message.text, lang: message.language })
+        .then((respData: string) => sendResponse(respData))
+        .catch((error: Error) => sendResponse({ error: error.message }));
+    } else {
+      googleTranslateSingleFetcher
+        .getFullTextTranslation({ text: message.text, lang: message.language })
+        .then((respData: unknown) => sendResponse(respData));
+    }
   }
   if (message.type === "getTextLanguage") {
     googleTranslateBatchFetcher
