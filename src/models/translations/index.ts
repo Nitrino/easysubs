@@ -20,6 +20,8 @@ import {
   translateLanguageChanged,
   $translationService,
   $deeplApiKey,
+  $chatGPTApiKey,
+  $chatGPTModel,
 } from "../settings";
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { createGate } from "effector-react";
@@ -67,9 +69,11 @@ export const fetchSubTranslationFx = createEffect<
     language: string;
     translationService: string;
     deeplApiKey: string;
+    chatGPTApiKey: string;
+    chatGPTModel: string;
   },
   string
->(async ({ source, language, translationService, deeplApiKey }) => {
+>(async ({ source, language, translationService, deeplApiKey, chatGPTApiKey, chatGPTModel }) => {
   try {
     const resp = await chrome.runtime.sendMessage({
       type: "translateFullText",
@@ -77,6 +81,8 @@ export const fetchSubTranslationFx = createEffect<
       text: source,
       translationService: translationService,
       deeplApiKey: deeplApiKey,
+      chatGPTApiKey: chatGPTApiKey,
+      chatGPTModel: chatGPTModel,
     });
 
     if (resp.error) {
@@ -86,7 +92,8 @@ export const fetchSubTranslationFx = createEffect<
     if (
       translationService === "deepl" ||
       translationService === "bing" ||
-      translationService === "yandex"
+      translationService === "yandex" ||
+      translationService === "chatgpt"
     ) {
       return resp;
     } else {
@@ -225,12 +232,16 @@ sample({
     language: $translateLanguage,
     translationService: $translationService,
     deeplApiKey: $deeplApiKey,
+    chatGPTApiKey: $chatGPTApiKey,
+    chatGPTModel: $chatGPTModel,
   },
-  fn: ({ language, translationService, deeplApiKey }, source) => ({
+  fn: ({ language, translationService, deeplApiKey, chatGPTApiKey, chatGPTModel }, source) => ({
     source,
     language,
     translationService,
     deeplApiKey,
+    chatGPTApiKey,
+    chatGPTModel,
   }),
   target: fetchSubTranslationFx,
 });

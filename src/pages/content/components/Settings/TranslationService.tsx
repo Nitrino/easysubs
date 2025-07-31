@@ -41,4 +41,5 @@ const services = [
   { label: "DeepL", value: "deepl" },
   { label: "Bing Translator", value: "bing" },
   { label: "Yandex Translate", value: "yandex" },
+  { label: "ChatGPT", value: "chatgpt" },
 ];

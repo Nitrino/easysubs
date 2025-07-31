@@ -59,6 +59,7 @@ const manifest = {
     "https://www.bing.com/*",
     "https://api-edge.cognitive.microsofttranslator.com/*",
     "https://translate.yandex.net/*",
+    "https://api.openai.com/*",
   ],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",

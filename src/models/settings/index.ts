@@ -82,6 +82,22 @@ export const $deeplApiKeyModalOpen = createStore<boolean>(false);
 export const deeplApiKeyModalOpened = createEvent();
 export const deeplApiKeyModalClosed = createEvent();
 
+export const $chatGPTApiKey = withPersist(createStore<string>(""));
+export const chatGPTApiKeyChanged = createEvent<string>();
+export const chatGPTApiKeyChangeFx = createEffect<string, string>(
+  (value) => value,
+);
+
+export const $chatGPTModel = withPersist(createStore<string>("gpt-4o-mini"));
+export const chatGPTModelChanged = createEvent<string>();
+export const chatGPTModelChangeFx = createEffect<string, string>(
+  (value) => value,
+);
+
+export const $chatGPTApiKeyModalOpen = createStore<boolean>(false);
+export const chatGPTApiKeyModalOpened = createEvent();
+export const chatGPTApiKeyModalClosed = createEvent();
+
 export const $subsFontSize = withPersist(createStore<number>(100));
 export const subsFontSizeButtonPressed = createEvent<number>();
 export const subsFontSizeChangeFx = createEffect<number, number>(
@@ -143,8 +159,24 @@ sample({
 });
 
 sample({
+  clock: translationServiceChanged,
+  filter: (service) => service === "chatgpt",
+  target: chatGPTApiKeyModalOpened,
+});
+
+sample({
   clock: deeplApiKeyChanged,
   target: deeplApiKeyChangeFx,
+});
+
+sample({
+  clock: chatGPTApiKeyChanged,
+  target: chatGPTApiKeyChangeFx,
+});
+
+sample({
+  clock: chatGPTModelChanged,
+  target: chatGPTModelChangeFx,
 });
 
 sample({
@@ -189,6 +221,10 @@ $translationService.on(
 $deeplApiKey.on(deeplApiKeyChangeFx.doneData, (_, key) => key);
 $deeplApiKeyModalOpen.on(deeplApiKeyModalOpened, () => true);
 $deeplApiKeyModalOpen.on(deeplApiKeyModalClosed, () => false);
+$chatGPTApiKey.on(chatGPTApiKeyChangeFx.doneData, (_, key) => key);
+$chatGPTModel.on(chatGPTModelChangeFx.doneData, (_, model) => model);
+$chatGPTApiKeyModalOpen.on(chatGPTApiKeyModalOpened, () => true);
+$chatGPTApiKeyModalOpen.on(chatGPTApiKeyModalClosed, () => false);
 $subsFontSize.on(
   subsFontSizeChangeFx.doneData,
   (_, subsFontSize) => subsFontSize,
