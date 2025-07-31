@@ -82,7 +82,6 @@ export const $deeplApiKeyModalOpen = createStore<boolean>(false);
 export const deeplApiKeyModalOpened = createEvent();
 export const deeplApiKeyModalClosed = createEvent();
 
-debug($deeplApiKey);
 export const $subsFontSize = withPersist(createStore<number>(100));
 export const subsFontSizeButtonPressed = createEvent<number>();
 export const subsFontSizeChangeFx = createEffect<number, number>(

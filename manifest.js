@@ -56,6 +56,8 @@ const manifest = {
     "https://api-free.deepl.com/*",
     "https://api.deepl.com/*",
     "https://www2.deepl.com/*",
+    "https://www.bing.com/*",
+    "https://api-edge.cognitive.microsofttranslator.com/*",
   ],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",

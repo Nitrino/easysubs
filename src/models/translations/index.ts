@@ -59,7 +59,7 @@ export const fetchSubTranslationFx = createEffect<
         throw new Error(resp.error);
       }
 
-      if (translationService === "deepl") {
+      if (translationService === "deepl" || translationService === "bing") {
         return resp;
       } else {
         const reponseText: string = JSON.parse(resp)
@@ -182,13 +182,13 @@ sample({
   source: { 
     language: $translateLanguage, 
     translationService: $translationService, 
-    deeplApiKey: $deeplApiKey 
+    deeplApiKey: $deeplApiKey
   },
   fn: ({ language, translationService, deeplApiKey }, source) => ({ 
     source, 
     language, 
     translationService, 
-    deeplApiKey 
+    deeplApiKey
   }),
   target: fetchSubTranslationFx,
 });
