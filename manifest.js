@@ -55,6 +55,7 @@ const manifest = {
     "https://api.lingualeo.com/*",
     "https://api-free.deepl.com/*",
     "https://api.deepl.com/*",
+    "https://www2.deepl.com/*",
   ],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",

@@ -1,6 +1,9 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
 
-import { TWordTranslate, googleTranslateBatchFetcher } from "@src/utils/googleTranslateBatchFetcher";
+import {
+  TWordTranslate,
+  googleTranslateBatchFetcher,
+} from "@src/utils/googleTranslateBatchFetcher";
 import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";
 import { deeplTranslateFetcher } from "@src/utils/deeplTranslateFetcher";
 
@@ -41,17 +44,13 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   }
   if (message.type === "translateFullText") {
     const translationService = message.translationService || "google";
-    
+
     if (translationService === "deepl") {
-      if (message.deeplApiKey) {
-        deeplTranslateFetcher.setApiKey(message.deeplApiKey);
-        deeplTranslateFetcher
-          .getFullTextTranslation({ text: message.text, lang: message.language })
-          .then((respData: string) => sendResponse(respData))
-          .catch((error: Error) => sendResponse({ error: error.message }));
-      } else {
-        sendResponse({ error: "DeepL API key not provided. Please configure your API key in settings." });
-      }
+      deeplTranslateFetcher.setApiKey(message.deeplApiKey);
+      deeplTranslateFetcher
+        .getFullTextTranslation({ text: message.text, lang: message.language })
+        .then((respData: string) => sendResponse(respData))
+        .catch((error: Error) => sendResponse({ error: error.message }));
     } else {
       googleTranslateSingleFetcher
         .getFullTextTranslation({ text: message.text, lang: message.language })

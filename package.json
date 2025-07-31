@@ -24,6 +24,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@ifyour/deeplx": "^0.1.17",
     "classnames": "^2.5.1",
     "effector": "^23.2.2",
     "effector-react": "^23.2.1",

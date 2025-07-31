@@ -1,6 +1,40 @@
+import { query } from "@ifyour/deeplx";
+
+const SUPPORTED_LANGUAGES = [
+  "el",
+  "bg",
+  "lv",
+  "ko",
+  "lt",
+  "id",
+  "uk",
+  "sl",
+  "sk",
+  "tr",
+  "ro",
+  "cs",
+  "et",
+  "fi",
+  "da",
+  "hu",
+  "sv",
+  "nb",
+  "ru",
+  "pl",
+  "pt",
+  "nl",
+  "it",
+  "es",
+  "fr",
+  "de",
+  "ja",
+  "en",
+  "zh",
+] as const;
+
 type TRequest = {
   text: string;
-  lang: string;
+  lang: (typeof SUPPORTED_LANGUAGES)[number];
 };
 
 class DeepLTranslateFetcher {
@@ -20,11 +54,18 @@ class DeepLTranslateFetcher {
   }
 
   async getFullTextTranslation({ text, lang }: TRequest): Promise<string> {
-    console.log("Fetching translation for:", text, "to", lang);
-    if (!this.#apiKey) {
-      throw new Error(
-        "DeepL API key not configured. Please add your API key in extension settings.",
-      );
+    if (!this.#apiKey || !this.#apiKey.length) {
+      const response = await query({
+        text,
+        source_lang: "auto",
+        target_lang: lang,
+      });
+
+      if (response.code === 200) {
+        return response.data;
+      } else {
+        throw new Error(`DeepL API error: ${response}`);
+      }
     }
 
     try {
@@ -36,7 +77,7 @@ class DeepLTranslateFetcher {
         },
         body: JSON.stringify({
           text: [text],
-          target_lang: this.getDeepLLanguageCode(lang),
+          target_lang: lang,
         }),
       });
 
@@ -75,7 +116,6 @@ class DeepLTranslateFetcher {
       pl: "PL",
       ru: "RU",
       pt: "PT-PT",
-      "pt-br": "PT-BR",
       sv: "SV",
       da: "DA",
       fi: "FI",
@@ -96,7 +136,6 @@ class DeepLTranslateFetcher {
       nb: "NB",
       ar: "AR",
     };
-
     return langMap[googleLangCode.toLowerCase()] || "EN-US";
   }
 }

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@ifyour/deeplx':
+        specifier: ^0.1.17
+        version: 0.1.17
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -472,6 +475,10 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
+  '@ifyour/deeplx@0.1.17':
+    resolution: {integrity: sha512-3tu/OjqcnJ8T0x65pSO1CpV5lqliuP7sfzAOwC1RCQQCT0GjMfJ+yvHsBbrnVY02w04eIjk0Dpy3+bKVgohEpw==}
+    engines: {node: '>=18'}
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -806,6 +813,7 @@ packages:
 
   acorn-import-assertions@1.9.0:
     resolution: {integrity: sha512-cmMwop9x+8KFhxvKrKfPYmN6/pKTYYHBqLa0DfvVZcKMJWNyWLnaqND7dx/qn66R7ewM1UX5XMaDVP5wlVTaVA==}
+    deprecated: package has been renamed to acorn-import-attributes
     peerDependencies:
       acorn: ^8
 
@@ -2844,6 +2852,8 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/object-schema@2.0.3': {}
+
+  '@ifyour/deeplx@0.1.17': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
