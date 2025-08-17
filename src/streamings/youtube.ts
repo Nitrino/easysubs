@@ -1,8 +1,21 @@
-import { parse } from "subtitle";
+import { parse, subTitleType } from "subtitle";
+import { getSubtitles } from "youtube-caption-extractor";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
+import { url } from "inspector";
+
+type YoutubeSubtitle = {
+  dDurationMs: number;
+  tStartMs: number;
+  segs:
+    | {
+        utf8: string;
+        tOffsetMs: number;
+      }[]
+    | undefined;
+};
 
 class Youtube implements Service {
   name = "youtube";
@@ -29,14 +42,30 @@ class Youtube implements Service {
   public async getSubs(label: string) {
     if (!label) return parse("");
     const videoId = this.getVideoId();
-
     const urlObject: URL = new URL(this.subCache[videoId][label]);
-    urlObject.searchParams.set("fmt", "vtt");
-    const subUri: string = urlObject.href;
 
+    const subUri: string = urlObject.href;
     const resp = await fetch(subUri);
-    const text = await resp.text();
-    return parse(text);
+    const respJson: { events: YoutubeSubtitle[] } = await resp.json();
+
+    const subs: subTitleType[] = respJson.events.map((sub) => {
+      if (!sub.segs) {
+        return {
+          start: sub.tStartMs,
+          end: sub.tStartMs,
+          text: "",
+        };
+      }
+
+      const end = sub.segs.at(-1).tOffsetMs ? sub.segs.at(-1).tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
+
+      return {
+        start: sub.tStartMs,
+        end: end,
+        text: sub.segs.map((seg) => seg.utf8).join(""),
+      };
+    });
+    return subs;
   }
 
   public getSubsContainer() {
