@@ -75,7 +75,7 @@ class Youtube implements Service {
   }
 
   public getSettingsButtonContainer() {
-    const selector = document.querySelector(".ytp-right-controls > .ytp-size-button");
+    const selector = document.querySelector(".ytp-right-controls .ytp-size-button");
     if (selector === null) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }

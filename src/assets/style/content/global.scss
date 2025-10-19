@@ -127,9 +127,43 @@
     align-items: center;
     height: 100%;
 
+    &.es-youtube-delphi {
+      position: relative;
+
+      &:hover {
+        &::before {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        border-radius: 40px;
+        background-color: transparent;
+        pointer-events: none;
+        width: 48px;
+        height: calc(var(--yt-delhi-pill-height, 48px) - 8px);
+      }
+    }
+
     svg {
       width: 24px;
       vertical-align: middle;
+    }
+  }
+
+  .ytp-delhi-modern.ytp-big-mode:not(.ytp-xsmall-width-mode) {
+    .es-settings-icon {
+      &::before {
+        height: calc(var(--yt-delhi-big-mode-pill-height, 56px) - 8px);
+        width: var(--yt-delhi-big-mode-pill-height, 56px);
+      }
     }
   }
 }
@@ -151,7 +185,7 @@
 
   #es {
     z-index: 30;
-    bottom: 80px;
+    bottom: 120px;
 
     @media screen and (max-width: 1520px) {
       bottom: 100px;
@@ -271,6 +305,20 @@
 .es-youtube {
   .es-settings-content {
     bottom: 50px;
+  }
+
+  &.es-youtube-delphi {
+    .es-settings-content {
+      bottom: 92px;
+    }
+    .es-progress-bar {
+      -webkit-backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px));
+      backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px));
+      background: var(--yt-spec-overlay-background-medium-light, rgba(0, 0, 0, 0.3));
+      border-radius: 40px;
+      width: calc(100% - 24px);
+      margin-left: 12px;
+    }
   }
 }
 
