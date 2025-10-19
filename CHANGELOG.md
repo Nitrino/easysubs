@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.1.1 (19.10.2025)
+
+### Enhancements
+
+- Rewrite youtube subtitles parsing
+- Support new Youtube layout
+
 ## v3.1.0 (31.07.2025)
 
 ### Enhancements
