@@ -92,10 +92,33 @@
   }
 
   #es {
-    bottom: 130px;
+    top: 0;
+    bottom: 0;
+    width: max-content;
+  }
 
+  #es-subs {
+    color: rgba(255,255,255,0.75);
+    bottom: 100px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
     @media screen and (max-width: 1520px) {
       bottom: 100px;
+    }
+  }
+
+  #es-prev {
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    top: 100px;
+    @media screen and (max-width: 1520px) {
+      top: 100px;
     }
   }
 }

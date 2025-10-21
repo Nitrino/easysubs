@@ -11,11 +11,11 @@ import { $autoPause } from "../settings";
 export const ES_CUSTOM_SUB_LABEL = "custom";
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
-export const $subsLanguage = createStore<string>("auto");
-export const $subsTitle = createStore<string>(null);
-export const $currentSubs = createStore<TSub[]>([]);
-export const $prevCurrentSubs = createStore<TSub[]>([]);
-export const esSubsChanged = createEvent<string>();
+export const $subsLanguage = createStore<string>('auto')
+export const $subsTitle = createStore<string>(null)
+export const $currentSubs = createStore<TSub[]>([])
+export const $currentPrevSubs = createStore<TSub[]>([])
+export const esSubsChanged = createEvent<string>()
 export const autoPauseFx = createEffect<
   {
     currentSubs: UnitValue<typeof $currentSubs>;
@@ -23,7 +23,10 @@ export const autoPauseFx = createEffect<
     autoPause: StoreValue<typeof $autoPause>;
   },
   void
->(({ video }) => video.pause());
+>(({ video }) => video.pause())
+
+export const $tupleSubs = createStore<[Array<TSub> | null, Array<TSub> | null]>([null, null])
+export const $prevSubs = $tupleSubs.map(([prev, _]) => prev)
 
 export const subsRequested = createEvent<string>();
 export const subsReloadRequested = createEvent();
@@ -41,7 +44,9 @@ export const fetchSubsFx = createEffect<{ streaming: Service; language: string }
 export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>(
   ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)
 );
-export const updatePrevCurrentSubsFx = createEffect<TSub[], TSub[]>((subs) => subs);
+export const updatePrevCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>(
+  ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)
+)
 export const rawSubsAdded = createEvent<Captions>();
 export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
 
