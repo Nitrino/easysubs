@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.1.2 (09.12.2025)
+
+### Enhancements
+
+- Update Kinopub integration to support new Vidstack video player
+
 ## v3.1.1 (19.10.2025)
 
 ### Enhancements
