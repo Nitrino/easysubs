@@ -5,8 +5,9 @@
   transform: translateX(-50%);
   font-size: 24px;
   color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif !important;
 
   pre {
     all: unset;
@@ -87,7 +88,7 @@
 }
 
 .es-kinopub.es-enabled {
-  .jw-captions.jw-captions-enabled {
+  media-captions.player-captions {
     display: none;
   }
 
