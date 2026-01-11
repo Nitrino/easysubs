@@ -41,13 +41,28 @@ jobs:
           prompt: |
             /code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
 
-            IMPORTANT: Post each code-related issue as a SEPARATE GitHub PR review comment.
-            Do NOT group all feedback into a single comment. For each specific issue you find:
-            - Post it as an individual inline comment on the relevant line(s) of code
-            - Include the file path and line number
-            - Provide specific, actionable feedback for that particular issue
+            CRITICAL: Post each code-related issue as a SEPARATE inline GitHub review comment using gh api.
 
-            This allows developers to address and resolve issues individually and makes the review more actionable.
+            For each issue found, you MUST use the GitHub API to create individual inline review comments:
+
+            ```bash
+            gh api repos/{owner}/{repo}/pulls/{pull_number}/comments \
+              -f body="Your detailed issue description here" \
+              -f commit_id="FULL_SHA_HASH" \
+              -f path="path/to/file.ts" \
+              -n line=42 \
+              -f side="RIGHT"
+            ```
+
+            Requirements:
+            - Use gh api, NOT gh pr comment (which only creates general comments)
+            - Each issue = one separate inline review comment on the specific line of code
+            - Use the commit SHA from the PR head, not abbreviated hash
+            - Attach comment to the exact line number where the issue occurs
+            - Use side="RIGHT" for new code, side="LEFT" for old code in diffs
+            - Provide specific, actionable feedback in each comment body
+
+            This allows developers to see issues directly on the relevant code lines and resolve them individually.
 
             CRITICAL: ALWAYS run PR preview without any eligibility checks. Do NOT skip or bypass the PR preview step regardless of PR size, complexity, or any other criteria. Every PR must be previewed.
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
