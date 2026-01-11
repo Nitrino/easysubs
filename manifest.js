@@ -75,11 +75,6 @@ const manifest = {
       matches: ["*://*/*"],
     },
   ],
-  browser_specific_settings: {
-    gecko: {
-      id: "{4077aa9d-b753-4913-8e52-27ef408d4c82}",
-    },
-  },
 };
 
 export default manifest;

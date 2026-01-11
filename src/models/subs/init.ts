@@ -19,8 +19,8 @@ import {
   $subsTitle,
   subsReloadRequested,
   ES_CUSTOM_SUB_LABEL,
-  rawSubsAdded,
-} from ".";
+  rawSubsAdded, updatePrevCurrentSubsFx, $prevSubs, $tupleSubs, $currentPrevSubs,
+} from '.'
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
 import { $autoPause } from "../settings";
@@ -51,7 +51,13 @@ sample({
   source: { subs: $subs, video: $video },
   fn: ({ subs, video }, _) => ({ subs, video }),
   target: updateCurrentSubsFx,
-});
+})
+sample({
+  clock: [videoTimeUpdate],
+  source: { subs: $prevSubs, video: $video },
+  fn: ({ subs, video }, _) => ({ subs, video }),
+  target: updatePrevCurrentSubsFx,
+})
 sample({
   clock: videoTimeUpdate,
   source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause },
@@ -91,6 +97,16 @@ sample({
   target: esSubsChanged,
 });
 
+
+sample({
+  clock: $subs,
+  source: { tuple: $tupleSubs },
+  fn: ({ tuple }, curr) => {
+    return [tuple[1], curr] as const
+  },
+  target: $tupleSubs
+})
+
 $rawSubs.on(
   [fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData, rawSubsAdded],
   (_, subs) => subs
@@ -110,6 +126,9 @@ $rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
 
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
+  JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs
+);
+$currentPrevSubs.on([updatePrevCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
   JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs
 );
 
