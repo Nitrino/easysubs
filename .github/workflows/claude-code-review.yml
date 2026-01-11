@@ -64,6 +64,6 @@ jobs:
 
             This allows developers to see issues directly on the relevant code lines and resolve them individually.
 
-            CRITICAL: ALWAYS run PR preview without any eligibility checks. Do NOT skip or bypass the PR preview step regardless of PR size, complexity, or any other criteria. Every PR must be previewed.
+            CRITICAL: ALWAYS run PR review without any eligibility checks. Do NOT skip or bypass the PR review step regardless of PR size, complexity, or any other criteria. Every PR must be reviewed.
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
