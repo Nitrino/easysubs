@@ -38,6 +38,15 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           plugin_marketplaces: "https://github.com/anthropics/claude-plugins-official.git"
           plugins: "code-review@claude-plugins-official"
-          prompt: "/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+          prompt: |
+            /code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+
+            IMPORTANT: Post each code-related issue as a SEPARATE GitHub PR review comment.
+            Do NOT group all feedback into a single comment. For each specific issue you find:
+            - Post it as an individual inline comment on the relevant line(s) of code
+            - Include the file path and line number
+            - Provide specific, actionable feedback for that particular issue
+
+            This allows developers to address and resolve issues individually and makes the review more actionable.
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
