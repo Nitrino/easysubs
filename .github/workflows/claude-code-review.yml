@@ -48,5 +48,7 @@ jobs:
             - Provide specific, actionable feedback for that particular issue
 
             This allows developers to address and resolve issues individually and makes the review more actionable.
+
+            CRITICAL: ALWAYS run PR preview without any eligibility checks. Do NOT skip or bypass the PR preview step regardless of PR size, complexity, or any other criteria. Every PR must be previewed.
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
