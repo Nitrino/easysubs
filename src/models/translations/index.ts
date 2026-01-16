@@ -17,7 +17,6 @@ import {
 } from "../types";
 import {
   $translateLanguage,
-  translateLanguageChanged,
   $translationService,
   $deeplApiKey,
   $chatGPTApiKey,
@@ -33,11 +32,11 @@ export const $wordTranslationsPendings = createStore<Record<string, boolean>>(
   {},
 );
 export const WordTranslationsGate = createGate<string>("WordTranslationsGate");
-export const $currentWordTranslation = createStore<TWordTranslation>(null);
+export const $currentWordTranslation = createStore<TWordTranslation | null>(null);
 export const requestWordTranslation = createEvent<string>();
 
 export const $currentPhrasalVerbs = createStore<TPhrasalVerb[]>([]);
-export const $currentPhrasalVerb = createStore<TPhrasalVerb>(null);
+export const $currentPhrasalVerb = createStore<TPhrasalVerb | null>(null);
 export const $findPhrasalVerbsPendings = createStore<Record<string, boolean>>(
   {},
 );
@@ -51,14 +50,15 @@ export const findPhrasalVerbsFx = createEffect<
 >(({ subs }) => subs.flatMap((sub) => findPhrasalVerbs(sub.cleanedText)));
 export const subItemMouseEntered = createEvent<string>();
 export const subItemMouseLeft = createEvent();
+
 export const findCurrentPhrasalVerbFx = createEffect<
   { phrasalVerbs: TPhrasalVerb[]; text: string },
   TPhrasalVerb | null
 >(({ phrasalVerbs, text }) =>
-  phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.includes(text)),
+  phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.includes(text)) ?? null
 );
 
-export const $currentSubTranslation = createStore<string>(null);
+export const $currentSubTranslation = createStore<string | null>(null);
 export const $subTranslationPendings = createStore<Record<string, boolean>>({});
 export const SubTranslationGate = createGate<string>("SubTranslationGate");
 export const requestSubTranslation = createEvent<string>();
@@ -98,7 +98,11 @@ export const fetchSubTranslationFx = createEffect<
       return resp;
     } else {
       const reponseText: string = JSON.parse(resp)
-        ["sentences"].map((sentence) => sentence["trans"])
+        ["sentences"].map((sentence: unknown) => {
+          if (typeof sentence !== "object" || sentence === null) throw new Error("Invalid translation: sentence is not an object");
+          if (!('trans' in sentence) || typeof sentence.trans !== "string") throw new Error("Invalid translation: 'trans' property is missing or not a string");
+          sentence["trans"]
+        })
         .join(" ");
       return reponseText;
     }
@@ -152,12 +156,13 @@ export const fetchWordTranslationFx = createEffect<
     };
   } catch (error) {
     console.error(error);
+    throw error;
   }
 });
 
 export const updateCurrentWordTranslationFx = createEffect<
   { source: string; language: string; translation: TWordTranslation | null },
-  TWordTranslation
+  TWordTranslation | null
 >(({ translation }) => translation);
 
 const wordTranslationDataCombined = sample({
@@ -328,7 +333,8 @@ $wordTranslations.reset($translateLanguage);
 sample({
   clock: $translateLanguage,
   source: $currentWordTranslation,
-  fn: (translations) => translations.source,
+  filter: (translations): translations is TWordTranslation => translations !== null,
+  fn: (translations) => translations!.source,
   target: requestWordTranslation,
 });
 

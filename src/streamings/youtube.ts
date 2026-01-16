@@ -1,10 +1,8 @@
 import { parse, subTitleType } from "subtitle";
-import { getSubtitles } from "youtube-caption-extractor";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
-import { url } from "inspector";
 
 type YoutubeSubtitle = {
   dDurationMs: number;
@@ -57,7 +55,8 @@ class Youtube implements Service {
         };
       }
 
-      const end = sub.segs.at(-1).tOffsetMs ? sub.segs.at(-1).tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
+      const tOffsetMs = sub.segs.at(-1)?.tOffsetMs
+      const end = tOffsetMs ? tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
 
       return {
         start: sub.tStartMs,
@@ -70,19 +69,19 @@ class Youtube implements Service {
 
   public getSubsContainer() {
     const selector = document.querySelector(".html5-video-player");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
     const selector = document.querySelector(".ytp-right-controls .ytp-size-button");
-    if (selector === null) throw new Error("Settings button container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector(".html5-video-player");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 

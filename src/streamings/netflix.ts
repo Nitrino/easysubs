@@ -93,6 +93,7 @@ class Netflix implements Service {
 
     const moveId = this.getMoveId();
     const subCacheItem = this.subCache.find((item) => item.videoId == moveId && item.title === title);
+    if (!subCacheItem) throw new Error('Netflix.getSubs() failed: subCacheItem was not found')
 
     const isSubCacheAdBreaksSame = JSON.stringify(subCacheItem.adBreaks) == JSON.stringify(this.adBreaks);
 
@@ -103,6 +104,7 @@ class Netflix implements Service {
 
     if (subCacheItem.data) {
       console.log("getSubs from cache with resync", subCacheItem.adBreaks, this.adBreaks);
+      if (!subCacheItem.originalData) throw new Error('Netflix.getSubs() failed: subCacheItem.originalData is nullable')
       const subs = this.resyncSubsWithAds(subCacheItem.originalData);
       subCacheItem.data = subs;
       subCacheItem.adBreaks = JSON.parse(JSON.stringify(this.adBreaks));
@@ -121,22 +123,22 @@ class Netflix implements Service {
 
   public getSubsContainer() {
     const selector = document.querySelector(".watch-video--player-view");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
     const selector = (
-      document.querySelector('[data-uia="control-fullscreen-enter"]') ||
+      document.querySelector('[data-uia="control-fullscreen-enter"]') ??
       document.querySelector('[data-uia="control-fullscreen-exit"]')
-    ).parentElement;
-    if (selector === null) throw new Error("Settings button container not found");
+    )?.parentElement;
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector("#appMountPoint");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 

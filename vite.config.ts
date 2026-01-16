@@ -6,6 +6,7 @@ import customDynamicImport from "./utils/plugins/custom-dynamic-import";
 import addHmr from "./utils/plugins/add-hmr";
 import watchRebuild from "./utils/plugins/watch-rebuild";
 import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script";
+import { assertIsDefinedAndReturn } from "./utils/asserts";
 
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, "src");
@@ -63,7 +64,7 @@ export default defineConfig({
         entryFileNames: "src/pages/[name]/index.js",
         chunkFileNames: isDev ? "assets/js/[name].js" : "assets/js/[name].[hash].js",
         assetFileNames: (assetInfo) => {
-          const { name } = path.parse(assetInfo.name);
+          const { name } = path.parse(assertIsDefinedAndReturn(assetInfo.name));
           const assetFileName = name === "contentStyle" ? `${name}${getCacheInvalidationKey()}` : name;
           return `assets/[ext]/${assetFileName}.chunk.[ext]`;
         },

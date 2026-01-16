@@ -25,6 +25,7 @@ import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
 import { $autoPause } from "../settings";
 import { debug } from "patronum";
+import { Captions } from "../types";
 
 split({
   source: esSubsChanged,
@@ -57,10 +58,9 @@ sample({
   source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause },
   fn: ({ currentSubs, video, autoPause }, _) => ({ currentSubs, video, autoPause }),
   filter: ({ currentSubs, video, autoPause }) => {
-    if (currentSubs[0]) {
-      const timeDiff = currentSubs[0].end - video.currentTime * 1000;
-      return autoPause && timeDiff < 250 && timeDiff > 0;
-    }
+    if (!video || !currentSubs[0]) return false;
+    const timeDiff = currentSubs[0].end - video.currentTime * 1000;
+    return !!(autoPause && timeDiff < 250 && timeDiff > 0);
   },
   target: autoPauseFx,
 });
@@ -86,8 +86,8 @@ sample({
 sample({
   clock: subsReloadRequested,
   source: { subsTitle: $subsTitle, rawSubs: $rawSubs },
-  filter: ({ subsTitle, rawSubs }) => subsTitle && rawSubs.length > 0,
-  fn: ({ subsTitle }) => subsTitle,
+  filter: (source): source is { subsTitle: string; rawSubs: Captions } => !!source.subsTitle && source.rawSubs.length > 0,
+  fn: ({ subsTitle }) => subsTitle!,
   target: esSubsChanged,
 });
 

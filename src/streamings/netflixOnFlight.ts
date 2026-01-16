@@ -21,7 +21,9 @@ class NetflixOnFlight implements Service {
     waitForElement(() => {
       esSubsChanged("en");
       const subtitleSource = document.querySelector(".player-timedtext");
+      if (!subtitleSource) throw new Error('NetflixOnFlight.init() failed: subtitleSource was not found')
       const videoElement = document.querySelector("video");
+      if (!videoElement) throw new Error('NetflixOnFlight.init() failed: videoElement was not found')
       const subtitleObserver = new MutationObserver(() => {
         const subtitleParts = subtitleSource.getElementsByClassName("player-timedtext-text-container");
         const subtitleContent = [...subtitleParts].map((el) => getText(el)).join("\n");
@@ -39,28 +41,28 @@ class NetflixOnFlight implements Service {
     });
   }
 
-  public async getSubs(title: string) {
+  public async getSubs(_title: string) {
     return parse("");
   }
 
   public getSubsContainer() {
     const selector = document.querySelector(".watch-video--player-view");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
     const selector = (
-      document.querySelector('[data-uia="control-fullscreen-enter"]') ||
+      document.querySelector('[data-uia="control-fullscreen-enter"]') ??
       document.querySelector('[data-uia="control-fullscreen-exit"]')
-    ).parentElement;
-    if (selector === null) throw new Error("Settings button container not found");
+    )?.parentElement;
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector("#appMountPoint");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
@@ -69,7 +71,7 @@ class NetflixOnFlight implements Service {
   }
 }
 
-function getText(node: ChildNode) {
+function getText(node: ChildNode): string | null {
   if (node.nodeType === Node.TEXT_NODE) {
     return node.textContent;
   }
@@ -81,7 +83,7 @@ function getText(node: ChildNode) {
   return result;
 }
 
-function waitForElement(callBack) {
+function waitForElement(callBack: () => void) {
   window.setTimeout(function () {
     if (document.querySelector(".player-timedtext")) {
       callBack();

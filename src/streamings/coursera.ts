@@ -2,6 +2,7 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { parse } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
+import { assertIsDefined } from "@root/utils/asserts";
 
 class Coursera implements Service {
   name = "coursera";
@@ -42,19 +43,19 @@ class Coursera implements Service {
 
   public getSettingsButtonContainer() {
     const selector = document.querySelector(".rc-VideoSettingsMenu");
-    if (selector === null) throw new Error("Settings button container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector(".video-main-player-container");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
   public getSubsContainer() {
     const selector = document.querySelector(".rc-VideoControlsContainer");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
@@ -62,7 +63,7 @@ class Coursera implements Service {
     return false;
   }
 
-  private handleCourseraRenderSettings(event: CustomEvent) {
+  private handleCourseraRenderSettings(_event: CustomEvent) {
     esRenderSetings();
   }
 
@@ -74,6 +75,7 @@ class Coursera implements Service {
 
     this.subsName = lang;
     this.playerId = id;
+    assertIsDefined(this.subsName)
     esSubsChanged(this.subsName);
     esRenderSetings();
   }

@@ -34,7 +34,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
     const time = getCurrentVideoTime(video);
     const leftBorder = time + TIME_PERIOD / 2;
     const rightBorder = time - TIME_PERIOD / 2;
-    const msInPx = progressBarRef.current.parentElement.clientWidth / TIME_PERIOD;
+    const msInPx = (progressBarRef.current.parentElement?.clientWidth ?? 0) / TIME_PERIOD;
 
     const subsInDuration = subs.filter(
       (sub) => (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder)

@@ -1,9 +1,9 @@
-import { Parser } from "m3u8-parser";
 import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
+import { assertIsDefined } from "@root/utils/asserts";
 
 type TFolder = {
   file: string;
@@ -25,8 +25,8 @@ const BASE_URL = "https://inoriginal.online";
 class Inoriginal implements Service {
   name = "inoriginal";
   private subsName: string | undefined;
-  private episodes: TFolder[];
-  private videoId: string;
+  private episodes: TFolder[] = [];
+  private videoId: string | undefined;
 
   constructor() {
     this.handleInoriginalVideoStarted = this.handleInoriginalVideoStarted.bind(this);
@@ -48,14 +48,17 @@ class Inoriginal implements Service {
     if (!label || label == "off") return parse("");
 
     const episode = this.episodes.find((item) => item.id === this.videoId);
+    assertIsDefined(episode)
     const subtitles = episode.subtitle.split(",").map((sub) => {
       const parts = sub.match(/\[(.*?)\]\/..\/..(.*)/);
+      assertIsDefined(parts)
       return {
         lang: parts[1],
         url: parts[2],
       };
     });
     const subtitle = subtitles.find((sub) => sub.lang === label);
+    assertIsDefined(subtitle)
 
     const subsResp = await fetch(BASE_URL + subtitle.url);
     const subsData = await subsResp.text();
@@ -64,19 +67,19 @@ class Inoriginal implements Service {
 
   public getSubsContainer() {
     const selector = document.querySelector("#oframeplayerjs");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
-    const selector = document.querySelector("#oframeplayerjs").querySelectorAll("svg")[13].parentElement.parentElement;
-    if (selector === null) throw new Error("Settings button container not found");
+    const selector = document.querySelector("#oframeplayerjs")?.querySelectorAll("svg")[13].parentElement?.parentElement;
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector("#oframeplayerjs");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
@@ -91,6 +94,7 @@ class Inoriginal implements Service {
   private handleInoriginalSubtitlesChanged(event: CustomEvent) {
     console.log("handleInoriginalSubtitlesChanged", event.detail);
     this.setSubName(event.detail);
+    assertIsDefined(this.subsName)
     esSubsChanged(this.subsName);
   }
 
@@ -102,6 +106,7 @@ class Inoriginal implements Service {
   private handleInoriginalVideoId(event: CustomEvent) {
     this.videoId = event.detail;
     esRenderSetings();
+    assertIsDefined(this.subsName)
     esSubsChanged(this.subsName);
   }
 
@@ -113,7 +118,7 @@ class Inoriginal implements Service {
   }
 
   private setSubName(name: string) {
-    name == "off" ? (this.subsName = null) : (this.subsName = name);
+    name == "off" ? (this.subsName = undefined) : (this.subsName = name);
   }
 }
 

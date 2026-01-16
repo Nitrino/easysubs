@@ -7,8 +7,8 @@ import { Select } from "../Select";
 export const TranslateSelect: FC = () => {
   const [translateLanguage, handleTranslateLanguageChanged] = useUnit([$translateLanguage, translateLanguageChanged]);
 
-  const getValue = (value) => {
-    return languages.find((lang) => lang.value === value);
+  const getValue = (value: string): TLanguageOption | null => {
+    return languages.find((lang) => lang.value === value) ?? null;
   };
 
   return (
@@ -16,12 +16,19 @@ export const TranslateSelect: FC = () => {
       <Select
         options={languages}
         value={getValue(translateLanguage)}
-        onChange={(option: { value: string }) => handleTranslateLanguageChanged(option.value)}
+        onChange={(newValue: TLanguageOption | null) => {
+          if (newValue) {
+            handleTranslateLanguageChanged(newValue.value);
+          }
+        }}
       />
     </div>
   );
 };
 
+export type TLanguageOption = (typeof languages)[number];
+export type TLanguageValue = TLanguageOption["value"];
+export type TLanguageLabel = TLanguageOption["label"];
 const languages = [
   { label: "Afrikaans", value: "af" },
   { label: "Albanian", value: "sq" },
@@ -127,4 +134,4 @@ const languages = [
   { label: "Yiddish", value: "yi" },
   { label: "Yoruba", value: "yo" },
   { label: "Zulu", value: "zu" },
-];
+] as const;

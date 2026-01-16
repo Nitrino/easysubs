@@ -8,7 +8,7 @@ import { $streaming } from "../streamings";
 const TIME_SEEK_TIME = 5000;
 
 export const $video = createStore<HTMLVideoElement | null>(null);
-export const getCurrentVideoFx = createEffect<void, HTMLVideoElement>(() => document.querySelector("video"));
+export const getCurrentVideoFx = createEffect<void, HTMLVideoElement | null>(() => document.querySelector("video"));
 export const videoTimeUpdate = createEvent<void>();
 
 export const $wasPaused = createStore<boolean>(false);
@@ -87,6 +87,7 @@ export const moveToTimeFx = createEffect<
   { video: StoreValue<typeof $video>; streaming: StoreValue<typeof $streaming>; time: number },
   void
 >(({ video, streaming, time }) => {
+  if (!video) throw new Error("moveToTimeFx: Video element not found");
   moveVideoToTime(video, streaming, time);
 });
 

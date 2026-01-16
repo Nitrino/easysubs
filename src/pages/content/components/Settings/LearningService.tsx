@@ -17,7 +17,9 @@ export const LearningService: FC<HTMLProps<HTMLSelectElement>> = () => {
       <div className="es-settings-content__element__right">
         <Select
           value={getServiceOption(learningService)}
-          onChange={(option: { value: TLearningService }) => handleTranslateLanguageChanged(option.value)}
+          onChange={(option: { value: TLearningService } | null) => {
+            if (option) handleTranslateLanguageChanged(option.value)
+          }}
           options={services}
         />
       </div>
@@ -25,7 +27,7 @@ export const LearningService: FC<HTMLProps<HTMLSelectElement>> = () => {
   );
 };
 
-const services = [
+const services: { label: string, value: TLearningService }[] = [
   { label: "Disabled", value: "disabled" },
   { label: "Anki", value: "anki" },
   { label: "LinguaLeo", value: "lingualeo" },

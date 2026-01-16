@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useRef, useState } from "react";
+import { FC, PropsWithChildren, useRef } from "react";
 import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
@@ -16,13 +16,10 @@ import { MoveBySubs } from "./MoveBySubs";
 import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
 import { useUnit } from "effector-react";
-import {
-  $activeSettingsTab,
-  activeSettingsTabChanged,
-} from "@src/models/settings";
-import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
+import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
 import { EnableAutoStop } from "./EnableAutoStop";
 import { createPortal } from "react-dom";
+import { assertIsDefinedAndReturn } from "@root/utils/asserts";
 
 interface TabProps {
   isActive: boolean;
@@ -30,11 +27,7 @@ interface TabProps {
   onClick: () => void;
 }
 
-const Tab: FC<PropsWithChildren<TabProps>> = ({
-  children,
-  isActive,
-  onClick,
-}) => {
+const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) => {
   return (
     <div
       className={cn("es-settings-content__menu__item", {
@@ -48,11 +41,8 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeSettingsTab, handleActiveSettingsTabChanged] = useUnit([
-    $activeSettingsTab,
-    activeSettingsTabChanged,
-  ]);
-  const contentRef = useRef();
+  const [activeSettingsTab, handleActiveSettingsTabChanged] = useUnit([$activeSettingsTab, activeSettingsTabChanged]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(contentRef, onClose);
 
@@ -148,8 +138,8 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         </div>
         <div className="es-settings-content__close" onClick={() => onClose()} />
       </div>
-      {createPortal(<DeepLApiKeyModal />, document.querySelector("body"))}
-      {createPortal(<ChatGPTApiKeyModal />, document.querySelector("body"))}
+      {createPortal(<DeepLApiKeyModal />, assertIsDefinedAndReturn(document.querySelector("body")))}
+      {createPortal(<ChatGPTApiKeyModal />, assertIsDefinedAndReturn(document.querySelector("body")))}
     </>
   );
 };

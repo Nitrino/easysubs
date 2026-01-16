@@ -12,7 +12,7 @@ export const ES_CUSTOM_SUB_LABEL = "custom";
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
 export const $subsLanguage = createStore<string>("auto");
-export const $subsTitle = createStore<string>(null);
+export const $subsTitle = createStore<string | null>(null);
 export const $currentSubs = createStore<TSub[]>([]);
 export const $prevCurrentSubs = createStore<TSub[]>([]);
 export const esSubsChanged = createEvent<string>();
@@ -23,13 +23,16 @@ export const autoPauseFx = createEffect<
     autoPause: StoreValue<typeof $autoPause>;
   },
   void
->(({ video }) => video.pause());
+>(({ video }) => {
+  if (!video) throw new Error('autoPauseFx failed: video nullish')
+  video.pause()
+});
 
 export const subsRequested = createEvent<string>();
 export const subsReloadRequested = createEvent();
 export const fetchSubs = createEvent<{ streaming: Service; language: string }>();
 export const resetSubs = createEvent<string>();
-export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions>(
+export const fetchSubsFx = createEffect<{ streaming: Service; language: string }, Captions | undefined>(
   async ({ streaming, language }) => {
     try {
       return await streaming.getSubs(language);
@@ -53,7 +56,7 @@ export const subsResyncFx = createEffect<
   Captions
 >(({ rawSubs, subsDelay, delay }) => resync(rawSubs, (delay - subsDelay) * 1000));
 
-export const subsLanguageDetectFx = createEffect<TSub[], string>(async (subs) => {
+export const subsLanguageDetectFx = createEffect<TSub[], string | undefined>(async (subs) => {
   try {
     return await chrome.runtime.sendMessage({
       type: "getTextLanguage",

@@ -11,10 +11,10 @@ import { PlusIcon } from "./assets/PlusIcon";
 export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phrasalVerb }) => {
   const [learningService] = useUnit([$learningService]);
 
-  const [service, setService] = useState<ILearningService>(null);
+  const [service, setService] = useState<ILearningService | null>(null);
 
   useEffect(() => {
-    setService(getLearningService(learningService));
+    setService(getLearningService(learningService) ?? null);
   }, [learningService]);
 
   const handleAddWord = (word: string, translation: string) => {

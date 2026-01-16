@@ -1,8 +1,6 @@
-import { FC } from "react";
+import { default as ReactSelect, type StylesConfig, type Theme } from "react-select";
 
-import { default as ReactSelect, Props } from "react-select";
-
-const customStyles = {
+const customStyles: StylesConfig<any, any, any> = {
   control: (baseStyles, _state) => ({
     ...baseStyles,
     background: "#51535D",
@@ -30,7 +28,7 @@ const customStyles = {
   }),
 };
 
-const theme = (theme) => ({
+const theme = (theme: Theme) => ({
   ...theme,
   colors: {
     ...theme.colors,
@@ -41,7 +39,7 @@ const theme = (theme) => ({
   },
 });
 
-export const Select: FC<Props> = (props) => {
+export const Select: ReactSelect = (props) => {
   return (
     <div style={{ width: "100%", minWidth: "140px" }}>
       <ReactSelect

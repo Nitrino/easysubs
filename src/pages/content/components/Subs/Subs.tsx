@@ -40,7 +40,7 @@ export const Subs: FC<TSubsProps> = () => {
 
   const handleOnMouseLeave = () => {
     if (wasPaused) {
-      video.play();
+      video?.play();
       console.log("handleWasPausedChanged false");
       handleWasPausedChanged(false);
     }
@@ -50,7 +50,7 @@ export const Subs: FC<TSubsProps> = () => {
     if (!autoStopEnabled) {
       return;
     }
-    if (!video.paused) {
+    if (video && !video.paused) {
       console.log("handleWasPausedChanged true");
 
       handleWasPausedChanged(true);
@@ -64,7 +64,7 @@ export const Subs: FC<TSubsProps> = () => {
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
         onMouseEnter={handleOnMouseEnter}
-        style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
+        style={video ? { fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` } : undefined}
       >
         {currentSubs.map((sub) => (
           <Sub sub={sub} />

@@ -1,4 +1,4 @@
-import { FC, useState, PropsWithChildren } from "react";
+import { FC, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";
@@ -7,6 +7,7 @@ import { useUnit } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
 import { MonoLogo } from "./assets/MonoLogo";
 import { Toaster } from "react-hot-toast";
+import { assertIsDefinedAndReturn } from "@root/utils/asserts";
 
 type TSettingsProps = {
   contentContainer: HTMLElement;
@@ -34,7 +35,7 @@ export const Settings: FC<TSettingsProps> = () => {
         <div className="es-toast">
           <Toaster />
         </div>,
-        document.querySelector("body"),
+        assertIsDefinedAndReturn(document.querySelector("body")),
       )}
     </>
   );

@@ -11,7 +11,7 @@ export const findPhrasalVerbs = (text: string): TPhrasalVerb[] => {
     const phrasalVerbList: string[] = [key, ...(item["derivatives"] ?? [])];
     for (const phrasalVerb of phrasalVerbList) {
       const phrasalVerbWords = phrasalVerb.match(/[^ ]+/g);
-      if (words.includes(phrasalVerbWords[0])) {
+      if (phrasalVerbWords && words.includes(phrasalVerbWords[0])) {
         const phrasalVerbIncluded = phrasalVerbWords.every((v) => words.includes(v));
         if (phrasalVerbIncluded) {
           const indexes = phrasalVerbWords.map((v) => words.findIndex((w) => w === v));
@@ -25,7 +25,7 @@ export const findPhrasalVerbs = (text: string): TPhrasalVerb[] => {
               key: key,
               text: phrasalVerb,
               indexes: indexes,
-              translations: item["translations"] as string[],
+              translations: item["translations"],
             });
           }
         }

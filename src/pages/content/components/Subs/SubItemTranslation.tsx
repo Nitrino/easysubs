@@ -28,10 +28,10 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     $wordTranslationsPendings,
   ]);
 
-  const [service, setService] = useState<ILearningService>(null);
+  const [service, setService] = useState<ILearningService | null>(null);
 
   useEffect(() => {
-    setService(getLearningService(learningService));
+    setService(getLearningService(learningService) ?? null);
   }, [learningService]);
 
   if (!currentWordTranslation || wordTranslationsPendings[text]) {
