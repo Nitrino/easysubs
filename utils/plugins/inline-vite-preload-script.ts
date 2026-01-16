@@ -21,11 +21,12 @@ export default function inlineVitePreloadScript() {
         const chunkName: string | undefined = Object.keys(meta.chunks).find((key) => /preload/.test(key));
         if (!chunkName) return null;
         const modules = meta.chunks?.[chunkName]?.modules;
-        __vitePreload = modules?.[Object.keys(modules)?.[0]]?.code;
-        __vitePreload = __vitePreload?.replaceAll("const ", "var ");
-        if (!__vitePreload) {
-          return null;
-        }
+        if (!modules) return null;
+        const firstKey = Object.keys(modules)[0];
+        if (!firstKey) return null;
+        const code = modules[firstKey]?.code;
+        if (!code) return null;
+        __vitePreload = code.replaceAll("const ", "var ");
       }
       return {
         code: __vitePreload + code.split(`\n`).slice(1).join(`\n`),

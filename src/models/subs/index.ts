@@ -61,7 +61,7 @@ export const subsLanguageDetectFx = createEffect<TSub[], string | undefined>(asy
     return await chrome.runtime.sendMessage({
       type: "getTextLanguage",
       language: "en",
-      text: subs[Math.floor(Math.random() * subs.length)].cleanedText,
+      text: subs[Math.floor(Math.random() * subs.length)]!.cleanedText,
     });
   } catch (error) {
     console.error(error);

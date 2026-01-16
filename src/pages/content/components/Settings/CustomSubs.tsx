@@ -10,6 +10,7 @@ export const CustomSubs: FC = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files!;
     const file = files[0];
+    if (!file) return
     const reader = new FileReader();
     reader.onload = () => {
       const data = reader.result;

@@ -37,16 +37,16 @@ class KinoPub implements Service {
     parser.end();
     if (!parser.manifest.mediaGroups)
       throw new Error("KinoPub.getSubs() failed: parser.manifest.mediaGroups was nullish");
-    const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub;
+    const subsSegments = parser.manifest.mediaGroups.SUBTITLES!.sub!;
 
-    const uri = `https://${cdnHostName}${subsSegments[label].uri}`;
+    const uri = `https://${cdnHostName}${subsSegments[label]!.uri}`;
     const subsSegmentsResp = await fetch(uri);
     const subsSegmentsData = await subsSegmentsResp.text();
 
     const subsSegmentsParser = new Parser();
     subsSegmentsParser.push(subsSegmentsData);
     subsSegmentsParser.end();
-    const subPath = subsSegmentsParser.manifest.segments[0].uri.match(/.*\/hls\/(.*)\/seg.*/)?.[1];
+    const subPath = subsSegmentsParser.manifest.segments[0]!.uri.match(/.*\/hls\/(.*)\/seg.*/)?.[1];
     const subUri = `https://${cdnHostName}/pd/${subPath}`;
 
     const subsResp = await fetch(subUri);

@@ -72,7 +72,7 @@ class Inoriginal implements Service {
   }
 
   public getSettingsButtonContainer() {
-    const selector = document.querySelector("#oframeplayerjs")?.querySelectorAll("svg")[13].parentElement?.parentElement;
+    const selector = document.querySelector("#oframeplayerjs")?.querySelectorAll("svg")[13]?.parentElement?.parentElement;
     if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }

@@ -3,6 +3,7 @@ import { parse, subTitleType } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
+import { assertIsDefined } from "@root/utils/asserts";
 
 type YoutubeSubtitle = {
   dDurationMs: number;
@@ -40,7 +41,9 @@ class Youtube implements Service {
   public async getSubs(label: string) {
     if (!label) return parse("");
     const videoId = this.getVideoId();
-    const urlObject: URL = new URL(this.subCache[videoId][label]);
+    const subCacheUrl = this.subCache[videoId]![label]
+    assertIsDefined(subCacheUrl)
+    const urlObject: URL = new URL(subCacheUrl);
 
     const subUri: string = urlObject.href;
     const resp = await fetch(subUri);
@@ -92,8 +95,8 @@ class Youtube implements Service {
   private getVideoId(): string {
     const regExpression = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = window.location.href.match(regExpression);
-    if (match && match[2].length === 11) {
-      return match[2];
+    if (match && match[2]!.length === 11) {
+      return match[2]!;
     }
     console.error("Can't get youtube video id");
     return "";

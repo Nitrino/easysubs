@@ -2,6 +2,7 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { parse, subTitleType } from "subtitle";
 import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
+import { assertIsDefined } from "@root/utils/asserts";
 
 const WEBVTT = "webvtt-lssdh-ios8";
 
@@ -180,7 +181,7 @@ class Netflix implements Service {
         this.subCache.push({
           videoId: event.detail.movieId,
           title: title,
-          url: this.randomProperty(track.ttDownloadables[WEBVTT].urls).url,
+          url: this.randomProperty(track.ttDownloadables[WEBVTT].urls)!.url,
         });
       }
     });
@@ -215,6 +216,7 @@ class Netflix implements Service {
   private handleAddHide(event: CustomEvent<number>) {
     console.log("handleAddHide", event.detail);
     const currentBreak = this.adBreaks[this.adBreaks.length - 1];
+    assertIsDefined(currentBreak)
     console.log("old durationMs", currentBreak.durationMs);
     console.log("timeVideo", event.detail);
     console.log("new durationMs", event.detail - currentBreak.locationMs);
@@ -230,7 +232,7 @@ class Netflix implements Service {
 
   private randomProperty = (obj: Record<string, TUrl>) => {
     const keys = Object.keys(obj);
-    return obj[keys[(keys.length * Math.random()) << 0]];
+    return obj[keys[(keys.length * Math.random()) << 0]!];
   };
 
   private getTrackTitle(track: TTrack): string {
@@ -257,6 +259,7 @@ class Netflix implements Service {
 
   private resyncSubsWithAds(subs: subTitleType[]) {
     const adBreak = this.adBreaks[this.adBreaks.length - 1];
+    assertIsDefined(adBreak)
     console.log("resynced with time: ", adBreak.durationMs);
 
     subs = subs.map((sub) => {

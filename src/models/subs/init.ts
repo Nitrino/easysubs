@@ -101,7 +101,7 @@ $rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
   if (!lastSub) {
     return [...oldSubs, ...newSubs];
   }
-  if (lastSub.text != newSubs[0].text && lastSub.start != newSubs[0].start) {
+  if (lastSub.text != newSubs[0]!.text && lastSub.start != newSubs[0]!.start) {
     const subs = oldSubs.slice(0, -1);
     lastSub.end = lastSub.start;
     return [...subs, ...[lastSub], ...newSubs];

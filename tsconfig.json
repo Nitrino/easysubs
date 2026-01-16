@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
     "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    // "verbatimModuleSyntax": true,
     "noEmit": true,
     "baseUrl": ".",
     "allowJs": false,

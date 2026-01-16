@@ -279,13 +279,13 @@ $currentPhrasalVerbs.on(
 );
 $findPhrasalVerbsPendings.on(findPhrasalVerbsFx, (pendings, { subs }) => ({
   ...pendings,
-  [subs[0].cleanedText]: true,
+  [subs[0]!.cleanedText]: true,
 }));
 $findPhrasalVerbsPendings.on(
   findPhrasalVerbsFx.finally,
   (pendings, { params: { subs } }) => {
     const copy = { ...pendings };
-    delete copy[subs[0].cleanedText];
+    delete copy[subs[0]!.cleanedText];
     return copy;
   },
 );

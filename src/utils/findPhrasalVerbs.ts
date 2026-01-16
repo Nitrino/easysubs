@@ -2,6 +2,7 @@ import { TPhrasalVerb } from "@src/models/types";
 import { PHRASAL_VERBS } from "./phrasalVerbs";
 import { textToWords } from "./textToWords";
 import { cleanWord } from "./cleanWord";
+import { assertIsDefinedAndReturn } from "@root/utils/asserts";
 
 export const findPhrasalVerbs = (text: string): TPhrasalVerb[] => {
   const words = textToWords(text).map((w) => cleanWord(w));
@@ -15,9 +16,9 @@ export const findPhrasalVerbs = (text: string): TPhrasalVerb[] => {
         const phrasalVerbIncluded = phrasalVerbWords.every((v) => words.includes(v));
         if (phrasalVerbIncluded) {
           const indexes = phrasalVerbWords.map((v) => words.findIndex((w) => w === v));
-          const isSorted = indexes.every((v, i, a) => !i || a[i - 1] <= v);
+          const isSorted = indexes.every((v, i, a) => !i || assertIsDefinedAndReturn(a[i - 1]) <= v);
           const checkWordProximity = indexes.every((v, index) =>
-            indexes[index + 1] ? indexes[index + 1] - v <= 2 : true
+            indexes[index + 1] ? assertIsDefinedAndReturn(indexes[index + 1]) - v <= 2 : true
           );
 
           if (isSorted && checkWordProximity) {

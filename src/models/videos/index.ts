@@ -4,6 +4,7 @@ import { $currentSubs, $subs } from "../subs";
 import { TMoveDirection } from "../types";
 import { moveVideoToTime } from "@src/utils/moveVideoToTime";
 import { $streaming } from "../streamings";
+import { assertIsDefined } from "@root/utils/asserts";
 
 const TIME_SEEK_TIME = 5000;
 
@@ -56,13 +57,16 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
       moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
     }
 
-    let prevSub = subs[currentSubs[0].id - 1];
+    const currentSubsId = currentSubs[0]!.id
+    assertIsDefined(currentSubsId)
+    let prevSub = subs[currentSubsId - 1];
+    assertIsDefined(prevSub)
 
     if (prevSub.end - prevSub.start < 20) {
       // if the previous subtitle is too short, we need move to the previous one
       // to avoid the situation when the previous subtitle is the same as the current one.
       // It's happening with youtube auto-generated subtitles
-      prevSub = subs[currentSubs[0].id - 2];
+      prevSub = subs[currentSubsId - 2];
     }
 
     const isPrevSubClose = prevSub && currentTime - prevSub.end <= TIME_SEEK_TIME;
@@ -76,7 +80,7 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
 
   if (direction === "current") {
     if (currentSubs.length > 0) {
-      moveVideoToTime(video, streaming, currentSubs[0].start);
+      moveVideoToTime(video, streaming, currentSubs[0]!.start);
       video.play();
     }
   }
