@@ -8,12 +8,12 @@ import {
 import { debug } from "patronum";
 
 import {
-  TPartOfSpeach,
-  TPhrasalVerb,
-  TSub,
-  TTranslateAlternative,
-  TWordTranslation,
-  TWordTranslationItem,
+  type TPartOfSpeach,
+  type TPhrasalVerb,
+  type TSub,
+  type TTranslateAlternative,
+  type TWordTranslation,
+  type TWordTranslationItem,
 } from "../types";
 import {
   $translateLanguage,

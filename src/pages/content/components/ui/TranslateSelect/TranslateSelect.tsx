@@ -1,6 +1,6 @@
 import { $translateLanguage, translateLanguageChanged } from "@root/src/models/settings";
 import { useUnit } from "effector-react";
-import { FC } from "react";
+import { type FC } from "react";
 
 import { Select } from "../Select";
 

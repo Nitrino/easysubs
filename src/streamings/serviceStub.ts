@@ -1,6 +1,6 @@
 import { parse } from "subtitle";
 
-import Service from "./service";
+import { type Service } from "./service";
 
 class ServiceStub implements Service {
   name = "stub";

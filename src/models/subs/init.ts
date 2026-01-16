@@ -25,7 +25,7 @@ import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
 import { $autoPause } from "../settings";
 import { debug } from "patronum";
-import { Captions } from "../types";
+import { type Captions } from "../types";
 
 split({
   source: esSubsChanged,

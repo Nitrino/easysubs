@@ -1,7 +1,7 @@
-import { createStore, createEffect, createEvent, StoreValue, sample } from "effector";
+import { createStore, createEffect, createEvent, type StoreValue, sample } from "effector";
 import { debug } from "patronum";
 import { $currentSubs, $subs } from "../subs";
-import { TMoveDirection } from "../types";
+import { type TMoveDirection } from "../types";
 import { moveVideoToTime } from "@src/utils/moveVideoToTime";
 import { $streaming } from "../streamings";
 import { assertIsDefined } from "@root/utils/asserts";

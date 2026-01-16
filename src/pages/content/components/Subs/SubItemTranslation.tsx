@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useGate, useUnit } from "effector-react";
 import { $learningService, $translateLanguage } from "@src/models/settings";
 
@@ -12,8 +12,8 @@ import cambridgeIcon from "@assets/img/icons/cambridge.png";
 import forvoIcon from "@assets/img/icons/forvo.png";
 import urbandictionaryIcon from "@assets/img/icons/urbandictionary.png";
 import youglishIcon from "@assets/img/icons/youglish.png";
-import ILearningService from "@src/learning-service/learningService";
-import { TWordTranslationItem } from "@src/models/types";
+import { type ILearningService } from "@src/learning-service/learningService";
+import { type TWordTranslationItem } from "@src/models/types";
 import { $subsLanguage } from "@src/models/subs";
 import { getLearningService } from "@src/utils/getLearningService";
 import { TranslateSelect } from "../ui/TranslateSelect";

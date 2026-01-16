@@ -6,7 +6,7 @@ import {
   addKeyboardEventsListeners,
   removeKeyboardEventsListeners,
 } from "@src/utils/keyboardHandler";
-import { TLearningService, TTranslationService } from "../types";
+import { type TLearningService, type TTranslationService } from "../types";
 import { fetchCurrentStreamingFx } from "../streamings";
 import { assertIsDefinedAndReturn } from "@root/utils/asserts";
 

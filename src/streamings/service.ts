@@ -1,6 +1,6 @@
-import { Captions } from "@src/models/types";
+import { type Captions } from "@src/models/types";
 
-interface Service {
+export interface Service {
   name: string;
 
   // Getting subtitles from a service
@@ -21,5 +21,3 @@ interface Service {
   // Init the service
   init: () => void;
 }
-
-export default Service;

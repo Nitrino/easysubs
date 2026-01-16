@@ -1,4 +1,4 @@
-import { createEvent, StoreWritable } from "effector";
+import { createEvent, type StoreWritable } from "effector";
 
 type PersistConfig = {
   key?: string;

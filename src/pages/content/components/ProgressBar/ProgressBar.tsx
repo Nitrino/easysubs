@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState, useRef, FC } from "react";
+import { type ReactElement, useEffect, useState, useRef, type FC } from "react";
 import { useUnit } from "effector-react";
 
 import { $video, moveToTimeRequested } from "@src/models/videos";

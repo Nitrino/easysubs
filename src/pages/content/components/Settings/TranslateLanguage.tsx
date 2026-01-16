@@ -1,4 +1,4 @@
-import { FC, HTMLProps } from "react";
+import { type FC, type HTMLProps } from "react";
 
 import { TranslateSelect } from "../ui/TranslateSelect";
 

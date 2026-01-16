@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import { type ChangeEvent, type FC } from "react";
 import { useUnit } from "effector-react";
 import { parse } from "subtitle";
 

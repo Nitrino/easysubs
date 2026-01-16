@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 
-import { TPhrasalVerb } from "@src/models/types";
+import { type TPhrasalVerb } from "@src/models/types";
 import { $learningService } from "@src/models/settings";
-import ILearningService from "@src/learning-service/learningService";
+import { type ILearningService } from "@src/learning-service/learningService";
 import { getLearningService } from "@src/utils/getLearningService";
 import toast from "react-hot-toast";
 import { PlusIcon } from "./assets/PlusIcon";

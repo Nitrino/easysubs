@@ -1,4 +1,4 @@
-import { TPhrasalVerb } from "@src/models/types";
+import { type TPhrasalVerb } from "@src/models/types";
 import { PHRASAL_VERBS } from "./phrasalVerbs";
 import { textToWords } from "./textToWords";
 import { cleanWord } from "./cleanWord";

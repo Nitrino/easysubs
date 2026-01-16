@@ -3,7 +3,7 @@ import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
-import Service from "./service";
+import { type Service } from "./service";
 import { assertIsDefined } from "@root/utils/asserts";
 
 class KinoPub implements Service {

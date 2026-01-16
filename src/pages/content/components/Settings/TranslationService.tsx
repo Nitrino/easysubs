@@ -1,11 +1,11 @@
-import { FC, HTMLProps } from "react";
+import { type FC, type HTMLProps } from "react";
 import { useUnit } from "effector-react";
 
 import {
   $translationService,
   translationServiceChanged,
 } from "@src/models/settings";
-import { TTranslationService } from "@src/models/types";
+import { type TTranslationService } from "@src/models/types";
 import { Select } from "../ui/Select";
 
 const getServiceOption = (service: string) => {

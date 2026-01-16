@@ -1,8 +1,8 @@
-import { parse, subTitleType } from "subtitle";
+import { parse, type subTitleType } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
-import Service from "./service";
+import { type Service } from "./service";
 import { assertIsDefined } from "@root/utils/asserts";
 
 type YoutubeSubtitle = {

@@ -1,5 +1,5 @@
 import { esRenderSetings } from "@src/models/settings";
-import Service from "./service";
+import { type Service } from "./service";
 import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video } from "@src/models/videos";

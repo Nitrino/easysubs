@@ -1,5 +1,5 @@
 import { esRenderSetings } from "@src/models/settings";
-import Service from "./service";
+import { type Service } from "./service";
 import { parse } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
 import { assertIsDefined } from "@root/utils/asserts";

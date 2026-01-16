@@ -3,12 +3,12 @@ import Youtube from "@src/streamings/youtube";
 import Coursera from "@src/streamings/coursera";
 import Netflix from "@src/streamings/netflix";
 import NetflixOnFlight from "@src/streamings/netflixOnFlight";
-import Service from "@src/streamings/service";
+import { type Service } from "@src/streamings/service";
 import ServiceStub from "@src/streamings/serviceStub";
-import Plex from "@src/streamings/plex";
-import Udemy from "@src/streamings/udemy";
-import Kinopoisk from "@src/streamings/kinopoisk";
-import Amazon from "@src/streamings/amazon";
+// import Plex from "@src/streamings/plex";
+// import Udemy from "@src/streamings/udemy";
+// import Kinopoisk from "@src/streamings/kinopoisk";
+// import Amazon from "@src/streamings/amazon";
 import Inoriginal from "@src/streamings/inoriginal";
 
 export const getCurrentService = (): Service => {

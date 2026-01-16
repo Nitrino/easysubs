@@ -1,5 +1,5 @@
-import { Captions, TSubItem } from "@src/models/types";
-import { TSub } from "@src/models/types";
+import { type Captions, type TSubItem } from "@src/models/types";
+import { type TSub } from "@src/models/types";
 import { textToWords } from "./textToWords";
 import { cleanWord } from "./cleanWord";
 

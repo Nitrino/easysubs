@@ -1,7 +1,7 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
 
 import {
-  TWordTranslate,
+  type TWordTranslate,
   googleTranslateBatchFetcher,
 } from "@src/utils/googleTranslateBatchFetcher";
 import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";

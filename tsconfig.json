@@ -8,7 +8,7 @@
     "alwaysStrict": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    // "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true,
     "noEmit": true,
     "baseUrl": ".",
     "allowJs": false,

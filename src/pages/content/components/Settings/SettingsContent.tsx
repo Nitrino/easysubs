@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useRef } from "react";
+import { type FC, type PropsWithChildren, useRef } from "react";
 import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";

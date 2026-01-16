@@ -1,10 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
 import { $currentSubs } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
-import { TSub, TSubItem } from "@src/models/types";
+import { type TSub, type TSubItem } from "@src/models/types";
 import {
   $autoStopEnabled,
   $moveBySubsEnabled,

@@ -1,11 +1,11 @@
-import { createStore, createEvent, createEffect, UnitValue, StoreValue } from "effector";
+import { createStore, createEvent, createEffect, type UnitValue, type StoreValue } from "effector";
 import { resync } from "subtitle";
 
 import { convertRawSubs } from "@src/utils/convertRawSubs";
 import { $video } from "@src/models/videos";
 import { getCurrentSubs } from "@src/utils/getCurrentSubs";
 import type { Captions, TSub } from "../types";
-import type Service from "@src/streamings/service";
+import { type Service } from "@src/streamings/service";
 import { $autoPause } from "../settings";
 
 export const ES_CUSTOM_SUB_LABEL = "custom";

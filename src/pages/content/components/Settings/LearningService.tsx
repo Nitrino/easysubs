@@ -1,8 +1,8 @@
-import { FC, HTMLProps } from "react";
+import { type FC, type HTMLProps } from "react";
 import { useUnit } from "effector-react";
 
 import { $learningService, learningServiceChanged } from "@src/models/settings";
-import { TLearningService } from "@src/models/types";
+import { type TLearningService } from "@src/models/types";
 import { Select } from "../ui/Select";
 
 const getServiceOption = (service: string) => {

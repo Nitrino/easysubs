@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { type FC } from "react";
 import { Toggle } from "../ui/Toggle";
 import { useUnit } from "effector-react";
 import { $moveBySubsEnabled, moveBySubsEnabledChanged } from "@src/models/settings";
