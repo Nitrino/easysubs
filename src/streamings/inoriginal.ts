@@ -1,4 +1,4 @@
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
@@ -45,7 +45,7 @@ class Inoriginal implements Service {
   }
 
   public async getSubs(label: string) {
-    if (!label || label == "off") return parse("");
+    if (!label || label == "off") return parseSync("");
 
     const episode = this.episodes.find((item) => item.id === this.videoId);
     assertIsDefined(episode)
@@ -62,7 +62,7 @@ class Inoriginal implements Service {
 
     const subsResp = await fetch(BASE_URL + subtitle.url);
     const subsData = await subsResp.text();
-    return parse(subsData);
+    return parseSync(subsData);
   }
 
   public getSubsContainer() {

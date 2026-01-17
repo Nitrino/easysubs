@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import { type Service } from "./service";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 
@@ -31,11 +31,14 @@ class Kinopoisk implements Service {
             const subtitleContent = [...subtitleParts].map((el) => getText(el)).join("\n");
             console.log("subtitleContent", subtitleContent);
             const startTime = videoElement.currentTime;
-            const captions = [
+            const captions: NodeList = [
               {
-                start: startTime * 1000,
-                end: (startTime + 100) * 1000,
-                text: subtitleContent,
+                type: 'cue',
+                data: {
+                  start: startTime * 1000,
+                  end: (startTime + 100) * 1000,
+                  text: subtitleContent,
+                }
               },
             ];
             rawSubsAdded(captions);
@@ -47,7 +50,7 @@ class Kinopoisk implements Service {
   }
 
   public async getSubs(_title: string) {
-    return parse("");
+    return parseSync("");
   }
 
   public getSubsContainer() {

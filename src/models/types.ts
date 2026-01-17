@@ -1,4 +1,4 @@
-import type { subTitleType } from "subtitle";
+// import type { NodeList } from "subtitle";
 
 export type TMoveDirection = "next" | "prev" | "current";
 
@@ -18,23 +18,23 @@ export type TSub = {
   items: TSubItem[];
 };
 
-type FullTranslationItemDefinition = {
-  meaning: string;
-  example: string;
-  synonyms: string[];
-};
+// type FullTranslationItemDefinition = {
+//   meaning: string;
+//   example: string;
+//   synonyms: string[];
+// };
 
-type FullTranslationItem = {
-  word: string;
-  translations: string[];
-  popularity: number;
-  definitions: FullTranslationItemDefinition[];
-};
+// type FullTranslationItem = {
+//   word: string;
+//   translations: string[];
+//   popularity: number;
+//   definitions: FullTranslationItemDefinition[];
+// };
 
-type FullTranslation = {
-  part_of_speech: string;
-  items: FullTranslationItem[];
-};
+// type FullTranslation = {
+//   part_of_speech: string;
+//   items: FullTranslationItem[];
+// };
 
 export type TTranslateAlternativeItem = [
   string,
@@ -93,7 +93,7 @@ export type TLearningService =
 
 export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt";
 
-export type Captions = subTitleType[];
+// export type Captions = NodeList;
 
 export type TPhrasalVerb = {
   key: string;

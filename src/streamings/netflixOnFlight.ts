@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import { type Service } from "./service";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 
 class NetflixOnFlight implements Service {
@@ -21,18 +21,21 @@ class NetflixOnFlight implements Service {
     waitForElement(() => {
       esSubsChanged("en");
       const subtitleSource = document.querySelector(".player-timedtext");
-      if (!subtitleSource) throw new Error('NetflixOnFlight.init() failed: subtitleSource was not found')
+      if (!subtitleSource) throw new Error("NetflixOnFlight.init() failed: subtitleSource was not found");
       const videoElement = document.querySelector("video");
-      if (!videoElement) throw new Error('NetflixOnFlight.init() failed: videoElement was not found')
+      if (!videoElement) throw new Error("NetflixOnFlight.init() failed: videoElement was not found");
       const subtitleObserver = new MutationObserver(() => {
         const subtitleParts = subtitleSource.getElementsByClassName("player-timedtext-text-container");
         const subtitleContent = [...subtitleParts].map((el) => getText(el)).join("\n");
         const startTime = videoElement.currentTime;
-        const captions = [
+        const captions: NodeList = [
           {
-            start: startTime * 1000,
-            end: (startTime + 100) * 1000,
-            text: subtitleContent,
+            type: "cue",
+            data: {
+              start: startTime * 1000,
+              end: (startTime + 100) * 1000,
+              text: subtitleContent,
+            },
           },
         ];
         rawSubsAdded(captions);
@@ -42,7 +45,7 @@ class NetflixOnFlight implements Service {
   }
 
   public async getSubs(_title: string) {
-    return parse("");
+    return parseSync("");
   }
 
   public getSubsContainer() {

@@ -23,8 +23,10 @@ export const withPersist = <State>(
   }
 
   chrome.storage.local.get([persistKey], (result) => {
-    if (result[persistKey]) {
-      store.on(rehydrate, () => JSON.parse(result[persistKey]));
+    const str: unknown = result[persistKey]
+    if (str) {
+      if (typeof str !== 'string') throw new Error('expected string')
+      store.on(rehydrate, () => JSON.parse(str));
       rehydrate();
     }
   });

@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import { type Service } from "./service";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 
 class Udemy implements Service {
@@ -16,20 +16,23 @@ class Udemy implements Service {
     waitForElement("div[class*='captions-display--captions-container']", () => {
       esSubsChanged("en");
       const subtitleSource = document.querySelector("div[class*='captions-display--captions-container']");
-      if (!subtitleSource) throw new Error('Udemy.init() failed: subtitleSource was not found')
+      if (!subtitleSource) throw new Error("Udemy.init() failed: subtitleSource was not found");
       const videoElement = document.querySelector("video");
-      if (!videoElement) throw new Error('Udemy.init() failed: videoElement was not found')
+      if (!videoElement) throw new Error("Udemy.init() failed: videoElement was not found");
       const subtitleObserver = new MutationObserver(() => {
         const subtitleParts = subtitleSource.querySelectorAll('[data-purpose="captions-cue-text"]');
 
         const subtitleContent = [...subtitleParts].map((el) => getText(el)).join("\n");
         console.log("subtitleContent", subtitleContent);
         const startTime = videoElement.currentTime;
-        const captions = [
+        const captions: NodeList = [
           {
-            start: startTime * 1000,
-            end: (startTime + 100) * 1000,
-            text: subtitleContent,
+            type: "cue",
+            data: {
+              start: startTime * 1000,
+              end: (startTime + 100) * 1000,
+              text: subtitleContent,
+            },
           },
         ];
         rawSubsAdded(captions);
@@ -39,7 +42,7 @@ class Udemy implements Service {
   }
 
   public async getSubs(_title: string) {
-    return parse("");
+    return parseSync("");
   }
 
   public getSubsContainer() {

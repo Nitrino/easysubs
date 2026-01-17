@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import { type Service } from "./service";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
 import { assertIsDefined } from "@root/utils/asserts";
 
@@ -26,7 +26,7 @@ class Coursera implements Service {
   }
 
   public async getSubs(language: string) {
-    if (!language) return parse("");
+    if (!language) return parseSync("");
     const track: HTMLTrackElement | null = document.querySelector(`track[srclang="${language}"]`);
 
     if (!track) {
@@ -38,7 +38,7 @@ class Coursera implements Service {
     const resp = await fetch(subUri);
     const text = await resp.text();
 
-    return parse(text);
+    return parseSync(text);
   }
 
   public getSettingsButtonContainer() {

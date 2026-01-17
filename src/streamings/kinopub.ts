@@ -1,5 +1,5 @@
 import { Parser } from "m3u8-parser";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
@@ -26,8 +26,8 @@ class KinoPub implements Service {
   }
 
   public async getSubs(label: string) {
-    if (!label) return parse("");
-    if (!this.videoPlaylistUrl) return parse("");
+    if (!label) return parseSync("");
+    if (!this.videoPlaylistUrl) return parseSync("");
 
     const cdnHostName = new URL(this.videoPlaylistUrl)?.hostname ?? "cdn-azure.net";
     const resp = await fetch(this.videoPlaylistUrl);
@@ -52,7 +52,7 @@ class KinoPub implements Service {
     const subsResp = await fetch(subUri);
     const subsData = await subsResp.text();
 
-    const subs = parse(subsData);
+    const subs = parseSync(subsData);
 
     return subs;
   }

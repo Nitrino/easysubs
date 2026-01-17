@@ -1,4 +1,4 @@
-import { parse, type subTitleType } from "subtitle";
+import { parseSync, type NodeCue, type NodeList } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
@@ -39,7 +39,7 @@ class Youtube implements Service {
   }
 
   public async getSubs(label: string) {
-    if (!label) return parse("");
+    if (!label) return parseSync("");
     const videoId = this.getVideoId();
     const subCacheUrl = this.subCache[videoId]![label]
     assertIsDefined(subCacheUrl)
@@ -49,22 +49,28 @@ class Youtube implements Service {
     const resp = await fetch(subUri);
     const respJson: { events: YoutubeSubtitle[] } = await resp.json();
 
-    const subs: subTitleType[] = respJson.events.map((sub) => {
+    const subs: NodeList = respJson.events.map((sub) => {
       if (!sub.segs) {
         return {
-          start: sub.tStartMs,
-          end: sub.tStartMs,
-          text: "",
-        };
+          type: 'cue',
+          data: {
+            start: sub.tStartMs,
+            end: sub.tStartMs,
+            text: "",
+          }
+        } satisfies NodeCue;
       }
 
       const tOffsetMs = sub.segs.at(-1)?.tOffsetMs
       const end = tOffsetMs ? tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
 
       return {
-        start: sub.tStartMs,
-        end: end,
-        text: sub.segs.map((seg) => seg.utf8).join(""),
+        type: 'cue',
+        data: {
+          start: sub.tStartMs,
+          end: end,
+          text: sub.segs.map((seg) => seg.utf8).join(""),
+        }
       };
     });
     return subs;

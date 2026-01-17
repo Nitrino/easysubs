@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import { type Service } from "./service";
-import { parse, type subTitleType } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
 import { assertIsDefined } from "@root/utils/asserts";
 
@@ -30,11 +30,11 @@ type TTrackChanged = {
 };
 
 type TSubCache = {
-  originalData?: subTitleType[];
+  originalData?: NodeList;
   videoId: string;
   title: string;
   url: string;
-  data?: subTitleType[];
+  data?: NodeList;
   adBreaks?: TAdBreak[];
 };
 
@@ -90,7 +90,7 @@ class Netflix implements Service {
   }
 
   public async getSubs(title: string) {
-    if (title === "") return parse("");
+    if (title === "") return parseSync("");
 
     const moveId = this.getMoveId();
     const subCacheItem = this.subCache.find((item) => item.videoId == moveId && item.title === title);
@@ -114,7 +114,7 @@ class Netflix implements Service {
       console.log("getSubs from server", this.adBreaks);
       const resp = await fetch(subCacheItem.url);
       const data = await resp.text();
-      const subs = parse(data);
+      const subs = parseSync(data);
       subCacheItem.originalData = subs;
       subCacheItem.data = subs;
       subCacheItem.adBreaks = JSON.parse(JSON.stringify(this.adBreaks));
@@ -257,25 +257,28 @@ class Netflix implements Service {
     return track.bcp47 + postfix;
   }
 
-  private resyncSubsWithAds(subs: subTitleType[]) {
+  private resyncSubsWithAds(subs: NodeList): NodeList {
     const adBreak = this.adBreaks[this.adBreaks.length - 1];
     assertIsDefined(adBreak)
     console.log("resynced with time: ", adBreak.durationMs);
 
-    subs = subs.map((sub) => {
-      if (Number(sub.start) >= adBreak.locationMs) {
-        const start = Number(sub.start) + adBreak.durationMs;
-        const end = Number(sub.end) + adBreak.durationMs;
+    return subs.map((sub) => {
+      if (sub.type === 'cue' && sub.data.start >= adBreak.locationMs) {
+        const start = sub.data.start + adBreak.durationMs;
+        const end = sub.data.end + adBreak.durationMs;
 
-        return Object.assign({}, sub, {
-          start,
-          end,
-        });
+        return {
+          type: 'cue',
+          data: {
+            ...sub.data,
+            start,
+            end,
+          }
+        }
       } else {
         return sub;
       }
     });
-    return subs;
   }
 }
 

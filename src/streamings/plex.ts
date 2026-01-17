@@ -1,6 +1,6 @@
 import { esRenderSetings } from "@src/models/settings";
 import { type Service } from "./service";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 
 class Plex implements Service {
@@ -20,20 +20,23 @@ class Plex implements Service {
     waitForElement(() => {
       esSubsChanged("en");
       const subtitleSource = document.querySelector(".libjass-subs");
-      if (!subtitleSource) throw new Error('Plex.init() failed: subtitleSource was not found')
+      if (!subtitleSource) throw new Error("Plex.init() failed: subtitleSource was not found");
       const videoElement = document.querySelector("video");
-      if (!videoElement) throw new Error('Plex.init() failed: videoElement was not found')
+      if (!videoElement) throw new Error("Plex.init() failed: videoElement was not found");
       const subtitleObserver = new MutationObserver(() => {
         const subtitleParts = subtitleSource.querySelectorAll("span span");
 
         const subtitleContent = [...subtitleParts].map((el) => getText(el)).join("\n");
         console.log("subtitleContent", subtitleContent);
         const startTime = videoElement.currentTime;
-        const captions = [
+        const captions: NodeList = [
           {
-            start: startTime * 1000,
-            end: (startTime + 100) * 1000,
-            text: subtitleContent,
+            type: "cue",
+            data: {
+              start: startTime * 1000,
+              end: (startTime + 100) * 1000,
+              text: subtitleContent,
+            },
           },
         ];
         rawSubsAdded(captions);
@@ -43,7 +46,7 @@ class Plex implements Service {
   }
 
   public async getSubs(_title: string) {
-    return parse("");
+    return parseSync("");
   }
 
   public getSubsContainer() {

@@ -25,7 +25,8 @@ import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
 import { $autoPause } from "../settings";
 import { debug } from "patronum";
-import { type Captions } from "../types";
+import { type NodeList, type Node } from "subtitle";
+import { assertIsDefined } from "@root/utils/asserts";
 
 split({
   source: esSubsChanged,
@@ -86,7 +87,7 @@ sample({
 sample({
   clock: subsReloadRequested,
   source: { subsTitle: $subsTitle, rawSubs: $rawSubs },
-  filter: (source): source is { subsTitle: string; rawSubs: Captions } => !!source.subsTitle && source.rawSubs.length > 0,
+  filter: (source): source is { subsTitle: string; rawSubs: NodeList } => !!source.subsTitle && source.rawSubs.length > 0,
   fn: ({ subsTitle }) => subsTitle!,
   target: esSubsChanged,
 });
@@ -96,15 +97,21 @@ $rawSubs.on(
   (_, subs) => subs
 );
 
-$rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
+$rawSubs.on(rawSubsAdded, (oldSubs, newSubs): NodeList | undefined => {
   const lastSub = oldSubs[oldSubs.length - 1];
-  if (!lastSub) {
-    return [...oldSubs, ...newSubs];
-  }
-  if (lastSub.text != newSubs[0]!.text && lastSub.start != newSubs[0]!.start) {
+  if (!lastSub) return [...oldSubs, ...newSubs];
+  const n = newSubs[0]
+  assertIsDefined(n)
+  if (lastSub.type === 'cue' && n.type === 'cue' && lastSub.data.text != n.data.text && lastSub.data.start != n.data.start) {
     const subs = oldSubs.slice(0, -1);
-    lastSub.end = lastSub.start;
-    return [...subs, ...[lastSub], ...newSubs];
+    const lastSub_: Node = {
+      type: 'cue',
+      data: {
+        ...lastSub.data,
+        end: lastSub.data.start
+      }
+    }
+    return [...subs, lastSub_, ...newSubs];
   }
 });
 

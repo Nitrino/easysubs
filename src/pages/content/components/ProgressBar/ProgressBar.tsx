@@ -12,7 +12,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
   const [video, subs] = useUnit([$video, $subs]);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [elements, updateElements] = useState<ReactElement[]>([]);
-  const animateRef = useRef<number>();
+  const animateRef = useRef<number>(null);
 
   function handleClick(event: any) {
     if (!video || !progressBarRef.current) {

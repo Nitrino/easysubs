@@ -38,7 +38,11 @@ export default defineConfig({
     makeManifest({
       getCacheInvalidationKey,
     }),
-    react(),
+    react({
+      babel: {
+        plugins: ["effector/babel-plugin"], // for debug
+      },
+    }),
     customDynamicImport(),
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
