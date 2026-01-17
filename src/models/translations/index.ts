@@ -132,12 +132,16 @@ export const fetchWordTranslationFx = createEffect<
   if (!result) throw new Error(`translation result is empty: ${result}`)
 
   const transcription: unknown = ((result as any)[0][0] as unknown);
+  const detectedSourceLanguage: unknown = ((result as any)[2] as unknown);
   const mainTranslation: unknown = ((result as any)[1][0][0][5][0][0] as unknown);
   const alternativesRaw: TTranslateAlternative[] = ((result as any)[3] && (result as any)[3][5] && (result as any)[3][5][0]) || [];
+
   alternativesRaw.forEach((x: unknown) => unknown_assertIsTTranslateAlternative(x))
   if (transcription !== null && typeof transcription !== 'string') throw new Error('transcription is not string or null')
   if (typeof mainTranslation !== 'string') throw new Error('mainTranslation is not string')
+  if (typeof detectedSourceLanguage !== 'string') throw new Error('detectedSourceLanguage is not string')
   if (!Array.isArray(alternativesRaw)) throw new Error('alternativesRaw is not array')
+
   const alternatives: TWordTranslationItem[] = alternativesRaw
     .flatMap((alternative: TTranslateAlternative): TWordTranslationItem[] => {
       const variants: [string, string[], number][] = alternative[1].map(
@@ -165,6 +169,7 @@ export const fetchWordTranslationFx = createEffect<
 
   return {
     source: source,
+    detectedSourceLanguage,
     mainTranslation: mainTranslation,
     targetLanguage: language,
     translations: alternatives.slice(0, 5),

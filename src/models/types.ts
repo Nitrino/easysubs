@@ -122,6 +122,7 @@ export type TWordTranslationItem = {
 
 export type TWordTranslation = {
   source: string;
+  detectedSourceLanguage: string;
   mainTranslation: string;
   targetLanguage: string;
   translations: TWordTranslationItem[];
