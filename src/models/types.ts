@@ -1,5 +1,3 @@
-// import type { NodeList } from "subtitle";
-
 export type TMoveDirection = "next" | "prev" | "current";
 
 export type TSubItem = {
@@ -17,24 +15,6 @@ export type TSub = {
   cleanedText: string;
   items: TSubItem[];
 };
-
-// type FullTranslationItemDefinition = {
-//   meaning: string;
-//   example: string;
-//   synonyms: string[];
-// };
-
-// type FullTranslationItem = {
-//   word: string;
-//   translations: string[];
-//   popularity: number;
-//   definitions: FullTranslationItemDefinition[];
-// };
-
-// type FullTranslation = {
-//   part_of_speech: string;
-//   items: FullTranslationItem[];
-// };
 
 export type TTranslateAlternativeItem = [
   string,
@@ -92,8 +72,6 @@ export type TLearningService =
   | "disabled";
 
 export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt";
-
-// export type Captions = NodeList;
 
 export type TPhrasalVerb = {
   key: string;

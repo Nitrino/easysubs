@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useRef, useState } from "react";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
@@ -58,13 +58,17 @@ export const Subs: FC<TSubsProps> = () => {
     }
   };
 
+  // fixes https://github.com/react-grid-layout/react-draggable/issues/771 "_reactDom.default.findDOMNode is not a function" on React 19
+  const nodeRef = useRef<HTMLDivElement>(null);
+
   return (
-    <Draggable>
+    <Draggable nodeRef={nodeRef}>
       <div
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
         onMouseEnter={handleOnMouseEnter}
         style={video ? { fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` } : undefined}
+        ref={nodeRef}
       >
         {currentSubs.map((sub) => (
           <Sub sub={sub} />

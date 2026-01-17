@@ -1,11 +1,11 @@
 import { createStore, createEvent, createEffect, type UnitValue, type StoreValue } from "effector";
 
 import { convertRawSubs } from "@src/utils/convertRawSubs";
-import { $video } from "@src/models/videos";
+import type { $video } from "@src/models/videos";
 import { getCurrentSubs } from "@src/utils/getCurrentSubs";
 import type { TSub } from "../types";
 import { type Service } from "@src/streamings/service";
-import { $autoPause } from "../settings";
+import type { $autoPause } from "../settings";
 import { type NodeList } from "subtitle";
 import { resyncSync } from "@root/src/utils/resyncNode";
 

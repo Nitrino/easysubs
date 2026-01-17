@@ -7,6 +7,7 @@ import addHmr from "./utils/plugins/add-hmr";
 import watchRebuild from "./utils/plugins/watch-rebuild";
 import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script";
 import { assertIsDefinedAndReturn } from "./utils/asserts";
+import tailwindcss from "@tailwindcss/vite";
 
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, "src");
@@ -32,9 +33,11 @@ export default defineConfig({
       "@src": srcDir,
       "@assets": assetsDir,
       "@pages": pagesDir,
+      stream: "stream-browserify",
     },
   },
   plugins: [
+    tailwindcss(),
     makeManifest({
       getCacheInvalidationKey,
     }),
@@ -52,7 +55,7 @@ export default defineConfig({
   build: {
     outDir,
     /** Can slow down build speed. */
-    // sourcemap: isDev,
+    sourcemap: isDev,
     minify: isProduction,
     modulePreload: false,
     reportCompressedSize: isProduction,
@@ -73,6 +76,15 @@ export default defineConfig({
           return `assets/[ext]/${assetFileName}.chunk.[ext]`;
         },
       },
+    },
+  },
+  define: {
+    process: {
+      env: {
+        NODE_ENV: isProduction ? "production" : "development",
+      },
+      browser: true,
+      version: "",
     },
   },
 });
