@@ -116,9 +116,10 @@ $rawSubs.on(rawSubsAdded, (oldSubs, newSubs): NodeList | undefined => {
 });
 
 $rawSubs.reset(resetSubs);
-$currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
-  JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs
-);
+$currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) => {
+  if (subs === undefined) return [];
+  return JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs;
+});
 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
 $subsLanguage.on(subsLanguageDetectFx.doneData, (_, lang) => lang);

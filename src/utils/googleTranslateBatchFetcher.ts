@@ -4,7 +4,7 @@ export type TWordTranslate = {
   original: string;
   lang: string;
   main: string;
-  alternatives: [];
+  alternatives: unknown[];
 };
 
 type TRequest = {
