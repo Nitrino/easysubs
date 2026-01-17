@@ -99,8 +99,14 @@ export const fetchSubTranslationFx = createEffect<
     } else {
       const reponseText: string = JSON.parse(resp)
         ["sentences"].map((sentence: unknown) => {
-          if (typeof sentence !== "object" || sentence === null) throw new Error("Invalid translation: sentence is not an object");
-          if (!('trans' in sentence) || typeof sentence.trans !== "string") throw new Error("Invalid translation: 'trans' property is missing or not a string");
+          if (typeof sentence !== "object" || sentence === null) {
+            console.error('sentence', sentence)
+            throw new Error("Invalid translation: sentence is not an object")
+          };
+          if (!('trans' in sentence) || typeof sentence.trans !== "string") {
+            console.error('sentence', sentence)
+            throw new Error("Invalid translation: 'trans' property is missing or not a string")
+          };
           sentence["trans"]
         })
         .join(" ");
