@@ -50,6 +50,7 @@ export type TTranslateAlternative = [
   string,
   number,
 ];
+
 export type TPartOfSpeach =
   | "noun"
   | "pronoun"
@@ -66,8 +67,6 @@ export type TPartOfSpeach =
   | "auxiliary verb"
   | "particle"
   | "unknown";
-
-return `unknown number ${val}`;
 
 export type TWordTranslationItem = {
   word: string;
