@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { type FC } from "react";
 import { useUnit } from "effector-react";
 import { $subsDelay, subsDelayButtonPressed } from "@src/models/subs";
 import { ArrowBackDouble } from "./assets/ArrowBackDouble";

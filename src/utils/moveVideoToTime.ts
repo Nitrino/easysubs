@@ -1,4 +1,4 @@
-import Service from "@src/streamings/service";
+import { type Service } from "@src/streamings/service";
 
 export const moveVideoToTime = (video: HTMLVideoElement, streaming: Service, time: number) => {
   if (streaming.constructor.name.toLowerCase() === "netflix") {

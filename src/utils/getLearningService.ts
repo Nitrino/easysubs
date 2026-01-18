@@ -1,7 +1,7 @@
 import { Anki } from "@src/learning-service/anki";
 import { LinguaLeo } from "@src/learning-service/linguaLeo";
 import { PuzzleEnglish } from "@src/learning-service/puzzleEnglish";
-import { TLearningService } from "@src/models/types";
+import { type TLearningService } from "@src/models/types";
 
 export const getLearningService = (learningService: TLearningService) => {
   if (learningService === "anki") {

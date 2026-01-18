@@ -1,10 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useRef, useState } from "react";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
 import { $currentSubs } from "@src/models/subs";
 import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
-import { TSub, TSubItem } from "@src/models/types";
+import { type TSub, type TSubItem } from "@src/models/types";
 import {
   $autoStopEnabled,
   $moveBySubsEnabled,
@@ -40,7 +40,7 @@ export const Subs: FC<TSubsProps> = () => {
 
   const handleOnMouseLeave = () => {
     if (wasPaused) {
-      video.play();
+      video?.play();
       console.log("handleWasPausedChanged false");
       handleWasPausedChanged(false);
     }
@@ -50,7 +50,7 @@ export const Subs: FC<TSubsProps> = () => {
     if (!autoStopEnabled) {
       return;
     }
-    if (!video.paused) {
+    if (video && !video.paused) {
       console.log("handleWasPausedChanged true");
 
       handleWasPausedChanged(true);
@@ -58,13 +58,17 @@ export const Subs: FC<TSubsProps> = () => {
     }
   };
 
+  // fixes https://github.com/react-grid-layout/react-draggable/issues/771 "_reactDom.default.findDOMNode is not a function" on React 19
+  const nodeRef = useRef<HTMLDivElement>(null);
+
   return (
-    <Draggable>
+    <Draggable nodeRef={nodeRef}>
       <div
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
         onMouseEnter={handleOnMouseEnter}
-        style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
+        style={video ? { fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` } : undefined}
+        ref={nodeRef}
       >
         {currentSubs.map((sub) => (
           <Sub sub={sub} />

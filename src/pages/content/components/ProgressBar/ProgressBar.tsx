@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState, useRef, FC } from "react";
+import { type ReactElement, useEffect, useState, useRef, type FC } from "react";
 import { useUnit } from "effector-react";
 
 import { $video, moveToTimeRequested } from "@src/models/videos";
@@ -12,7 +12,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
   const [video, subs] = useUnit([$video, $subs]);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [elements, updateElements] = useState<ReactElement[]>([]);
-  const animateRef = useRef<number>();
+  const animateRef = useRef<number>(null);
 
   function handleClick(event: any) {
     if (!video || !progressBarRef.current) {
@@ -34,7 +34,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
     const time = getCurrentVideoTime(video);
     const leftBorder = time + TIME_PERIOD / 2;
     const rightBorder = time - TIME_PERIOD / 2;
-    const msInPx = progressBarRef.current.parentElement.clientWidth / TIME_PERIOD;
+    const msInPx = (progressBarRef.current.parentElement?.clientWidth ?? 0) / TIME_PERIOD;
 
     const subsInDuration = subs.filter(
       (sub) => (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder)

@@ -6,6 +6,8 @@ import customDynamicImport from "./utils/plugins/custom-dynamic-import";
 import addHmr from "./utils/plugins/add-hmr";
 import watchRebuild from "./utils/plugins/watch-rebuild";
 import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script";
+import { assertIsDefinedAndReturn } from "./utils/asserts";
+import tailwindcss from "@tailwindcss/vite";
 
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, "src");
@@ -31,13 +33,19 @@ export default defineConfig({
       "@src": srcDir,
       "@assets": assetsDir,
       "@pages": pagesDir,
+      stream: "stream-browserify",
     },
   },
   plugins: [
+    tailwindcss(),
     makeManifest({
       getCacheInvalidationKey,
     }),
-    react(),
+    react({
+      babel: {
+        plugins: ["effector/babel-plugin"], // for debug
+      },
+    }),
     customDynamicImport(),
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
@@ -47,7 +55,7 @@ export default defineConfig({
   build: {
     outDir,
     /** Can slow down build speed. */
-    // sourcemap: isDev,
+    sourcemap: isDev,
     minify: isProduction,
     modulePreload: false,
     reportCompressedSize: isProduction,
@@ -63,11 +71,20 @@ export default defineConfig({
         entryFileNames: "src/pages/[name]/index.js",
         chunkFileNames: isDev ? "assets/js/[name].js" : "assets/js/[name].[hash].js",
         assetFileNames: (assetInfo) => {
-          const { name } = path.parse(assetInfo.name);
+          const { name } = path.parse(assertIsDefinedAndReturn(assetInfo.name));
           const assetFileName = name === "contentStyle" ? `${name}${getCacheInvalidationKey()}` : name;
           return `assets/[ext]/${assetFileName}.chunk.[ext]`;
         },
       },
+    },
+  },
+  define: {
+    process: {
+      env: {
+        NODE_ENV: isProduction ? "production" : "development",
+      },
+      browser: true,
+      version: "",
     },
   },
 });

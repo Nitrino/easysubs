@@ -1,7 +1,8 @@
 import { esRenderSetings } from "@src/models/settings";
-import Service from "./service";
-import { parse, subTitleType } from "subtitle";
+import { type Service } from "./service";
+import { parseSync, type NodeList } from "subtitle";
 import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
+import { assertIsDefined } from "@root/utils/asserts";
 
 const WEBVTT = "webvtt-lssdh-ios8";
 
@@ -29,11 +30,11 @@ type TTrackChanged = {
 };
 
 type TSubCache = {
-  originalData?: subTitleType[];
+  originalData?: NodeList;
   videoId: string;
   title: string;
   url: string;
-  data?: subTitleType[];
+  data?: NodeList;
   adBreaks?: TAdBreak[];
 };
 
@@ -89,10 +90,11 @@ class Netflix implements Service {
   }
 
   public async getSubs(title: string) {
-    if (title === "") return parse("");
+    if (title === "") return parseSync("");
 
     const moveId = this.getMoveId();
     const subCacheItem = this.subCache.find((item) => item.videoId == moveId && item.title === title);
+    if (!subCacheItem) throw new Error('Netflix.getSubs() failed: subCacheItem was not found')
 
     const isSubCacheAdBreaksSame = JSON.stringify(subCacheItem.adBreaks) == JSON.stringify(this.adBreaks);
 
@@ -103,6 +105,7 @@ class Netflix implements Service {
 
     if (subCacheItem.data) {
       console.log("getSubs from cache with resync", subCacheItem.adBreaks, this.adBreaks);
+      if (!subCacheItem.originalData) throw new Error('Netflix.getSubs() failed: subCacheItem.originalData is nullable')
       const subs = this.resyncSubsWithAds(subCacheItem.originalData);
       subCacheItem.data = subs;
       subCacheItem.adBreaks = JSON.parse(JSON.stringify(this.adBreaks));
@@ -111,7 +114,7 @@ class Netflix implements Service {
       console.log("getSubs from server", this.adBreaks);
       const resp = await fetch(subCacheItem.url);
       const data = await resp.text();
-      const subs = parse(data);
+      const subs = parseSync(data);
       subCacheItem.originalData = subs;
       subCacheItem.data = subs;
       subCacheItem.adBreaks = JSON.parse(JSON.stringify(this.adBreaks));
@@ -121,22 +124,22 @@ class Netflix implements Service {
 
   public getSubsContainer() {
     const selector = document.querySelector(".watch-video--player-view");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
     const selector = (
-      document.querySelector('[data-uia="control-fullscreen-enter"]') ||
+      document.querySelector('[data-uia="control-fullscreen-enter"]') ??
       document.querySelector('[data-uia="control-fullscreen-exit"]')
-    ).parentElement;
-    if (selector === null) throw new Error("Settings button container not found");
+    )?.parentElement;
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector("#appMountPoint");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
@@ -178,7 +181,7 @@ class Netflix implements Service {
         this.subCache.push({
           videoId: event.detail.movieId,
           title: title,
-          url: this.randomProperty(track.ttDownloadables[WEBVTT].urls).url,
+          url: this.randomProperty(track.ttDownloadables[WEBVTT].urls)!.url,
         });
       }
     });
@@ -213,6 +216,7 @@ class Netflix implements Service {
   private handleAddHide(event: CustomEvent<number>) {
     console.log("handleAddHide", event.detail);
     const currentBreak = this.adBreaks[this.adBreaks.length - 1];
+    assertIsDefined(currentBreak)
     console.log("old durationMs", currentBreak.durationMs);
     console.log("timeVideo", event.detail);
     console.log("new durationMs", event.detail - currentBreak.locationMs);
@@ -228,7 +232,7 @@ class Netflix implements Service {
 
   private randomProperty = (obj: Record<string, TUrl>) => {
     const keys = Object.keys(obj);
-    return obj[keys[(keys.length * Math.random()) << 0]];
+    return obj[keys[(keys.length * Math.random()) << 0]!];
   };
 
   private getTrackTitle(track: TTrack): string {
@@ -253,24 +257,28 @@ class Netflix implements Service {
     return track.bcp47 + postfix;
   }
 
-  private resyncSubsWithAds(subs: subTitleType[]) {
+  private resyncSubsWithAds(subs: NodeList): NodeList {
     const adBreak = this.adBreaks[this.adBreaks.length - 1];
+    assertIsDefined(adBreak)
     console.log("resynced with time: ", adBreak.durationMs);
 
-    subs = subs.map((sub) => {
-      if (Number(sub.start) >= adBreak.locationMs) {
-        const start = Number(sub.start) + adBreak.durationMs;
-        const end = Number(sub.end) + adBreak.durationMs;
+    return subs.map((sub) => {
+      if (sub.type === 'cue' && sub.data.start >= adBreak.locationMs) {
+        const start = sub.data.start + adBreak.durationMs;
+        const end = sub.data.end + adBreak.durationMs;
 
-        return Object.assign({}, sub, {
-          start,
-          end,
-        });
+        return {
+          type: 'cue',
+          data: {
+            ...sub.data,
+            start,
+            end,
+          }
+        }
       } else {
         return sub;
       }
     });
-    return subs;
   }
 }
 

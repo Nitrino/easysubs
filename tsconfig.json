@@ -1,5 +1,14 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "verbatimModuleSyntax": true,
     "noEmit": true,
     "baseUrl": ".",
     "allowJs": false,
@@ -9,13 +18,13 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "types": ["vite/client", "node"],
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["./src/global.d.ts", "node_modules/@types"],
+    "typeRoots": ["./src/global.d.ts", "node_modules", "node_modules/@types"],
     "paths": {
       "@root/*": ["./*"],
       "@src/*": ["src/*"],
@@ -23,8 +32,7 @@
       "@pages/*": ["src/pages/*"],
       "virtual:reload-on-update-in-background-script": ["./src/global.d.ts"],
       "virtual:reload-on-update-in-view": ["./src/global.d.ts"]
-    },
-
+    }
   },
   "include": ["src", "utils", "vite.config.ts", "node_modules/@types"]
 }

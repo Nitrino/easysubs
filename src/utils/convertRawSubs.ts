@@ -1,5 +1,6 @@
-import { Captions, TSubItem } from "@src/models/types";
-import { TSub } from "@src/models/types";
+import { type NodeList } from "subtitle";
+import { type TSubItem } from "@src/models/types";
+import { type TSub } from "@src/models/types";
 import { textToWords } from "./textToWords";
 import { cleanWord } from "./cleanWord";
 
@@ -12,9 +13,10 @@ const cleanText = (text: string): string => {
   return tmpDiv.textContent || "";
 };
 
-export const convertRawSubs = (rawSubs: Captions): TSub[] => {
+export const convertRawSubs = (rawSubs: NodeList): TSub[] => {
   return rawSubs.map((sub, index) => {
-    const words = textToWords(sub.text).filter((word) => word);
+    if (sub.type !== 'cue') return
+    const words = textToWords(sub.data.text).filter((word) => word);
     const items: TSubItem[] = words.map((word: string) => {
       return {
         text: word,
@@ -26,11 +28,11 @@ export const convertRawSubs = (rawSubs: Captions): TSub[] => {
 
     return {
       id: index,
-      start: Number(sub.start),
-      end: Number(sub.end),
-      text: sub.text,
-      cleanedText: cleanText(sub.text),
+      start: sub.data.start,
+      end: sub.data.end,
+      text: sub.data.text,
+      cleanedText: cleanText(sub.data.text),
       items: items,
     };
-  });
+  }).filter(x => !!x);
 };

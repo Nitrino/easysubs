@@ -1,14 +1,15 @@
-import { createStore, createEffect, createEvent, StoreValue, sample } from "effector";
+import { createStore, createEffect, createEvent, type StoreValue, sample } from "effector";
 import { debug } from "patronum";
 import { $currentSubs, $subs } from "../subs";
-import { TMoveDirection } from "../types";
+import { type TMoveDirection } from "../types";
 import { moveVideoToTime } from "@src/utils/moveVideoToTime";
 import { $streaming } from "../streamings";
+import { assertIsDefined } from "@root/utils/asserts";
 
 const TIME_SEEK_TIME = 5000;
 
 export const $video = createStore<HTMLVideoElement | null>(null);
-export const getCurrentVideoFx = createEffect<void, HTMLVideoElement>(() => document.querySelector("video"));
+export const getCurrentVideoFx = createEffect<void, HTMLVideoElement | null>(() => document.querySelector("video"));
 export const videoTimeUpdate = createEvent<void>();
 
 export const $wasPaused = createStore<boolean>(false);
@@ -56,13 +57,16 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
       moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
     }
 
-    let prevSub = subs[currentSubs[0].id - 1];
+    const currentSubsId = currentSubs[0]!.id
+    assertIsDefined(currentSubsId)
+    let prevSub = subs[currentSubsId - 1];
+    assertIsDefined(prevSub)
 
     if (prevSub.end - prevSub.start < 20) {
       // if the previous subtitle is too short, we need move to the previous one
       // to avoid the situation when the previous subtitle is the same as the current one.
       // It's happening with youtube auto-generated subtitles
-      prevSub = subs[currentSubs[0].id - 2];
+      prevSub = subs[currentSubsId - 2];
     }
 
     const isPrevSubClose = prevSub && currentTime - prevSub.end <= TIME_SEEK_TIME;
@@ -76,7 +80,7 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
 
   if (direction === "current") {
     if (currentSubs.length > 0) {
-      moveVideoToTime(video, streaming, currentSubs[0].start);
+      moveVideoToTime(video, streaming, currentSubs[0]!.start);
       video.play();
     }
   }
@@ -87,6 +91,7 @@ export const moveToTimeFx = createEffect<
   { video: StoreValue<typeof $video>; streaming: StoreValue<typeof $streaming>; time: number },
   void
 >(({ video, streaming, time }) => {
+  if (!video) throw new Error("moveToTimeFx: Video element not found");
   moveVideoToTime(video, streaming, time);
 });
 

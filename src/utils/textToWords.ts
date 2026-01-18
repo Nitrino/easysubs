@@ -4,5 +4,5 @@ export const textToWords = (text: string): string[] => {
 
   const items = Array.from(tmpDiv.childNodes);
 
-  return items.flatMap((item) => (item.textContent || "").match(/[^ ]+/g));
+  return items.flatMap((item) => (item.textContent || "").match(/[^ ]+/g) ?? []);
 };

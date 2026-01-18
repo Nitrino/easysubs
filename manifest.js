@@ -67,6 +67,8 @@ const manifest = {
   web_accessible_resources: [
     {
       resources: [
+        "assets/js/*.map",
+        "assets/css/*.map",
         "assets/js/*.js",
         "assets/css/*.css",
         "icon-128.png",

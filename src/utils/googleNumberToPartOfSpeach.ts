@@ -1,4 +1,6 @@
-export const googleNumberToPartOfSpeach = (val: number) => {
+import type { TPartOfSpeach } from "../models/types";
+
+export const googleNumberToPartOfSpeach = (val: number): TPartOfSpeach => {
   switch (val) {
     case 1:
       return "noun";
@@ -39,6 +41,7 @@ export const googleNumberToPartOfSpeach = (val: number) => {
     case 19:
       return "particle";
     default:
-      return `unknown number ${val}`;
+      console.error(`googleNumberToPartOfSpeach: unknown number ${val}`)
+      return 'unknown'
   }
 };

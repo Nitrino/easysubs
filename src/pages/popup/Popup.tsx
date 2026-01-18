@@ -1,13 +1,4 @@
-function castTarget(target) {
-  return typeof target === "object"
-    ? target
-    : {
-        tabId: target,
-        frameId: 0,
-      };
-}
-
-async function getTab() {
+async function getTab(): Promise<chrome.tabs.Tab | undefined> {
   const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   return tabs[0];
 }
@@ -15,11 +6,15 @@ async function getTab() {
 const Popup = () => {
   const handleRequestPermissions = async () => {
     const tab = await getTab();
+    if (!tab?.url) {
+      console.warn("No active tab URL found");
+      return;
+    }
     const isGranted = await chrome.permissions.request({
       permissions: ["scripting", "storage", "activeTab"],
       origins: [tab.url],
     });
-    if (isGranted) {
+    if (isGranted && tab.id !== undefined) {
       chrome.tabs.reload(tab.id);
     }
   };

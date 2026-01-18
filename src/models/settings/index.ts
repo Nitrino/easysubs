@@ -6,8 +6,9 @@ import {
   addKeyboardEventsListeners,
   removeKeyboardEventsListeners,
 } from "@src/utils/keyboardHandler";
-import { TLearningService, TTranslationService } from "../types";
+import { type TLearningService, type TTranslationService } from "../types";
 import { fetchCurrentStreamingFx } from "../streamings";
+import { assertIsDefinedAndReturn } from "@root/utils/asserts";
 
 export const $enabled = withPersist(createStore<boolean>(true));
 export const enableToggleChanged = createEvent<boolean>();
@@ -47,7 +48,7 @@ export const moveBySubsEnabledChangeFx = createEffect<boolean, boolean>(
 );
 
 export const $translateLanguage = withPersist(
-  createStore<string>(window.navigator.language.split("-")[0]),
+  createStore<string>(assertIsDefinedAndReturn(window.navigator.language.split("-")[0])),
 );
 export const translateLanguageChanged = createEvent<string>();
 export const translateLanguageChangeFx = createEffect<string, string>(

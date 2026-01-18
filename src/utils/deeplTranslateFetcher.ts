@@ -62,6 +62,7 @@ class DeepLTranslateFetcher {
       });
 
       if (response.code === 200) {
+        if (!response.data) throw new Error(`deeplTranslateFetcher -> getFullTextTranslation: code is 200, but data is empty ${response.data}`)
         return response.data;
       } else {
         throw new Error(`DeepL API error: ${response}`);

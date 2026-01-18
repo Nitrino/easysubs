@@ -1,10 +1,10 @@
-import { Captions } from "@src/models/types";
+import { type NodeList } from "subtitle";
 
-interface Service {
+export interface Service {
   name: string;
 
   // Getting subtitles from a service
-  getSubs: (language: string) => Promise<Captions>;
+  getSubs: (language: string) => Promise<NodeList>;
 
   // Player container selector, required to render subtitles
   getSubsContainer: () => HTMLElement;
@@ -21,5 +21,3 @@ interface Service {
   // Init the service
   init: () => void;
 }
-
-export default Service;

@@ -1,8 +1,8 @@
-import { FC, HTMLProps } from "react";
+import { type FC, type HTMLProps } from "react";
 import { useUnit } from "effector-react";
 
 import { $learningService, learningServiceChanged } from "@src/models/settings";
-import { TLearningService } from "@src/models/types";
+import { type TLearningService } from "@src/models/types";
 import { Select } from "../ui/Select";
 
 const getServiceOption = (service: string) => {
@@ -17,7 +17,9 @@ export const LearningService: FC<HTMLProps<HTMLSelectElement>> = () => {
       <div className="es-settings-content__element__right">
         <Select
           value={getServiceOption(learningService)}
-          onChange={(option: { value: TLearningService }) => handleTranslateLanguageChanged(option.value)}
+          onChange={(option: { value: TLearningService } | null) => {
+            if (option) handleTranslateLanguageChanged(option.value)
+          }}
           options={services}
         />
       </div>
@@ -25,7 +27,7 @@ export const LearningService: FC<HTMLProps<HTMLSelectElement>> = () => {
   );
 };
 
-const services = [
+const services: { label: string, value: TLearningService }[] = [
   { label: "Disabled", value: "disabled" },
   { label: "Anki", value: "anki" },
   { label: "LinguaLeo", value: "lingualeo" },

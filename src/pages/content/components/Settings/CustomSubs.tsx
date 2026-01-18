@@ -1,6 +1,6 @@
-import { ChangeEvent, FC } from "react";
+import { type ChangeEvent, type FC } from "react";
 import { useUnit } from "effector-react";
-import { parse } from "subtitle";
+import { parseSync, type NodeList } from "subtitle";
 
 import { ES_CUSTOM_SUB_LABEL, esSubsChanged, updateCustomSubsFx } from "@src/models/subs";
 
@@ -10,11 +10,12 @@ export const CustomSubs: FC = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files!;
     const file = files[0];
+    if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       const data = reader.result;
       if (typeof data === "string") {
-        handleUpdateCustomSubsFx(parse(data));
+        handleUpdateCustomSubsFx(parseSync(data));
         esSubsChanged(ES_CUSTOM_SUB_LABEL);
       }
     };

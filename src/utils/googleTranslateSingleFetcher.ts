@@ -2,7 +2,7 @@ export type TWordTranslate = {
   original: string;
   lang: string;
   main: string;
-  alternatives: [];
+  alternatives: unknown[];
 };
 
 type TRequest = {
@@ -35,7 +35,7 @@ class GoogleTranslateSingleFetcher {
       body: body,
       headers: headers,
     });
-    return await resp.text();
+    return resp.text();
   }
 }
 

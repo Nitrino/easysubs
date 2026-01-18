@@ -1,8 +1,8 @@
-import { FC, HTMLProps } from "react";
+import { type FC, type HTMLProps } from "react";
 
 import { TranslateSelect } from "../ui/TranslateSelect";
 
-export const TranslateLanguage: FC<HTMLProps<HTMLSelectElement>> = (props) => {
+export const TranslateLanguage: FC<HTMLProps<HTMLSelectElement>> = () => {
   return (
     <div className="es-settings-content__element">
       <div className="es-settings-content__element__left">Translate to</div>

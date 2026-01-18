@@ -1,10 +1,9 @@
-import { parse, subTitleType } from "subtitle";
-import { getSubtitles } from "youtube-caption-extractor";
+import { parseSync, type NodeCue, type NodeList } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
-import Service from "./service";
-import { url } from "inspector";
+import { type Service } from "./service";
+import { assertIsDefined } from "@root/utils/asserts";
 
 type YoutubeSubtitle = {
   dDurationMs: number;
@@ -40,29 +39,38 @@ class Youtube implements Service {
   }
 
   public async getSubs(label: string) {
-    if (!label) return parse("");
+    if (!label) return parseSync("");
     const videoId = this.getVideoId();
-    const urlObject: URL = new URL(this.subCache[videoId][label]);
+    const subCacheUrl = this.subCache[videoId]![label]
+    assertIsDefined(subCacheUrl)
+    const urlObject: URL = new URL(subCacheUrl);
 
     const subUri: string = urlObject.href;
     const resp = await fetch(subUri);
     const respJson: { events: YoutubeSubtitle[] } = await resp.json();
 
-    const subs: subTitleType[] = respJson.events.map((sub) => {
+    const subs: NodeList = respJson.events.map((sub) => {
       if (!sub.segs) {
         return {
-          start: sub.tStartMs,
-          end: sub.tStartMs,
-          text: "",
-        };
+          type: 'cue',
+          data: {
+            start: sub.tStartMs,
+            end: sub.tStartMs,
+            text: "",
+          }
+        } satisfies NodeCue;
       }
 
-      const end = sub.segs.at(-1).tOffsetMs ? sub.segs.at(-1).tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
+      const tOffsetMs = sub.segs.at(-1)?.tOffsetMs
+      const end = tOffsetMs ? tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
 
       return {
-        start: sub.tStartMs,
-        end: end,
-        text: sub.segs.map((seg) => seg.utf8).join(""),
+        type: 'cue',
+        data: {
+          start: sub.tStartMs,
+          end: end,
+          text: sub.segs.map((seg) => seg.utf8).join(""),
+        }
       };
     });
     return subs;
@@ -70,19 +78,19 @@ class Youtube implements Service {
 
   public getSubsContainer() {
     const selector = document.querySelector(".html5-video-player");
-    if (selector === null) throw new Error("Subtitles container not found");
+    if (selector === null || selector === undefined) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsButtonContainer() {
     const selector = document.querySelector(".ytp-right-controls .ytp-size-button");
-    if (selector === null) throw new Error("Settings button container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector(".html5-video-player");
-    if (selector === null) throw new Error("Settings content container not found");
+    if (selector === null || selector === undefined) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
@@ -93,8 +101,8 @@ class Youtube implements Service {
   private getVideoId(): string {
     const regExpression = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = window.location.href.match(regExpression);
-    if (match && match[2].length === 11) {
-      return match[2];
+    if (match && match[2]!.length === 11) {
+      return match[2]!;
     }
     console.error("Can't get youtube video id");
     return "";

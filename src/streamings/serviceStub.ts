@@ -1,6 +1,6 @@
-import { parse } from "subtitle";
+import { type NodeList } from "subtitle";
 
-import Service from "./service";
+import { type Service } from "./service";
 
 class ServiceStub implements Service {
   name = "stub";
@@ -9,29 +9,29 @@ class ServiceStub implements Service {
     throw new Error("Not Implimented streaming service");
   }
 
-  public async getSubs() {
+  public async getSubs(): Promise<NodeList> {
     throw new Error("Not Implimented streaming service");
-    return parse("");
+    // return parseSync("");
   }
 
-  public getSubsContainer() {
+  public getSubsContainer(): HTMLElement {
     throw new Error("Not Implimented streaming service");
-    return window.document.body;
+    // return window.document.body;
   }
 
-  public getSettingsButtonContainer() {
+  public getSettingsButtonContainer(): HTMLElement {
     throw new Error("Not Implimented streaming service");
-    return window.document.body;
+    // return window.document.body;
   }
 
-  public getSettingsContentContainer() {
+  public getSettingsContentContainer(): HTMLElement {
     throw new Error("Not Implimented streaming service");
-    return window.document.body;
+    // return window.document.body;
   }
 
-  public isOnFlight() {
+  public isOnFlight(): boolean {
     throw new Error("Not Implimented streaming service");
-    return false;
+    // return false;
   }
 }
 

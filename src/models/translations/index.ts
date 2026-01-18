@@ -8,16 +8,15 @@ import {
 import { debug } from "patronum";
 
 import {
-  TPartOfSpeach,
-  TPhrasalVerb,
-  TSub,
-  TTranslateAlternative,
-  TWordTranslation,
-  TWordTranslationItem,
+    unknown_assertIsTTranslateAlternative,
+  type TPhrasalVerb,
+  type TSub,
+  type TTranslateAlternative,
+  type TWordTranslation,
+  type TWordTranslationItem,
 } from "../types";
 import {
   $translateLanguage,
-  translateLanguageChanged,
   $translationService,
   $deeplApiKey,
   $chatGPTApiKey,
@@ -33,11 +32,11 @@ export const $wordTranslationsPendings = createStore<Record<string, boolean>>(
   {},
 );
 export const WordTranslationsGate = createGate<string>("WordTranslationsGate");
-export const $currentWordTranslation = createStore<TWordTranslation>(null);
+export const $currentWordTranslation = createStore<TWordTranslation | null>(null);
 export const requestWordTranslation = createEvent<string>();
 
 export const $currentPhrasalVerbs = createStore<TPhrasalVerb[]>([]);
-export const $currentPhrasalVerb = createStore<TPhrasalVerb>(null);
+export const $currentPhrasalVerb = createStore<TPhrasalVerb | null>(null);
 export const $findPhrasalVerbsPendings = createStore<Record<string, boolean>>(
   {},
 );
@@ -51,14 +50,15 @@ export const findPhrasalVerbsFx = createEffect<
 >(({ subs }) => subs.flatMap((sub) => findPhrasalVerbs(sub.cleanedText)));
 export const subItemMouseEntered = createEvent<string>();
 export const subItemMouseLeft = createEvent();
+
 export const findCurrentPhrasalVerbFx = createEffect<
   { phrasalVerbs: TPhrasalVerb[]; text: string },
   TPhrasalVerb | null
 >(({ phrasalVerbs, text }) =>
-  phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.includes(text)),
+  phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.includes(text)) ?? null
 );
 
-export const $currentSubTranslation = createStore<string>(null);
+export const $currentSubTranslation = createStore<string | null>(null);
 export const $subTranslationPendings = createStore<Record<string, boolean>>({});
 export const SubTranslationGate = createGate<string>("SubTranslationGate");
 export const requestSubTranslation = createEvent<string>();
@@ -98,7 +98,19 @@ export const fetchSubTranslationFx = createEffect<
       return resp;
     } else {
       const reponseText: string = JSON.parse(resp)
-        ["sentences"].map((sentence) => sentence["trans"])
+        ["sentences"].map((sentence: unknown) => {
+          if (typeof sentence !== "object" || sentence === null) {
+            console.error('resp', resp)
+            throw new Error("Invalid translation: sentence is not an object")
+          };
+          if (!('trans' in sentence)) return
+          if (typeof sentence.trans !== "string") {
+            console.error('resp', resp)
+            throw new Error("Invalid translation: 'trans' property is missing or not a string")
+          };
+          return sentence.trans
+        })
+        .filter((x: string | undefined) => !!x)
         .join(" ");
       return reponseText;
     }
@@ -112,52 +124,62 @@ export const fetchWordTranslationFx = createEffect<
   { source: string; language: string; translation: TWordTranslation | null },
   TWordTranslation
 >(async ({ source, language }) => {
-  try {
-    const result: any = await chrome.runtime.sendMessage({
-      type: "translateWordFull",
-      language: language,
-      text: source,
-    });
+  const result: unknown = await chrome.runtime.sendMessage({
+    type: "translateWordFull",
+    language: language,
+    text: source,
+  });
+  if (!result) throw new Error(`translation result is empty: ${result}`)
 
-    const transcription: string = result[0][0];
-    const mainTranslation: string = result[1][0][0][5][0][0];
-    const alternativesRaw =
-      (result[3] && result[3][5] && result[3][5][0]) || [];
-    const alternatives: [] = alternativesRaw
-      .flatMap((alternative: TTranslateAlternative): TWordTranslationItem[] => {
-        const variants: [string, string[], number][] = alternative[1].map(
-          (val) => [val[0], val[2], val[3]],
-        );
-        return variants.map((variant) => ({
-          word: variant[0],
-          partOfSpeech: googleNumberToPartOfSpeach(
-            alternative[4],
-          ) as TPartOfSpeach,
-          synonyms: variant[1].slice(0, 3),
-          popularity: variant[2],
-        }));
-      })
-      .sort(
-        (a: TWordTranslationItem, b: TWordTranslationItem) =>
-          a.popularity - b.popularity,
-      )
-      .slice(0, 5);
+  const transcription: unknown = ((result as any)[0][0] as unknown);
+  const detectedSourceLanguage: unknown = ((result as any)[2] as unknown);
+  const mainTranslation: unknown = ((result as any)[1][0][0][5][0][0] as unknown);
+  const alternativesRaw: TTranslateAlternative[] = ((result as any)[3] && (result as any)[3][5] && (result as any)[3][5][0]) || [];
 
-    return {
-      source: source,
-      mainTranslation: mainTranslation,
-      targetLanguage: language,
-      translations: alternatives.slice(0, 5),
-      transcription: transcription,
-    };
-  } catch (error) {
-    console.error(error);
-  }
+  alternativesRaw.forEach((x: unknown) => unknown_assertIsTTranslateAlternative(x))
+  if (transcription !== null && typeof transcription !== 'string') throw new Error('transcription is not string or null')
+  if (typeof mainTranslation !== 'string') throw new Error('mainTranslation is not string')
+  if (typeof detectedSourceLanguage !== 'string') throw new Error('detectedSourceLanguage is not string')
+  if (!Array.isArray(alternativesRaw)) throw new Error('alternativesRaw is not array')
+
+  const alternatives: TWordTranslationItem[] = alternativesRaw
+    .flatMap((alternative: TTranslateAlternative): TWordTranslationItem[] => {
+      const variants: [string, string[], number][] = alternative[1].map(
+        (val) => {
+          if (typeof val[0] !== 'string') throw new Error('val[0] is not string')
+          if (!Array.isArray(val[2])) throw new Error('val[0] is not array')
+          if (typeof val[3] !== 'number') throw new Error('val[0] is not number')
+          return [val[0], val[2], val[3]]
+        },
+      );
+      return variants.map((variant) => ({
+        word: variant[0],
+        partOfSpeech: googleNumberToPartOfSpeach(
+          alternative[4],
+        ),
+        synonyms: variant[1].slice(0, 3),
+        popularity: variant[2],
+      }));
+    })
+    .sort(
+      (a: TWordTranslationItem, b: TWordTranslationItem) =>
+        a.popularity - b.popularity,
+    )
+    .slice(0, 5);
+
+  return {
+    source: source,
+    detectedSourceLanguage,
+    mainTranslation: mainTranslation,
+    targetLanguage: language,
+    translations: alternatives.slice(0, 5),
+    transcription: transcription ?? "",
+  };
 });
 
 export const updateCurrentWordTranslationFx = createEffect<
   { source: string; language: string; translation: TWordTranslation | null },
-  TWordTranslation
+  TWordTranslation | null
 >(({ translation }) => translation);
 
 const wordTranslationDataCombined = sample({
@@ -274,13 +296,13 @@ $currentPhrasalVerbs.on(
 );
 $findPhrasalVerbsPendings.on(findPhrasalVerbsFx, (pendings, { subs }) => ({
   ...pendings,
-  [subs[0].cleanedText]: true,
+  [subs[0]!.cleanedText]: true,
 }));
 $findPhrasalVerbsPendings.on(
   findPhrasalVerbsFx.finally,
   (pendings, { params: { subs } }) => {
     const copy = { ...pendings };
-    delete copy[subs[0].cleanedText];
+    delete copy[subs[0]!.cleanedText];
     return copy;
   },
 );
@@ -328,7 +350,8 @@ $wordTranslations.reset($translateLanguage);
 sample({
   clock: $translateLanguage,
   source: $currentWordTranslation,
-  fn: (translations) => translations.source,
+  filter: (translations): translations is TWordTranslation => translations !== null,
+  fn: (translations) => translations!.source,
   target: requestWordTranslation,
 });
 

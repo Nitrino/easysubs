@@ -1,4 +1,4 @@
-import ILearningService, { TAditionalData } from "./learningService";
+import { type ILearningService, type TAditionalData } from "./learningService";
 
 const ANKI_API_VERSION = 6;
 const ANKI_DESK = "Easysubs";

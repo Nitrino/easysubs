@@ -1,4 +1,9 @@
-export const PHRASAL_VERBS = {
+interface PhrasalVerbEntry {
+  derivatives?: string[];
+  translations: string[];
+}
+
+export const PHRASAL_VERBS: Record<string, PhrasalVerbEntry> = {
   "abide by": {
     derivatives: ["abides by", "abiding by", "abided by"],
     translations: ["блюсти", "выполнить", "выполнять", "подчиниться", "подчиняться"],

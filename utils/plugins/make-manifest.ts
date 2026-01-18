@@ -5,6 +5,7 @@ import ManifestParser from '../manifest-parser';
 import type { PluginOption } from 'vite';
 import url from 'url';
 import * as process from 'process';
+import { assertIsDefinedAndReturn } from '../asserts';
 
 const { resolve } = path;
 
@@ -32,7 +33,7 @@ export default function makeManifest(config?: { getCacheInvalidationKey?: () => 
     const manifestPath = resolve(to, 'manifest.json');
     if (cacheKey) {
       // Naming change for cache invalidation
-      manifest.content_scripts.forEach(script => {
+      assertIsDefinedAndReturn(manifest.content_scripts).forEach(script => {
         script.css &&= script.css.map(css => css.replace('<KEY>', cacheKey));
       });
     }
@@ -48,7 +49,7 @@ export default function makeManifest(config?: { getCacheInvalidationKey?: () => 
       this.addWatchFile(manifestFile);
     },
     async writeBundle() {
-      const invalidationKey = config.getCacheInvalidationKey?.();
+      const invalidationKey = config?.getCacheInvalidationKey?.();
       const manifest = await getManifestWithCacheBurst();
       makeManifest(manifest.default, distDir, invalidationKey);
     },

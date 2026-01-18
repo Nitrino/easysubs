@@ -1,5 +1,5 @@
 import { $subsFontSize, subsFontSizeButtonPressed } from "@src/models/settings";
-import { FC } from "react";
+import { type FC } from "react";
 import { useUnit } from "effector-react";
 import { MinusIcon } from "./assets/MinusIcon";
 import { PlusIcon } from "./assets/PlusIcon";

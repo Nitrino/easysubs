@@ -1,10 +1,10 @@
-import { RefObject, useEffect, useCallback } from "react";
-import { c } from "vite/dist/node/types.d-aGj9QkWt";
+import { type RefObject, useEffect, useCallback } from "react";
 
-export const useClickOutside = (ref: RefObject<HTMLDivElement>, callback: () => void) => {
+export const useClickOutside = (ref: RefObject<HTMLDivElement | null>, callback: () => void) => {
   const handleClick = useCallback(
     (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) throw new Error("not a HTMLElement");
 
       if (ref.current && !ref.current.contains(target)) {
         // Check if the click is on a react-select element

@@ -1,4 +1,4 @@
-import ILearningService, { TAditionalData } from "./learningService";
+import { type ILearningService, type TAditionalData } from "./learningService";
 
 export class PuzzleEnglish implements ILearningService {
   public color: string;

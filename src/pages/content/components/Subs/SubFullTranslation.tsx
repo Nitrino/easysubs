@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { type FC } from "react";
 import { useGate, useUnit } from "effector-react";
 
 import { $currentSubTranslation, $subTranslationPendings, SubTranslationGate } from "@src/models/translations";
