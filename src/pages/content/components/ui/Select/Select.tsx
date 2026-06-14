@@ -11,8 +11,8 @@ const customStyles = {
     minHeight: "24px",
     height: "24px",
   }),
-  menuPortal: (provided) => ({ ...provided, zIndex: 10000, fontSize: "14px" }),
-  menu: (provided) => ({ ...provided, zIndex: 10000 }),
+  menuPortal: (provided) => ({ ...provided, zIndex: 2147483647, fontSize: "14px" }),
+  menu: (provided) => ({ ...provided, zIndex: 2147483647 }),
   valueContainer: (provided, _state) => ({
     ...provided,
     height: "24px",
