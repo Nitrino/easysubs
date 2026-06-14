@@ -6,7 +6,7 @@ class ServiceStub implements Service {
   name = "stub";
 
   public init(): void {
-    throw new Error("Not Implimented streaming service");
+    return;
   }
 
   public async getSubs() {

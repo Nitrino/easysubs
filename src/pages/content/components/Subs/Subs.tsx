@@ -64,6 +64,7 @@ export const Subs: FC<TSubsProps> = () => {
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
         onMouseEnter={handleOnMouseEnter}
+        onClick={(e) => e.stopPropagation()}
         style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
       >
         {currentSubs.map((sub) => (

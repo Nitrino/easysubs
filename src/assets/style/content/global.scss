@@ -109,6 +109,41 @@
   }
 }
 
+.es-jellyfin {
+  .es-settings-icon {
+    svg {
+      width: 28px;
+    }
+  }
+
+  .es-settings-content {
+    position: fixed;
+    z-index: 2147483647;
+    bottom: 80px;
+    right: 20px;
+    pointer-events: auto;
+  }
+}
+
+.es-jellyfin.es-enabled {
+  #es {
+    position: fixed;
+    z-index: 9999;
+    bottom: 100px;
+    pointer-events: auto;
+
+    @media screen and (max-width: 1520px) {
+      bottom: 80px;
+    }
+
+    .es-sub,
+    .es-sub-item,
+    pre {
+      pointer-events: auto;
+    }
+  }
+}
+
 .es-enabled {
   #es {
     display: block;
