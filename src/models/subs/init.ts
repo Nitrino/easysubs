@@ -96,18 +96,6 @@ $rawSubs.on(
   (_, subs) => subs
 );
 
-$rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
-  const lastSub = oldSubs[oldSubs.length - 1];
-  if (!lastSub) {
-    return [...oldSubs, ...newSubs];
-  }
-  if (lastSub.text != newSubs[0].text && lastSub.start != newSubs[0].start) {
-    const subs = oldSubs.slice(0, -1);
-    lastSub.end = lastSub.start;
-    return [...subs, ...[lastSub], ...newSubs];
-  }
-});
-
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
   JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs

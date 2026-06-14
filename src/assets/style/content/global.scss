@@ -128,7 +128,7 @@
 .es-jellyfin.es-enabled {
   #es {
     position: fixed;
-    z-index: 9999;
+    z-index: 2147483647;
     bottom: 100px;
     pointer-events: auto;
 
@@ -136,9 +136,7 @@
       bottom: 80px;
     }
 
-    .es-sub,
-    .es-sub-item,
-    pre {
+    * {
       pointer-events: auto;
     }
   }

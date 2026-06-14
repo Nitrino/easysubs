@@ -3,6 +3,7 @@ import Service from "./service";
 import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video, getCurrentVideoFx } from "@src/models/videos";
+import type { Captions } from "@src/models/types";
 
 class Jellyfin implements Service {
   name = "jellyfin";
@@ -10,6 +11,7 @@ class Jellyfin implements Service {
   private videoSubsObserver: MutationObserver | null = null;
   private waitForElementGen = 0;
   private initialized = false;
+  private loadedCues: Captions = [];
 
   constructor() {
     setInterval(() => {
@@ -51,6 +53,7 @@ class Jellyfin implements Service {
       this.videoSubsObserver = null;
       this.waitForElementGen++;
       const myGen = this.waitForElementGen;
+      this.loadedCues = [];
 
       // Suppress Jellyfin's native ::cue rendering via CSS injection.
       // We cannot use track.mode="hidden" because Jellyfin immediately resets it
@@ -60,14 +63,36 @@ class Jellyfin implements Service {
       // Track which TextTrack objects we already attached oncuechange to
       const attachedTracks = new Set<TextTrack>();
 
+      const loadAllCues = (track: TextTrack): boolean => {
+        if (!track.cues || track.cues.length === 0) return false;
+        const subs = ([...track.cues] as VTTCue[])
+          .map((c) => ({ start: c.startTime * 1000, end: c.endTime * 1000, text: cleanVttText(c.text ?? "") }))
+          .filter((s) => s.text);
+        if (subs.length === 0) return false;
+        this.loadedCues = subs;
+        return true;
+      };
+
       const attachTrack = (track: TextTrack) => {
         if (track.kind !== "subtitles" && track.kind !== "captions") return;
         if (attachedTracks.has(track)) return;
         attachedTracks.add(track);
 
+        // Try to pre-load all cues now so getSubs() can return them and the
+        // progress bar has full subtitle data from the start.
+        loadAllCues(track);
+
         track.oncuechange = () => {
           // Only forward when this track is actually active
           if (track.mode === "disabled") return;
+
+          // If all cues were pre-loaded, videoTimeUpdate drives current subtitle display.
+          if (this.loadedCues.length > 0) return;
+
+          // Lazy-loading: cues may not have been ready at attach time — try again.
+          if (loadAllCues(track)) return;
+
+          // Final fallback: push the current active cue individually.
           const cues = [...(track.activeCues ?? [])] as VTTCue[];
           if (cues.length === 0) return;
           const text = cues
@@ -148,14 +173,17 @@ class Jellyfin implements Service {
     });
   }
 
-  public async getSubs(_title: string) {
+  public async getSubs(_title: string): Promise<Captions> {
+    // Return pre-loaded VTT cues when available so the full subtitle list
+    // lands in $rawSubs (used by the progress bar and time-based display).
+    if (this.loadedCues.length > 0) {
+      return this.loadedCues;
+    }
     return parse("");
   }
 
   public getSubsContainer() {
-    const selector = document.querySelector(".videoPlayerContainer");
-    if (selector === null) throw new Error("Subtitles container not found");
-    return selector as HTMLElement;
+    return document.body;
   }
 
   public getSettingsButtonContainer() {
@@ -169,7 +197,7 @@ class Jellyfin implements Service {
   }
 
   public isOnFlight() {
-    return true;
+    return false;
   }
 }
 

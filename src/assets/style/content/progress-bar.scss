@@ -41,6 +41,17 @@
   }
 }
 
+.es-jellyfin.es-enabled.es-progress-bar-enabled {
+  .es-progress-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9998;
+  }
+}
+
 .es-kinopub.es-enabled.es-progress-bar-enabled {
   .jw-controlbar {
     bottom: 15px;

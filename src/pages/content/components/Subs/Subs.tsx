@@ -59,7 +59,7 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   return (
-    <Draggable>
+    <Draggable cancel=".es-sub">
       <div
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
@@ -133,9 +133,10 @@ const SubItem: FC<TSubItemProps> = ({ subItem, index }) => {
     handleSubItemMouseEntered(subItem.cleanedText);
   };
 
-  const handleClick = () => {
-    setShowTranslation(false);
-    handleSubItemMouseLeft();
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowTranslation(true);
+    handleSubItemMouseEntered(subItem.cleanedText);
   };
 
   return (
