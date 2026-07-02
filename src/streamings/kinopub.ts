@@ -44,18 +44,19 @@ class KinoPub implements Service {
     parser.end();
     const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub;
 
-    const uri = `https://${cdnHostName}${subsSegments[label].uri}`;
+    const uri = isValidHttpsUrl(subsSegments[label].uri)
+      ? subsSegments[label].uri
+      : `https://${cdnHostName}${subsSegments[label].uri}`;
     const subsSegmentsResp = await fetch(uri);
     const subsSegmentsData = await subsSegmentsResp.text();
 
     const subsSegmentsParser = new Parser();
     subsSegmentsParser.push(subsSegmentsData);
     subsSegmentsParser.end();
-    const subPath =
-      subsSegmentsParser.manifest.segments[0].uri.match(
-        /.*\/hls\/(.*)\/seg.*/,
-      )?.[1];
-    const subUri = `https://${cdnHostName}/pd/${subPath}`;
+
+    const segmentUri = subsSegmentsParser.manifest.segments[0].uri;
+    const subPath = segmentUri.match(/.*\/hls\/(.*)\/seg.*/)?.[1];
+    const subUri = `${new URL(segmentUri).origin}/pd/${subPath}`;
 
     const subsResp = await fetch(subUri);
     const subsData = await subsResp.text();
@@ -114,6 +115,15 @@ class KinoPub implements Service {
     script.src = chrome.runtime.getURL("assets/js/kinopub.js");
     script.type = "module";
     document.head.prepend(script);
+  }
+}
+
+function isValidHttpsUrl(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+    return url.protocol === "https:";
+  } catch (error) {
+    return false;
   }
 }
 
