@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.1.3 (08.07.2026)
+
+### Bugs
+
+- Fix subtitles loading on kinopub
+
 ## v3.1.2 (09.12.2025)
 
 ### Enhancements
