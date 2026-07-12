@@ -8,23 +8,38 @@ export class LinguaLeo implements ILearningService {
   }
 
   public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
-    const url = new URL("https://api.lingualeo.com/addword");
-    const data = {
-      word: word,
-      tword: translation,
-      port: 1001,
-      context_url: window.location.href,
-      context_title: document.title,
-      ...(aditionalData["context"] ? { part_of_speech: aditionalData["context"] } : null),
-    };
-
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
-        { type: "postFormDataRequest", url: url.toString(), data: data },
-        (response: { error_msg?: string }) => {
-          response.error_msg
-            ? reject("LinguaLeo Error: " + JSON.stringify(response))
-            : resolve("Word added to LinguaLeo");
+        { type: "addWordToLingualeo", word: word, translation: translation },
+        (response: any) => {
+          if (chrome.runtime.lastError) {
+            reject("Extension Error: " + chrome.runtime.lastError.message);
+            return;
+          }
+          if (response && response.error) {
+            reject("LinguaLeo Fetch Error: " + response.error);
+            return;
+          }
+          const leo = response?.lingualeoResponse;
+          if (!leo) {
+            reject("LinguaLeo Error: Empty response from background script.");
+            return;
+          }
+
+          if (leo.error_msg) {
+             reject("LinguaLeo API Error: " + leo.error_msg);
+          } else if (leo.data && leo.data[0] && leo.data[0].error) {
+            const errCode = leo.data[0].error.code;
+            if (errCode === '6') {
+               reject("LinguaLeo: Premium required (meatballs error).");
+            } else {
+               reject("LinguaLeo API Error: " + JSON.stringify(leo.data[0].error));
+            }
+          } else if (leo.data && leo.data[0] && leo.data[0].word) {
+            resolve("Word added to LinguaLeo");
+          } else {
+             reject("LinguaLeo Unknown Error: " + JSON.stringify(leo));
+          }
         }
       );
     });
