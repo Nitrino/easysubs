@@ -59,11 +59,12 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   return (
-    <Draggable>
+    <Draggable cancel=".es-sub">
       <div
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
         onMouseEnter={handleOnMouseEnter}
+        onClick={(e) => e.stopPropagation()}
         style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
       >
         {currentSubs.map((sub) => (
@@ -132,9 +133,10 @@ const SubItem: FC<TSubItemProps> = ({ subItem, index }) => {
     handleSubItemMouseEntered(subItem.cleanedText);
   };
 
-  const handleClick = () => {
-    setShowTranslation(false);
-    handleSubItemMouseLeft();
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowTranslation(true);
+    handleSubItemMouseEntered(subItem.cleanedText);
   };
 
   return (

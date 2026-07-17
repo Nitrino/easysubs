@@ -22,7 +22,9 @@ import {
 } from "@src/models/settings";
 import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
 import { EnableAutoStop } from "./EnableAutoStop";
+import { JellyfinSubTrack } from "./JellyfinSubTrack";
 import { createPortal } from "react-dom";
+import { $streaming } from "@src/models/streamings";
 
 interface TabProps {
   isActive: boolean;
@@ -48,9 +50,10 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeSettingsTab, handleActiveSettingsTabChanged] = useUnit([
+  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming] = useUnit([
     $activeSettingsTab,
     activeSettingsTabChanged,
+    $streaming,
   ]);
   const contentRef = useRef();
 
@@ -58,7 +61,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <>
-      <div className="es-settings-content" ref={contentRef}>
+      <div className="es-settings-content" ref={contentRef} onClick={(e) => e.stopPropagation()}>
         <div className="es-settings-content__menu">
           <div className="es-settings-content__menu__items">
             <Tab
@@ -130,6 +133,11 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
               <div className="es-settings-content__item">
                 <SubsDelay />
               </div>
+              {streaming.name === "jellyfin" && (
+                <div className="es-settings-content__item">
+                  <JellyfinSubTrack />
+                </div>
+              )}
               <div className="es-settings-content__item">
                 <CustomSubs />
               </div>

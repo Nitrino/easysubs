@@ -18,13 +18,21 @@ const handleTimeUpdate = () => {
   videoTimeUpdate();
 };
 
+let detectionRetries = 0;
+
 $streaming.watch((streaming) => {
   console.log("streaming changed", streaming);
-  document.body.classList.add("es-" + streaming.name);
 
-  if (streaming == null) {
+  if (streaming.name === "stub") {
+    if (detectionRetries < 5) {
+      detectionRetries++;
+      setTimeout(() => fetchCurrentStreamingFx(), 1500);
+    }
     return;
   }
+
+  detectionRetries = 0;
+  document.body.classList.add("es-" + streaming.name);
 
   esRenderSetings.watch(() => {
     console.log("Event:", "esRenderSetings");
@@ -56,6 +64,7 @@ esSubsChanged.watch((language) => {
   const subsContainer = $streaming.getState().getSubsContainer();
   const subsNode = document.createElement("div");
   subsNode.id = "es";
+  subsNode.addEventListener("click", (e) => e.stopPropagation());
   subsContainer?.appendChild(subsNode);
   createRoot(subsNode).render(<Subs />);
 

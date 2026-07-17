@@ -10,6 +10,7 @@ import Udemy from "@src/streamings/udemy";
 import Kinopoisk from "@src/streamings/kinopoisk";
 import Amazon from "@src/streamings/amazon";
 import Inoriginal from "@src/streamings/inoriginal";
+import Jellyfin from "@src/streamings/jellyfin";
 
 export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
@@ -62,6 +63,16 @@ export const getCurrentService = (): Service => {
   // ) {
   //   return new Amazon();
   // }
+
+  const isJellyfin =
+    document.querySelector('meta[name="application-name"][content="Jellyfin"]') !== null ||
+    typeof (window as any).ApiClient !== "undefined" ||
+    (window.location.pathname.includes("/web/") &&
+      document.querySelector(".videoPlayerContainer") !== null);
+  if (isJellyfin) {
+    document.querySelector("html")?.setAttribute("id", "jellyfin");
+    return new Jellyfin();
+  }
 
   return new ServiceStub();
 };
