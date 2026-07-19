@@ -162,9 +162,9 @@ class Netflix implements Service {
       return;
     }
 
-    console.log("handleNetflixData", event.detail.timedtexttracks);
+    console.log("handleNetflixData", event.detail.textTracks);
 
-    const tracks: TTrack[] = event.detail.timedtexttracks;
+    const tracks: TTrack[] = event.detail.textTracks;
     console.log("tracks", tracks);
 
     tracks.forEach((track) => {
@@ -174,11 +174,11 @@ class Netflix implements Service {
 
       const title = this.getTrackTitle(track);
 
-      if (track.ttDownloadables[WEBVTT]?.urls) {
+      if (track.downloadables[WEBVTT]?.urls) {
         this.subCache.push({
           videoId: event.detail.movieId,
           title: title,
-          url: this.randomProperty(track.ttDownloadables[WEBVTT].urls).url,
+          url: this.randomProperty(track.downloadables[WEBVTT].urls).url,
         });
       }
     });
