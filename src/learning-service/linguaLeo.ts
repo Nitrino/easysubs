@@ -16,6 +16,10 @@ export class LinguaLeo implements ILearningService {
             reject("Extension Error: " + chrome.runtime.lastError.message);
             return;
           }
+          if (response?.error === "not_authenticated") {
+            reject("LinguaLeo: please log in at lingualeo.com");
+            return;
+          }
           if (response && response.error) {
             reject("LinguaLeo Fetch Error: " + response.error);
             return;
@@ -26,9 +30,7 @@ export class LinguaLeo implements ILearningService {
             return;
           }
 
-          if (leo.error_msg) {
-             reject("LinguaLeo API Error: " + leo.error_msg);
-          } else if (leo.data && leo.data[0] && leo.data[0].error) {
+          if (leo.data && leo.data[0] && leo.data[0].error) {
             const errCode = leo.data[0].error.code;
             if (errCode === '6') {
                reject("LinguaLeo: Premium required (meatballs error).");

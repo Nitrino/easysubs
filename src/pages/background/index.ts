@@ -32,6 +32,56 @@ chrome.runtime.onInstalled.addListener(function (object) {
   }
 });
 
+class LinguaLeoAuthError extends Error {}
+
+// The LinguaLeo session cookie is sent via `credentials: "include"`, so the API itself tells us whether the user is logged in.
+async function lingualeoPost(path: string, body: object) {
+  const resp = await fetch(`https://api.lingualeo.com/${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+    credentials: "include",
+  });
+  if (resp.status === 401 || resp.status === 403) {
+    throw new LinguaLeoAuthError();
+  }
+  if (!resp.ok) {
+    throw new Error(`HTTP error! status: ${resp.status}`);
+  }
+  const data = await resp.json();
+  if (data.error_msg) {
+    throw new Error(data.error_msg);
+  }
+  return data;
+}
+
+async function addWordToLingualeo(word: string, translation: string) {
+  const profile = await lingualeoPost("getUserProfile", {
+    apiVersion: "1.0.1",
+    port: 1001,
+    attrList: { targetLang: "targetLang", nativeLang: "nativeLang" },
+  });
+  if (!profile.data?.targetLang || !profile.data?.nativeLang) {
+    throw new LinguaLeoAuthError();
+  }
+
+  return lingualeoPost("SetWords", {
+    apiVersion: "1.0.0",
+    port: 1001,
+    data: [
+      {
+        action: "add",
+        valueList: {
+          wordValue: word,
+          wordSetId: 3,
+          langPair: { source: profile.data.targetLang.slice(0, 2).toLowerCase(), target: profile.data.nativeLang },
+          translation: { tr: translation, ctx: "", pic: "" },
+        },
+      },
+    ],
+  });
+}
+
 chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   console.log("read: ", message);
 
@@ -118,71 +168,14 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
 
   if (message.type === "addWordToLingualeo") {
     console.log("addWordToLingualeo: ", message);
-    
-    chrome.cookies.get({ url: "https://lingualeo.com", name: "userid" }, (useridCookie) => {
-      chrome.cookies.get({ url: "https://lingualeo.com", name: "remember" }, (rememberCookie) => {
-        if (!useridCookie || !rememberCookie) {
-          sendResponse({ error: "LinguaLeo cookies not found. Please log in." });
-          return;
-        }
 
-        const profileData = {
-          apiVersion: "1.0.1",
-          port: 1001,
-          attrList: { targetLang: "targetLang", nativeLang: "nativeLang" }
-        };
-
-        fetch("https://api.lingualeo.com/getUserProfile", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(profileData),
-          credentials: "include"
-        })
-        .then(profileResp => profileResp.json())
-        .then(profileJson => {
-          if (!profileJson.data || !profileJson.data.targetLang || !profileJson.data.nativeLang) {
-            sendResponse({ error: "LinguaLeo: Could not fetch user profile to determine correct dictionary."});
-            return;
-          }
-          const nativeLang = profileJson.data.nativeLang;
-          const learningLang = profileJson.data.targetLang.slice(0, 2).toLowerCase();
-
-          const setData = {
-            apiVersion: "1.0.0",
-            userId: useridCookie.value,
-            port: 1001,
-            data: [
-              {
-                action: "add",
-                valueList: {
-                  wordValue: message.word,
-                  wordSetId: 3,
-                  langPair: { source: learningLang, target: nativeLang },
-                  translation: { tr: message.translation, ctx: "", pic: "" }
-                }
-              }
-            ]
-          };
-
-          fetch("https://api.lingualeo.com/SetWords", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: JSON.stringify(setData),
-            credentials: "include"
-          })
-          .then(resp => resp.json())
-          .then(data => sendResponse({ lingualeoResponse: data }))
-          .catch(err => sendResponse({ error: err.toString() }));
-        })
-        .catch(err => sendResponse({ error: "LinguaLeo profile error: " + err.toString() }));
-      });
-    });
+    addWordToLingualeo(message.word, message.translation)
+      .then((data) => sendResponse({ lingualeoResponse: data }))
+      .catch((error) =>
+        sendResponse(
+          error instanceof LinguaLeoAuthError ? { error: "not_authenticated" } : { error: error.message || error },
+        ),
+      );
     return true; // Will respond asynchronously
   }
 
