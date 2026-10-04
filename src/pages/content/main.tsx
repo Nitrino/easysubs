@@ -64,7 +64,6 @@ esSubsChanged.watch((language) => {
   const subsContainer = $streaming.getState().getSubsContainer();
   const subsNode = document.createElement("div");
   subsNode.id = "es";
-  subsNode.addEventListener("click", (e) => e.stopPropagation());
   subsContainer?.appendChild(subsNode);
   createRoot(subsNode).render(<Subs />);
 
