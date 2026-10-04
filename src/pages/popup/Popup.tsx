@@ -19,7 +19,26 @@ const Popup = () => {
       permissions: ["scripting", "storage", "activeTab"],
       origins: [tab.url],
     });
-    if (isGranted) {
+    if (!isGranted) return;
+
+    // Inject into the current tab without reloading, so SPA players
+    // (e.g. Jellyfin) don't lose their playback state. Future page loads
+    // are handled automatically by webext-dynamic-content-scripts.
+    const [contentScript] = chrome.runtime.getManifest().content_scripts ?? [];
+    try {
+      if (contentScript?.css?.length) {
+        await chrome.scripting.insertCSS({
+          target: { tabId: tab.id },
+          files: contentScript.css,
+        });
+      }
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: contentScript.js,
+      });
+      window.close();
+    } catch (e) {
+      // Fallback: reload if programmatic injection fails
       chrome.tabs.reload(tab.id);
     }
   };
@@ -39,7 +58,7 @@ const Popup = () => {
           </a>
         </li>
         <li onClick={handleRequestPermissions}>
-          <a className="es-popup-kinopub">Enable on Kinopub</a>
+          <a className="es-popup-kinopub">Enable on this site</a>
         </li>
         <li onClick={handleFaqLinkClick}>
           <a>FAQ</a>
