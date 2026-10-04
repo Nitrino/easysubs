@@ -5,7 +5,8 @@ const stringifyMock = JSON.stringify;
 // This is required to intercept subtitles from the server response.
 JSON.parse = function () {
   const data = parseMock.apply(this, arguments);
-  if (data && data.result && data.result.timedtexttracks) {
+  // Netflix renamed timedtexttracks to textTracks; keep both for older responses
+  if (data && data.result && (data.result.textTracks || data.result.timedtexttracks)) {
     // Sends subtitles from the site page to the extension via a browser event
     window.dispatchEvent(new CustomEvent("esNetflixData", { detail: data.result }));
   }
