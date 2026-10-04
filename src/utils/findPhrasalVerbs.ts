@@ -17,7 +17,7 @@ export const findPhrasalVerbs = (text: string): TPhrasalVerb[] => {
           const indexes = phrasalVerbWords.map((v) => words.findIndex((w) => w === v));
           const isSorted = indexes.every((v, i, a) => !i || a[i - 1] <= v);
           const checkWordProximity = indexes.every((v, index) =>
-            indexes[index + 1] ? indexes[index + 1] - v <= 2 : true
+            indexes[index + 1] ? indexes[index + 1] - v <= 2 : true,
           );
 
           if (isSorted && checkWordProximity) {

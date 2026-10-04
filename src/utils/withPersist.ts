@@ -9,10 +9,7 @@ const defaultConfig = {
   key: "persist",
 };
 
-export const withPersist = <State>(
-  store: StoreWritable<State>,
-  config: PersistConfig = defaultConfig
-) => {
+export const withPersist = <State>(store: StoreWritable<State>, config: PersistConfig = defaultConfig) => {
   const name = store.shortName;
   const { key, expire } = config;
   const persistKey = `${key}:${name}`;

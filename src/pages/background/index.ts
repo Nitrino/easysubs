@@ -1,9 +1,6 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
 
-import {
-  TWordTranslate,
-  googleTranslateBatchFetcher,
-} from "@src/utils/googleTranslateBatchFetcher";
+import { TWordTranslate, googleTranslateBatchFetcher } from "@src/utils/googleTranslateBatchFetcher";
 import { googleTranslateSingleFetcher } from "@src/utils/googleTranslateSingleFetcher";
 import { deeplTranslateFetcher } from "@src/utils/deeplTranslateFetcher";
 import { bingTranslateFetcher } from "@src/utils/bingTranslateFetcher";
@@ -189,30 +186,30 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
     fetch("https://puzzle-english.com/api2/dictionary/checkWordsFromMassImport", {
       method: "POST",
       body: checkFormData,
-      credentials: "include"
+      credentials: "include",
     })
-    .then(r => r.json())
-    .then(d1 => {
-      if (d1.previewWords) {
-        // Step 2: Add words
-        const addFormData = new FormData();
-        addFormData.append("words", JSON.stringify(d1.previewWords));
-        addFormData.append("idSet", "0");
+      .then((r) => r.json())
+      .then((d1) => {
+        if (d1.previewWords) {
+          // Step 2: Add words
+          const addFormData = new FormData();
+          addFormData.append("words", JSON.stringify(d1.previewWords));
+          addFormData.append("idSet", "0");
 
-        fetch("https://puzzle-english.com/api2/dictionary/addWordsFromMassImport", {
-          method: "POST",
-          body: addFormData,
-          credentials: "include"
-        })
-        .then(r => r.json())
-        .then(d2 => sendResponse(d2))
-        .catch(err => sendResponse({ error: err.toString() }));
-      } else {
-        sendResponse({ error: "Failed to preview words for Puzzle English", detail: d1 });
-      }
-    })
-    .catch(err => sendResponse({ error: err.toString() }));
-    
+          fetch("https://puzzle-english.com/api2/dictionary/addWordsFromMassImport", {
+            method: "POST",
+            body: addFormData,
+            credentials: "include",
+          })
+            .then((r) => r.json())
+            .then((d2) => sendResponse(d2))
+            .catch((err) => sendResponse({ error: err.toString() }));
+        } else {
+          sendResponse({ error: "Failed to preview words for Puzzle English", detail: d1 });
+        }
+      })
+      .catch((err) => sendResponse({ error: err.toString() }));
+
     return true; // Will respond asynchronously
   }
 

@@ -11,14 +11,7 @@ import {
 } from "@src/models/settings";
 
 export const ChatGPTApiKeyModal: FC = () => {
-  const [
-    isModalOpen,
-    handleModalClose,
-    currentApiKey,
-    handleApiKeyChange,
-    currentModel,
-    handleModelChange,
-  ] = useUnit([
+  const [isModalOpen, handleModalClose, currentApiKey, handleApiKeyChange, currentModel, handleModelChange] = useUnit([
     $chatGPTApiKeyModalOpen,
     chatGPTApiKeyModalClosed,
     $chatGPTApiKey,
@@ -90,37 +83,24 @@ export const ChatGPTApiKeyModal: FC = () => {
 
           <div className="es-modal-info">
             <p>
-              ChatGPT API key is required for translation. Please enter your
-              OpenAI API key and choose a model to use this service.
+              ChatGPT API key is required for translation. Please enter your OpenAI API key and choose a model to use
+              this service.
             </p>
             <p>
               Get your ChatGPT API key at{" "}
-              <a
-                href="https://platform.openai.com/api-keys"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">
                 platform.openai.com/api-keys
               </a>
             </p>
-            <p>
-              Note: Usage is based on OpenAI's pricing model. Monitor your usage
-              to avoid unexpected charges.
-            </p>
+            <p>Note: Usage is based on OpenAI's pricing model. Monitor your usage to avoid unexpected charges.</p>
           </div>
         </div>
 
         <div className="es-modal-footer">
-          <button
-            className="es-modal-button es-modal-button--secondary"
-            onClick={handleCancel}
-          >
+          <button className="es-modal-button es-modal-button--secondary" onClick={handleCancel}>
             Cancel
           </button>
-          <button
-            className="es-modal-button es-modal-button--primary"
-            onClick={handleSave}
-          >
+          <button className="es-modal-button es-modal-button--primary" onClick={handleSave}>
             Save
           </button>
         </div>

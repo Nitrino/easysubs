@@ -66,8 +66,7 @@ export const getCurrentService = (): Service => {
 
   const isJellyfin =
     document.querySelector('meta[name="application-name"][content="Jellyfin"]') !== null ||
-    (window.location.pathname.includes("/web/") &&
-      document.querySelector(".videoPlayerContainer") !== null);
+    (window.location.pathname.includes("/web/") && document.querySelector(".videoPlayerContainer") !== null);
   if (isJellyfin) {
     document.querySelector("html")?.setAttribute("id", "jellyfin");
     return new Jellyfin();

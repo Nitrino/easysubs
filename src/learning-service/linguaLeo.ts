@@ -32,17 +32,17 @@ export class LinguaLeo implements ILearningService {
 
           if (leo.data && leo.data[0] && leo.data[0].error) {
             const errCode = leo.data[0].error.code;
-            if (errCode === '6') {
-               reject("LinguaLeo: Premium required (meatballs error).");
+            if (errCode === "6") {
+              reject("LinguaLeo: Premium required (meatballs error).");
             } else {
-               reject("LinguaLeo API Error: " + JSON.stringify(leo.data[0].error));
+              reject("LinguaLeo API Error: " + JSON.stringify(leo.data[0].error));
             }
           } else if (leo.data && leo.data[0] && leo.data[0].word) {
             resolve("Word added to LinguaLeo");
           } else {
-             reject("LinguaLeo Unknown Error: " + JSON.stringify(leo));
+            reject("LinguaLeo Unknown Error: " + JSON.stringify(leo));
           }
-        }
+        },
       );
     });
   }

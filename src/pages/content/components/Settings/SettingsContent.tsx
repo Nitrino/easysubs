@@ -16,10 +16,7 @@ import { MoveBySubs } from "./MoveBySubs";
 import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
 import { useUnit } from "effector-react";
-import {
-  $activeSettingsTab,
-  activeSettingsTabChanged,
-} from "@src/models/settings";
+import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
 import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
 import { EnableAutoStop } from "./EnableAutoStop";
 import { JellyfinSubTrack } from "./JellyfinSubTrack";
@@ -32,11 +29,7 @@ interface TabProps {
   onClick: () => void;
 }
 
-const Tab: FC<PropsWithChildren<TabProps>> = ({
-  children,
-  isActive,
-  onClick,
-}) => {
+const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) => {
   return (
     <div
       className={cn("es-settings-content__menu__item", {

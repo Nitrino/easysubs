@@ -37,7 +37,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
     const msInPx = progressBarRef.current.parentElement.clientWidth / TIME_PERIOD;
 
     const subsInDuration = subs.filter(
-      (sub) => (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder)
+      (sub) => (sub.end > rightBorder && sub.end < leftBorder) || (sub.start > rightBorder && sub.start < leftBorder),
     );
 
     updateElements(
@@ -51,7 +51,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
             key={`id${sub.start}-${sub.end}-${sub.text}`}
           />
         );
-      })
+      }),
     );
   };
 

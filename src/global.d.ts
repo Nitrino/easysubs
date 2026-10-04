@@ -58,7 +58,7 @@ declare module "m3u8-parser" {
       playlists: [
         {
           attributes: Record<string, unknown>;
-        }
+        },
       ];
       mediaGroups: {
         AUDIO: {
@@ -117,7 +117,7 @@ declare module "m3u8-parser" {
           "cue-out-cont": string;
           "cue-in": string;
           custom: Record<string, unknown>;
-        }
+        },
       ];
     };
   }

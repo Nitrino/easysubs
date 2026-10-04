@@ -137,9 +137,9 @@ class ChatGPTTranslateFetcher {
     this.#apiKey = apiKey;
     this.#model = model || "gpt-4o-mini";
     if (apiKey) {
-      this.#translator = new ChatGPTLLMTranslator({ 
-        apiKey, 
-        model: this.#model 
+      this.#translator = new ChatGPTLLMTranslator({
+        apiKey,
+        model: this.#model,
       });
     } else {
       this.#translator = null;

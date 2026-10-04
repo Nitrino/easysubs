@@ -58,11 +58,7 @@ export const JellyfinSubTrack: FC = () => {
     <div className="es-settings-content__element">
       <div className="es-settings-content__element__left">Subtitle track</div>
       <div className="es-settings-content__element__right">
-        <Select
-          options={options}
-          value={selected}
-          onChange={(opt) => handleChange(opt as TrackOption)}
-        />
+        <Select options={options} value={selected} onChange={(opt) => handleChange(opt as TrackOption)} />
       </div>
     </div>
   );

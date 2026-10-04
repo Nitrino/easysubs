@@ -11,7 +11,7 @@ export class PuzzleEnglish implements ILearningService {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
         { type: "addWordToPuzzleEnglish", word: word },
-        (response: { error?: string, status?: boolean }) => {
+        (response: { error?: string; status?: boolean }) => {
           if (chrome.runtime.lastError) {
             reject("Extension Error: " + chrome.runtime.lastError.message);
             return;
@@ -19,9 +19,9 @@ export class PuzzleEnglish implements ILearningService {
           response && response.error
             ? reject("Puzzle English Error: " + response.error)
             : response && response.status === false
-            ? reject("Puzzle English failed to add word. Might already exist.")
-            : resolve("Word added to Puzzle English");
-        }
+              ? reject("Puzzle English failed to add word. Might already exist.")
+              : resolve("Word added to Puzzle English");
+        },
       );
     });
   }

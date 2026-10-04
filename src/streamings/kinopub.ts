@@ -13,30 +13,22 @@ class KinoPub implements Service {
 
   constructor() {
     this.handleKinopubFirstFrame = this.handleKinopubFirstFrame.bind(this);
-    this.handleKinopubCaptionsChanged =
-      this.handleKinopubCaptionsChanged.bind(this);
+    this.handleKinopubCaptionsChanged = this.handleKinopubCaptionsChanged.bind(this);
   }
 
   public init(): void {
     console.debug("++++++++++++ KINOPUB INIT ++++++++++++");
     this.injectScript();
 
-    window.addEventListener(
-      "kinopubFirstFrame",
-      this.handleKinopubFirstFrame as EventListener,
-    );
-    window.addEventListener(
-      "kinopubCaptionsChanged",
-      this.handleKinopubCaptionsChanged as EventListener,
-    );
+    window.addEventListener("kinopubFirstFrame", this.handleKinopubFirstFrame as EventListener);
+    window.addEventListener("kinopubCaptionsChanged", this.handleKinopubCaptionsChanged as EventListener);
   }
 
   public async getSubs(label: string) {
     if (!label) return parse("");
     if (!this.videoPlaylistUrl) return parse("");
 
-    const cdnHostName =
-      new URL(this.videoPlaylistUrl)?.hostname ?? "cdn-azure.net";
+    const cdnHostName = new URL(this.videoPlaylistUrl)?.hostname ?? "cdn-azure.net";
     const resp = await fetch(this.videoPlaylistUrl);
     const data = await resp.text();
     const parser = new Parser();
@@ -68,9 +60,7 @@ class KinoPub implements Service {
 
   public getSubsContainer() {
     // Try Vidstack player first, then fallback to old #player selector
-    const selector =
-      document.querySelector("media-player") ||
-      document.querySelector("#player");
+    const selector = document.querySelector("media-player") || document.querySelector("#player");
     if (selector === null) throw new Error("Subtitles container not found");
     return selector as HTMLElement;
   }
@@ -80,15 +70,13 @@ class KinoPub implements Service {
     // Vidstack controls are typically inside media-controls with media-controls-group
     const selector = document.querySelector(".control-button.btn-settings");
 
-    if (selector === null)
-      throw new Error("Settings button container not found");
+    if (selector === null) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
     const selector = document.querySelector("#player");
-    if (selector === null)
-      throw new Error("Settings content container not found");
+    if (selector === null) throw new Error("Settings content container not found");
     return selector as HTMLElement;
   }
 
