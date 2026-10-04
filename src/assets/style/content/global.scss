@@ -116,9 +116,10 @@
     }
   }
 
+  // z-index stays at the default 10000: above the Jellyfin player,
+  // below Jellyfin dialogs and EasySubs modals
   .es-settings-content {
     position: fixed;
-    z-index: 2147483647;
     bottom: 80px;
     right: 20px;
     pointer-events: auto;
@@ -126,9 +127,10 @@
 }
 
 .es-jellyfin.es-enabled {
+  // Just above .videoPlayerContainer-onTop (z-index: 1000)
   #es {
     position: fixed;
-    z-index: 2147483647;
+    z-index: 1001;
     bottom: 100px;
     pointer-events: auto;
 
