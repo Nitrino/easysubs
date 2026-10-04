@@ -55,11 +55,6 @@ class Jellyfin implements Service {
       const myGen = this.waitForElementGen;
       this.loadedCues = [];
 
-      // Suppress Jellyfin's native ::cue rendering via CSS injection.
-      // We cannot use track.mode="hidden" because Jellyfin immediately resets it
-      // via setTimeout(0) inside forceClearTextTrackActiveCues().
-      injectHideCueStyle();
-
       // Track which TextTrack objects we already attached oncuechange to
       const attachedTracks = new Set<TextTrack>();
 
@@ -151,9 +146,6 @@ class Jellyfin implements Service {
         if (this.waitForElementGen !== myGen) return; // stale, a new video loaded
         const subtitleSource = document.querySelector(".videoSubtitles");
         if (!subtitleSource) return;
-        // Hide Jellyfin's custom div (EasySubs renders its own overlay)
-        (subtitleSource as HTMLElement).style.opacity = "0";
-        (subtitleSource as HTMLElement).style.pointerEvents = "none";
 
         this.videoSubsObserver?.disconnect();
         this.videoSubsObserver = new MutationObserver(() => {
@@ -199,18 +191,6 @@ class Jellyfin implements Service {
   public isOnFlight() {
     return false;
   }
-}
-
-// Injected once per page: hides the browser-native ::cue rendering so only
-// EasySubs' overlay is visible. We avoid track.mode="hidden" because Jellyfin
-// resets it synchronously via setTimeout(0).
-function injectHideCueStyle() {
-  if (document.getElementById("es-jellyfin-hide-cue")) return;
-  const style = document.createElement("style");
-  style.id = "es-jellyfin-hide-cue";
-  style.textContent =
-    "video.htmlvideoplayer::cue { opacity: 0 !important; color: transparent !important; text-shadow: none !important; }";
-  document.head.appendChild(style);
 }
 
 // Strip WebVTT tags before passing text to the EasySubs tokenizer:

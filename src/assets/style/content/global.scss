@@ -127,6 +127,20 @@
 }
 
 .es-jellyfin.es-enabled {
+  // EasySubs renders its own overlay, so hide Jellyfin's native subtitles.
+  // track.mode = "hidden" doesn't work: Jellyfin resets it back to "showing".
+  video.htmlvideoplayer::cue {
+    opacity: 0 !important;
+    color: transparent !important;
+    text-shadow: none !important;
+  }
+
+  // Custom subtitles element (used instead of ::cue in some browsers)
+  .videoSubtitles {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
   // Just above .videoPlayerContainer-onTop (z-index: 1000)
   #es {
     position: fixed;
