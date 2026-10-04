@@ -1,8 +1,8 @@
-export const ArrowBack = () => {
+export const CloseIcon = () => {
   return (
-    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path
-        d="M7.75 2 3.75 6l4 4"
+        d="M1.5 1.5l7 7M8.5 1.5l-7 7"
         stroke="currentColor"
         strokeWidth="1.6"
         strokeLinecap="round"

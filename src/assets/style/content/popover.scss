@@ -1,0 +1,398 @@
+// HUD popovers above a hovered word (dictionary, phrasal verb, language picker) and above a clicked
+// subtitle (line translation), after the IINA plugin's macOS HUD popover.
+//
+// .es-popover is the positioned wrapper: its bottom padding spans the gap between the anchor and the
+// body, so the pointer travels from the word into the popover without leaving it. The body and the
+// arrow are siblings with their own backdrop filter, and only they fade in: an ancestor with
+// opacity < 1 would cut their backdrop off from the video.
+
+$es-arrow: 12px; // side of the rotated square
+$es-gap: 8px; // how far the arrow sticks out of the body
+
+.es-popover {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 50%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 0 $es-gap;
+  transform: translate(-50%, -100%);
+  transform-origin: 50% 100%;
+  font: 400 15px/1.35 var(--es-font);
+  letter-spacing: normal;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  white-space: normal;
+  color: var(--es-primary);
+  cursor: default;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: es-pop 120ms ease-out;
+
+  &--word {
+    width: max-content;
+    min-width: 10em;
+    max-width: min(24em, calc(100vw - 16px));
+  }
+
+  &--line {
+    width: max-content;
+    min-width: min(100%, 14em);
+    max-width: min(max(100%, 30em), calc(100vw - 16px));
+    font-size: 16px;
+    text-align: center;
+  }
+
+  &__body {
+    position: relative;
+    box-sizing: border-box;
+    padding: 0.6em 0.85em 0.65em;
+    border: 0.5px solid var(--es-hud-border);
+    border-radius: 10px;
+    background: var(--es-hud);
+    -webkit-backdrop-filter: var(--es-hud-blur);
+    backdrop-filter: var(--es-hud-blur);
+    box-shadow: var(--es-hud-shadow);
+    animation: es-fade-in 120ms ease-out;
+  }
+
+  // A rotated square centred on the body's bottom edge, clipped to the half outside the body.
+  &__arrow {
+    position: absolute;
+    box-sizing: border-box;
+    left: calc(50% - #{$es-arrow * 0.5});
+    bottom: $es-gap - $es-arrow * 0.5;
+    width: $es-arrow;
+    height: $es-arrow;
+    transform: rotate(45deg);
+    background: var(--es-hud);
+    -webkit-backdrop-filter: var(--es-hud-blur);
+    backdrop-filter: var(--es-hud-blur);
+    border-right: 0.5px solid var(--es-hud-border);
+    border-bottom: 0.5px solid var(--es-hud-border);
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    animation: es-fade-in 120ms ease-out;
+  }
+
+  // Safety against host-page rules for bare elements.
+  button {
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  svg {
+    display: block;
+    pointer-events: none;
+  }
+}
+
+@keyframes es-pop {
+  from {
+    transform: translate(-50%, -100%) scale(0.96);
+  }
+  to {
+    transform: translate(-50%, -100%);
+  }
+}
+
+// ---- Content -------------------------------------------------------------------------------------
+
+.es-popover {
+  .es-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .es-content > * + * {
+    margin-top: 0.2em;
+  }
+
+  .es-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: 600;
+    line-height: 1.25;
+    color: rgba(255, 255, 255, 0.96);
+  }
+
+  .es-title-small {
+    font-size: 1.05em;
+  }
+
+  .es-src {
+    display: flex;
+    align-items: center;
+    font-size: 0.93em;
+    color: var(--es-secondary);
+  }
+
+  .es-src > * + * {
+    margin-left: 0.3em;
+  }
+
+  .es-src-word {
+    color: var(--es-primary);
+  }
+
+  .es-translit {
+    color: var(--es-secondary);
+  }
+
+  .es-speak {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 1.45em;
+    height: 1.3em;
+    margin-left: -0.25em;
+    border-radius: 5px;
+    color: rgba(255, 255, 255, 0.72);
+
+    &:hover {
+      color: #fff;
+      background: var(--es-fill-hover);
+    }
+
+    &:active {
+      background: var(--es-fill-active);
+    }
+
+    svg {
+      width: 1.05em;
+      height: 0.85em;
+    }
+  }
+
+  .es-content > .es-sep {
+    flex: none;
+    height: 0.5px;
+    margin: 0.5em 0 0.3em;
+    background: var(--es-separator);
+  }
+
+  .es-alts {
+    display: grid;
+    grid-template-columns: fit-content(11em) auto 1fr;
+    column-gap: 0.85em;
+    row-gap: 0.15em;
+    align-items: baseline;
+    font-size: 0.93em;
+  }
+
+  .es-alt-word {
+    display: flex;
+    align-items: baseline;
+    hyphens: auto;
+  }
+
+  .es-alt-pos {
+    color: var(--es-secondary);
+    font-size: 0.93em;
+  }
+
+  .es-alt-back {
+    color: var(--es-tertiary);
+  }
+
+  // Words that go to the learning service on click: a quiet "+" badge, tinted with the service's
+  // color (--es-service, set on the popover) while the row is pointed at.
+  .es-addable {
+    cursor: pointer;
+
+    &:hover .es-add {
+      background: var(--es-fill-hover);
+      color: var(--es-service, var(--es-accent));
+    }
+
+    &:active .es-add {
+      background: var(--es-fill-active);
+    }
+  }
+
+  .es-add {
+    display: inline-flex;
+    flex: none;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.4em;
+    border-radius: 50%;
+    background: var(--es-fill);
+    color: var(--es-secondary);
+    font-size: 0.8em;
+    transition:
+      color 120ms,
+      background-color 120ms;
+
+    .es-title & {
+      font-size: 0.7em;
+    }
+
+    svg {
+      width: 0.6em;
+      height: 0.6em;
+    }
+  }
+
+  // Dictionary links: recessed capsules in secondary text, grown to fill the row like a button bar.
+  .es-links {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.15em -0.35em -0.35em 0;
+    font-size: 0.8em;
+  }
+
+  a.es-link {
+    display: inline-flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.35em 0.35em 0;
+    padding: 0.2em 0.55em 0.2em 0.65em;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--es-secondary);
+    font-weight: 400;
+    line-height: 1.25;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--es-fill-hover);
+      color: var(--es-primary);
+      text-decoration: none;
+    }
+
+    &:active {
+      background: var(--es-fill-active);
+    }
+
+    svg {
+      width: 0.62em;
+      height: 0.62em;
+      margin-left: 0.35em;
+      opacity: 0.7;
+    }
+  }
+
+  .es-label {
+    font-size: 0.87em;
+    color: var(--es-secondary);
+  }
+
+  .es-pv-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .es-pv-list > * + * {
+    margin-top: 0.1em;
+  }
+
+  .es-pv-item {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .es-note {
+    max-width: 17em;
+    font-size: 0.93em;
+    color: var(--es-secondary);
+  }
+
+  .es-content > .es-picker {
+    min-width: 13em;
+    margin-top: 0.5em;
+    font-size: 13px;
+  }
+
+  .es-loading {
+    display: flex;
+    align-items: center;
+    color: var(--es-secondary);
+  }
+
+  .es-loading > * + * {
+    margin-left: 0.5em;
+  }
+
+  .es-loading-word {
+    color: var(--es-primary);
+  }
+
+  .es-line-text {
+    font-size: 1.08em;
+    line-height: 1.35;
+    white-space: pre-wrap;
+    text-wrap: balance;
+  }
+
+  .es-content > .es-foot {
+    margin-top: 0.5em;
+    font-size: 0.8em;
+    color: var(--es-tertiary);
+  }
+}
+
+.es-popover--line .es-loading {
+  justify-content: center;
+}
+
+// macOS-style spinner: eight spokes, stepping round.
+.es-spinner {
+  position: relative;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  pointer-events: none;
+  animation: es-spin 0.8s steps(8, end) infinite;
+
+  span {
+    position: absolute;
+    left: 0.44em;
+    top: 0.04em;
+    width: 0.12em;
+    height: 0.3em;
+    border-radius: 0.06em;
+    background: currentColor;
+    transform-origin: 0.06em 0.46em;
+  }
+
+  $opacities: 1, 0.2, 0.3, 0.4, 0.5, 0.625, 0.75, 0.875;
+
+  @for $i from 1 through 8 {
+    span:nth-child(#{$i}) {
+      transform: rotate(#{($i - 1) * 45}deg);
+      opacity: nth($opacities, $i);
+    }
+  }
+}
+
+@keyframes es-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .es-popover,
+  .es-popover__body,
+  .es-popover__arrow {
+    animation: none;
+  }
+}

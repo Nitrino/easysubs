@@ -1,0 +1,45 @@
+// Design tokens shared by every EasySubs surface injected into the page (subtitles, popovers,
+// settings panel, modals, toasts, react-select menus). Ported from the IINA plugin's macOS HUD
+// look (easysubs-iina src/overlay/overlay.css): dark translucent material with a hairline
+// border, SF text colors at fixed opacities, the system cyan for highlighted words.
+// Defined on :root so the portaled react-select menus and toasts can use them too.
+
+:root {
+  --es-font:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+  --es-hl: #64d2ff;
+  --es-accent: #0a84ff;
+  --es-accent-hover: #2b95ff;
+  --es-link: #409cff;
+  --es-focus-ring: rgba(10, 132, 255, 0.4);
+
+  --es-primary: rgba(255, 255, 255, 0.92);
+  --es-secondary: rgba(255, 255, 255, 0.55);
+  --es-tertiary: rgba(255, 255, 255, 0.35);
+  --es-separator: rgba(255, 255, 255, 0.12);
+
+  // Quiet control fills: rest, pointed at, pressed.
+  --es-fill: rgba(255, 255, 255, 0.08);
+  --es-fill-hover: rgba(255, 255, 255, 0.15);
+  --es-fill-active: rgba(255, 255, 255, 0.22);
+
+  // HUD material. The strong variant backs larger surfaces that may sit over bright video
+  // where backdrop blur is unavailable (e.g. inside a faded player layer).
+  --es-hud: rgba(28, 28, 30, 0.78);
+  --es-hud-strong: rgba(30, 30, 32, 0.88);
+  --es-hud-border: rgba(255, 255, 255, 0.14);
+  --es-hud-blur: blur(24px) saturate(160%);
+  --es-hud-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --es-glass-edge: inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+}
+
+@keyframes es-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

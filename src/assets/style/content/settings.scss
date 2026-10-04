@@ -1,156 +1,11 @@
+// Settings panel, modals and the player button, in the macOS HUD material: a glass panel with a
+// capsule segmented control, one inset-grouped list of rows (label left, control right, inset
+// separators) as in macOS System Settings and the IINA plugin's settings page.
+
 .es-settings {
   display: inline-block;
   line-height: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-}
-
-.es-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20000;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-}
-
-.es-modal-content {
-  background-color: #252836;
-  border-radius: 8px;
-  width: 400px;
-  max-width: 90vw;
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.es-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid #333;
-
-  h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-  }
-}
-
-.es-modal-close {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    color: #ccc;
-  }
-}
-
-.es-modal-body {
-  padding: 20px;
-}
-
-.es-modal-field {
-  margin-bottom: 16px;
-
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-}
-
-.es-modal-input {
-  width: 100%;
-  padding: 8px 12px;
-  background-color: #51535d;
-  border: 1px solid #666;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 14px;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: #1296ba;
-  }
-
-  &::placeholder {
-    color: #999;
-  }
-}
-
-.es-modal-info {
-  font-size: 12px;
-  color: #ccc;
-  line-height: 1.4;
-
-  p {
-    margin: 8px 0;
-  }
-
-  a {
-    color: #1296ba;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.es-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px 20px;
-  border-top: 1px solid #333;
-}
-
-.es-modal-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &--secondary {
-    background-color: #51535d;
-    color: #fff;
-
-    &:hover {
-      background-color: #5a5c66;
-    }
-  }
-
-  &--primary {
-    background-color: #1296ba;
-    color: #fff;
-
-    &:hover {
-      background-color: #0e7a96;
-    }
-  }
+  font-family: var(--es-font);
 }
 
 .es-settings-icon {
@@ -168,102 +23,494 @@
   }
 }
 
+// ---- Panel ---------------------------------------------------------------------------------------
+
 .es-settings-content {
   all: revert;
-  line-height: 16px;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  font-size: 15px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #fff;
   position: absolute;
-  height: 270px;
-  width: 340px;
-  background-color: #1f1d2b;
   right: 36px;
   bottom: 116px;
   z-index: 10000;
-  border-radius: 8px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  // A fixed size, like a settings window: fits the longest tab (seven rows), so switching tabs
+  // never moves the tab bar under the pointer. Shorter tabs leave room below the group.
+  width: 340px;
+  height: 336px;
+  max-height: 80vh;
+  margin: 15px 0;
+  padding: 0;
+  border: 0.5px solid var(--es-hud-border);
+  border-radius: 16px;
+  background: var(--es-hud-strong);
+  -webkit-backdrop-filter: var(--es-hud-blur);
+  backdrop-filter: var(--es-hud-blur);
+  box-shadow:
+    var(--es-glass-edge),
+    0 16px 40px rgba(0, 0, 0, 0.45);
+  color: var(--es-primary);
+  font: 400 13px/16px var(--es-font);
+  text-align: left;
+  cursor: default;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: es-panel-in 160ms ease-out;
 
   &__menu {
     display: flex;
+    flex: none;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 10px 8px;
 
+    // Capsule segmented control.
     &__items {
       display: flex;
+      flex: 1;
+      padding: 2px;
+      border-radius: 999px;
+      background: var(--es-fill);
     }
 
     &__item {
-      line-height: 46px;
-      padding: 0 16px;
-      font-size: 15px;
+      flex: 1 1 0;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      color: var(--es-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 22px;
+      text-align: center;
+      white-space: nowrap;
       cursor: pointer;
+      transition:
+        color 150ms,
+        background-color 150ms;
 
-      &:first-child {
-        border-radius: 8px 0 0 0;
+      &:hover {
+        color: var(--es-primary);
       }
 
-      &--active {
-        background-color: #252836;
-      }
-    }
-  }
-
-  &__main {
-    flex: 1;
-    padding: 16px;
-    background-color: #252836;
-    border-radius: 0 0 8px 8px;
-  }
-
-  &__item {
-    margin-bottom: 12px;
-  }
-
-  &__element {
-    display: flex;
-
-    &__left {
-      display: flex;
-      flex: 1;
-      text-align: right;
-      align-items: center;
-      justify-content: flex-end;
-      margin-right: 8px;
-    }
-
-    &__right {
-      display: flex;
-      flex: 1;
-      align-items: center;
-      margin-left: 8px;
-
-      label {
-        margin-bottom: 0;
+      &--active,
+      &--active:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        box-shadow:
+          inset 0 0.5px 0 rgba(255, 255, 255, 0.14),
+          0 1px 3px rgba(0, 0, 0, 0.25);
       }
     }
   }
 
   &__close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--es-fill);
+    color: var(--es-secondary);
     cursor: pointer;
+    appearance: none;
+    transition:
+      color 150ms,
+      background-color 150ms;
 
-    &:after {
-      display: inline-block;
-      content: "\00d7";
-      font-size: 28px;
-      line-height: 18px;
+    &:hover {
+      background: var(--es-fill-hover);
+      color: var(--es-primary);
+    }
+
+    &:active {
+      background: var(--es-fill-active);
+    }
+
+    svg {
+      display: block;
+      width: 9px;
+      height: 9px;
+    }
+  }
+
+  // The inset group: concentric with the panel corners.
+  &__main {
+    flex: 0 1 auto;
+    min-height: 0;
+    margin: 0 10px 10px;
+    padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+
+  &__item {
+    position: relative;
+    margin: 0;
+    padding: 8px 10px;
+
+    // A setting that renders nothing (e.g. no Jellyfin tracks) leaves no empty row.
+    &:empty {
+      display: none;
+    }
+
+    & + &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      border-top: 0.5px solid var(--es-separator);
+    }
+  }
+
+  &__element {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 24px;
+
+    &__left {
+      flex: 1 1 auto;
+      min-width: 0;
+      margin: 0;
+      color: var(--es-primary);
+      text-align: left;
+    }
+
+    &__right {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 0;
+
+      label {
+        margin-bottom: 0;
+      }
+
+      .es-select {
+        width: 168px;
+      }
     }
   }
 }
 
-.es-settings__select {
+@keyframes es-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// ---- Controls ------------------------------------------------------------------------------------
+
+// macOS switch: accent track when on, white knob that stretches while pressed. The checkbox stays
+// unfocusable (display: none) so the player's keyboard shortcuts keep working after a click.
+.es-switch {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  margin: 0;
+  cursor: pointer;
+
+  &__input {
+    display: none;
+  }
+
+  &__track {
+    position: relative;
+    display: block;
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: rgba(120, 120, 128, 0.36);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+    transition: background-color 200ms ease;
+  }
+
+  &__knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.3),
+      0 0 0 0.5px rgba(0, 0, 0, 0.04);
+    transition:
+      left 220ms cubic-bezier(0.3, 0.7, 0.4, 1),
+      width 150ms ease;
+  }
+
+  &__input:checked + &__track {
+    background: var(--es-accent);
+  }
+
+  &__input:checked + &__track &__knob {
+    left: 18px;
+  }
+
+  &:active &__knob {
+    width: 20px;
+  }
+
+  &:active &__input:checked + &__track &__knob {
+    left: 14px;
+  }
+}
+
+// − value + in one capsule.
+.es-stepper {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 2px;
+  border-radius: 999px;
+  background: var(--es-fill);
+
+  &__button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--es-secondary);
+    cursor: pointer;
+    appearance: none;
+    transition:
+      color 120ms,
+      background-color 120ms;
+
+    &:hover {
+      background: var(--es-fill-hover);
+      color: var(--es-primary);
+    }
+
+    &:active {
+      background: var(--es-fill-active);
+    }
+
+    svg {
+      display: block;
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &__value {
+    min-width: 42px;
+    padding: 0 2px;
+    color: var(--es-primary);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+}
+
+// react-select renders the rest (Select.tsx styles); this only sizes it.
+.es-select {
   width: 100%;
+  min-width: 140px;
+}
+
+// ---- Modals --------------------------------------------------------------------------------------
+
+.es-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  font: 400 13px/1.35 var(--es-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: es-fade-in 160ms ease-out;
+}
+
+.es-modal-content {
+  box-sizing: border-box;
+  width: 400px;
+  max-width: 90vw;
+  border: 0.5px solid var(--es-hud-border);
+  border-radius: 18px;
+  background: var(--es-hud-strong);
+  -webkit-backdrop-filter: var(--es-hud-blur);
+  backdrop-filter: var(--es-hud-blur);
+  box-shadow:
+    var(--es-glass-edge),
+    0 24px 64px rgba(0, 0, 0, 0.5);
+  color: var(--es-primary);
+  animation: es-panel-in 180ms ease-out;
+}
+
+.es-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px 4px 20px;
+
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+}
+
+.es-modal-close {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0 0 1px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--es-fill);
+  color: var(--es-secondary);
+  font: 400 17px/1 var(--es-font);
+  cursor: pointer;
+  appearance: none;
+
+  &:hover {
+    background: var(--es-fill-hover);
+    color: var(--es-primary);
+  }
+}
+
+.es-modal-body {
+  padding: 12px 20px 4px;
+}
+
+.es-modal-field {
+  margin-bottom: 14px;
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--es-secondary);
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+.es-modal-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--es-primary);
+  font: 400 13px var(--es-font);
+  outline: none;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
+
+  &:focus {
+    border-color: var(--es-accent);
+    box-shadow: 0 0 0 3px var(--es-focus-ring);
+  }
+
+  &::placeholder {
+    color: var(--es-tertiary);
+  }
+}
+
+.es-modal-info {
+  color: var(--es-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+
+  p {
+    margin: 8px 0;
+  }
+
+  a {
+    color: var(--es-link);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.es-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px 16px;
+}
+
+.es-modal-button {
+  height: 28px;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  font: 500 13px/28px var(--es-font);
+  cursor: pointer;
+  appearance: none;
+  transition: background-color 150ms;
+
+  &--secondary {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: var(--es-primary);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.18);
+    }
+  }
+
+  &--primary {
+    background-color: var(--es-accent);
+    color: #fff;
+
+    &:hover {
+      background-color: var(--es-accent-hover);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .es-settings-content,
+  .es-modal-overlay,
+  .es-modal-content {
+    animation: none;
+  }
 }

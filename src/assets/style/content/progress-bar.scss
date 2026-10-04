@@ -5,18 +5,25 @@
   height: 15px;
   width: 100%;
   z-index: 60;
-  background-color: #171717;
+  background-color: rgba(18, 18, 20, 0.72);
+  -webkit-backdrop-filter: var(--es-hud-blur);
+  backdrop-filter: var(--es-hud-blur);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.08);
 
+  // Playhead: the current moment sits in the middle of the 30 s window.
   &:after {
     content: " ";
     display: block;
     position: absolute;
-    bottom: 0;
-    height: 15px;
+    bottom: 2px;
+    height: 11px;
     width: 2px;
     left: 50%;
     transform: translateX(-50%);
-    background: #1296ba;
+    border-radius: 1px;
+    background: var(--es-hl);
+    box-shadow: 0 0 6px rgba(100, 210, 255, 0.6);
+    pointer-events: none;
   }
 
   &-container {
@@ -26,12 +33,16 @@
   }
 
   &-element {
-    background-color: #707070;
+    background-color: rgba(255, 255, 255, 0.3);
     position: absolute;
     height: 7px;
     bottom: 4px;
-    border-radius: 7px;
+    border-radius: 999px;
     pointer-events: none;
+  }
+
+  &-container:hover &-element {
+    background-color: rgba(255, 255, 255, 0.42);
   }
 }
 

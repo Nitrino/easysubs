@@ -6,7 +6,7 @@ import { TTranslationService } from "@src/models/types";
 import { Select } from "../ui/Select";
 
 const getServiceOption = (service: string) => {
-  return services.find((option) => option.value === service);
+  return TRANSLATION_SERVICES.find((option) => option.value === service);
 };
 
 export const TranslationService: FC<HTMLProps<HTMLSelectElement>> = () => {
@@ -22,14 +22,14 @@ export const TranslationService: FC<HTMLProps<HTMLSelectElement>> = () => {
         <Select
           value={getServiceOption(translationService)}
           onChange={(option: { value: TTranslationService }) => handleTranslationServiceChanged(option.value)}
-          options={services}
+          options={TRANSLATION_SERVICES}
         />
       </div>
     </div>
   );
 };
 
-const services = [
+export const TRANSLATION_SERVICES: { label: string; value: TTranslationService }[] = [
   { label: "Google Translate", value: "google" },
   { label: "DeepL", value: "deepl" },
   { label: "Bing Translator", value: "bing" },

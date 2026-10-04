@@ -22,6 +22,7 @@ import { EnableAutoStop } from "./EnableAutoStop";
 import { JellyfinSubTrack } from "./JellyfinSubTrack";
 import { createPortal } from "react-dom";
 import { $streaming } from "@src/models/streamings";
+import { CloseIcon } from "./assets/CloseIcon";
 
 interface TabProps {
   isActive: boolean;
@@ -85,6 +86,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
               Experiments
             </Tab>
           </div>
+          <button className="es-settings-content__close" aria-label="Close" onClick={() => onClose()}>
+            <CloseIcon />
+          </button>
         </div>
         <div className="es-settings-content__main">
           {activeSettingsTab === 0 && (
@@ -147,7 +151,6 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
             </>
           )}
         </div>
-        <div className="es-settings-content__close" onClick={() => onClose()} />
       </div>
       {createPortal(<DeepLApiKeyModal />, document.querySelector("body"))}
       {createPortal(<ChatGPTApiKeyModal />, document.querySelector("body"))}

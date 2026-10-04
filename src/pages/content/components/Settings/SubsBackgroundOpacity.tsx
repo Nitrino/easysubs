@@ -16,19 +16,21 @@ export const SubsBackgroundOpacity: FC = () => {
     <div className="es-settings-content__element">
       <div className="es-settings-content__element__left">Background opacity</div>
       <div className="es-settings-content__element__right">
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsBackgroundOpacity(subsBackgroundOpacity - OPACITY_STEP)}
-        >
-          <MinusIcon />
-        </button>
-        <div className="es-settings-button__value">{subsBackgroundOpacity}%</div>
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsBackgroundOpacity(subsBackgroundOpacity + OPACITY_STEP)}
-        >
-          <PlusIcon />
-        </button>
+        <div className="es-stepper">
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsBackgroundOpacity(subsBackgroundOpacity - OPACITY_STEP)}
+          >
+            <MinusIcon />
+          </button>
+          <div className="es-stepper__value">{subsBackgroundOpacity}%</div>
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsBackgroundOpacity(subsBackgroundOpacity + OPACITY_STEP)}
+          >
+            <PlusIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

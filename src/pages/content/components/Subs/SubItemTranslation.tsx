@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { CSSProperties, FC, Fragment, useEffect, useState } from "react";
 import { useGate, useUnit } from "effector-react";
 import { $learningService, $translateLanguage } from "@src/models/settings";
 
@@ -6,17 +6,23 @@ import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGat
 import toast from "react-hot-toast";
 import { SoundIcon } from "./assets/SoundIcon";
 import { PlusIcon } from "./assets/PlusIcon";
+import { ExternalIcon } from "./assets/ExternalIcon";
 import { joinTranslations } from "@src/utils/joinTranslations";
 
-import cambridgeIcon from "@assets/img/icons/cambridge.png";
-import forvoIcon from "@assets/img/icons/forvo.png";
-import urbandictionaryIcon from "@assets/img/icons/urbandictionary.png";
-import youglishIcon from "@assets/img/icons/youglish.png";
 import ILearningService from "@src/learning-service/learningService";
 import { TWordTranslationItem } from "@src/models/types";
 import { $subsLanguage } from "@src/models/subs";
 import { getLearningService } from "@src/utils/getLearningService";
 import { TranslateSelect } from "../ui/TranslateSelect";
+import { Popover } from "../ui/Popover";
+import { Spinner } from "../ui/Spinner";
+
+const DICTIONARIES: [string, (word: string) => string][] = [
+  ["Cambridge", (word) => `https://dictionary.cambridge.org/dictionary/english/${word}`],
+  ["Forvo", (word) => `https://forvo.com/search/${word}`],
+  ["Urban", (word) => `https://www.urbandictionary.com/define.php?term=${word}`],
+  ["YouGlish", (word) => `https://youglish.com/pronounce/${word}/english`],
+];
 
 export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   useGate(WordTranslationsGate, text);
@@ -34,8 +40,33 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     setService(getLearningService(learningService));
   }, [learningService]);
 
-  if (!currentWordTranslation || wordTranslationsPendings[text]) {
-    return null;
+  const source = text.toLowerCase();
+
+  if (subsLanguage === translateLanguage) {
+    return (
+      <Popover variant="word">
+        <div className="es-title es-title-small">{text}</div>
+        <div className="es-note">Select the translation language:</div>
+        <div className="es-picker">
+          <TranslateSelect />
+        </div>
+      </Popover>
+    );
+  }
+
+  // Translations are keyed by the lowercased word; a result for another word may still be in flight.
+  if (currentWordTranslation?.source !== source) {
+    if (!wordTranslationsPendings[source]) {
+      return null;
+    }
+    return (
+      <Popover variant="word">
+        <div className="es-loading">
+          <Spinner />
+          <span className="es-loading-word">{text}</span>
+        </div>
+      </Popover>
+    );
   }
 
   const handleAddWord = (word: string, translation: TWordTranslationItem) => {
@@ -59,109 +90,79 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     window.speechSynthesis.speak(msg);
   };
 
-  if (subsLanguage === translateLanguage) {
-    return (
-      <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
-        <div className="es-word-translation-languages">
-          <div>Select the translation language:</div>
-          <TranslateSelect />
-        </div>
-      </div>
-    );
-  }
+  const { transcription } = currentWordTranslation;
+  const showTranscription =
+    typeof transcription === "string" && transcription && transcription.toLowerCase() !== source;
 
   return (
-    <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
-      <div className="es-word-main">
-        <div
-          className="es-translation-variant-word"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAddWord(currentWordTranslation.source, {
-              word: currentWordTranslation.mainTranslation,
-              partOfSpeech: "unknown",
-              popularity: 0,
-              synonyms: [],
-            });
-          }}
-        >
-          {service && (
-            <button className="es-settings-button">
-              <PlusIcon fill={service.color} />
-            </button>
-          )}
-          <div>{currentWordTranslation.mainTranslation}</div>
-        </div>
+    <Popover variant="word" style={service ? ({ "--es-service": service.color } as CSSProperties) : undefined}>
+      <div
+        className={service ? "es-title es-addable" : "es-title"}
+        onClick={() =>
+          handleAddWord(currentWordTranslation.source, {
+            word: currentWordTranslation.mainTranslation,
+            partOfSpeech: "unknown",
+            popularity: 0,
+            synonyms: [],
+          })
+        }
+      >
+        {service && (
+          <span className="es-add">
+            <PlusIcon />
+          </span>
+        )}
+        <span dir="auto">{currentWordTranslation.mainTranslation}</span>
       </div>
-      <hr className="es-word-original-hr" />
-      <div className="es-word-original-info">
-        <div className="es-word-original-sound-icon" onClick={handlePlaySound}>
+      <div className="es-src">
+        <button className="es-speak" title="Pronounce" onClick={handlePlaySound}>
           <SoundIcon />
-        </div>
-        <div className="es-word-original">{text.toLowerCase()}</div>
+        </button>
+        <span className="es-src-word" dir="auto">
+          {source}
+        </span>
+        {showTranscription && <span className="es-translit">[{transcription}]</span>}
       </div>
-      <div className="es-translation-variants">
-        {currentWordTranslation.translations.length > 0 &&
-          currentWordTranslation.translations.map((translation) => (
-            <Fragment key={`${translation.partOfSpeech}-${translation.word}`}>
-              <div
-                className="es-translation-variant-word"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAddWord(currentWordTranslation.source, translation);
-                }}
-              >
-                {service && (
-                  <button className="es-settings-button">
-                    <PlusIcon fill={service.color} />
-                  </button>
-                )}
-                <div>{translation.word}</div>
-              </div>
-              <div className="es-translation-variant-part-of-speach">{translation.partOfSpeech}</div>
-              <div className="es-translation-variant-synonyms">{joinTranslations(translation.synonyms)}</div>
-            </Fragment>
-          ))}
-      </div>
-      {subsLanguage === "en" && (
+      {currentWordTranslation.translations.length > 0 && (
         <>
-          <hr className="es-translation-services-hr" />
-          <div className="es-translation-services">
-            <a
-              className="es-translation-service"
-              href={`https://dictionary.cambridge.org/dictionary/english/${text.toLowerCase()}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img src={cambridgeIcon} alt="cambridge dictionary" />
-            </a>
-            <a
-              className="es-translation-service"
-              href={`https://forvo.com/search/${text.toLowerCase()}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img src={forvoIcon} alt="forvo" />
-            </a>
-            <a
-              className="es-translation-service"
-              href={`https://www.urbandictionary.com/define.php?term=${text.toLowerCase()}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img src={urbandictionaryIcon} alt="urban dictionary" />
-            </a>
-            <a
-              className="es-translation-service"
-              href={`https://youglish.com/pronounce/${text.toLowerCase()}/english`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img src={youglishIcon} alt="youglish" />
-            </a>
+          <div className="es-sep" />
+          <div className="es-alts">
+            {currentWordTranslation.translations.map((translation) => (
+              <Fragment key={`${translation.partOfSpeech}-${translation.word}`}>
+                <span
+                  className={service ? "es-alt-word es-addable" : "es-alt-word"}
+                  dir="auto"
+                  onClick={() => handleAddWord(currentWordTranslation.source, translation)}
+                >
+                  {service && (
+                    <span className="es-add">
+                      <PlusIcon />
+                    </span>
+                  )}
+                  {translation.word}
+                </span>
+                <span className="es-alt-pos">{translation.partOfSpeech}</span>
+                <span className="es-alt-back" dir="auto">
+                  {joinTranslations(translation.synonyms)}
+                </span>
+              </Fragment>
+            ))}
           </div>
         </>
       )}
-    </div>
+      {subsLanguage === "en" && (
+        <>
+          <div className="es-sep" />
+          <div className="es-links">
+            {DICTIONARIES.map(([name, url]) => (
+              <a key={name} className="es-link" href={url(encodeURIComponent(source))} target="_blank" rel="noreferrer">
+                {name}
+                <ExternalIcon />
+              </a>
+            ))}
+          </div>
+        </>
+      )}
+    </Popover>
   );
 };

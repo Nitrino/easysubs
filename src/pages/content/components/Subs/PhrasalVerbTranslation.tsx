@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { CSSProperties, FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 
 import { TPhrasalVerb } from "@src/models/types";
@@ -7,6 +7,7 @@ import ILearningService from "@src/learning-service/learningService";
 import { getLearningService } from "@src/utils/getLearningService";
 import toast from "react-hot-toast";
 import { PlusIcon } from "./assets/PlusIcon";
+import { Popover } from "../ui/Popover";
 
 export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phrasalVerb }) => {
   const [learningService] = useUnit([$learningService]);
@@ -31,30 +32,29 @@ export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phra
   };
 
   return (
-    <div className="es-word-translation" onClick={(e) => e.stopPropagation()}>
-      <div className="es-word-main">{phrasalVerb.text}</div>
-      <hr className="es-word-original-hr" />
-      <div className="es-word-original-info">
-        <div className="es-word-original">phrasal verb</div>
+    <Popover variant="word" style={service ? ({ "--es-service": service.color } as CSSProperties) : undefined}>
+      <div className="es-title" dir="auto">
+        {phrasalVerb.text}
       </div>
-      <div className="es-translation-phrasal-verbs-variants">
+      <div className="es-label">phrasal verb</div>
+      <div className="es-sep" />
+      <div className="es-pv-list">
         {phrasalVerb.translations.map((translation) => (
-          <div className="es-translation-variant-word" key={translation}>
+          <div
+            key={translation}
+            className={service ? "es-pv-item es-addable" : "es-pv-item"}
+            dir="auto"
+            onClick={() => handleAddWord(phrasalVerb.text, translation)}
+          >
             {service && (
-              <button
-                className="es-settings-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAddWord(phrasalVerb.text, translation);
-                }}
-              >
-                <PlusIcon fill={service.color} />
-              </button>
+              <span className="es-add">
+                <PlusIcon />
+              </span>
             )}
             {translation}
           </div>
         ))}
       </div>
-    </div>
+    </Popover>
   );
 };

@@ -74,7 +74,7 @@ export const DeepLApiKeyModal: FC = () => {
           <button className="es-modal-button es-modal-button--secondary" onClick={handleCancel}>
             Cancel
           </button>
-          <button className="es-modal-button es-modal-button--primary" onClick={handleCancel}>
+          <button className="es-modal-button es-modal-button--secondary" onClick={handleCancel}>
             Use without key
           </button>
           <button className="es-modal-button es-modal-button--primary" onClick={handleSave}>
