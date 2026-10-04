@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
@@ -28,6 +28,7 @@ type TSubsProps = {};
 export const Subs: FC<TSubsProps> = () => {
   const [video, currentSubs, subsFontSize, moveBySubsEnabled, wasPaused, handleWasPausedChanged, autoStopEnabled] =
     useUnit([$video, $currentSubs, $subsFontSize, $moveBySubsEnabled, $wasPaused, wasPausedChanged, $autoStopEnabled]);
+  const draggableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (moveBySubsEnabled) {
@@ -59,8 +60,9 @@ export const Subs: FC<TSubsProps> = () => {
   };
 
   return (
-    <Draggable>
+    <Draggable nodeRef={draggableRef}>
       <div
+        ref={draggableRef}
         id="es-subs"
         onMouseLeave={handleOnMouseLeave}
         onMouseEnter={handleOnMouseEnter}

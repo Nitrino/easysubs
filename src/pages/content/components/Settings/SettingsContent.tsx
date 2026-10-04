@@ -48,7 +48,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
     activeSettingsTabChanged,
     $streaming,
   ]);
-  const contentRef = useRef();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(contentRef, onClose);
 

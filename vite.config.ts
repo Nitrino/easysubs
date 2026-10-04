@@ -22,9 +22,6 @@ const enableHmrInBackgroundScript = true;
 const cacheInvalidationKeyRef = { current: generateKey() };
 
 export default defineConfig({
-  esbuild: {
-    drop: isProduction ? ["console", "debugger"] : [],
-  },
   resolve: {
     alias: {
       "@root": rootDir,
@@ -52,7 +49,7 @@ export default defineConfig({
     modulePreload: false,
     reportCompressedSize: isProduction,
     emptyOutDir: !isDev,
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         contentInjected: resolve(pagesDir, "content", "index.ts"),
         background: resolve(pagesDir, "background", "index.ts"),
@@ -60,6 +57,7 @@ export default defineConfig({
         popup: resolve(pagesDir, "popup", "index.html"),
       },
       output: {
+        minify: isProduction ? { compress: { dropConsole: true, dropDebugger: true }, mangle: true, codegen: true } : false,
         entryFileNames: "src/pages/[name]/index.js",
         chunkFileNames: isDev ? "assets/js/[name].js" : "assets/js/[name].[hash].js",
         assetFileNames: (assetInfo) => {

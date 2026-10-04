@@ -20,8 +20,9 @@ export const withPersist = <State>(store: StoreWritable<State>, config: PersistC
   }
 
   chrome.storage.local.get([persistKey], (result) => {
-    if (result[persistKey]) {
-      store.on(rehydrate, () => JSON.parse(result[persistKey]));
+    const persisted = result[persistKey];
+    if (typeof persisted === "string" && persisted) {
+      store.on(rehydrate, () => JSON.parse(persisted));
       rehydrate();
     }
   });
