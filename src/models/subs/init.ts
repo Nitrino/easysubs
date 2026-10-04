@@ -91,10 +91,14 @@ sample({
   target: esSubsChanged,
 });
 
-$rawSubs.on(
-  [fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData, rawSubsAdded],
-  (_, subs) => subs
-);
+$rawSubs.on([fetchSubsFx.doneData, subsResyncFx.doneData, updateCustomSubsFx.doneData], (_, subs) => subs);
+
+// On-flight services push the currently visible phrase on every DOM mutation,
+// so the same phrase arrives several times — skip the store update for repeats
+$rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
+  if (oldSubs[oldSubs.length - 1]?.text === newSubs[0]?.text) return oldSubs;
+  return newSubs;
+});
 
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
