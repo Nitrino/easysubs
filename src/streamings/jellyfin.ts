@@ -15,6 +15,13 @@ class Jellyfin implements Service {
 
   constructor() {
     setInterval(() => {
+      // Jellyfin removes the player on exit, while our overlay lives in <body>.
+      // Dropping .es-settings also makes the next video re-run the setup.
+      if (!document.querySelector("video.htmlvideoplayer")) {
+        document.querySelectorAll("#es, .es-progress-bar, .es-settings").forEach((e) => e.remove());
+        return;
+      }
+
       const settingsButton = this.findOsdButton();
       const easysubsSettings = document.querySelector(".es-settings");
       if (settingsButton && !easysubsSettings) {
