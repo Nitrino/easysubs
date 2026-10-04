@@ -94,9 +94,10 @@ class Jellyfin implements Service {
       };
 
       // --- Fallback: custom .videoSubtitlesInner (Firefox / Edge / custom mode) ---
-      // Jellyfin creates this div only when useCustomSubtitles() is true.
-      waitForElement(".videoSubtitles", () => {
-        if (this.waitForElementGen !== myGen) return; // stale, a new video loaded
+      // Jellyfin creates this div only when useCustomSubtitles() is true,
+      // so stop waiting once a new video is loaded or the player is closed.
+      const isStale = () => this.waitForElementGen !== myGen || !video.isConnected;
+      waitForElement(".videoSubtitles", isStale, () => {
         const subtitleSource = document.querySelector(".videoSubtitles");
         if (!subtitleSource) return;
 
@@ -176,12 +177,13 @@ function getText(node: ChildNode): string {
   return [...node.childNodes].map((el) => getText(el)).join("");
 }
 
-function waitForElement(selector: string, callBack: () => void) {
+function waitForElement(selector: string, isCancelled: () => boolean, callBack: () => void) {
   window.setTimeout(() => {
+    if (isCancelled()) return;
     if (document.querySelector(selector)) {
       callBack();
     } else {
-      waitForElement(selector, callBack);
+      waitForElement(selector, isCancelled, callBack);
     }
   }, 300);
 }
