@@ -1,6 +1,5 @@
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
-import { parse } from "subtitle";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video, getCurrentVideoFx } from "@src/models/videos";
 import type { Captions } from "@src/models/types";
@@ -11,7 +10,8 @@ class Jellyfin implements Service {
   private videoSubsObserver: MutationObserver | null = null;
   private waitForElementGen = 0;
   private initialized = false;
-  private loadedCues: Captions = [];
+  // Whether the active track had cues on the last getSubs() call
+  private hasLoadedCues = false;
 
   constructor() {
     setInterval(() => {
@@ -53,88 +53,41 @@ class Jellyfin implements Service {
       this.videoSubsObserver = null;
       this.waitForElementGen++;
       const myGen = this.waitForElementGen;
-      this.loadedCues = [];
+      this.hasLoadedCues = false;
 
       // Track which TextTrack objects we already attached oncuechange to
       const attachedTracks = new Set<TextTrack>();
 
-      const loadAllCues = (track: TextTrack): boolean => {
-        if (!track.cues || track.cues.length === 0) return false;
-        const subs = ([...track.cues] as VTTCue[])
-          .map((c) => ({ start: c.startTime * 1000, end: c.endTime * 1000, text: cleanVttText(c.text ?? "") }))
-          .filter((s) => s.text);
-        if (subs.length === 0) return false;
-        this.loadedCues = subs;
-        return true;
+      const requestSubs = () => {
+        const track = getActiveTrack(video);
+        if (track) esSubsChanged(track.language || track.label || "und");
       };
 
       const attachTrack = (track: TextTrack) => {
-        if (track.kind !== "subtitles" && track.kind !== "captions") return;
-        if (attachedTracks.has(track)) return;
+        if (!isSubtitlesTrack(track) || attachedTracks.has(track)) return;
         attachedTracks.add(track);
 
-        // Try to pre-load all cues now so getSubs() can return them and the
-        // progress bar has full subtitle data from the start.
-        loadAllCues(track);
-
+        // Cues may arrive after subs were requested — request them again
         track.oncuechange = () => {
-          // Only forward when this track is actually active
-          if (track.mode === "disabled") return;
-
-          // If all cues were pre-loaded, videoTimeUpdate drives current subtitle display.
-          if (this.loadedCues.length > 0) return;
-
-          // Lazy-loading: cues may not have been ready at attach time — try again.
-          if (loadAllCues(track)) return;
-
-          // Final fallback: push the current active cue individually.
-          const cues = [...(track.activeCues ?? [])] as VTTCue[];
-          if (cues.length === 0) return;
-          const text = cues
-            .map((c) => cleanVttText(c.text ?? ""))
-            .join("\n")
-            .trim();
-          if (!text) return;
-          rawSubsAdded([
-            {
-              start: cues[0].startTime * 1000,
-              end: cues[cues.length - 1].endTime * 1000,
-              text,
-            },
-          ]);
+          if (track.mode === "disabled" || this.hasLoadedCues) return;
+          if (track.cues?.length) requestSubs();
         };
       };
 
-      const getActiveLang = () => {
-        for (let i = 0; i < video.textTracks.length; i++) {
-          const t = video.textTracks[i];
-          if (t.mode !== "disabled" && (t.kind === "subtitles" || t.kind === "captions")) {
-            return t.language || t.label || "und";
-          }
-        }
-        return null;
-      };
-
-      // Attach to tracks that are already showing
       for (let i = 0; i < video.textTracks.length; i++) {
-        if (video.textTracks[i].mode !== "disabled") {
-          attachTrack(video.textTracks[i]);
-        }
+        attachTrack(video.textTracks[i]);
       }
 
       // Trigger subs pipeline if a track is already active
-      const lang = getActiveLang();
-      if (lang) esSubsChanged(lang);
+      requestSubs();
 
-      // Handle subtitle language change (new track becomes showing)
+      // Jellyfin reuses a single TextTrack for every subtitle stream: it swaps
+      // the cues and toggles the mode, so reload subs on every change
       video.textTracks.onchange = () => {
         for (let i = 0; i < video.textTracks.length; i++) {
-          if (video.textTracks[i].mode !== "disabled") {
-            attachTrack(video.textTracks[i]);
-          }
+          attachTrack(video.textTracks[i]);
         }
-        const newLang = getActiveLang();
-        if (newLang) esSubsChanged(newLang);
+        requestSubs();
       };
       video.textTracks.onaddtrack = (e) => {
         if (e?.track) attachTrack(e.track);
@@ -166,12 +119,15 @@ class Jellyfin implements Service {
   }
 
   public async getSubs(_title: string): Promise<Captions> {
-    // Return pre-loaded VTT cues when available so the full subtitle list
-    // lands in $rawSubs (used by the progress bar and time-based display).
-    if (this.loadedCues.length > 0) {
-      return this.loadedCues;
-    }
-    return parse("");
+    // Read the active track on every request instead of caching cues: Jellyfin
+    // swaps cues inside the same TextTrack when the subtitle stream changes
+    const video = $video.getState();
+    const track = video && getActiveTrack(video);
+    const cues = track?.cues ? ([...track.cues] as VTTCue[]) : [];
+    this.hasLoadedCues = cues.length > 0;
+    return cues
+      .map((c) => ({ start: c.startTime * 1000, end: c.endTime * 1000, text: cleanVttText(c.text ?? "") }))
+      .filter((s) => s.text);
   }
 
   public getSubsContainer() {
@@ -191,6 +147,18 @@ class Jellyfin implements Service {
   public isOnFlight() {
     return false;
   }
+}
+
+function isSubtitlesTrack(track: TextTrack) {
+  return track.kind === "subtitles" || track.kind === "captions";
+}
+
+function getActiveTrack(video: HTMLVideoElement): TextTrack | null {
+  for (let i = 0; i < video.textTracks.length; i++) {
+    const track = video.textTracks[i];
+    if (track.mode !== "disabled" && isSubtitlesTrack(track)) return track;
+  }
+  return null;
 }
 
 // Strip WebVTT tags before passing text to the EasySubs tokenizer:
