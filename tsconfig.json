@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "noEmit": true,
-    "baseUrl": ".",
+    "isolatedModules": true,
+    "rewriteRelativeImportExtensions": true,
+    "strict": false,
     "allowJs": false,
     "target": "esnext",
     "module": "esnext",
@@ -9,7 +11,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "types": ["vite/client", "node"],
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
@@ -18,9 +20,9 @@
     "typeRoots": ["./src/global.d.ts", "node_modules/@types"],
     "paths": {
       "@root/*": ["./*"],
-      "@src/*": ["src/*"],
-      "@assets/*": ["src/assets/*"],
-      "@pages/*": ["src/pages/*"],
+      "@src/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@pages/*": ["./src/pages/*"],
       "virtual:reload-on-update-in-background-script": ["./src/global.d.ts"],
       "virtual:reload-on-update-in-view": ["./src/global.d.ts"]
     },

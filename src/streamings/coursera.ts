@@ -62,7 +62,7 @@ class Coursera implements Service {
     return false;
   }
 
-  private handleCourseraRenderSettings(event: CustomEvent) {
+  private handleCourseraRenderSettings() {
     esRenderSetings();
   }
 

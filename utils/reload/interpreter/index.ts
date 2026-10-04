@@ -1,4 +1,4 @@
-import type { WebSocketMessage, SerializedMessage } from './types';
+import type { WebSocketMessage, SerializedMessage } from './types.ts';
 
 export default class MessageInterpreter {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

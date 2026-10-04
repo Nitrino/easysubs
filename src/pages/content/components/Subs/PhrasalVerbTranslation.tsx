@@ -39,7 +39,7 @@ export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phra
       </div>
       <div className="es-translation-phrasal-verbs-variants">
         {phrasalVerb.translations.map((translation) => (
-          <div className="es-translation-variant-word">
+          <div className="es-translation-variant-word" key={translation}>
             {service && (
               <button
                 className="es-settings-button"

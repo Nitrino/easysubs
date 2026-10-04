@@ -9,10 +9,7 @@ const defaultConfig = {
   key: "persist",
 };
 
-export const withPersist = <State>(
-  store: StoreWritable<State>,
-  config: PersistConfig = defaultConfig
-) => {
+export const withPersist = <State>(store: StoreWritable<State>, config: PersistConfig = defaultConfig) => {
   const name = store.shortName;
   const { key, expire } = config;
   const persistKey = `${key}:${name}`;
@@ -23,13 +20,14 @@ export const withPersist = <State>(
   }
 
   chrome.storage.local.get([persistKey], (result) => {
-    if (result[persistKey]) {
-      store.on(rehydrate, () => JSON.parse(result[persistKey]));
+    const persisted = result[persistKey];
+    if (typeof persisted === "string" && persisted) {
+      store.on(rehydrate, () => JSON.parse(persisted));
       rehydrate();
     }
   });
 
-  store.watch((state: any) => {
+  store.watch((state: State) => {
     chrome.storage.local.set({ [persistKey]: JSON.stringify(state) });
   });
 

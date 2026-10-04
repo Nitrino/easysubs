@@ -1,7 +1,7 @@
 import type { PluginOption } from 'vite';
 import { WebSocket } from 'ws';
-import MessageInterpreter from '../reload/interpreter';
-import { LOCAL_RELOAD_SOCKET_URL } from '../reload/constant';
+import MessageInterpreter from '../reload/interpreter/index.ts';
+import { LOCAL_RELOAD_SOCKET_URL } from '../reload/constant.ts';
 
 export default function watchRebuild(config: { afterWriteBundle: () => void }): PluginOption {
   const ws = new WebSocket(LOCAL_RELOAD_SOCKET_URL);

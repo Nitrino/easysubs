@@ -1,6 +1,6 @@
 import { query } from "@ifyour/deeplx";
 
-const SUPPORTED_LANGUAGES = [
+export const SUPPORTED_LANGUAGES = [
   "el",
   "bg",
   "lv",

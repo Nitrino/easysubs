@@ -1,12 +1,3 @@
-function castTarget(target) {
-  return typeof target === "object"
-    ? target
-    : {
-        tabId: target,
-        frameId: 0,
-      };
-}
-
 async function getTab() {
   const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   return tabs[0];
@@ -37,7 +28,7 @@ const Popup = () => {
         files: contentScript.js,
       });
       window.close();
-    } catch (e) {
+    } catch {
       // Fallback: reload if programmatic injection fails
       chrome.tabs.reload(tab.id);
     }

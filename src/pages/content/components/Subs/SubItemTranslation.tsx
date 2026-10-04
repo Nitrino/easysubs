@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useGate, useUnit } from "effector-react";
 import { $learningService, $translateLanguage } from "@src/models/settings";
 
@@ -103,7 +103,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
       <div className="es-translation-variants">
         {currentWordTranslation.translations.length > 0 &&
           currentWordTranslation.translations.map((translation) => (
-            <>
+            <Fragment key={`${translation.partOfSpeech}-${translation.word}`}>
               <div
                 className="es-translation-variant-word"
                 onClick={(e) => {
@@ -120,7 +120,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
               </div>
               <div className="es-translation-variant-part-of-speach">{translation.partOfSpeech}</div>
               <div className="es-translation-variant-synonyms">{joinTranslations(translation.synonyms)}</div>
-            </>
+            </Fragment>
           ))}
       </div>
       {subsLanguage === "en" && (
@@ -131,6 +131,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
               className="es-translation-service"
               href={`https://dictionary.cambridge.org/dictionary/english/${text.toLowerCase()}`}
               target="_blank"
+              rel="noreferrer"
             >
               <img src={cambridgeIcon} alt="cambridge dictionary" />
             </a>
@@ -138,6 +139,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
               className="es-translation-service"
               href={`https://forvo.com/search/${text.toLowerCase()}`}
               target="_blank"
+              rel="noreferrer"
             >
               <img src={forvoIcon} alt="forvo" />
             </a>
@@ -145,6 +147,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
               className="es-translation-service"
               href={`https://www.urbandictionary.com/define.php?term=${text.toLowerCase()}`}
               target="_blank"
+              rel="noreferrer"
             >
               <img src={urbandictionaryIcon} alt="urban dictionary" />
             </a>
@@ -152,6 +155,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
               className="es-translation-service"
               href={`https://youglish.com/pronounce/${text.toLowerCase()}/english`}
               target="_blank"
+              rel="noreferrer"
             >
               <img src={youglishIcon} alt="youglish" />
             </a>

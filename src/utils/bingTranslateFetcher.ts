@@ -1,6 +1,6 @@
 import { MicrosoftTranslator } from "anylang/translators";
 
-const SUPPORTED_LANGUAGES = [
+export const SUPPORTED_LANGUAGES = [
   "ace",
   "af",
   "sq",

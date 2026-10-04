@@ -36,20 +36,8 @@ type FullTranslation = {
   items: FullTranslationItem[];
 };
 
-export type TTranslateAlternativeItem = [
-  string,
-  null,
-  string[],
-  number,
-  boolean,
-];
-export type TTranslateAlternative = [
-  string,
-  TTranslateAlternativeItem[],
-  string,
-  string,
-  number,
-];
+export type TTranslateAlternativeItem = [string, null, string[], number, boolean];
+export type TTranslateAlternative = [string, TTranslateAlternativeItem[], string, string, number];
 export type TPartOfSpeach =
   | "noun"
   | "pronoun"
@@ -86,11 +74,7 @@ export type TWordTranslation = {
 
 export type TGoogleTranslation = unknown;
 
-export type TLearningService =
-  | "anki"
-  | "lingualeo"
-  | "puzzle-english"
-  | "disabled";
+export type TLearningService = "anki" | "lingualeo" | "puzzle-english" | "disabled";
 
 export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt";
 

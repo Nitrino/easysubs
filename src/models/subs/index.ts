@@ -36,10 +36,10 @@ export const fetchSubsFx = createEffect<{ streaming: Service; language: string }
     } catch (error) {
       console.error(error);
     }
-  }
+  },
 );
 export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue<typeof $video> }, TSub[]>(
-  ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000)
+  ({ subs, video }) => getCurrentSubs(subs, video!.currentTime * 1000),
 );
 export const updatePrevCurrentSubsFx = createEffect<TSub[], TSub[]>((subs) => subs);
 export const rawSubsAdded = createEvent<Captions>();

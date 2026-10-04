@@ -102,7 +102,7 @@ $rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
 
 $rawSubs.reset(resetSubs);
 $currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
-  JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs
+  JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs,
 );
 
 $subsDelay.on(subsDelayChangeFx.doneData, (_, newSubsDelay) => newSubsDelay);
@@ -120,5 +120,5 @@ debug(
   subsReloadRequested,
   $subsTitle,
   esSubsChanged,
-  subsLanguageDetectFx
+  subsLanguageDetectFx,
 );

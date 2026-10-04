@@ -1,13 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path, { resolve } from "path";
-import makeManifest from "./utils/plugins/make-manifest";
-import customDynamicImport from "./utils/plugins/custom-dynamic-import";
-import addHmr from "./utils/plugins/add-hmr";
-import watchRebuild from "./utils/plugins/watch-rebuild";
-import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script";
+import makeManifest from "./utils/plugins/make-manifest.ts";
+import customDynamicImport from "./utils/plugins/custom-dynamic-import.ts";
+import addHmr from "./utils/plugins/add-hmr.ts";
+import watchRebuild from "./utils/plugins/watch-rebuild.ts";
+import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script.ts";
 
-const rootDir = resolve(__dirname);
+const rootDir = resolve(import.meta.dirname);
 const srcDir = resolve(rootDir, "src");
 const pagesDir = resolve(srcDir, "pages");
 const assetsDir = resolve(srcDir, "assets");
@@ -22,9 +22,6 @@ const enableHmrInBackgroundScript = true;
 const cacheInvalidationKeyRef = { current: generateKey() };
 
 export default defineConfig({
-  esbuild: {
-    drop: isProduction ? ["console", "debugger"] : [],
-  },
   resolve: {
     alias: {
       "@root": rootDir,
@@ -52,7 +49,7 @@ export default defineConfig({
     modulePreload: false,
     reportCompressedSize: isProduction,
     emptyOutDir: !isDev,
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         contentInjected: resolve(pagesDir, "content", "index.ts"),
         background: resolve(pagesDir, "background", "index.ts"),
@@ -60,6 +57,7 @@ export default defineConfig({
         popup: resolve(pagesDir, "popup", "index.html"),
       },
       output: {
+        minify: isProduction ? { compress: { dropConsole: true, dropDebugger: true }, mangle: true, codegen: true } : false,
         entryFileNames: "src/pages/[name]/index.js",
         chunkFileNames: isDev ? "assets/js/[name].js" : "assets/js/[name].[hash].js",
         assetFileNames: (assetInfo) => {

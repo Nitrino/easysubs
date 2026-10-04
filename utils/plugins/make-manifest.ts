@@ -1,14 +1,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import colorLog from '../log';
-import ManifestParser from '../manifest-parser';
+import colorLog from '../log.ts';
+import ManifestParser from '../manifest-parser/index.ts';
 import type { PluginOption } from 'vite';
 import url from 'url';
 import * as process from 'process';
 
 const { resolve } = path;
 
-const rootDir = resolve(__dirname, '..', '..');
+const rootDir = resolve(import.meta.dirname, '..', '..');
 const distDir = resolve(rootDir, 'dist');
 const manifestFile = resolve(rootDir, 'manifest.js');
 

@@ -1,4 +1,3 @@
-import { Parser } from "m3u8-parser";
 import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
@@ -113,7 +112,7 @@ class Inoriginal implements Service {
   }
 
   private setSubName(name: string) {
-    name == "off" ? (this.subsName = null) : (this.subsName = name);
+    this.subsName = name == "off" ? null : name;
   }
 }
 

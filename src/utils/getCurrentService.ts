@@ -5,10 +5,10 @@ import Netflix from "@src/streamings/netflix";
 import NetflixOnFlight from "@src/streamings/netflixOnFlight";
 import Service from "@src/streamings/service";
 import ServiceStub from "@src/streamings/serviceStub";
-import Plex from "@src/streamings/plex";
-import Udemy from "@src/streamings/udemy";
-import Kinopoisk from "@src/streamings/kinopoisk";
-import Amazon from "@src/streamings/amazon";
+// import Plex from "@src/streamings/plex";
+// import Udemy from "@src/streamings/udemy";
+// import Kinopoisk from "@src/streamings/kinopoisk";
+// import Amazon from "@src/streamings/amazon";
 import Inoriginal from "@src/streamings/inoriginal";
 import Jellyfin from "@src/streamings/jellyfin";
 
@@ -16,7 +16,7 @@ export const getCurrentService = (): Service => {
   const titleContent = document.querySelector("title")?.textContent;
   if (titleContent?.includes("YouTube") || window.location.host === "www.youtube.com") {
     document.querySelector("html")?.setAttribute("id", "youtube");
-    if (!!document.querySelector(".ytp-delhi-modern")) {
+    if (document.querySelector(".ytp-delhi-modern")) {
       // Add class for new youtube delphi design
       document.body.classList.add("es-youtube-delphi");
     }
@@ -66,8 +66,7 @@ export const getCurrentService = (): Service => {
 
   const isJellyfin =
     document.querySelector('meta[name="application-name"][content="Jellyfin"]') !== null ||
-    (window.location.pathname.includes("/web/") &&
-      document.querySelector(".videoPlayerContainer") !== null);
+    (window.location.pathname.includes("/web/") && document.querySelector(".videoPlayerContainer") !== null);
   if (isJellyfin) {
     document.querySelector("html")?.setAttribute("id", "jellyfin");
     return new Jellyfin();
