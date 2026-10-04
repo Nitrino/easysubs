@@ -92,7 +92,7 @@ export const ChatGPTApiKeyModal: FC = () => {
                 platform.openai.com/api-keys
               </a>
             </p>
-            <p>Note: Usage is based on OpenAI's pricing model. Monitor your usage to avoid unexpected charges.</p>
+            <p>Note: Usage is based on OpenAI&apos;s pricing model. Monitor your usage to avoid unexpected charges.</p>
           </div>
         </div>
 

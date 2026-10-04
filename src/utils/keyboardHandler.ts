@@ -1,7 +1,7 @@
 import { $streaming } from "@src/models/streamings";
 import { moveKeyPressed } from "@src/models/videos";
 
-const keyboardEvents = ["keyup", "keydown", "keypress"];
+const keyboardEvents = ["keyup", "keydown", "keypress"] as const;
 
 export const keyboardHandler = (event: KeyboardEvent) => {
   if (event.code === "ArrowLeft") {
@@ -30,12 +30,12 @@ export const addKeyboardEventsListeners = () => {
     return;
   }
   keyboardEvents.forEach((eventType) => {
-    document.addEventListener(eventType as any, keyboardHandler, true);
+    document.addEventListener(eventType, keyboardHandler, true);
   });
 };
 
 export const removeKeyboardEventsListeners = () => {
   keyboardEvents.forEach((eventType) => {
-    document.removeEventListener(eventType as any, keyboardHandler, true);
+    document.removeEventListener(eventType, keyboardHandler, true);
   });
 };

@@ -1,20 +1,19 @@
-import { ReactElement, useEffect, useState, useRef, FC } from "react";
+import { ReactElement, useEffect, useState, useRef, FC, MouseEvent } from "react";
 import { useUnit } from "effector-react";
 
 import { $video, moveToTimeRequested } from "@src/models/videos";
 import { $subs } from "@src/models/subs";
 import { getCurrentVideoTime } from "@src/utils/getCurrentVideoTime";
 
-type TProgressBarProps = {};
 const TIME_PERIOD = 30000;
 
-export const ProgressBar: FC<TProgressBarProps> = () => {
+export const ProgressBar: FC = () => {
   const [video, subs] = useUnit([$video, $subs]);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [elements, updateElements] = useState<ReactElement[]>([]);
   const animateRef = useRef<number | undefined>(undefined);
 
-  function handleClick(event: any) {
+  function handleClick(event: MouseEvent<HTMLDivElement>) {
     if (!video || !progressBarRef.current) {
       return;
     }
@@ -67,7 +66,7 @@ export const ProgressBar: FC<TProgressBarProps> = () => {
     // addKeyboardEventsListeners();
 
     return () => {
-      animateRef.current && cancelAnimationFrame(animateRef.current);
+      if (animateRef.current) cancelAnimationFrame(animateRef.current);
       // removeKeyboardEventsListeners();
       updateElements([]);
     };

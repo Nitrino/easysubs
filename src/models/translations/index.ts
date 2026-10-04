@@ -9,14 +9,7 @@ import {
   TWordTranslation,
   TWordTranslationItem,
 } from "../types";
-import {
-  $translateLanguage,
-  translateLanguageChanged,
-  $translationService,
-  $deeplApiKey,
-  $chatGPTApiKey,
-  $chatGPTModel,
-} from "../settings";
+import { $translateLanguage, $translationService, $deeplApiKey, $chatGPTApiKey, $chatGPTModel } from "../settings";
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { createGate } from "effector-react";
 import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
@@ -98,7 +91,7 @@ export const fetchWordTranslationFx = createEffect<
   TWordTranslation
 >(async ({ source, language }) => {
   try {
-    const result: any = await chrome.runtime.sendMessage({
+    const result = await chrome.runtime.sendMessage({
       type: "translateWordFull",
       language: language,
       text: source,

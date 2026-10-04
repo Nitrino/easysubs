@@ -1,4 +1,4 @@
-import { FC, useState, PropsWithChildren } from "react";
+import { FC, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";

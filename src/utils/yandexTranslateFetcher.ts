@@ -1,6 +1,6 @@
 import { YandexTranslator } from "anylang/translators";
 
-const SUPPORTED_LANGUAGES = [
+export const SUPPORTED_LANGUAGES = [
   "af",
   "am",
   "ar",

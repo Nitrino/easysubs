@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener(function (object) {
   const onboardingUrl = "https://easysubs.cc/onboarding/";
 
   if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    chrome.tabs.create({ url: onboardingUrl }, function (tab) {
+    chrome.tabs.create({ url: onboardingUrl }, function () {
       console.log("New tab launched with options page");
     });
   }

@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useRef, useState } from "react";
+import { FC, PropsWithChildren, useRef } from "react";
 import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
@@ -17,7 +17,7 @@ import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
 import { useUnit } from "effector-react";
 import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
-import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
+// import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
 import { EnableAutoStop } from "./EnableAutoStop";
 import { JellyfinSubTrack } from "./JellyfinSubTrack";
 import { createPortal } from "react-dom";

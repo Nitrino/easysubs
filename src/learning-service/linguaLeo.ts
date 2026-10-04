@@ -1,5 +1,10 @@
 import ILearningService, { TAditionalData } from "./learningService";
 
+type TLingualeoMessageResponse = {
+  error?: string;
+  lingualeoResponse?: { data?: { error?: { code?: unknown }; word?: unknown }[] };
+};
+
 export class LinguaLeo implements ILearningService {
   public color: string;
 
@@ -7,11 +12,11 @@ export class LinguaLeo implements ILearningService {
     this.color = "#FFC900";
   }
 
-  public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
+  public async addWord(word: string, translation: string, _aditionalData: TAditionalData): Promise<string> {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
         { type: "addWordToLingualeo", word: word, translation: translation },
-        (response: any) => {
+        (response: TLingualeoMessageResponse) => {
           if (chrome.runtime.lastError) {
             reject("Extension Error: " + chrome.runtime.lastError.message);
             return;

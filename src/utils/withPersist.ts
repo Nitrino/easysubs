@@ -27,7 +27,7 @@ export const withPersist = <State>(store: StoreWritable<State>, config: PersistC
     }
   });
 
-  store.watch((state: any) => {
+  store.watch((state: State) => {
     chrome.storage.local.set({ [persistKey]: JSON.stringify(state) });
   });
 

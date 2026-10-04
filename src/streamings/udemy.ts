@@ -36,7 +36,7 @@ class Udemy implements Service {
     });
   }
 
-  public async getSubs(title: string) {
+  public async getSubs(_title: string) {
     return parse("");
   }
 

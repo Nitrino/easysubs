@@ -110,7 +110,7 @@ function isValidHttpsUrl(urlString: string): boolean {
   try {
     const url = new URL(urlString);
     return url.protocol === "https:";
-  } catch (error) {
+  } catch {
     return false;
   }
 }

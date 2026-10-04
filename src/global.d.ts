@@ -15,8 +15,8 @@ declare module "virtual:reload-on-update-in-view" {
 }
 
 declare module "*.svg" {
-  import React = require("react");
-  export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
+  import type { FC, SVGProps } from "react";
+  export const ReactComponent: FC<SVGProps<SVGSVGElement>>;
   const src: string;
   export default src;
 }
@@ -38,7 +38,6 @@ declare module "*.json" {
 
 declare global {
   interface Window {
-    playerInstance: any;
     isLoaded: boolean;
     subtitlesEnabled: boolean;
   }

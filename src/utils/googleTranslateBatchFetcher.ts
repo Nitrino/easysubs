@@ -88,10 +88,12 @@ class GoogleTranslateBatchFetcher {
     return "";
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw Google Translate response (untyped nested arrays)
   private getTextTranslate(content: any): string {
-    return content[1][0][0][5].map((translate: any) => translate[0]).join(" ");
+    return content[1][0][0][5].map((translate: string[]) => translate[0]).join(" ");
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw Google Translate response (untyped nested arrays)
   private getWordTranslate(content: any, original: string, lang: string): TWordTranslate {
     try {
       return {

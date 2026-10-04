@@ -23,9 +23,7 @@ import { SubItemTranslation } from "./SubItemTranslation";
 import { PhrasalVerbTranslation } from "./PhrasalVerbTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
 
-type TSubsProps = {};
-
-export const Subs: FC<TSubsProps> = () => {
+export const Subs: FC = () => {
   const [video, currentSubs, subsFontSize, moveBySubsEnabled, wasPaused, handleWasPausedChanged, autoStopEnabled] =
     useUnit([$video, $currentSubs, $subsFontSize, $moveBySubsEnabled, $wasPaused, wasPausedChanged, $autoStopEnabled]);
   const draggableRef = useRef<HTMLDivElement>(null);
@@ -68,8 +66,8 @@ export const Subs: FC<TSubsProps> = () => {
         onMouseEnter={handleOnMouseEnter}
         style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
       >
-        {currentSubs.map((sub) => (
-          <Sub sub={sub} />
+        {currentSubs.map((sub, index) => (
+          <Sub key={index} sub={sub} />
         ))}
       </div>
     </Draggable>
@@ -103,7 +101,7 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
       }}
     >
       {sub.items.map((item, index) => (
-        <SubItem subItem={item} index={index} />
+        <SubItem key={index} subItem={item} index={index} />
       ))}
       {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
     </div>

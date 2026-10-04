@@ -1,10 +1,8 @@
 import { parse, subTitleType } from "subtitle";
-import { getSubtitles } from "youtube-caption-extractor";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
-import { url } from "inspector";
 
 type YoutubeSubtitle = {
   dDurationMs: number;
