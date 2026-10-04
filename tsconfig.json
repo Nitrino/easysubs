@@ -2,6 +2,7 @@
   "compilerOptions": {
     "noEmit": true,
     "isolatedModules": true,
+    "rewriteRelativeImportExtensions": true,
     "strict": false,
     "allowJs": false,
     "target": "esnext",

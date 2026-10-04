@@ -7,7 +7,7 @@ const isDev = process.env.__DEV__ === 'true';
 const DUMMY_CODE = `export default function(){};`;
 
 function getInjectionCode(fileName: string): string {
-  return readFileSync(path.resolve(__dirname, '..', 'reload', 'injections', fileName), { encoding: 'utf8' });
+  return readFileSync(path.resolve(import.meta.dirname, '..', 'reload', 'injections', fileName), { encoding: 'utf8' });
 }
 
 type Config = {
