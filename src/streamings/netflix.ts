@@ -10,16 +10,20 @@ type TUrl = {
   url: string;
 };
 
+type TDownloadables = {
+  "webvtt-lssdh-ios8"?: {
+    urls: Record<string, TUrl>;
+  };
+};
+
 type TTrack = {
   isNoneTrack: boolean;
   isForcedNarrative: boolean;
   language: string;
   rawTrackType: "subtitles" | "closedcaptions";
-  ttDownloadables: {
-    "webvtt-lssdh-ios8": {
-      urls: Record<string, TUrl>;
-    };
-  };
+  // Netflix renamed ttDownloadables to downloadables; keep both for older responses
+  downloadables?: TDownloadables;
+  ttDownloadables?: TDownloadables;
 };
 
 type TTrackChanged = {
@@ -162,9 +166,8 @@ class Netflix implements Service {
       return;
     }
 
-    console.log("handleNetflixData", event.detail.textTracks);
-
-    const tracks: TTrack[] = event.detail.textTracks;
+    // Netflix renamed timedtexttracks to textTracks; keep both for older responses
+    const tracks: TTrack[] = event.detail.textTracks ?? event.detail.timedtexttracks ?? [];
     console.log("tracks", tracks);
 
     tracks.forEach((track) => {
@@ -173,12 +176,13 @@ class Netflix implements Service {
       }
 
       const title = this.getTrackTitle(track);
+      const urls = (track.downloadables ?? track.ttDownloadables)?.[WEBVTT]?.urls;
 
-      if (track.downloadables[WEBVTT]?.urls) {
+      if (urls) {
         this.subCache.push({
           videoId: event.detail.movieId,
           title: title,
-          url: this.randomProperty(track.downloadables[WEBVTT].urls).url,
+          url: this.randomProperty(urls).url,
         });
       }
     });
