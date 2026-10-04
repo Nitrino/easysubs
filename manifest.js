@@ -30,7 +30,7 @@ const manifest = {
         "https://www.youtube.com/*",
         "https://www.coursera.org/*",
         "https://kinopub.net/*",
-        "https://kino.pub/*",
+        "https://kino.watch/*",
         "https://kinopub.cc/*",
         "https://app.plex.tv/*",
         "https://plex.ukrapka.tech/*",

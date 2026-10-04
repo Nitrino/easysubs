@@ -333,7 +333,7 @@ Global change of the extension initialization model. Now initialization occurs b
 - Add Netflix base integration (only after refresh on video page and without rewind to sub)
 - Increase font size in fullscreen
 - Fix youtube fullscreen styles
-- Add support [kino.pub](https://kino.pub)
+- Add support [kino.watch](https://kino.watch)
 - Rewind only 5 seconds if the next phrase is more than 5 seconds
 
 ### Bugs

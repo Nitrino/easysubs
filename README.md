@@ -47,7 +47,7 @@ To use the plugin, you must have a subscription to the desired service.
 
 - [Youtube (videos and originals)](https://www.youtube.com)
 - [Netflix](https://www.netflix.com)
-- [KinoPub](https://kino.pub)
+- [KinoPub](https://kino.watch)
 - [Coursera](https://www.coursera.org)
 
 ### Word and full subtitle translation
