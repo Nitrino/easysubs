@@ -53,6 +53,7 @@ const manifest = {
     "https://translate.google.com/*",
     "http://localhost:8765/*",
     "https://api.lingualeo.com/*",
+    "https://puzzle-english.com/*",
     "https://api-free.deepl.com/*",
     "https://api.deepl.com/*",
     "https://www2.deepl.com/*",
