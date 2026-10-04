@@ -17,6 +17,10 @@ EasySubs is a browser extension that helps users learn languages by watching mov
 - `pnpm lint:fix` - Auto-fix linting issues
 - `pnpm prettier` - Format code with Prettier
 
+## Releasing
+
+To cut a new release (version bump, changelog, release commit, GitHub release, build + versioned zip), follow the step-by-step guide in [RELEASING.md](RELEASING.md).
+
 ## Architecture
 
 ### State Management
