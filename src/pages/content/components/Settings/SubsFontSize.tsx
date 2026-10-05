@@ -13,19 +13,21 @@ export const SubsFontSize: FC = () => {
     <div className="es-settings-content__element">
       <div className="es-settings-content__element__left">Subtitles size</div>
       <div className="es-settings-content__element__right">
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsSizeButtonPressed(subsFontSize - FONT_SIZE_STEP)}
-        >
-          <MinusIcon />
-        </button>
-        <div className="es-settings-button__value">{subsFontSize}%</div>
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsSizeButtonPressed(subsFontSize + FONT_SIZE_STEP)}
-        >
-          <PlusIcon />
-        </button>
+        <div className="es-stepper">
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsSizeButtonPressed(subsFontSize - FONT_SIZE_STEP)}
+          >
+            <MinusIcon />
+          </button>
+          <div className="es-stepper__value">{subsFontSize}%</div>
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsSizeButtonPressed(subsFontSize + FONT_SIZE_STEP)}
+          >
+            <PlusIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

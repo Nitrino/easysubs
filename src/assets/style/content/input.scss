@@ -2,10 +2,29 @@ input.es-input {
   display: none !important;
 }
 
+// "Select file": a macOS push button in the HUD.
 .es-input__label {
-  border: 1px solid #fff;
-  padding: 4px 12px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--es-primary);
+  font-size: 12px;
+  font-weight: 500 !important;
+  line-height: 24px;
+  white-space: nowrap;
   cursor: pointer;
-  font-weight: 400 !important;
+  transition: background-color 150ms;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  &:active {
+    background: var(--es-fill-active);
+  }
 }

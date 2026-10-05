@@ -1,45 +1,102 @@
+// The toolbar popup as a macOS menu: rounded rows with an accent highlight that follows the
+// pointer, following the system light/dark appearance.
+
+:root {
+  color-scheme: light dark;
+  --bg: #f2f2f4;
+  --label: rgba(0, 0, 0, 0.85);
+  --secondary: rgba(0, 0, 0, 0.5);
+  --separator: rgba(0, 0, 0, 0.1);
+  --accent: #007aff;
+  --accent-text: #0062cc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #262628;
+    --label: rgba(255, 255, 255, 0.88);
+    --secondary: rgba(255, 255, 255, 0.55);
+    --separator: rgba(255, 255, 255, 0.12);
+    --accent: #0a84ff;
+    --accent-text: #409cff;
+  }
+}
+
 body {
-  width: 200px;
+  width: 220px;
   margin: 0;
-  font-size: 13px;
-  background: #262a32;
-  color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  padding: 5px;
+  font:
+    400 13px/1.25 -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Segoe UI",
+    "Roboto",
+    "Oxygen",
+    "Ubuntu",
+    "Cantarell",
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    sans-serif;
+  background: var(--bg);
+  color: var(--label);
+  cursor: default;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  user-select: none;
 
   position: relative;
 }
 
 .header {
-  font-size: 14px;
-  padding: 10px 20px;
-  border-bottom: 1px solid rgba(#fff, 0.1);
+  position: relative;
+  padding: 6px 10px 10px;
+  font-size: 13px;
+  font-weight: 600;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    border-bottom: 1px solid var(--separator);
+  }
 }
 
 .content {
   menu {
     padding: 0;
-    margin: 10px 0;
+    margin: 5px 0 0;
 
     li {
       list-style: none;
-      line-height: 2;
-      padding: 0 20px;
-      cursor: pointer;
-
-      &:hover {
-        background: rgba(#fff, 0.1);
-      }
+      border-radius: 6px;
+      cursor: default;
 
       a {
-        color: #fff;
+        display: block;
+        padding: 3px 10px;
+        line-height: 16px;
+        color: inherit;
         text-decoration: none;
+        cursor: default;
 
         &.es-popup-kinopub {
-          font-weight: bold;
-          color: #ed734b;
+          font-weight: 600;
+          color: var(--accent-text);
+        }
+      }
+
+      &:hover {
+        background: var(--accent);
+        color: #fff;
+
+        a,
+        a.es-popup-kinopub {
+          color: #fff;
         }
       }
     }

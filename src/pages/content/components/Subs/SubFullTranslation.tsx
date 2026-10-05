@@ -2,14 +2,33 @@ import { FC } from "react";
 import { useGate, useUnit } from "effector-react";
 
 import { $currentSubTranslation, $subTranslationPendings, SubTranslationGate } from "@src/models/translations";
+import { Popover } from "../ui/Popover";
+import { Spinner } from "../ui/Spinner";
 
 export const SubFullTranslation: FC<{ text: string }> = ({ text }) => {
   useGate(SubTranslationGate, text);
   const [currentSubTranslation, subTranslationPendings] = useUnit([$currentSubTranslation, $subTranslationPendings]);
 
-  if (!currentSubTranslation || subTranslationPendings[text]) {
+  if (subTranslationPendings[text]) {
+    return (
+      <Popover variant="line">
+        <div className="es-loading">
+          <Spinner />
+          <span>Translating…</span>
+        </div>
+      </Popover>
+    );
+  }
+
+  if (!currentSubTranslation) {
     return null;
   }
 
-  return <div className="es-full-translation">{currentSubTranslation}</div>;
+  return (
+    <Popover variant="line">
+      <div className="es-line-text" dir="auto">
+        {currentSubTranslation}
+      </div>
+    </Popover>
+  );
 };

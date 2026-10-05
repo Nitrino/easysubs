@@ -16,31 +16,33 @@ export const SubsDelay: FC = () => {
     <div className="es-settings-content__element">
       <div className="es-settings-content__element__left">Subtitles delay</div>
       <div className="es-settings-content__element__right">
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsDelayButtonPressed(subsDelay - SUBS_DELAY_LARGE_STEP)}
-        >
-          <ArrowBackDouble />
-        </button>
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsDelayButtonPressed(subsDelay - SUBS_DELAY_SMALL_STEP)}
-        >
-          <ArrowBack />
-        </button>
-        <div className="es-settings-button__value">{subsDelay}s</div>
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsDelayButtonPressed(subsDelay + SUBS_DELAY_SMALL_STEP)}
-        >
-          <ArrowForward />
-        </button>
-        <button
-          className="es-settings-button"
-          onClick={() => handleSubsDelayButtonPressed(subsDelay + SUBS_DELAY_LARGE_STEP)}
-        >
-          <ArrowForwardDouble />
-        </button>
+        <div className="es-stepper">
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsDelayButtonPressed(subsDelay - SUBS_DELAY_LARGE_STEP)}
+          >
+            <ArrowBackDouble />
+          </button>
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsDelayButtonPressed(subsDelay - SUBS_DELAY_SMALL_STEP)}
+          >
+            <ArrowBack />
+          </button>
+          <div className="es-stepper__value">{subsDelay}s</div>
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsDelayButtonPressed(subsDelay + SUBS_DELAY_SMALL_STEP)}
+          >
+            <ArrowForward />
+          </button>
+          <button
+            className="es-stepper__button"
+            onClick={() => handleSubsDelayButtonPressed(subsDelay + SUBS_DELAY_LARGE_STEP)}
+          >
+            <ArrowForwardDouble />
+          </button>
+        </div>
       </div>
     </div>
   );

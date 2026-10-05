@@ -1,9 +1,7 @@
+@use "./tokens.scss";
 @use "./global.scss";
-@use "./word-translation.scss";
-@use "./toggle.scss";
+@use "./popover.scss";
 @use "./settings.scss";
-@use "./select.scss";
-@use "./button.scss";
 @use "./input.scss";
 @use "./progress-bar.scss";
 @use "./toast.scss";

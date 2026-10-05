@@ -5,9 +5,9 @@
   transform: translateX(-50%);
   font-size: 24px;
   color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif !important;
+  font-family: var(--es-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   pre {
     all: unset;
@@ -25,65 +25,47 @@
     text-decoration: underline;
   }
 
+  // The background (inline style) reads as one rounded caption box across stacked lines.
   .es-sub {
     text-align: center;
     line-height: 1.25;
-    padding: 0 10px;
+    padding: 0.04em 0.4em;
     cursor: pointer;
+    text-shadow:
+      0 0 0.12em rgba(0, 0, 0, 0.5),
+      0 0.04em 0.1em rgba(0, 0, 0, 0.45);
+
+    &:first-child {
+      border-top-left-radius: 0.22em;
+      border-top-right-radius: 0.22em;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 0.22em;
+      border-bottom-right-radius: 0.22em;
+    }
   }
 
   .es-sub-item {
     display: inline;
     position: relative;
+    transition: color 120ms ease-out;
 
     pre {
       display: inline;
     }
 
     &:hover {
-      color: #3a88a2;
+      color: var(--es-hl);
       cursor: pointer;
     }
 
     &-highlighted {
-      color: #3a88a2;
+      color: var(--es-hl);
     }
   }
   .es-sub-item-space {
     display: inline;
-  }
-
-  .es-full-translation {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translate3d(-50%, -100%, 0);
-    background-color: #1e1e1e;
-    border-radius: 0.4em;
-    font-size: 18px;
-    width: 100%;
-    font-style: normal;
-    white-space: normal;
-    box-sizing: content-box;
-    color: #fff;
-    padding: 16px 24px;
-    box-sizing: border-box;
-    white-space: pre-wrap;
-    text-wrap: balance;
-
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border: 10px solid transparent;
-      border-top-color: #1e1e1e;
-      border-bottom: 0;
-      margin-left: -10px;
-      margin-bottom: -10px;
-    }
   }
 }
 
