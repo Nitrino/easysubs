@@ -140,15 +140,15 @@ const TRANSLATOR_NOTES: Record<TSecondaryTranslator, string | null> = {
   chatgpt: "Uses your ChatGPT API key, billed by OpenAI.",
 };
 
-// Google unless DeepL or ChatGPT is picked here; only used when the second line is translated
+// Google unless DeepL or ChatGPT is picked here. It stays editable while the line comes from a track: it's what
+// translates languages picked under Auto-translate and videos without the track.
 export const SecondarySubsTranslator: FC = () => {
   const [translator, handleChanged, source] = useUnit([
     $secondarySubsTranslator,
     secondarySubsTranslatorChanged,
     $secondarySource,
   ]);
-  const used = source.type === "translate";
-  const note = used ? TRANSLATOR_NOTES[translator] : null;
+  const note = source.type === "track" ? "Used when the second line is translated." : TRANSLATOR_NOTES[translator];
 
   return (
     <>
@@ -156,7 +156,6 @@ export const SecondarySubsTranslator: FC = () => {
         <Select
           options={TRANSLATOR_OPTIONS}
           value={TRANSLATOR_OPTIONS.find((option) => option.value === translator)}
-          isDisabled={!used}
           onChange={(option: (typeof TRANSLATOR_OPTIONS)[number]) => handleChanged(option.value)}
         />
       </Row>

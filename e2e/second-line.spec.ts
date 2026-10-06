@@ -28,7 +28,8 @@ test.describe("second subtitle line", () => {
     await expect(playground.secondLineStatus()).toHaveText(
       "TrackSpanish subtitles from the playground. No translation needed.",
     );
-    await expect(playground.settingsRow("Translator").locator("input")).toBeDisabled();
+    await expect(playground.settingsRow("Translator").locator("input")).toBeEnabled();
+    await expect(playground.settingsPanel).toContainText("Used when the second line is translated.");
     await playground.closeSettings();
 
     await expect(playground.secondLine).toHaveText(SPANISH_ALMOST);
