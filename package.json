@@ -20,10 +20,11 @@
     "playground:movies": "node playground/scripts/download-movies.ts",
     "playground:translations": "node playground/scripts/translation-keys.ts",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "commitlint": "commitlint --edit",
-    "lint": "eslint src playground e2e",
+    "lint": "eslint src playground e2e test",
     "lint:fix": "pnpm lint --fix",
     "prettier": "prettier . --write"
   },
@@ -60,6 +61,7 @@
     "@types/subtitle": "^2.0.6",
     "@types/ws": "^8.18.2",
     "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^5.0.3",
     "autoprefixer": "^10.6.1",
     "chokidar": "^5.0.0",
     "cross-env": "^10.1.0",
@@ -68,6 +70,7 @@
     "eslint-plugin-prettier": "^5.5.6",
     "fs-extra": "^11.4.1",
     "globals": "^17.13.0",
+    "jsdom": "^30.1.2",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.28",
     "prettier": "^3.9.9",
@@ -77,6 +80,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.0",
     "vite": "^8.3.2",
+    "vitest": "^5.0.3",
     "ws": "^8.22.0"
   }
 }

@@ -7,7 +7,7 @@ import prettierRecommended from "eslint-plugin-prettier/recommended";
 export default tseslint.config(
   { ignores: ["dist", "node_modules"] },
   {
-    files: ["src/**/*.{ts,tsx,js,jsx}", "playground/**/*.ts", "e2e/**/*.ts"],
+    files: ["src/**/*.{ts,tsx,js,jsx}", "playground/**/*.ts", "e2e/**/*.ts", "test/**/*.ts"],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
