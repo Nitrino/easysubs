@@ -21,9 +21,9 @@ export class Playground {
     this.trackSelect = page.getByLabel("Subtitles", { exact: true });
   }
 
-  // Opens the playground with the offline background; `subs` picks the initial track ("" for none)
+  // Opens the playground with the offline background at 0 s; `subs` picks the initial track ("" for none)
   async open({ subs = "en" }: { subs?: string } = {}) {
-    await this.page.goto(`/?${new URLSearchParams({ background: "mock", subs })}`);
+    await this.page.goto(`/?${new URLSearchParams({ background: "mock", subs, t: "0" })}`);
     await expect(this.settingsButton).toBeVisible();
     await this.page.waitForFunction(() => document.querySelector("video").readyState >= HTMLMediaElement.HAVE_METADATA);
     // Phrasal verbs depend on the detected language and are only looked up when the current cue changes

@@ -35,9 +35,15 @@ export const VIDEO_SOURCES: VideoSource[] = [
 ];
 
 const VIDEO_KEY = "easysubs-playground-video";
+// Seconds; the sample and Sprite Fright both have a subtitle on screen at 20 s
+const DEFAULT_START_TIME = 20;
 
 let tracks: SubtitleTrack[] = [...SAMPLE_VIDEO.tracks];
 let videoSource: VideoSource = SAMPLE_VIDEO;
+let startTime = DEFAULT_START_TIME;
+
+// A media fragment makes the browser start there as part of loading, so there's no seek racing the first frames
+const withStartTime = (url: string) => (startTime > 0 ? `${url}#t=${startTime}` : url);
 
 const PLAYBACK_RATES = [1, 1.25, 1.5, 2, 0.5, 0.75];
 const IDLE_DELAY_MS = 2500;
@@ -56,13 +62,13 @@ const seekTooltip = playerRoot.querySelector<HTMLElement>(".pg-seek__tooltip");
 const currentTimeLabel = playerRoot.querySelector<HTMLElement>(".pg-time--current");
 const endTimeButton = playerRoot.querySelector<HTMLButtonElement>(".pg-time--end");
 const speedButton = playerRoot.querySelector<HTMLButtonElement>(".pg-speed");
+const muteButton = playerRoot.querySelector<HTMLButtonElement>(".pg-mute");
 
 const trackListeners = new Set<(track: SubtitleTrack | null) => void>();
 
 export const getTrack = (id: string) => tracks.find((track) => track.id === id) ?? null;
 export const getActiveTrack = () => getTrack(trackSelect.value);
 
-const muteButton = playerRoot.querySelector<HTMLButtonElement>(".pg-mute");
 export function onTrackChange(listener: (track: SubtitleTrack | null) => void) {
   trackListeners.add(listener);
   return () => trackListeners.delete(listener);
@@ -109,7 +115,7 @@ export async function isVideoAvailable(source: VideoSource) {
 function applyVideoSource(source: VideoSource, preferredTrackId: string) {
   if (video.src.startsWith("blob:")) URL.revokeObjectURL(video.src);
   videoSource = source;
-  video.src = source.url;
+  video.src = withStartTime(source.url);
   title.textContent = source.title;
   const fileTrack = getTrack(FILE_TRACK_ID);
   tracks = fileTrack ? [...source.tracks, fileTrack] : [...source.tracks];
@@ -130,7 +136,7 @@ export function switchVideoSource(source: VideoSource) {
 export function openVideoFile(file: File) {
   if (video.src.startsWith("blob:")) URL.revokeObjectURL(video.src);
   videoSource = { id: FILE_TRACK_ID, title: file.name, url: URL.createObjectURL(file), tracks: [] };
-  video.src = videoSource.url;
+  video.src = withStartTime(videoSource.url);
   title.textContent = file.name;
 }
 
@@ -155,14 +161,14 @@ function togglePlay() {
   else video.pause();
 }
 
+const toggleMute = () => (video.muted = !video.muted);
+
 function toggleFullscreen() {
   if (document.fullscreenElement) document.exitFullscreen();
   else playerRoot.requestFullscreen();
 }
 
 const isTyping = (target: EventTarget | null) =>
-const toggleMute = () => (video.muted = !video.muted);
-
   target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(target.tagName));
 
 function setupTimeline() {
@@ -233,8 +239,11 @@ function storedVideoId() {
 }
 
 export function setupPlayer() {
-  // ?video= and ?subs= pick the video and the subtitle track; otherwise the last video is shown again
+  // ?video= and ?subs= pick the video and the subtitle track, otherwise the last video is shown again;
+  // ?t= sets where videos start
   const params = new URLSearchParams(location.search);
+  const requestedStart = Number(params.get("t"));
+  if (params.has("t") && Number.isFinite(requestedStart) && requestedStart >= 0) startTime = requestedStart;
   const requestedVideo = params.get("video") ?? storedVideoId();
   applyVideoSource(
     VIDEO_SOURCES.find((source) => source.id === requestedVideo) ?? SAMPLE_VIDEO,
@@ -256,15 +265,6 @@ export function setupPlayer() {
   video.addEventListener("play", () => playerRoot.classList.add("pg-player--playing"));
   video.addEventListener("pause", () => playerRoot.classList.remove("pg-player--playing"));
   playerRoot.querySelector(".pg-play").addEventListener("click", togglePlay);
-  playerRoot.querySelectorAll(".pg-fullscreen").forEach((button) => button.addEventListener("click", toggleFullscreen));
-
-  speedButton.addEventListener("click", () => {
-    const next = PLAYBACK_RATES[(PLAYBACK_RATES.indexOf(video.playbackRate) + 1) % PLAYBACK_RATES.length];
-    video.playbackRate = next;
-    speedButton.textContent = `${next}×`;
-  });
-
-  let clickTimer: number | undefined;
 
   // Muted on every load; the video element is muted in index.html as well, before this runs
   video.muted = true;
@@ -275,6 +275,15 @@ export function setupPlayer() {
   video.addEventListener("volumechange", showMuted);
   muteButton.addEventListener("click", toggleMute);
   showMuted();
+  playerRoot.querySelectorAll(".pg-fullscreen").forEach((button) => button.addEventListener("click", toggleFullscreen));
+
+  speedButton.addEventListener("click", () => {
+    const next = PLAYBACK_RATES[(PLAYBACK_RATES.indexOf(video.playbackRate) + 1) % PLAYBACK_RATES.length];
+    video.playbackRate = next;
+    speedButton.textContent = `${next}×`;
+  });
+
+  let clickTimer: number | undefined;
   video.addEventListener("click", () => {
     window.clearTimeout(clickTimer);
     clickTimer = window.setTimeout(togglePlay, DOUBLE_CLICK_MS);
@@ -290,6 +299,8 @@ export function setupPlayer() {
     if (event.code === "Space") {
       event.preventDefault();
       togglePlay();
+    } else if (event.code === "KeyM" && !event.altKey && !event.metaKey && !event.ctrlKey) {
+      toggleMute();
     } else if (event.code === "ArrowLeft") {
       video.currentTime -= 5;
     } else if (event.code === "ArrowRight") {
@@ -297,5 +308,3 @@ export function setupPlayer() {
     }
   });
 }
-    } else if (event.code === "KeyM" && !event.altKey && !event.metaKey && !event.ctrlKey) {
-      toggleMute();

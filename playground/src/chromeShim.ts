@@ -22,8 +22,9 @@ type MessageListener = (
 
 const STORAGE_PREFIX = "easysubs-playground:";
 
+// The offline mock unless ?background=live asks for the real background script
 export const backgroundMode: BackgroundMode =
-  new URLSearchParams(location.search).get("background") === "mock" ? "mock" : "live";
+  new URLSearchParams(location.search).get("background") === "live" ? "live" : "mock";
 
 const messageListeners: MessageListener[] = [];
 const messageLog: MessageLogEntry[] = [];
