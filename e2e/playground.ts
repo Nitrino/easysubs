@@ -1,4 +1,11 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { test as base, expect, type Locator, type Page } from "@playwright/test";
+import type { TranslationFixture } from "../playground/src/translationPairs";
+
+// The offline mock answers with these translations, e.g. offlineTranslations("en-ru").words.keys.main
+export const offlineTranslations = (pair: string): TranslationFixture =>
+  JSON.parse(readFileSync(resolve(import.meta.dirname, `../playground/fixtures/translations/${pair}.json`), "utf8"));
 
 // Page object for playground/index.html with the extension running in it
 export class Playground {

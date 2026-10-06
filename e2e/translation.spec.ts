@@ -1,6 +1,8 @@
-import { test, expect } from "./playground";
+import { test, expect, offlineTranslations } from "./playground";
 
-// The mock background translates "text" into "[ru] text", see playground/src/mockBackground.ts
+// The mock background answers from playground/fixtures/translations
+const enRu = offlineTranslations("en-ru");
+
 test.describe("translation", () => {
   test.beforeEach(async ({ playground }) => {
     await playground.open();
@@ -12,7 +14,7 @@ test.describe("translation", () => {
     await playground.word("keys").hover();
 
     const popover = playground.subs.locator(".es-popover--word");
-    await expect(popover.locator(".es-title")).toHaveText("[ru] keys");
+    await expect(popover.locator(".es-title")).toHaveText(enRu.words.keys.main);
     expect(await playground.messages("translateWordFull")).toContainEqual(
       expect.objectContaining({ text: "keys", language: "ru" }),
     );
@@ -22,7 +24,7 @@ test.describe("translation", () => {
     await playground.word("need").click();
 
     await expect(playground.subs.locator(".es-popover--line")).toHaveText(
-      "[ru] Almost. I just need to pick up my keys.",
+      enRu.lines["Almost. I just need to pick up my keys."],
     );
   });
 

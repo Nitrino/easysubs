@@ -1,5 +1,5 @@
 import { readFile, rm } from "node:fs/promises";
-import { test, expect } from "./playground";
+import { test, expect, offlineTranslations } from "./playground";
 
 // Width and height from the PNG header (the IHDR chunk)
 const pngSize = (png: Buffer) => ({ width: png.readUInt32BE(16), height: png.readUInt32BE(20) });
@@ -11,7 +11,9 @@ test.describe("screenshots", () => {
     await page.getByRole("button", { name: "1×", exact: true }).click();
     await playground.seek(5);
     await playground.word("keys").hover();
-    await expect(playground.subs.locator(".es-popover--word .es-title")).toHaveText("[ru] keys");
+    await expect(playground.subs.locator(".es-popover--word .es-title")).toHaveText(
+      offlineTranslations("en-ru").words.keys.main,
+    );
 
     await page.keyboard.press("Alt+KeyS");
 
