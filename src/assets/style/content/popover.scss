@@ -149,15 +149,17 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     color: var(--es-secondary);
   }
 
+  // The box of the "+" badges in the list below (same font size, then 0.8em × 1.2em), so the speaker
+  // sits in their column and the word lines up with the translations.
   .es-speak {
     display: inline-flex;
     flex: none;
     align-items: center;
     justify-content: center;
-    width: 1.45em;
-    height: 1.3em;
-    margin-left: -0.25em;
-    border-radius: 5px;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    font-size: 0.8em;
     color: rgba(255, 255, 255, 0.72);
 
     &:hover {
@@ -170,8 +172,8 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     }
 
     svg {
-      width: 1.05em;
-      height: 0.85em;
+      width: 1.1em;
+      height: 0.88em;
     }
   }
 
