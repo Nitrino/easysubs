@@ -41,6 +41,10 @@ For screenshots on real footage, `pnpm playground:movies` downloads the open mov
 pick it in the Inspector's Video menu. It's licensed CC BY 4.0: credit "Sprite Fright © Blender Studio, CC BY 4.0"
 next to published images.
 
+The offline mock translates the playground's subtitles from `playground/fixtures/translations` (English, Spanish and
+German into Russian, Russian into English), so screenshots and tests show real translations without network access.
+After subtitles change, `pnpm playground:translations --write-missing` lists the words and lines to translate.
+
 `pnpm test:e2e` runs the Playwright tests from `e2e/` against the playground (offline mock, no build needed);
 `pnpm test:e2e:ui` opens them in Playwright's UI mode. Run `pnpm exec playwright install chromium` once beforehand.
 
