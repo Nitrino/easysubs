@@ -159,6 +159,7 @@ globalThis.chrome = chromeShim as unknown as typeof chrome;
 window.easysubsPlayground = {
   backgroundMode,
   messages: messageLog,
+  mockAnswers: {},
   clearStorage: () => storageLocal.clear(),
 };
 
@@ -167,6 +168,8 @@ declare global {
     easysubsPlayground: {
       backgroundMode: BackgroundMode;
       messages: MessageLogEntry[];
+      // Answers of the offline mock background replaced by tests, see playground/src/mockBackground.ts
+      mockAnswers: Record<string, unknown>;
       clearStorage: () => Promise<void>;
     };
   }

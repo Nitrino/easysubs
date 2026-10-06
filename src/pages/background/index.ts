@@ -159,7 +159,8 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       })
       .then((data) => sendResponse(data))
       .catch((error) => {
-        sendResponse({ error: error.message || error });
+        // fetch() rejects with a TypeError when nothing answers, e.g. Anki isn't running
+        sendResponse({ error: error instanceof TypeError ? "connection error" : error.message || error });
       });
   }
 

@@ -1,8 +1,8 @@
 /**
  * An offline stand-in for src/pages/background: answers the same messages in the shapes the content script parses.
  * Words and lines of the playground's subtitles get the translations from playground/fixtures/translations (see
- * translationPairs.ts); anything else gets a placeholder like `[ru] word`. Used by the e2e tests and
- * `?background=mock`.
+ * translationPairs.ts); anything else gets a placeholder like `[ru] word`. Used by the e2e tests, the unit tests and
+ * `?background=mock`. Tests replace answers through `window.easysubsPlayground.mockAnswers`, see answerOverride().
  */
 
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
@@ -95,7 +95,18 @@ function ankiResponse(action: string) {
   }
 }
 
+// An answer set by a test, by message type ("translateFullText") or, for AnkiConnect, by action ("post:addNote")
+function answerOverride(message: Message) {
+  const answers = window.easysubsPlayground?.mockAnswers ?? {};
+  const action = message.type === "post" ? (message.data as { action?: string })?.action : undefined;
+  const key = [action && `post:${action}`, message.type].find((name) => name && name in answers);
+  return key ? { found: true, answer: answers[key] } : { found: false };
+}
+
 function handle(message: Message): unknown {
+  const override = answerOverride(message);
+  if (override.found) return override.answer;
+
   const text = String(message.text ?? "");
   const language = String(message.language ?? "en");
 
@@ -120,7 +131,7 @@ function handle(message: Message): unknown {
     case "post":
       return ankiResponse(String((message.data as { action?: string })?.action));
     case "addWordToLingualeo":
-      return { lingualeoResponse: { status: "ok" } };
+      return { lingualeoResponse: { status: "ok", data: [{ word: { wordValue: message.word } }] } };
     case "addWordToPuzzleEnglish":
       return { status: true };
     default:

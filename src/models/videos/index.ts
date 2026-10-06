@@ -34,35 +34,29 @@ export const moveFx = createEffect<TMoveFX, void>(({ video, subs, streaming, dir
 
   if (direction === "next") {
     const currentTime = video.currentTime * 1000;
-    if (currentSubs.length < 2) {
-      // use regular move if we don't have subs
-      moveVideoToTime(video, streaming, currentTime + TIME_SEEK_TIME);
-    }
-
     const nextSub = subs.find((sub) => sub.start > currentTime);
     const isNextSubClose = nextSub && nextSub.start - currentTime <= TIME_SEEK_TIME;
 
     if (nextSub && (force || isNextSubClose)) {
       moveVideoToTime(video, streaming, nextSub.start);
     } else {
+      // use regular move if there is no subtitle close enough
       moveVideoToTime(video, streaming, currentTime + TIME_SEEK_TIME);
     }
   }
 
   if (direction === "prev") {
     const currentTime = video.currentTime * 1000;
-    if (currentSubs.length < 2) {
-      // use regular move if we don't have subs
-      moveVideoToTime(video, streaming, currentTime - TIME_SEEK_TIME);
-    }
+    // The subtitles before the current one or, between subtitles, the ones that have ended
+    const prevSubs =
+      currentSubs.length > 0 ? subs.slice(0, currentSubs[0].id) : subs.filter((sub) => sub.end < currentTime);
+    let prevSub = prevSubs.at(-1);
 
-    let prevSub = subs[currentSubs[0].id - 1];
-
-    if (prevSub.end - prevSub.start < 20) {
+    if (prevSub && prevSub.end - prevSub.start < 20) {
       // if the previous subtitle is too short, we need move to the previous one
       // to avoid the situation when the previous subtitle is the same as the current one.
       // It's happening with youtube auto-generated subtitles
-      prevSub = subs[currentSubs[0].id - 2];
+      prevSub = prevSubs.at(-2);
     }
 
     const isPrevSubClose = prevSub && currentTime - prevSub.end <= TIME_SEEK_TIME;

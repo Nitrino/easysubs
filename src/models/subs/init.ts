@@ -101,7 +101,7 @@ $rawSubs.on(rawSubsAdded, (oldSubs, newSubs) => {
 });
 
 $rawSubs.reset(resetSubs);
-$currentSubs.on([updateCurrentSubsFx.doneData, autoPauseFx.doneData], (oldSubs, subs) =>
+$currentSubs.on(updateCurrentSubsFx.doneData, (oldSubs, subs) =>
   JSON.stringify(oldSubs) === JSON.stringify(subs) ? oldSubs : subs,
 );
 

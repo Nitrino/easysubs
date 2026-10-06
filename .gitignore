@@ -9,6 +9,9 @@ playground/screenshots
 playground/public/movies
 playground/fixtures/translations/missing.json
 
+# Test reports
+coverage
+
 # Playwright
 test-results
 playwright-report

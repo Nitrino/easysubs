@@ -27,5 +27,15 @@
       "virtual:reload-on-update-in-view": ["./src/global.d.ts"]
     }
   },
-  "include": ["src", "utils", "vite.config.ts", "playground", "e2e", "playwright.config.ts", "node_modules/@types"]
+  "include": [
+    "src",
+    "utils",
+    "vite.config.ts",
+    "playground",
+    "e2e",
+    "test",
+    "playwright.config.ts",
+    "vitest.config.ts",
+    "node_modules/@types"
+  ]
 }
