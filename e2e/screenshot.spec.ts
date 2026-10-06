@@ -11,16 +11,14 @@ test.describe("screenshots", () => {
     await page.getByRole("button", { name: "1×", exact: true }).click();
     await playground.seek(5);
     await playground.word("keys").hover();
-    await expect(playground.subs.locator(".es-popover--word .es-title")).toHaveText(
-      offlineTranslations("en-ru").words.keys.main,
-    );
+    await expect(playground.wordPopover.locator(".es-title")).toHaveText(offlineTranslations("en-ru").words.keys.main);
 
     await page.keyboard.press("Alt+KeyS");
 
     const status = page.locator(".pg-shot-status");
     await expect(status).toHaveText(/^Saved /, { timeout: 30_000 });
     // The popover is still open: the shortcut doesn't move the pointer
-    await expect(playground.subs.locator(".es-popover--word")).toBeVisible();
+    await expect(playground.wordPopover).toBeVisible();
     const file = (await status.textContent()).replace("Saved ", "");
     try {
       expect(pngSize(await readFile(file))).toEqual({ width: 1280, height: 800 });
