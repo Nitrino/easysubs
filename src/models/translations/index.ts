@@ -34,7 +34,10 @@ export const subItemMouseLeft = createEvent();
 export const findCurrentPhrasalVerbFx = createEffect<
   { phrasalVerbs: TPhrasalVerb[]; text: string },
   TPhrasalVerb | null
->(({ phrasalVerbs, text }) => phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.includes(text)));
+>(
+  ({ phrasalVerbs, text }) =>
+    phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.split(" ").includes(text.toLowerCase())) ?? null,
+);
 
 export const $currentSubTranslation = createStore<string>(null);
 export const $subTranslationPendings = createStore<Record<string, boolean>>({});
@@ -270,7 +273,8 @@ $wordTranslations.reset($translateLanguage);
 sample({
   clock: $translateLanguage,
   source: $currentWordTranslation,
-  fn: (translations) => translations.source,
+  filter: (translation) => translation !== null,
+  fn: (translation) => translation.source,
   target: requestWordTranslation,
 });
 
