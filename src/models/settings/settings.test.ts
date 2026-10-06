@@ -21,6 +21,15 @@ import {
   $chatGPTModel,
   $netflixOnFlightEnabled,
   $ttsService,
+  $secondarySubs,
+  $secondarySubsBackground,
+  $secondarySubsColor,
+  $secondarySubsPosition,
+  $secondarySubsReveal,
+  $secondarySubsSize,
+  $secondarySubsTopOffset,
+  $secondarySubsTranslator,
+  SECONDARY_SUBS_COLORS,
   deeplApiKeyChanged,
   deeplApiKeyModalClosed,
   enableToggleChanged,
@@ -31,6 +40,9 @@ import {
   subsFontSizeButtonPressed,
   translationServiceChanged,
   ttsServiceChanged,
+  secondarySubsSizeButtonPressed,
+  secondarySubsTopMoved,
+  secondarySubsTranslatorChanged,
 } from ".";
 import { fetchCurrentStreamingFx } from "../streamings";
 import { moveKeyPressed } from "../videos";
@@ -55,6 +67,14 @@ const PERSISTED_SETTINGS: Record<string, StoreWritable<unknown>> = {
   $subsBackground,
   $subsBackgroundOpacity,
   $autoPause,
+  $secondarySubs,
+  $secondarySubsTranslator,
+  $secondarySubsPosition,
+  $secondarySubsSize,
+  $secondarySubsColor,
+  $secondarySubsBackground,
+  $secondarySubsReveal,
+  $secondarySubsTopOffset,
 };
 
 describe("settings defaults", () => {
@@ -81,6 +101,19 @@ describe("settings defaults", () => {
     expect($subsFontSize.defaultState).toBe(100);
     expect($subsBackground.defaultState).toBe(true);
     expect($subsBackgroundOpacity.defaultState).toBe(50);
+  });
+
+  it("keeps the second line off, and translated by Google once on", () => {
+    expect($secondarySubs.defaultState).toEqual({ language: "off" });
+    expect($secondarySubsTranslator.defaultState).toBe("google");
+  });
+
+  it("shows the second line under the subtitles at 75%, in amber, on a background, always", () => {
+    expect($secondarySubsPosition.defaultState).toBe("below");
+    expect($secondarySubsSize.defaultState).toBe(75);
+    expect($secondarySubsColor.defaultState).toBe(SECONDARY_SUBS_COLORS[0].value);
+    expect($secondarySubsBackground.defaultState).toBe(true);
+    expect($secondarySubsReveal.defaultState).toBe("always");
   });
 });
 
@@ -151,6 +184,47 @@ describe("settings changes", () => {
     await allSettled(ttsServiceChanged, { scope, params: "chatgpt" });
 
     expect(scope.getState($chatGPTApiKeyModalOpen)).toBe(false);
+  });
+
+  it("keeps the second line between 50 and 100% of the subtitles", async () => {
+    const scope = fork({ values: [[$secondarySubsSize, 100]] });
+
+    await allSettled(secondarySubsSizeButtonPressed, { scope, params: 105 });
+    expect(scope.getState($secondarySubsSize)).toBe(100);
+
+    await allSettled(secondarySubsSizeButtonPressed, { scope, params: 50 });
+    await allSettled(secondarySubsSizeButtonPressed, { scope, params: 45 });
+    expect(scope.getState($secondarySubsSize)).toBe(50);
+  });
+
+  it("asks for the key of a paid translator picked for the second line", async () => {
+    const scope = fork({ values: [[$chatGPTApiKey, "sk-test"]] });
+
+    await allSettled(secondarySubsTranslatorChanged, { scope, params: "deepl" });
+    expect(scope.getState($secondarySubsTranslator)).toBe("deepl");
+    expect(scope.getState($deeplApiKeyModalOpen)).toBe(true);
+
+    await allSettled(deeplApiKeyModalClosed, { scope });
+    await allSettled(secondarySubsTranslatorChanged, { scope, params: "chatgpt" });
+    expect(scope.getState($chatGPTApiKeyModalOpen)).toBe(false);
+  });
+
+  it("doesn't change the word translator with the second line's", async () => {
+    const scope = fork();
+
+    await allSettled(secondarySubsTranslatorChanged, { scope, params: "chatgpt" });
+
+    expect(scope.getState($translationService)).toBe("google");
+  });
+
+  it("keeps where the second line's top block was dropped for each service", async () => {
+    const scope = fork();
+
+    await allSettled(secondarySubsTopMoved, { scope, params: { service: "netflix", x: 10, y: 40 } });
+    await allSettled(secondarySubsTopMoved, { scope, params: { service: "youtube", x: -5, y: 0 } });
+    await allSettled(secondarySubsTopMoved, { scope, params: { service: "netflix", x: 12, y: 30 } });
+
+    expect(scope.getState($secondarySubsTopOffset)).toEqual({ netflix: { x: 12, y: 30 }, youtube: { x: -5, y: 0 } });
   });
 
   it("asks for no key for the other services", async () => {

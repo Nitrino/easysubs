@@ -1,17 +1,19 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
 import { $currentSubs } from "@src/models/subs";
-import { $video, $wasPaused, wasPausedChanged } from "@src/models/videos";
+import { $video } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
 import {
-  $autoStopEnabled,
   $moveBySubsEnabled,
+  $secondarySubsPosition,
   $subsBackground,
   $subsBackgroundOpacity,
   $subsFontSize,
 } from "@src/models/settings";
+import { $currentSecondarySubs } from "@src/models/secondarySubs";
 import {
   $findPhrasalVerbsPendings,
   subItemMouseEntered,
@@ -22,11 +24,22 @@ import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/
 import { SubItemTranslation } from "./SubItemTranslation";
 import { PhrasalVerbTranslation } from "./PhrasalVerbTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
+import { SecondaryLine, SecondaryNotice, SecondarySubsTop } from "./SecondarySubs";
+import { useHoverPause } from "./useHoverPause";
 
-export const Subs: FC = () => {
-  const [video, currentSubs, subsFontSize, moveBySubsEnabled, wasPaused, handleWasPausedChanged, autoStopEnabled] =
-    useUnit([$video, $currentSubs, $subsFontSize, $moveBySubsEnabled, $wasPaused, wasPausedChanged, $autoStopEnabled]);
+// The subtitles over the player; the second line goes under or above each cue, or into its own block in
+// `topContainer` at the top of the player
+export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
+  const [video, currentSubs, subsFontSize, moveBySubsEnabled, secondarySubs, secondaryPosition] = useUnit([
+    $video,
+    $currentSubs,
+    $subsFontSize,
+    $moveBySubsEnabled,
+    $currentSecondarySubs,
+    $secondarySubsPosition,
+  ]);
   const draggableRef = useRef<HTMLDivElement>(null);
+  const hoverPause = useHoverPause();
 
   useEffect(() => {
     if (moveBySubsEnabled) {
@@ -37,40 +50,29 @@ export const Subs: FC = () => {
     };
   }, []);
 
-  const handleOnMouseLeave = () => {
-    if (wasPaused) {
-      video.play();
-      console.log("handleWasPausedChanged false");
-      handleWasPausedChanged(false);
-    }
-  };
-
-  const handleOnMouseEnter = () => {
-    if (!autoStopEnabled) {
-      return;
-    }
-    if (!video.paused) {
-      console.log("handleWasPausedChanged true");
-
-      handleWasPausedChanged(true);
-      video.pause();
-    }
-  };
-
   return (
-    <Draggable nodeRef={draggableRef}>
-      <div
-        ref={draggableRef}
-        id="es-subs"
-        onMouseLeave={handleOnMouseLeave}
-        onMouseEnter={handleOnMouseEnter}
-        style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
-      >
-        {currentSubs.map((sub, index) => (
-          <Sub key={index} sub={sub} />
-        ))}
-      </div>
-    </Draggable>
+    <>
+      <Draggable nodeRef={draggableRef}>
+        <div
+          ref={draggableRef}
+          id="es-subs"
+          {...hoverPause}
+          style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
+        >
+          <SecondaryNotice />
+          {currentSubs.map((sub, index) => (
+            <Fragment key={index}>
+              {secondaryPosition === "above" && <SecondaryLine line={secondarySubs[index]} />}
+              <Sub sub={sub} />
+              {secondaryPosition === "below" && <SecondaryLine line={secondarySubs[index]} />}
+            </Fragment>
+          ))}
+        </div>
+      </Draggable>
+      {secondaryPosition === "top" &&
+        topContainer &&
+        createPortal(<SecondarySubsTop lines={secondarySubs} />, topContainer)}
+    </>
   );
 };
 

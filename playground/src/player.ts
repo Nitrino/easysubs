@@ -3,7 +3,7 @@
 
 import { MOVIES, movieSubtitlesPath, movieVideoPath, type Movie } from "./movies";
 
-export type SubtitleTrack = { id: string; label: string; url: string };
+export type SubtitleTrack = { id: string; label: string; url: string; language?: string };
 export type VideoSource = { id: string; title: string; url: string; tracks: SubtitleTrack[]; movie?: Movie };
 
 export const FILE_TRACK_ID = "file";
@@ -13,8 +13,8 @@ export const SAMPLE_VIDEO: VideoSource = {
   title: "sample.webm",
   url: "/media/sample.webm",
   tracks: [
-    { id: "en", label: "English", url: "/subs/en.srt" },
-    { id: "es", label: "Español", url: "/subs/es.srt" },
+    { id: "en", label: "English", url: "/subs/en.srt", language: "en" },
+    { id: "es", label: "Español", url: "/subs/es.srt", language: "es" },
   ],
 };
 
@@ -28,6 +28,8 @@ export const VIDEO_SOURCES: VideoSource[] = [
     tracks: movie.subtitles.map((track) => ({
       id: track.id,
       label: track.label,
+      // The movies' subtitle ids are their languages
+      language: track.id,
       url: `/${movieSubtitlesPath(movie, track.id)}`,
     })),
     movie,
@@ -67,6 +69,7 @@ const muteButton = playerRoot.querySelector<HTMLButtonElement>(".pg-mute");
 const trackListeners = new Set<(track: SubtitleTrack | null) => void>();
 
 export const getTrack = (id: string) => tracks.find((track) => track.id === id) ?? null;
+export const getTracks = () => [...tracks];
 export const getActiveTrack = () => getTrack(trackSelect.value);
 
 export function onTrackChange(listener: (track: SubtitleTrack | null) => void) {

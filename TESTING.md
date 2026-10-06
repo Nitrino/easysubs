@@ -63,6 +63,17 @@ a comment on the cause. When the bug is fixed, `it.fails` starts failing: turn i
   per word, the language from the settings or asked for when it matches the subtitles, the whole line, phrasal verbs,
   Bing/DeepL/ChatGPT with their API key dialogs, a failing service, Spanish into English
 
+**Second subtitle line**
+
+- Unit: picking the source (track, YouTube auto-translate, translator, already in the language), anchoring a track to
+  the main cues, the translation window and batch limits, batches by Google, DeepL and ChatGPT, the cache, the language
+  picker and its status line, the settings, V and R, the services' track lists (Netflix, YouTube, Coursera, KinoPub),
+  the model: loading, delay, reloads, translating as the video plays and after seeks, failures, hiding
+- E2E: off by default, the Spanish track, translating into Russian in one request and from the cache after a reload,
+  translating into Spanish in place of the Spanish track,
+  Same as translation, a failed translation, the DeepL key dialog, above, top of the player and dragging, size, color
+  and background, blurred until hover or pause, V and R
+
 **Navigation**
 
 - Unit: next/previous/current cue, 5 s seeks when cues are far, Alt to force the jump, short YouTube cues, the
@@ -90,6 +101,8 @@ a comment on the cause. When the bug is fixed, `it.fails` starts failing: turn i
 ## Not covered yet
 
 - The streaming services' own code (subtitle downloads from YouTube, Netflix and others, their injected scripts): it
-  needs recorded responses of each service
+  needs recorded responses of each service. The second line's track lists are covered with made-up answers; whether
+  YouTube still serves a track after its URL's `lang` or `tlang` changes, and whether Jellyfin exposes a second track
+  with cues, needs the real services
 - The extension popup (`src/pages/popup`)
 - The playground with `?background=live`: it calls real translation services

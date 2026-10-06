@@ -17,9 +17,14 @@ export class Playground {
   readonly settingsPanel: Locator;
   readonly trackSelect: Locator;
   readonly toast: Locator;
+  // The second subtitle line: under or above the cues, or in its own block at the top of the player
+  readonly secondLine: Locator;
+  readonly topBlock: Locator;
 
   constructor(readonly page: Page) {
     this.subs = page.locator("#es-subs");
+    this.secondLine = page.locator(".es-sub--secondary");
+    this.topBlock = page.locator("#es-top-subs");
     this.wordPopover = this.subs.locator(".es-popover--word");
     this.linePopover = this.subs.locator(".es-popover--line");
     this.progressBar = page.locator(".es-progress-bar");
@@ -87,7 +92,7 @@ export class Playground {
     return this.subs.locator(".es-sub-item").getByText(new RegExp(`^\\W*${escaped}\\W*$`));
   }
 
-  async openSettings(tab?: "General" | "Subtitles" | "Experiments") {
+  async openSettings(tab?: SettingsTab) {
     await this.settingsButton.click();
     await expect(this.settingsPanel).toBeVisible();
     if (tab) await this.settingsPanel.locator(".es-settings-content__menu__item", { hasText: tab }).click();
@@ -110,8 +115,23 @@ export class Playground {
     await this.page.getByRole("option", { name: option, exact: true }).click();
   }
 
+  // Picks the second line's language: its options also name their source ("Spanish Track", "Spanish Google"), the
+  // first one unless `source` says which
+  async chooseSecondLine(language: string, source = "") {
+    await this.settingsRow("Second line").locator(".es-select").click();
+    await this.page
+      .getByRole("option", { name: new RegExp(`^${language}.*${source}`) })
+      .first()
+      .click();
+  }
+
+  // The line under the Second line picker naming where the line comes from
+  secondLineStatus() {
+    return this.settingsPanel.locator(".es-settings-content__status").first();
+  }
+
   // Opens the settings, changes them and closes the panel again
-  async changeSettings(tab: "General" | "Subtitles" | "Experiments", change: () => Promise<void>) {
+  async changeSettings(tab: SettingsTab, change: () => Promise<void>) {
     await this.openSettings(tab);
     await change();
     await this.closeSettings();
@@ -160,6 +180,8 @@ export class Playground {
     );
   }
 }
+
+type SettingsTab = "General" | "Subtitles" | "Second line" | "Experiments";
 
 export const test = base.extend<{ playground: Playground }>({
   playground: async ({ page }, use) => {

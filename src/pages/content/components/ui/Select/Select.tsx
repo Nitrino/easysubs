@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { default as ReactSelect, components, DropdownIndicatorProps, Props, StylesConfig, Theme } from "react-select";
 
@@ -15,6 +15,7 @@ const customStyles: StylesConfig = {
     borderRadius: 7,
     background: state.menuIsOpen ? "var(--es-fill-active)" : "var(--es-fill)",
     boxShadow: "none",
+    opacity: state.isDisabled ? 0.45 : 1,
     cursor: "default",
     transition: "background-color 120ms",
     "&:hover": {
@@ -61,14 +62,31 @@ const customStyles: StylesConfig = {
     position: "relative",
     padding: "4px 10px 4px 24px",
     borderRadius: 6,
-    background: state.isFocused ? "var(--es-accent)" : "transparent",
-    color: state.isFocused ? "#fff" : "var(--es-primary)",
+    background: state.isFocused && !state.isDisabled ? "var(--es-accent)" : "transparent",
+    color: state.isDisabled ? "var(--es-secondary)" : state.isFocused ? "#fff" : "var(--es-primary)",
     lineHeight: "18px",
     cursor: "default",
     "&:active": { background: "var(--es-accent)" },
     "&::before": state.isSelected ? { content: '"✓"', position: "absolute", left: 9, fontSize: 12 } : {},
+    // Tags (the second line's sources) turn white on the accent
+    "& .es-tag": state.isFocused && !state.isDisabled ? { background: "rgba(255, 255, 255, 0.22)", color: "#fff" } : {},
   }),
   noOptionsMessage: (base) => ({ ...base, color: "var(--es-secondary)" }),
+  // Grouped menus (the second line's languages): a quiet caption and a separator between groups
+  group: (base) => ({
+    ...base,
+    padding: 0,
+    "& + &": { marginTop: 4, paddingTop: 4, borderTop: "0.5px solid var(--es-separator)" },
+  }),
+  groupHeading: (base) => ({
+    ...base,
+    margin: 0,
+    padding: "4px 10px 2px 24px",
+    color: "var(--es-secondary)",
+    fontSize: 11,
+    fontWeight: 600,
+    textTransform: "none",
+  }),
 };
 
 const theme = (theme: Theme): Theme => ({
@@ -100,13 +118,29 @@ const DropdownIndicator: FC<DropdownIndicatorProps> = (props) => (
 // Long lists (languages) stay type-to-search; short ones behave like a plain pop-up button.
 const SEARCHABLE_MIN_OPTIONS = 10;
 
-export const Select: FC<Props> = (props) => {
+type SelectProps = Props & {
+  // A menu wider than the button, aligned to its right edge: for options with tags (the second line's languages)
+  menuWidth?: number;
+};
+
+export const Select: FC<SelectProps> = ({ menuWidth, ...props }) => {
+  const styles = useMemo<StylesConfig>(
+    () =>
+      menuWidth
+        ? {
+            ...customStyles,
+            menu: (base, state) => ({ ...customStyles.menu(base, state), width: menuWidth, left: "auto", right: 0 }),
+          }
+        : customStyles,
+    [menuWidth],
+  );
+
   return (
     <div className="es-select">
       <ReactSelect
         isSearchable={(props.options?.length ?? 0) > SEARCHABLE_MIN_OPTIONS}
         {...props}
-        styles={customStyles}
+        styles={styles}
         theme={theme}
         components={{ DropdownIndicator, ...props.components }}
         menuPortalTarget={document.body}

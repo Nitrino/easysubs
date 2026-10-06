@@ -3,7 +3,15 @@ import { debug } from "patronum";
 
 import { withPersist } from "@src/utils/withPersist";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
-import { TLearningService, TTranslationService, TTtsService } from "../types";
+import {
+  TLearningService,
+  TSecondaryChoice,
+  TSecondaryPosition,
+  TSecondaryReveal,
+  TSecondaryTranslator,
+  TTranslationService,
+  TTtsService,
+} from "../types";
 import { fetchCurrentStreamingFx } from "../streamings";
 
 // Settings are saved under their names. Up to v3.1.3 they were saved under the ids effector gave the stores
@@ -95,6 +103,45 @@ export const subsBackgroundOpacityChangeFx = createEffect<number, number>((value
 export const $autoPause = createSetting("autoPause", false, 456);
 export const autoPauseChanged = createEvent<boolean>();
 $autoPause.on(autoPauseChanged, (_, value) => value);
+
+// The second subtitle line (src/models/secondarySubs). Off until it's turned on in the Second line tab.
+export const $secondarySubs = createSetting<TSecondaryChoice>("secondarySubs", { language: "off" });
+export const secondarySubsChanged = createEvent<TSecondaryChoice>();
+
+// Google unless DeepL or ChatGPT is picked for the second line itself: a film uses far more characters than words
+export const $secondarySubsTranslator = createSetting<TSecondaryTranslator>("secondarySubsTranslator", "google");
+export const secondarySubsTranslatorChanged = createEvent<TSecondaryTranslator>();
+
+export const $secondarySubsPosition = createSetting<TSecondaryPosition>("secondarySubsPosition", "below");
+export const secondarySubsPositionChanged = createEvent<TSecondaryPosition>();
+
+// Percent of the main subtitles' size
+export const SECONDARY_SUBS_SIZE_MIN = 50;
+export const SECONDARY_SUBS_SIZE_MAX = 100;
+export const $secondarySubsSize = createSetting("secondarySubsSize", 75);
+export const secondarySubsSizeButtonPressed = createEvent<number>();
+
+export const SECONDARY_SUBS_COLORS = [
+  { name: "Amber", value: "#ffd866" },
+  { name: "White", value: "#ffffff" },
+  { name: "Gray", value: "#b9c1cc" },
+  { name: "Sky", value: "#9ccbff" },
+  { name: "Mint", value: "#a6e3b8" },
+] as const;
+export const $secondarySubsColor = createSetting<string>("secondarySubsColor", SECONDARY_SUBS_COLORS[0].value);
+export const secondarySubsColorChanged = createEvent<string>();
+
+export const $secondarySubsBackground = createSetting("secondarySubsBackground", true);
+export const secondarySubsBackgroundChanged = createEvent<boolean>();
+
+export const $secondarySubsReveal = createSetting<TSecondaryReveal>("secondarySubsReveal", "always");
+export const secondarySubsRevealChanged = createEvent<TSecondaryReveal>();
+
+// Where the second line's own block was dragged with the Top position, per service: players put their controls in
+// different places
+export type TOffset = { x: number; y: number };
+export const $secondarySubsTopOffset = createSetting<Record<string, TOffset>>("secondarySubsTopOffset", {});
+export const secondarySubsTopMoved = createEvent<{ service: string } & TOffset>();
 
 export const esRenderSetings = createEvent();
 
@@ -204,6 +251,34 @@ $subsFontSize.on(subsFontSizeChangeFx.doneData, (_, subsFontSize) => subsFontSiz
 $subsBackground.on(subsBackgroundToggleFx.doneData, (_, value) => value);
 $subsBackgroundOpacity.on(subsBackgroundOpacityChangeFx.doneData, (_, value) => value);
 $activeSettingsTab.on(activeSettingsTabChanged, (_, value) => value);
+$secondarySubs.on(secondarySubsChanged, (_, choice) => choice);
+$secondarySubsTranslator.on(secondarySubsTranslatorChanged, (_, translator) => translator);
+$secondarySubsPosition.on(secondarySubsPositionChanged, (_, position) => position);
+$secondarySubsSize.on(secondarySubsSizeButtonPressed, (size, value) =>
+  value >= SECONDARY_SUBS_SIZE_MIN && value <= SECONDARY_SUBS_SIZE_MAX ? value : size,
+);
+$secondarySubsColor.on(secondarySubsColorChanged, (_, color) => color);
+$secondarySubsBackground.on(secondarySubsBackgroundChanged, (_, value) => value);
+$secondarySubsReveal.on(secondarySubsRevealChanged, (_, reveal) => reveal);
+$secondarySubsTopOffset.on(secondarySubsTopMoved, (offsets, { service, x, y }) => ({
+  ...offsets,
+  [service]: { x, y },
+}));
+
+// Picking a paid translator for the second line asks for its key when there's none yet
+sample({
+  clock: secondarySubsTranslatorChanged,
+  source: $deeplApiKey,
+  filter: (apiKey, translator) => translator === "deepl" && !apiKey,
+  target: deeplApiKeyModalOpened,
+});
+
+sample({
+  clock: secondarySubsTranslatorChanged,
+  source: $chatGPTApiKey,
+  filter: (apiKey, translator) => translator === "chatgpt" && !apiKey,
+  target: chatGPTApiKeyModalOpened,
+});
 
 $enabled.watch((isEnabled) => {
   document.body.classList.toggle("es-enabled", isEnabled);

@@ -3,7 +3,8 @@ import { parse } from "subtitle";
 import type Service from "@src/streamings/service";
 import { esRenderSetings } from "@src/models/settings";
 import { esSubsChanged } from "@src/models/subs";
-import { getActiveTrack, getTrack, onTrackChange, playerRoot, trackMenu } from "./player";
+import type { TSubsTrack } from "@src/models/types";
+import { getActiveTrack, getTrack, getTracks, onTrackChange, playerRoot, trackMenu } from "./player";
 
 let initialized = false;
 
@@ -37,6 +38,13 @@ class Playground implements Service {
     const track = getTrack(trackId);
     if (!track) throw new Error(`Unknown subtitle track: ${trackId}`);
     return loadCaptions(track.url);
+  }
+
+  // The video's tracks; a subtitle file opened by hand has no language
+  public async getSubsTracks(): Promise<TSubsTrack[]> {
+    return getTracks()
+      .filter((track) => track.language)
+      .map((track) => ({ label: track.id, language: track.language, kind: "subtitles", name: track.label }));
   }
 
   public getSubsContainer() {

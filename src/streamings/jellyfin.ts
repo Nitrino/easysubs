@@ -2,7 +2,8 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video, getCurrentVideoFx } from "@src/models/videos";
-import type { Captions } from "@src/models/types";
+import type { Captions, TSubsTrack } from "@src/models/types";
+import { languageFromTrack } from "@src/utils/languages";
 
 class Jellyfin implements Service {
   name = "jellyfin";
@@ -18,7 +19,7 @@ class Jellyfin implements Service {
       // Jellyfin removes the player on exit, while our overlay lives in <body>.
       // Dropping .es-settings also makes the next video re-run the setup.
       if (!document.querySelector("video.htmlvideoplayer")) {
-        document.querySelectorAll("#es, .es-progress-bar, .es-settings").forEach((e) => e.remove());
+        document.querySelectorAll("#es, #es-top, .es-progress-bar, .es-settings").forEach((e) => e.remove());
         return;
       }
 
@@ -126,16 +127,36 @@ class Jellyfin implements Service {
     });
   }
 
-  public async getSubs(_title: string): Promise<Captions> {
+  public async getSubs(title: string): Promise<Captions> {
     // Read the active track on every request instead of caching cues: Jellyfin
     // swaps cues inside the same TextTrack when the subtitle stream changes
     const video = $video.getState();
+    const secondary =
+      title.startsWith(SECONDARY_PREFIX) && video?.textTracks[Number(title.slice(SECONDARY_PREFIX.length))];
+    if (secondary) return cuesToCaptions(secondary);
+
     const track = video && getActiveTrack(video);
     const cues = track?.cues ? ([...track.cues] as VTTCue[]) : [];
     this.hasLoadedCues = cues.length > 0;
     return cues
       .map((c) => ({ start: c.startTime * 1000, end: c.endTime * 1000, text: cleanVttText(c.text ?? "") }))
       .filter((s) => s.text);
+  }
+
+  // Jellyfin usually swaps one TextTrack between subtitle streams, so a second track exists only when the video has
+  // several tracks with their cues loaded; their modes are left to Jellyfin
+  public async getSubsTracks(): Promise<TSubsTrack[]> {
+    const video = $video.getState();
+    if (!video) return [];
+    const active = getActiveTrack(video);
+    const tracks: TSubsTrack[] = [];
+    for (let i = 0; i < video.textTracks.length; i++) {
+      const track = video.textTracks[i];
+      if (track === active || !isSubtitlesTrack(track) || !track.cues?.length) continue;
+      const language = languageFromTrack(track.language, track.label);
+      if (language) tracks.push({ label: `${SECONDARY_PREFIX}${i}`, language, kind: "subtitles", name: track.label });
+    }
+    return tracks;
   }
 
   public getSubsContainer() {
@@ -155,6 +176,16 @@ class Jellyfin implements Service {
   public isOnFlight() {
     return false;
   }
+}
+
+// Labels of other tracks: their index in video.textTracks
+const SECONDARY_PREFIX = "textTrack:";
+
+function cuesToCaptions(track: TextTrack): Captions {
+  const cues = track.cues ? ([...track.cues] as VTTCue[]) : [];
+  return cues
+    .map((c) => ({ start: c.startTime * 1000, end: c.endTime * 1000, text: cleanVttText(c.text ?? "") }))
+    .filter((s) => s.text);
 }
 
 function isSubtitlesTrack(track: TextTrack) {

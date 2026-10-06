@@ -39,3 +39,25 @@ window.setInterval(() => {
     open.call(this, method, url, true);
   };
 })(XMLHttpRequest.prototype.open);
+
+// The caption tracks of the current video for the second subtitle line, see getSubsTracks() in src/streamings/youtube.ts
+window.addEventListener("esYoutubeGetTracks", () => {
+  const player = document.getElementById("movie_player");
+  const response = player && typeof player.getPlayerResponse === "function" ? player.getPlayerResponse() : null;
+  const renderer = response?.captions?.playerCaptionsTracklistRenderer;
+  const text = (value) => value?.simpleText ?? value?.runs?.map((run) => run.text).join("") ?? "";
+  const list = {
+    videoId: response?.videoDetails?.videoId ?? "",
+    captionTracks: (renderer?.captionTracks ?? []).map((track) => ({
+      languageCode: track.languageCode,
+      kind: track.kind ?? "",
+      name: text(track.name),
+      isTranslatable: Boolean(track.isTranslatable),
+    })),
+    translationLanguages: (renderer?.translationLanguages ?? []).map((language) => ({
+      languageCode: language.languageCode,
+      name: text(language.languageName),
+    })),
+  };
+  window.dispatchEvent(new CustomEvent("esYoutubeTracks", { detail: JSON.stringify(list) }));
+});

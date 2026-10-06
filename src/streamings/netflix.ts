@@ -2,6 +2,7 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { parse, subTitleType } from "subtitle";
 import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
+import type { TSubsTrack } from "@src/models/types";
 
 const WEBVTT = "webvtt-lssdh-ios8";
 
@@ -121,6 +122,13 @@ class Netflix implements Service {
       subCacheItem.adBreaks = JSON.parse(JSON.stringify(this.adBreaks));
       return subs;
     }
+  }
+
+  // Every text track of the title arrived with its manifest, so the second line loads like the main one
+  public async getSubsTracks(): Promise<TSubsTrack[]> {
+    const moveId = this.getMoveId();
+    const titles = new Set(this.subCache.filter((item) => item.videoId == moveId).map((item) => item.title));
+    return [...titles].map(netflixTrack);
   }
 
   public getSubsContainer() {
@@ -276,6 +284,13 @@ class Netflix implements Service {
     });
     return subs;
   }
+}
+
+// A track from its subCache title: "en", "en[cc]", "pt-BR-forced"
+export function netflixTrack(title: string): TSubsTrack {
+  if (title.endsWith("[cc]")) return { label: title, language: title.slice(0, -"[cc]".length), kind: "cc" };
+  if (title.endsWith("-forced")) return { label: title, language: title.slice(0, -"-forced".length), kind: "forced" };
+  return { label: title, language: title, kind: "subtitles" };
 }
 
 export default Netflix;

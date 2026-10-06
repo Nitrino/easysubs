@@ -1,10 +1,14 @@
-import { Captions } from "@src/models/types";
+import { Captions, TSubsTrack } from "@src/models/types";
 
 interface Service {
   name: string;
 
   // Getting subtitles from a service
   getSubs: (language: string) => Promise<Captions>;
+
+  // The subtitle tracks of the current video that getSubs() can load, for the second subtitle line. Services that
+  // read each line off the page have none: their second line is translated.
+  getSubsTracks?: () => Promise<TSubsTrack[]>;
 
   // Player container selector, required to render subtitles
   getSubsContainer: () => HTMLElement;

@@ -2,6 +2,8 @@ import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
+import type { TSubsTrack } from "@src/models/types";
+import { languageFromTrack } from "@src/utils/languages";
 import Service from "./service";
 
 type TFolder = {
@@ -59,6 +61,19 @@ class Inoriginal implements Service {
     const subsResp = await fetch(BASE_URL + subtitle.url);
     const subsData = await subsResp.text();
     return parse(subsData);
+  }
+
+  // The episode's subtitles: "[Английские]/…/eng.vtt", named by the bracketed label
+  public async getSubsTracks(): Promise<TSubsTrack[]> {
+    const episode = this.episodes?.find((item) => item.id === this.videoId);
+    if (!episode?.subtitle) return [];
+    return episode.subtitle.split(",").flatMap((subtitle): TSubsTrack[] => {
+      const [, label, path = ""] = subtitle.match(/\[(.*?)\](.*)/) ?? [];
+      const file = path.split("/").pop()?.split(".")[0] ?? "";
+      const language = label && languageFromTrack(undefined, `${label} ${file}`);
+      if (!language) return [];
+      return [{ label, language, kind: /forced|форс/i.test(label) ? "forced" : "subtitles", name: label }];
+    });
   }
 
   public getSubsContainer() {

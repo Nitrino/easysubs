@@ -74,9 +74,9 @@
     }
 
     &__item {
-      flex: 1 1 0;
+      flex: 1 1 auto;
       height: 22px;
-      padding: 0 8px;
+      padding: 0 6px;
       border-radius: 999px;
       color: var(--es-secondary);
       font-size: 12px;
@@ -329,6 +329,107 @@
     font-variant-numeric: tabular-nums;
     text-align: center;
   }
+}
+
+// A line of explanation under a row: where the second line comes from, the shortcuts
+.es-settings-content__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 6px;
+  margin: 6px 0 0;
+  color: var(--es-secondary);
+  font-size: 12px;
+  line-height: 15px;
+}
+
+// Where a second line comes from: the video (green) or a translator (orange)
+.es-tag {
+  flex: none;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 15px;
+  white-space: nowrap;
+
+  &--track {
+    background: rgba(48, 209, 88, 0.16);
+    color: #30d158;
+  }
+
+  &--translate {
+    background: rgba(255, 159, 10, 0.16);
+    color: #ff9f0a;
+  }
+}
+
+// An option of the second line's language menu: name, hint, tag on the right
+.es-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__hint {
+    color: var(--es-secondary);
+  }
+
+  .es-tag {
+    margin-left: auto;
+  }
+}
+
+.es-swatches {
+  display: flex;
+  gap: 8px;
+  padding-right: 2px;
+
+  &__swatch {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    appearance: none;
+
+    &--selected {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--es-accent);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.es-kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 4px;
+  border: 0.5px solid var(--es-hud-border);
+  border-radius: 4px;
+  background: var(--es-fill);
+  color: var(--es-primary);
+  font: 500 11px/15px var(--es-font);
+  text-align: center;
+}
+
+.es-stepper__button:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
 }
 
 // react-select renders the rest (Select.tsx styles); this only sizes it.

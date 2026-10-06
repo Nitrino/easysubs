@@ -13,6 +13,9 @@ vi.mock("anylang/translators", () => {
         if (text === "fail") throw new Error(`${name} is unavailable`);
         return `${name} ${from}→${to}: ${text}`;
       });
+      translateBatch = vi.fn(async (texts: string[], from: string, to: string) =>
+        texts.map((text) => (text === "skip" ? null : `${name} ${from}→${to}: ${text}`)),
+      );
     };
   return {
     MicrosoftTranslator: translator("Bing"),
@@ -192,6 +195,83 @@ describe("background: other translation services", () => {
 
   it("answers with the error of a failed translation", async () => {
     expect(await translate("bing", {}, "fail")).toEqual({ error: "Bing is unavailable" });
+  });
+});
+
+describe("background: lines of the second subtitle line", () => {
+  const LINES = ["Almost. I need my keys.", "- Right. - Let's go.", "Yes."];
+  const translateBatch = (translator: string, extra: Record<string, unknown> = {}, texts = LINES) =>
+    sendToBackground({ type: "translateBatch", texts, language: "ru", translator, ...extra });
+  // Google's dj=1 answer: sentences keep the line breaks of the text, then a transliteration entry
+  const googleAnswer = (...lines: string[]) =>
+    new Response(
+      JSON.stringify({
+        sentences: [
+          ...lines.map((line, index) => ({ trans: index < lines.length - 1 ? `${line}\n` : line, orig: "" })),
+          { translit: "Pochti" },
+        ],
+      }),
+    );
+
+  it("translates the lines with Google in one request and splits them back", async () => {
+    const fetchMock = stubFetch({
+      "https://translate.google.com/translate_a/single": () => googleAnswer("Почти. Ключи.", "- Да. - Идём.", "Да."),
+    });
+
+    expect(await translateBatch("google")).toEqual(["Почти. Ключи.", "- Да. - Идём.", "Да."]);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    const [, init] = fetchMock.mock.calls[0];
+    expect(new URLSearchParams(String(init.body)).get("q")).toBe(LINES.join("\n"));
+  });
+
+  it("translates line by line when Google merges lines", async () => {
+    const fetchMock = stubFetch({
+      "https://translate.google.com/translate_a/single": (_, init) => {
+        const text = new URLSearchParams(String(init.body)).get("q");
+        return text.includes("\n") ? googleAnswer("Почти. Ключи. - Да. - Идём.", "Да.") : googleAnswer(`[ru] ${text}`);
+      },
+    });
+
+    expect(await translateBatch("google")).toEqual(LINES.map((line) => `[ru] ${line}`));
+    expect(fetchMock).toHaveBeenCalledTimes(1 + LINES.length);
+  });
+
+  it("keeps a line with a line break as one line", async () => {
+    const fetchMock = stubFetch({
+      "https://translate.google.com/translate_a/single": () => googleAnswer("Да. Идём."),
+    });
+
+    expect(await translateBatch("google", {}, ["Yes.\nLet's go."])).toEqual(["Да. Идём."]);
+    expect(new URLSearchParams(String(fetchMock.mock.calls[0][1].body)).get("q")).toBe("Yes. Let's go.");
+  });
+
+  it("sends the lines to DeepL as one list", async () => {
+    const fetchMock = stubFetch({
+      "https://api-free.deepl.com/v2/translate": () =>
+        json({ translations: [{ text: "Почти." }, { text: "- Да." }, { text: "Да." }] }),
+    });
+
+    expect(await translateBatch("deepl", { deeplApiKey: "secret:fx" })).toEqual(["Почти.", "- Да.", "Да."]);
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1].body))).toEqual({ text: LINES, target_lang: "ru" });
+  });
+
+  it("explains DeepL's quota", async () => {
+    stubFetch({ "https://api-free.deepl.com/v2/translate": () => json({}, 456) });
+
+    expect(await translateBatch("deepl", { deeplApiKey: "secret:fx" })).toEqual({ error: "DeepL quota exceeded" });
+  });
+
+  it("gives ChatGPT the lines together, as context", async () => {
+    expect(await translateBatch("chatgpt", { chatGPTApiKey: "sk-test" }, ["Hello", "skip"])).toEqual([
+      "ChatGPT auto→ru: Hello",
+      "",
+    ]);
+  });
+
+  it("asks for a ChatGPT API key", async () => {
+    expect(await translateBatch("chatgpt", { chatGPTApiKey: "" })).toEqual({
+      error: "ChatGPT API key is required for translation",
+    });
   });
 });
 

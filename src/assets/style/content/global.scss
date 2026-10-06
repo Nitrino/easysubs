@@ -1,3 +1,47 @@
+// One subtitle box: the background (inline style) reads as one rounded caption box across stacked lines
+@mixin sub-box {
+  text-align: center;
+  line-height: 1.25;
+  padding: 0.04em 0.4em;
+  cursor: pointer;
+  text-shadow:
+    0 0 0.12em rgba(0, 0, 0, 0.5),
+    0 0.04em 0.1em rgba(0, 0, 0, 0.45);
+
+  &:first-child {
+    border-top-left-radius: 0.22em;
+    border-top-right-radius: 0.22em;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 0.22em;
+    border-bottom-right-radius: 0.22em;
+  }
+}
+
+// The second subtitle line: plain text in its own color and size, under or above the cue or in #es-top
+@mixin secondary-sub {
+  .es-sub--secondary {
+    white-space: pre-line;
+    cursor: default;
+    transition: filter 150ms ease-out;
+  }
+
+  .es-sub--no-background {
+    text-shadow:
+      0 0 0.15em rgba(0, 0, 0, 0.9),
+      0 0.05em 0.12em rgba(0, 0, 0, 0.9);
+  }
+
+  .es-sub--pending {
+    opacity: 0.6;
+  }
+
+  .es-sub--blurred {
+    filter: blur(0.3em);
+  }
+}
+
 #es {
   display: none;
   position: absolute;
@@ -25,25 +69,38 @@
     text-decoration: underline;
   }
 
-  // The background (inline style) reads as one rounded caption box across stacked lines.
   .es-sub {
-    text-align: center;
-    line-height: 1.25;
-    padding: 0.04em 0.4em;
-    cursor: pointer;
-    text-shadow:
-      0 0 0.12em rgba(0, 0, 0, 0.5),
-      0 0.04em 0.1em rgba(0, 0, 0, 0.45);
+    @include sub-box;
+  }
 
-    &:first-child {
-      border-top-left-radius: 0.22em;
-      border-top-right-radius: 0.22em;
-    }
+  @include secondary-sub;
 
-    &:last-child {
-      border-bottom-left-radius: 0.22em;
-      border-bottom-right-radius: 0.22em;
-    }
+  // Hovering the subtitles reveals a blurred second line
+  #es-subs:hover .es-sub--blurred {
+    filter: none;
+  }
+
+  #es-subs {
+    position: relative;
+  }
+
+  // What V did, above the subtitles
+  .es-secondary-notice {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border: 0.5px solid var(--es-hud-border);
+    border-radius: 999px;
+    background: var(--es-hud-strong);
+    color: var(--es-primary);
+    font-size: 13px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-shadow: none;
+    pointer-events: none;
   }
 
   .es-sub-item {
@@ -123,6 +180,13 @@
     pointer-events: none !important;
   }
 
+  #es-top {
+    position: fixed;
+    z-index: 1001;
+    top: 80px;
+    pointer-events: auto;
+  }
+
   // Just above .videoPlayerContainer-onTop (z-index: 1000)
   #es {
     position: fixed;
@@ -140,8 +204,32 @@
   }
 }
 
+// The second subtitle line's own block, with the Top position
+#es-top {
+  display: none;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-family: var(--es-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  .es-sub {
+    @include sub-box;
+  }
+
+  @include secondary-sub;
+
+  #es-top-subs:hover .es-sub--blurred {
+    filter: none;
+  }
+}
+
 .es-enabled {
-  #es {
+  #es,
+  #es-top {
     display: block;
   }
 }
@@ -213,6 +301,10 @@
         bottom: 110px;
       }
     }
+  }
+
+  #es-top {
+    z-index: 30;
   }
 
   #es {
