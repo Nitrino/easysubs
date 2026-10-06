@@ -74,6 +74,7 @@ Each streaming service implements the `Service` interface defined in `src/stream
 - Batch and single word translation fetchers
 - Phrasal verb detection and translation
 - Export to learning services (Anki, LinguaLeo, Puzzle English)
+- Word pronunciation from the service chosen in the settings (`$ttsService`): the background fetches Google, Youdao, Wiktionary or ChatGPT audio (`src/utils/tts/`, falling back to Google) and answers the `pronounce` message with a data: URL; `src/models/pronunciation` plays it through Web Audio and falls back to the browser's `speechSynthesis`
 
 ### Build System
 - Vite for bundling with custom plugins for manifest generation
