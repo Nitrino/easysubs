@@ -7,6 +7,12 @@ import { getActiveTrack, getTrack, onTrackChange, playerRoot, trackMenu } from "
 
 let initialized = false;
 
+// Also used by playground/scripts/record-translations.ts to read the subtitles the way the player does
+export async function loadCaptions(url: string) {
+  const resp = await fetch(url);
+  return parse(await resp.text());
+}
+
 // The streaming service for the playground player, see src/streamings/service.ts
 class Playground implements Service {
   name = "playground";
@@ -30,8 +36,7 @@ class Playground implements Service {
   public async getSubs(trackId: string) {
     const track = getTrack(trackId);
     if (!track) throw new Error(`Unknown subtitle track: ${trackId}`);
-    const resp = await fetch(track.url);
-    return parse(await resp.text());
+    return loadCaptions(track.url);
   }
 
   public getSubsContainer() {

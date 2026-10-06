@@ -18,6 +18,7 @@
     "dev:firefox": "pnpm build:hmr && (run-p wss build:firefox:watch)",
     "playground": "vite --config playground/vite.config.ts",
     "playground:movies": "node playground/scripts/download-movies.ts",
+    "playground:translations": "node playground/scripts/translation-keys.ts",
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
