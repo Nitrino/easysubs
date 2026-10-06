@@ -24,6 +24,18 @@ import { JellyfinSubTrack } from "./JellyfinSubTrack";
 import { createPortal } from "react-dom";
 import { $streaming } from "@src/models/streamings";
 import { CloseIcon } from "./assets/CloseIcon";
+import {
+  SecondarySubsBackground,
+  SecondarySubsColor,
+  SecondarySubsLanguage,
+  SecondarySubsPosition,
+  SecondarySubsReveal,
+  SecondarySubsSize,
+  SecondarySubsTranslator,
+} from "./SecondarySubs";
+
+// Tab ids are saved, so a new tab takes the next id wherever it's shown
+const SECOND_LINE_TAB = 3;
 
 interface TabProps {
   isActive: boolean;
@@ -76,6 +88,15 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
               }}
             >
               Subtitles
+            </Tab>
+            <Tab
+              isActive={activeSettingsTab === SECOND_LINE_TAB}
+              tabId={SECOND_LINE_TAB}
+              onClick={() => {
+                handleActiveSettingsTabChanged(SECOND_LINE_TAB);
+              }}
+            >
+              Second line
             </Tab>
             <Tab
               isActive={activeSettingsTab === 2}
@@ -141,6 +162,31 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
               )}
               <div className="es-settings-content__item">
                 <CustomSubs />
+              </div>
+            </>
+          )}
+          {activeSettingsTab === SECOND_LINE_TAB && (
+            <>
+              <div className="es-settings-content__item">
+                <SecondarySubsLanguage />
+              </div>
+              <div className="es-settings-content__item">
+                <SecondarySubsTranslator />
+              </div>
+              <div className="es-settings-content__item">
+                <SecondarySubsPosition />
+              </div>
+              <div className="es-settings-content__item">
+                <SecondarySubsSize />
+              </div>
+              <div className="es-settings-content__item">
+                <SecondarySubsColor />
+              </div>
+              <div className="es-settings-content__item">
+                <SecondarySubsBackground />
+              </div>
+              <div className="es-settings-content__item">
+                <SecondarySubsReveal />
               </div>
             </>
           )}

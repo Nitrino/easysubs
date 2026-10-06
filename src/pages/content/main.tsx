@@ -9,6 +9,7 @@ import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
 import { ProgressBar } from "./components/ProgressBar";
 import { removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
+import { addSecondarySubsKeyListeners } from "@src/utils/secondarySubsKeys";
 
 refreshOnUpdate("pages/content");
 
@@ -33,6 +34,7 @@ $streaming.watch((streaming) => {
 
   detectionRetries = 0;
   document.body.classList.add("es-" + streaming.name);
+  addSecondarySubsKeyListeners();
 
   esRenderSetings.watch(() => {
     console.log("Event:", "esRenderSetings");
@@ -60,12 +62,16 @@ esSubsChanged.watch((language) => {
   console.log("Event:", "esSubsChanged");
   console.log("Language:", language);
   removeKeyboardEventsListeners();
-  document.querySelectorAll("#es").forEach((e) => e.remove());
+  document.querySelectorAll("#es, #es-top").forEach((e) => e.remove());
   const subsContainer = $streaming.getState().getSubsContainer();
   const subsNode = document.createElement("div");
   subsNode.id = "es";
   subsContainer?.appendChild(subsNode);
-  createRoot(subsNode).render(<Subs />);
+  // The second subtitle line's own block, for its Top position
+  const topNode = document.createElement("div");
+  topNode.id = "es-top";
+  subsContainer?.appendChild(topNode);
+  createRoot(subsNode).render(<Subs topContainer={topNode} />);
 
   if (!$streaming.getState().isOnFlight()) {
     document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
