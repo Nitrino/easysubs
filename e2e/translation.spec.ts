@@ -63,3 +63,23 @@ test.describe("translation", () => {
     expect(ankiActions).toEqual(["createDeck", "modelNames", "addNote"]);
   });
 });
+
+test.describe("translation into English", () => {
+  // The translation language follows the browser language by default
+  test.use({ locale: "en-US" });
+  const esEn = offlineTranslations("es-en");
+
+  test("translates Spanish subtitles", async ({ playground }) => {
+    await playground.open({ subs: "es" });
+    await playground.seek(2);
+    await expect(playground.subs).toHaveText("¡Hola! ¿Estás lista para salir?");
+
+    await playground.word("lista").hover();
+    await expect(playground.subs.locator(".es-popover--word .es-title")).toHaveText(esEn.words.lista.main);
+
+    await playground.word("salir").click();
+    await expect(playground.subs.locator(".es-popover--line")).toHaveText(
+      esEn.lines["¡Hola! ¿Estás lista para salir?"],
+    );
+  });
+});

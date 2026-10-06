@@ -1,0 +1,1465 @@
+{
+  "credit": "Subtitle lines: the playground sample dialogue and Sprite Fright © Blender Studio, CC BY 4.0. Translations written for the EasySubs playground.",
+  "lines": {
+    "¡Hola! ¿Estás lista para salir?": "Hello there! Are you ready to go?",
+    "Casi. Solo tengo que buscar mis llaves.": "Almost. I just need to grab my keys.",
+    "Espera, el tren sale a las 7:45, ¿verdad?": "Hold on, the train leaves at 7:45, right?",
+    "- Sí. - Entonces deberíamos irnos ya.": "- Right. - Then we should set off now.",
+    "¿Apagaste las luces de la cocina?": "Did you turn off the lights in the kitchen?",
+    "Sí. Y le pedí a Sam que cuidara al gato.": "Yes. And I asked Sam to look after the cat.",
+    "Primero vamos a buscar la cafetería.": "Let's find the café first.",
+    "Volvemos el domingo por la noche, te lo prometo.": "We'll be back on Sunday night, I promise.",
+    "¡Mira! El tren ya está aquí.": "Look! The train is already here.",
+    "¡Hola, señor Caracol!": "Hello, Mr. Snail!",
+    "Aww, qué lindo cornu aspersum.": "Aww, what a cute little Cornu aspersum.",
+    "Nombre en latín: ¡puntos extra!": "Latin name: bonus points!",
+    "No puedo creer que estemos atrapados con la abraza-árboles.": "I can't believe we're stuck with the tree hugger.",
+    "Si escucho un nombre en latin más, juro que la mataré.": "If I hear one more Latin name, I swear I'll kill her.",
+    "Relájate, pastelito. Mientras ella hace todo el trabajo, nosotros nos divertimos.": "Relax, sugar buns. While she does all the work, we have all the fun.",
+    "¡Sí! ¡Y nos emborrachamos!": "Yeah! And we get wasted!",
+    "Ya voy adelantado a ustedes.": "Way ahead of you guys.",
+    "¡Vamos, equipo! ¡No debemos perder el tiempo cuando hay tanta naturaleza por ver!": "Come on, team! No time to waste when there's so much nature to see!",
+    "Estaba pensando que podríamos llamar a nuestro proyecto de clase: \"¡Hongos en el bosque!\"": "I was thinking we could call our class project “Fungi in the Forest!”",
+    "¿Entienden? Porque somos un grupo de chicos en el bosque...": "Get it? Because we're a bunch of kids in the forest...",
+    "...y también somos hongos que-": "...and we're also fungi that-",
+    "¡Silencio! Escucho a una Lavandera Amarilla. ¡Y suena angustiada!": "Shush! I hear a yellow wagtail. And she sounds distressed!",
+    "Ya, ya. Mi pequeña motacilla flava.": "There, there. My little Motacilla flava.",
+    "¡Oh! ¡Míra como vuela!": "Oh! Look at her fly!",
+    "¡Guau!": "Wow!",
+    "¡Fuera del camino, idiota! Acamparemos aquí.": "Out of the way, idiot! We're camping here.",
+    "¡Al fin! Es hora de empezar esa barbacoa.": "Finally! Time to get that barbecue going.",
+    "Oh. Oh, no.": "Oh. Oh, no.",
+    "¡Qué asco!": "Gross!",
+    "Oh. Tranquilos, chicos. Se supone que debemos estudiar la naturaleza, no destruirla.": "Oh. Easy, guys. We're supposed to be studying nature, not destroying it.",
+    "¡Pausa para el baño!": "Bathroom break!",
+    "¡Oye, fanática de los hongos! Haz algo útil y arma la carpa.": "Hey, fungus freak! Make yourself useful and put up the tent.",
+    "Oh, un poco de bromas amistosas de campamento. Muy divertido.": "Oh, a bit of friendly campsite teasing. Very funny.",
+    "No sobreviviría ni cinco minutos sola en el bosque.": "She wouldn't last five minutes alone in the woods.",
+    "Sí. Vaya que es tonta, ¿no?": "Yeah. Boy, she's dumb, isn't she?",
+    "¡Oye, Phil! ¿Cómo van esas salchichas?": "Hey, Phil! How are those sausages coming?",
+    "¡Casi listas! Solo necesito un poco más de sal...": "Almost ready! Just need a bit more salt...",
+    "¡Increíble! ¡Es una nueva especie!": "Incredible! It's a new species!",
+    "¿Qué demonios son esas cosas?": "What the hell are those things?",
+    "Es como si un gnomo se follara a un hongo.": "It's like a gnome shagged a mushroom.",
+    "Son absolutamente adorables.": "They're absolutely adorable.",
+    "Sí, absolutamente \"adorable\"...": "Yeah, absolutely “adorable”...",
+    "...y apuesto que haríamos una  fortuna si los atrapamos.": "...and I bet we'd make a fortune if we caught them.",
+    "¡Seríamos famosos!": "We'd be famous!",
+    "¡Apareceríamos en MTV!": "We'd be on MTV!",
+    "Me pregunto a qué sabrán.": "I wonder what they taste like.",
+    "Realmente no deberíamos alterar su hábitat.": "We really shouldn't disturb their habitat.",
+    "Sí. Claro, seguro.": "Yeah. Sure, of course.",
+    "¡Saludos!": "Greetings!",
+    "¡Bienvenidos, amigos!": "Welcome, friends!",
+    "Bajaré enseguida.": "I'll be right down.",
+    "¿Les interesa un té de menta?": "Could I interest you in some mint tea?",
+    "¿Ustedes qué son?": "What are you guys?",
+    "¡Somos Sprites! Traemos balance al bosque.": "We're sprites! We bring balance to the forest.",
+    "Cuidamos de los animales, plantas, pájaros...": "We take care of the animals, plants, birds...",
+    "¿Chicos? Chicos, yo...": "Guys? Guys, I...",
+    "Hey, señor hongo, ¿te parece bien que acampemos aquí esta noche?": "Hey, Mr. Mushroom, you cool with us camping here tonight?",
+    "¡Absolutamente! Los amigos del bosque son amigos de los Sprites.": "Absolutely! Friends of the forest are friends of the sprites.",
+    "Tal vez fue solo salsa de tomate... o algo... como...": "Maybe it was just ketchup... or something... like...",
+    "¿Pintura roja? Sí, tal vez solo estaban  pintando sus sombreritos o... algo...": "Red paint? Yeah, maybe they were just painting their little caps or... something...",
+    "¿Chicos?": "Guys?",
+    "Chicos...": "Guys...",
+    "Esto no es gracioso.": "This isn't funny.",
+    "¡¿Chicos?!": "Guys?!",
+    "¡Solo íbamos a atrapar uno! ¡Pero son psicópatas!": "We were only gonna catch one! But they're psychos!",
+    "¡Tienes que sacarme esto! ¡Apúrate! ¡Nos van a matar!": "You've gotta get this off me! Hurry! They're gonna kill us!",
+    "¡Apúrate!": "Hurry!",
+    "Pie derecho, pie izquierdo, hoja y piedra.": "Right foot, left foot, leaf and stone.",
+    "Escogieron el lugar equivocado para acampar, perras.": "You picked the wrong camping spot, bitches.",
+    "¡A ellos!": "Get them!",
+    "¡¡¡Corran!!!": "Run!!!",
+    "¡Aaaah! ¡Mis ojos!": "Aaaah! My eyes!",
+    "¿Cariño? ¡Ayúdame!": "Honey? Help me!",
+    "¡Pastelito!": "Sweet cakes!",
+    "Mi querida muffin...": "My darling muffin...",
+    "¿Eh?": "Huh?",
+    "¡No no no! ¡No sé nadar!": "No, no, no! I can't swim!",
+    "¡Sí!": "Yes!",
+    "¡No!": "No!",
+    "¡No quiero hacerles daño! ¡Manténganse lejos!": "I don't want to hurt you! Stay back!",
+    "De acuerdo entonces. ¡Coman sal, pequeños demonios verdes!": "All right, then. Eat salt, you little green devils!",
+    "No-o-o.": "Nuh-uh-uh.",
+    "Esos punks trataban al mundo como su propio basurero personal.": "Those punks treated the world like their own personal garbage dump.",
+    "¡Y los dejaste libres!": "And you set them free!",
+    "¡Ahora te les unirás!": "Now you'll join them!",
+    "Te perdonaré esta, hermano pájaro.": "I'll let this one slide, brother bird.",
+    "Muy bien, Sprites. ¡A quemar los cuerpos y tomar té de menta!": "All right, sprites. Let's burn the bodies and have some mint tea!"
+  },
+  "words": {
+    "¡hola": {
+      "main": "hello",
+      "interjection": ["hello", "hi", "hey"]
+    },
+    "¿estás": {
+      "main": "are you",
+      "verb": ["are", "be", "feel"]
+    },
+    "lista": {
+      "main": "ready",
+      "adjective": ["ready", "clever", "smart"],
+      "noun": ["list", "roll"]
+    },
+    "para": {
+      "main": "to",
+      "preposition": ["for", "to", "in order to", "toward"]
+    },
+    "salir": {
+      "main": "leave",
+      "verb": ["leave", "go out", "come out", "date"]
+    },
+    "casi": {
+      "main": "almost",
+      "adverb": ["almost", "nearly", "hardly"]
+    },
+    "solo": {
+      "main": "just",
+      "adverb": ["only", "just", "merely"],
+      "adjective": ["alone", "lonely", "single"]
+    },
+    "tengo": {
+      "main": "I have to",
+      "verb": ["I have", "I've got", "I hold"],
+      "phrase": ["I have to", "I need to", "I must"]
+    },
+    "que": {
+      "main": "that",
+      "conjunction": ["that", "than", "so that"],
+      "pronoun": ["which", "who", "what"]
+    },
+    "buscar": {
+      "main": "look for",
+      "verb": ["look for", "search for", "fetch", "pick up"]
+    },
+    "mis": {
+      "main": "my",
+      "pronoun": ["my"]
+    },
+    "llaves": {
+      "main": "keys",
+      "noun": ["keys", "faucets", "wrenches", "switches"]
+    },
+    "espera": {
+      "main": "wait",
+      "interjection": ["wait", "hold on"],
+      "verb": ["wait", "expect", "hope"],
+      "noun": ["wait", "waiting"]
+    },
+    "el": {
+      "main": "the",
+      "article": ["the"]
+    },
+    "tren": {
+      "main": "train",
+      "noun": ["train"]
+    },
+    "sale": {
+      "main": "leaves",
+      "verb": ["leaves", "goes out", "comes out", "turns out"]
+    },
+    "a": {
+      "main": "at",
+      "preposition": ["to", "at", "in", "by"]
+    },
+    "las": {
+      "main": "the",
+      "article": ["the"],
+      "pronoun": ["them"]
+    },
+    "745": {
+      "main": "7:45"
+    },
+    "¿verdad": {
+      "main": "right?",
+      "noun": ["truth"],
+      "phrase": ["right?", "isn't it?", "really?"]
+    },
+    "sí": {
+      "main": "yes",
+      "adverb": ["yes", "indeed", "certainly"],
+      "pronoun": ["himself", "herself", "oneself"]
+    },
+    "entonces": {
+      "main": "then",
+      "adverb": ["then", "so", "at that time"]
+    },
+    "deberíamos": {
+      "main": "we should",
+      "verb": ["we should", "we ought to", "we'd have to"]
+    },
+    "irnos": {
+      "main": "leave",
+      "verb": ["leave", "go", "get going"]
+    },
+    "ya": {
+      "main": "already",
+      "adverb": ["already", "now", "right away", "anymore"],
+      "interjection": ["there, there", "okay", "right"]
+    },
+    "¿apagaste": {
+      "main": "did you turn off",
+      "verb": ["turned off", "switched off", "put out"]
+    },
+    "luces": {
+      "main": "lights",
+      "noun": ["lights", "lamps"]
+    },
+    "de": {
+      "main": "of",
+      "preposition": ["of", "from", "about", "in"]
+    },
+    "la": {
+      "main": "the",
+      "article": ["the"],
+      "pronoun": ["her", "it"]
+    },
+    "cocina": {
+      "main": "kitchen",
+      "noun": ["kitchen", "cooking", "cuisine", "stove"],
+      "verb": ["cooks"]
+    },
+    "y": {
+      "main": "and",
+      "conjunction": ["and"]
+    },
+    "le": {
+      "main": "him",
+      "pronoun": ["him", "her", "to him", "to her"]
+    },
+    "pedí": {
+      "main": "I asked",
+      "verb": ["asked", "ordered", "requested", "begged"]
+    },
+    "sam": {
+      "main": "Sam"
+    },
+    "cuidara": {
+      "main": "look after",
+      "verb": ["look after", "take care of", "watch"]
+    },
+    "al": {
+      "main": "to the",
+      "preposition": ["to the", "at the", "on the"]
+    },
+    "gato": {
+      "main": "cat",
+      "noun": ["cat", "tomcat", "jack"]
+    },
+    "primero": {
+      "main": "first",
+      "adverb": ["first", "firstly", "at first"],
+      "adjective": ["first", "top"]
+    },
+    "vamos": {
+      "main": "let's",
+      "verb": ["we go", "we're going", "let's go"],
+      "interjection": ["come on", "let's go"]
+    },
+    "cafetería": {
+      "main": "café",
+      "noun": ["café", "coffee shop", "cafeteria"]
+    },
+    "volvemos": {
+      "main": "we're coming back",
+      "verb": ["we come back", "we return", "we go back"]
+    },
+    "domingo": {
+      "main": "Sunday",
+      "noun": ["Sunday"]
+    },
+    "por": {
+      "main": "in",
+      "preposition": ["for", "by", "through", "because of"]
+    },
+    "noche": {
+      "main": "night",
+      "noun": ["night", "evening", "nighttime"]
+    },
+    "te": {
+      "main": "you",
+      "pronoun": ["you", "to you", "yourself"]
+    },
+    "lo": {
+      "main": "it",
+      "pronoun": ["it", "him"],
+      "article": ["the"]
+    },
+    "prometo": {
+      "main": "I promise",
+      "verb": ["promise", "pledge", "swear"]
+    },
+    "¡mira": {
+      "main": "look",
+      "interjection": ["look", "hey"],
+      "verb": ["look", "watch", "see"]
+    },
+    "está": {
+      "main": "is",
+      "verb": ["is", "stays", "feels"]
+    },
+    "aquí": {
+      "main": "here",
+      "adverb": ["here", "now"]
+    },
+    "señor": {
+      "main": "Mr.",
+      "noun": ["Mr.", "sir", "gentleman", "lord"]
+    },
+    "caracol": {
+      "main": "snail",
+      "noun": ["snail", "shell", "curl"]
+    },
+    "aww": {
+      "main": "aww",
+      "interjection": ["aww", "aw"]
+    },
+    "qué": {
+      "main": "what",
+      "pronoun": ["what", "which"],
+      "adverb": ["how", "what a"]
+    },
+    "lindo": {
+      "main": "cute",
+      "adjective": ["cute", "pretty", "lovely", "nice"]
+    },
+    "cornu": {
+      "main": "horn (Latin)",
+      "noun": ["horn", "Cornu (garden snail genus)"]
+    },
+    "aspersum": {
+      "main": "speckled (Latin)",
+      "adjective": ["sprinkled", "speckled", "spotted"],
+      "phrase": ["Cornu aspersum: the garden snail"]
+    },
+    "nombre": {
+      "main": "name",
+      "noun": ["name", "first name", "noun"]
+    },
+    "en": {
+      "main": "in",
+      "preposition": ["in", "on", "at", "into"]
+    },
+    "latín": {
+      "main": "Latin",
+      "noun": ["Latin"]
+    },
+    "¡puntos": {
+      "main": "points",
+      "noun": ["points", "dots", "stitches"]
+    },
+    "extra": {
+      "main": "bonus",
+      "adjective": ["extra", "bonus", "additional", "premium"]
+    },
+    "no": {
+      "main": "not",
+      "adverb": ["not", "no", "don't"],
+      "interjection": ["no"]
+    },
+    "puedo": {
+      "main": "I can",
+      "verb": ["I can", "I'm able to", "I may"]
+    },
+    "creer": {
+      "main": "believe",
+      "verb": ["believe", "think", "trust"]
+    },
+    "estemos": {
+      "main": "we are",
+      "verb": ["we are", "we be", "we stay"]
+    },
+    "atrapados": {
+      "main": "stuck",
+      "adjective": ["stuck", "trapped", "caught"],
+      "verb": ["trapped", "caught"]
+    },
+    "con": {
+      "main": "with",
+      "preposition": ["with", "by", "despite"]
+    },
+    "abrazaárboles": {
+      "main": "tree hugger",
+      "noun": ["tree hugger", "nature lover", "eco-warrior"]
+    },
+    "si": {
+      "main": "if",
+      "conjunction": ["if", "whether"]
+    },
+    "escucho": {
+      "main": "I hear",
+      "verb": ["I hear", "I listen to", "I heed"]
+    },
+    "un": {
+      "main": "a",
+      "article": ["a", "an"],
+      "numeral": ["one"]
+    },
+    "latin": {
+      "main": "Latin",
+      "noun": ["Latin"]
+    },
+    "más": {
+      "main": "more",
+      "adverb": ["more", "most", "else", "plus"]
+    },
+    "juro": {
+      "main": "I swear",
+      "verb": ["swear", "vow", "pledge"]
+    },
+    "mataré": {
+      "main": "I'll kill",
+      "verb": ["kill", "murder", "slay"]
+    },
+    "relájate": {
+      "main": "relax",
+      "verb": ["relax", "chill out", "calm down", "take it easy"]
+    },
+    "pastelito": {
+      "main": "cupcake",
+      "noun": ["cupcake", "little cake", "pastry", "sweetie"]
+    },
+    "mientras": {
+      "main": "while",
+      "conjunction": ["while", "as long as", "whereas"],
+      "adverb": ["meanwhile"]
+    },
+    "ella": {
+      "main": "she",
+      "pronoun": ["she", "her", "it"]
+    },
+    "hace": {
+      "main": "does",
+      "verb": ["does", "makes", "is (weather)"],
+      "adverb": ["ago"]
+    },
+    "todo": {
+      "main": "all",
+      "adjective": ["all", "whole", "every"],
+      "pronoun": ["everything", "all"]
+    },
+    "trabajo": {
+      "main": "work",
+      "noun": ["work", "job", "labor", "task"],
+      "verb": ["I work"]
+    },
+    "nosotros": {
+      "main": "we",
+      "pronoun": ["we", "us"]
+    },
+    "nos": {
+      "main": "us",
+      "pronoun": ["us", "ourselves", "each other"]
+    },
+    "divertimos": {
+      "main": "we have fun",
+      "verb": ["have fun", "enjoy ourselves", "amuse"]
+    },
+    "¡sí": {
+      "main": "yes",
+      "adverb": ["yes", "indeed"],
+      "interjection": ["yeah", "yay", "sure"]
+    },
+    "¡y": {
+      "main": "and",
+      "conjunction": ["and"]
+    },
+    "emborrachamos": {
+      "main": "get drunk",
+      "verb": ["get drunk", "get wasted", "get tipsy"]
+    },
+    "voy": {
+      "main": "I'm",
+      "verb": ["I go", "I'm going", "I'm coming", "I am"]
+    },
+    "adelantado": {
+      "main": "ahead",
+      "adjective": ["ahead", "advanced", "early", "fast"]
+    },
+    "ustedes": {
+      "main": "you",
+      "pronoun": ["you", "you all", "you guys"]
+    },
+    "¡vamos": {
+      "main": "come on",
+      "interjection": ["come on", "let's go"],
+      "verb": ["we go", "let's go"]
+    },
+    "equipo": {
+      "main": "team",
+      "noun": ["team", "equipment", "gear", "squad"]
+    },
+    "¡no": {
+      "main": "no",
+      "adverb": ["not", "no", "don't"]
+    },
+    "debemos": {
+      "main": "we must",
+      "verb": ["we must", "we should", "we owe"]
+    },
+    "perder": {
+      "main": "waste",
+      "verb": ["lose", "waste", "miss"]
+    },
+    "tiempo": {
+      "main": "time",
+      "noun": ["time", "weather", "period", "half"]
+    },
+    "cuando": {
+      "main": "when",
+      "conjunction": ["when", "whenever", "if"],
+      "adverb": ["when"]
+    },
+    "hay": {
+      "main": "there is",
+      "verb": ["there is", "there are"]
+    },
+    "tanta": {
+      "main": "so much",
+      "adjective": ["so much", "such", "as much"]
+    },
+    "naturaleza": {
+      "main": "nature",
+      "noun": ["nature", "character", "kind"]
+    },
+    "ver": {
+      "main": "see",
+      "verb": ["see", "watch", "look at"]
+    },
+    "estaba": {
+      "main": "I was",
+      "verb": ["was", "was being", "used to be"]
+    },
+    "pensando": {
+      "main": "thinking",
+      "verb": ["thinking", "planning", "considering"]
+    },
+    "podríamos": {
+      "main": "we could",
+      "verb": ["we could", "we might", "we'd be able to"]
+    },
+    "llamar": {
+      "main": "call",
+      "verb": ["call", "name", "phone", "knock"]
+    },
+    "nuestro": {
+      "main": "our",
+      "pronoun": ["our", "ours"]
+    },
+    "proyecto": {
+      "main": "project",
+      "noun": ["project", "plan", "design"]
+    },
+    "clase": {
+      "main": "class",
+      "noun": ["class", "lesson", "kind", "classroom"]
+    },
+    "¡hongos": {
+      "main": "fungi",
+      "noun": ["mushrooms", "fungi", "fungus"]
+    },
+    "bosque": {
+      "main": "forest",
+      "noun": ["forest", "woods", "woodland"]
+    },
+    "¿entienden": {
+      "main": "get it?",
+      "verb": ["understand", "get", "see"]
+    },
+    "porque": {
+      "main": "because",
+      "conjunction": ["because", "since", "as"]
+    },
+    "somos": {
+      "main": "we are",
+      "verb": ["we are"]
+    },
+    "grupo": {
+      "main": "group",
+      "noun": ["group", "bunch", "band"]
+    },
+    "chicos": {
+      "main": "guys",
+      "noun": ["guys", "kids", "boys", "children"]
+    },
+    "también": {
+      "main": "also",
+      "adverb": ["also", "too", "as well"]
+    },
+    "hongos": {
+      "main": "fungi",
+      "noun": ["mushrooms", "fungi", "fungus"]
+    },
+    "¡silencio": {
+      "main": "quiet",
+      "interjection": ["quiet", "shush", "silence"],
+      "noun": ["silence", "quiet"]
+    },
+    "una": {
+      "main": "a",
+      "article": ["a", "an"],
+      "numeral": ["one"]
+    },
+    "lavandera": {
+      "main": "wagtail",
+      "noun": ["wagtail", "laundress", "washerwoman"]
+    },
+    "amarilla": {
+      "main": "yellow",
+      "adjective": ["yellow"]
+    },
+    "suena": {
+      "main": "sounds",
+      "verb": ["sounds", "rings", "seems"]
+    },
+    "angustiada": {
+      "main": "distressed",
+      "adjective": ["distressed", "anguished", "anxious", "upset"]
+    },
+    "mi": {
+      "main": "my",
+      "pronoun": ["my"]
+    },
+    "pequeña": {
+      "main": "little",
+      "adjective": ["little", "small", "young"],
+      "noun": ["little girl"]
+    },
+    "motacilla": {
+      "main": "wagtail (Latin)",
+      "noun": ["wagtail", "Motacilla (wagtail genus)"]
+    },
+    "flava": {
+      "main": "yellow (Latin)",
+      "adjective": ["yellow", "golden", "blond"],
+      "phrase": ["Motacilla flava: the yellow wagtail"]
+    },
+    "¡oh": {
+      "main": "oh",
+      "interjection": ["oh", "ah", "wow"]
+    },
+    "¡míra": {
+      "main": "look",
+      "interjection": ["look", "hey"],
+      "verb": ["look", "watch", "see"]
+    },
+    "como": {
+      "main": "like",
+      "adverb": ["like", "as", "how"],
+      "conjunction": ["as", "since", "if"]
+    },
+    "vuela": {
+      "main": "flies",
+      "verb": ["flies", "flies away", "rushes"]
+    },
+    "¡guau": {
+      "main": "wow",
+      "interjection": ["wow", "whoa", "woof"]
+    },
+    "¡fuera": {
+      "main": "out",
+      "interjection": ["get out", "go away"],
+      "adverb": ["out", "outside", "away"]
+    },
+    "del": {
+      "main": "of the",
+      "preposition": ["of the", "from the"]
+    },
+    "camino": {
+      "main": "way",
+      "noun": ["way", "path", "road", "trail"],
+      "verb": ["I walk"]
+    },
+    "idiota": {
+      "main": "idiot",
+      "noun": ["idiot", "fool", "moron", "jerk"],
+      "adjective": ["idiotic", "stupid"]
+    },
+    "acamparemos": {
+      "main": "we'll camp",
+      "verb": ["we'll camp", "we'll pitch camp"]
+    },
+    "¡al": {
+      "main": "at",
+      "preposition": ["to the", "at the", "on the"],
+      "phrase": ["at last", "finally"]
+    },
+    "fin": {
+      "main": "end",
+      "noun": ["end", "finish", "aim", "purpose"],
+      "phrase": ["at last", "finally"]
+    },
+    "es": {
+      "main": "is",
+      "verb": ["is", "it's", "it is"]
+    },
+    "hora": {
+      "main": "time",
+      "noun": ["hour", "time", "o'clock", "appointment"]
+    },
+    "empezar": {
+      "main": "start",
+      "verb": ["start", "begin", "kick off"]
+    },
+    "esa": {
+      "main": "that",
+      "pronoun": ["that", "that one"]
+    },
+    "barbacoa": {
+      "main": "barbecue",
+      "noun": ["barbecue", "grill", "cookout"]
+    },
+    "oh": {
+      "main": "oh",
+      "interjection": ["oh", "ah"]
+    },
+    "¡qué": {
+      "main": "how",
+      "pronoun": ["what", "which"],
+      "adverb": ["how", "what a", "so"]
+    },
+    "asco": {
+      "main": "disgust",
+      "noun": ["disgust", "revulsion", "nausea"],
+      "phrase": ["gross!", "yuck!"]
+    },
+    "tranquilos": {
+      "main": "easy",
+      "adjective": ["calm", "easy", "quiet", "relaxed"],
+      "interjection": ["take it easy", "relax"]
+    },
+    "se": {
+      "main": "oneself",
+      "pronoun": ["oneself", "himself", "herself", "themselves"]
+    },
+    "supone": {
+      "main": "is supposed",
+      "verb": ["supposes", "assumes", "means", "involves"],
+      "phrase": ["is supposed to", "it is assumed"]
+    },
+    "estudiar": {
+      "main": "study",
+      "verb": ["study", "learn", "examine"]
+    },
+    "destruirla": {
+      "main": "destroy it",
+      "verb": ["destroy it", "wreck it", "ruin it"]
+    },
+    "¡pausa": {
+      "main": "break",
+      "noun": ["break", "pause", "rest"]
+    },
+    "baño": {
+      "main": "bathroom",
+      "noun": ["bathroom", "bath", "toilet", "swim"]
+    },
+    "¡oye": {
+      "main": "hey",
+      "interjection": ["hey", "listen"],
+      "verb": ["hears", "listens"]
+    },
+    "fanática": {
+      "main": "freak",
+      "noun": ["fan", "fanatic", "freak", "enthusiast"],
+      "adjective": ["fanatical"]
+    },
+    "los": {
+      "main": "the",
+      "article": ["the"],
+      "pronoun": ["them"]
+    },
+    "haz": {
+      "main": "do",
+      "verb": ["do", "make"],
+      "noun": ["beam", "bundle"]
+    },
+    "algo": {
+      "main": "something",
+      "pronoun": ["something", "anything"],
+      "adverb": ["somewhat", "a bit"]
+    },
+    "útil": {
+      "main": "useful",
+      "adjective": ["useful", "handy", "helpful"]
+    },
+    "arma": {
+      "main": "put up",
+      "verb": ["put up", "assemble", "set up", "build"],
+      "noun": ["weapon", "arm"]
+    },
+    "carpa": {
+      "main": "tent",
+      "noun": ["tent", "marquee", "carp"]
+    },
+    "poco": {
+      "main": "a bit",
+      "adverb": ["little", "not much"],
+      "noun": ["a bit", "a little"],
+      "adjective": ["little", "few"]
+    },
+    "bromas": {
+      "main": "teasing",
+      "noun": ["jokes", "pranks", "teasing", "banter"]
+    },
+    "amistosas": {
+      "main": "friendly",
+      "adjective": ["friendly", "amicable"]
+    },
+    "campamento": {
+      "main": "campsite",
+      "noun": ["camp", "campsite", "camping", "encampment"]
+    },
+    "muy": {
+      "main": "very",
+      "adverb": ["very", "really", "too"]
+    },
+    "divertido": {
+      "main": "funny",
+      "adjective": ["fun", "funny", "amusing", "entertaining"]
+    },
+    "sobreviviría": {
+      "main": "would survive",
+      "verb": ["would survive", "would outlive", "would make it"]
+    },
+    "ni": {
+      "main": "not even",
+      "conjunction": ["nor", "neither", "or"],
+      "adverb": ["not even"]
+    },
+    "cinco": {
+      "main": "five",
+      "numeral": ["five"]
+    },
+    "minutos": {
+      "main": "minutes",
+      "noun": ["minutes"]
+    },
+    "sola": {
+      "main": "alone",
+      "adjective": ["alone", "lonely", "on her own", "single"]
+    },
+    "vaya": {
+      "main": "boy",
+      "interjection": ["wow", "boy", "well", "gosh"],
+      "verb": ["go", "may go"]
+    },
+    "tonta": {
+      "main": "dumb",
+      "adjective": ["silly", "dumb", "stupid", "foolish"],
+      "noun": ["fool", "dummy", "idiot"]
+    },
+    "¿no": {
+      "main": "right?",
+      "phrase": ["right?", "isn't she?", "don't you think?"],
+      "adverb": ["not", "no"]
+    },
+    "phil": {
+      "main": "Phil"
+    },
+    "¿cómo": {
+      "main": "how",
+      "adverb": ["how", "what"],
+      "interjection": ["what?", "pardon?"]
+    },
+    "van": {
+      "main": "are going",
+      "verb": ["go", "are going", "are doing", "are coming along"]
+    },
+    "esas": {
+      "main": "those",
+      "pronoun": ["those", "those ones"]
+    },
+    "salchichas": {
+      "main": "sausages",
+      "noun": ["sausages", "hot dogs", "wieners"]
+    },
+    "¡casi": {
+      "main": "almost",
+      "adverb": ["almost", "nearly"]
+    },
+    "listas": {
+      "main": "ready",
+      "adjective": ["ready", "done", "clever"],
+      "noun": ["lists", "stripes"]
+    },
+    "necesito": {
+      "main": "I need",
+      "verb": ["I need", "I require", "I want"]
+    },
+    "sal": {
+      "main": "salt",
+      "noun": ["salt", "wit"],
+      "verb": ["get out", "go out"]
+    },
+    "¡increíble": {
+      "main": "incredible",
+      "adjective": ["incredible", "unbelievable", "amazing"]
+    },
+    "¡es": {
+      "main": "it's",
+      "verb": ["is", "it's", "it is"]
+    },
+    "nueva": {
+      "main": "new",
+      "adjective": ["new", "fresh", "another"]
+    },
+    "especie": {
+      "main": "species",
+      "noun": ["species", "kind", "sort"]
+    },
+    "¿qué": {
+      "main": "what",
+      "pronoun": ["what", "which"],
+      "interjection": ["what?"]
+    },
+    "demonios": {
+      "main": "devils",
+      "noun": ["demons", "devils", "fiends"],
+      "phrase": ["the hell", "the heck", "on earth"]
+    },
+    "son": {
+      "main": "are",
+      "verb": ["are", "they are"],
+      "noun": ["sound", "rhythm"]
+    },
+    "cosas": {
+      "main": "things",
+      "noun": ["things", "stuff", "matters"]
+    },
+    "gnomo": {
+      "main": "gnome",
+      "noun": ["gnome", "goblin", "dwarf"]
+    },
+    "follara": {
+      "main": "shagged",
+      "verb": ["shagged", "screwed", "had sex with"]
+    },
+    "hongo": {
+      "main": "mushroom",
+      "noun": ["mushroom", "fungus", "mold"]
+    },
+    "absolutamente": {
+      "main": "absolutely",
+      "adverb": ["absolutely", "completely", "totally", "utterly"]
+    },
+    "adorables": {
+      "main": "adorable",
+      "adjective": ["adorable", "cute", "lovely"]
+    },
+    "adorable": {
+      "main": "adorable",
+      "adjective": ["adorable", "cute", "lovely", "charming"]
+    },
+    "apuesto": {
+      "main": "I bet",
+      "verb": ["I bet", "I wager", "I gamble"],
+      "adjective": ["handsome", "dashing"]
+    },
+    "haríamos": {
+      "main": "we would make",
+      "verb": ["we would make", "we would do"]
+    },
+    "fortuna": {
+      "main": "fortune",
+      "noun": ["fortune", "luck", "wealth"]
+    },
+    "atrapamos": {
+      "main": "we catch",
+      "verb": ["we catch", "we trap", "we capture", "we caught"]
+    },
+    "¡seríamos": {
+      "main": "we would be",
+      "verb": ["we would be", "we'd become"]
+    },
+    "famosos": {
+      "main": "famous",
+      "adjective": ["famous", "well-known", "celebrated"]
+    },
+    "¡apareceríamos": {
+      "main": "we would appear",
+      "verb": ["we would appear", "we'd show up", "we'd turn up"]
+    },
+    "mtv": {
+      "main": "MTV"
+    },
+    "me": {
+      "main": "me",
+      "pronoun": ["me", "myself", "to me"]
+    },
+    "pregunto": {
+      "main": "I wonder",
+      "verb": ["I ask", "I wonder", "I inquire"]
+    },
+    "sabrán": {
+      "main": "will taste",
+      "verb": ["will taste", "will know", "will find out"]
+    },
+    "realmente": {
+      "main": "really",
+      "adverb": ["really", "truly", "actually"]
+    },
+    "alterar": {
+      "main": "disturb",
+      "verb": ["disturb", "alter", "change", "upset"]
+    },
+    "su": {
+      "main": "their",
+      "pronoun": ["his", "her", "their", "your"]
+    },
+    "hábitat": {
+      "main": "habitat",
+      "noun": ["habitat", "environment"]
+    },
+    "claro": {
+      "main": "of course",
+      "adverb": ["of course", "sure", "clearly"],
+      "adjective": ["clear", "light", "bright"]
+    },
+    "seguro": {
+      "main": "sure",
+      "adverb": ["sure", "certainly", "for sure"],
+      "adjective": ["safe", "sure", "secure"],
+      "noun": ["insurance"]
+    },
+    "¡saludos": {
+      "main": "greetings",
+      "noun": ["greetings", "regards", "hellos"]
+    },
+    "¡bienvenidos": {
+      "main": "welcome",
+      "interjection": ["welcome"],
+      "adjective": ["welcome"]
+    },
+    "amigos": {
+      "main": "friends",
+      "noun": ["friends", "buddies", "pals"]
+    },
+    "bajaré": {
+      "main": "I'll come down",
+      "verb": ["I'll come down", "I'll go down", "I'll lower"]
+    },
+    "enseguida": {
+      "main": "right away",
+      "adverb": ["right away", "at once", "immediately", "in a moment"]
+    },
+    "¿les": {
+      "main": "you",
+      "pronoun": ["you", "to you", "them", "to them"]
+    },
+    "interesa": {
+      "main": "interests",
+      "verb": ["interests", "concerns", "matters"]
+    },
+    "té": {
+      "main": "tea",
+      "noun": ["tea"]
+    },
+    "menta": {
+      "main": "mint",
+      "noun": ["mint", "peppermint", "spearmint"]
+    },
+    "¿ustedes": {
+      "main": "you",
+      "pronoun": ["you", "you guys", "you all"]
+    },
+    "¡somos": {
+      "main": "we are",
+      "verb": ["we are"]
+    },
+    "sprites": {
+      "main": "sprites",
+      "noun": ["sprites", "fairies", "spirits"]
+    },
+    "traemos": {
+      "main": "we bring",
+      "verb": ["we bring", "we carry", "we fetch"]
+    },
+    "balance": {
+      "main": "balance",
+      "noun": ["balance", "equilibrium", "outcome"]
+    },
+    "cuidamos": {
+      "main": "we take care of",
+      "verb": ["we take care of", "we look after", "we protect"]
+    },
+    "animales": {
+      "main": "animals",
+      "noun": ["animals", "creatures", "beasts"]
+    },
+    "plantas": {
+      "main": "plants",
+      "noun": ["plants", "floors", "soles"]
+    },
+    "pájaros": {
+      "main": "birds",
+      "noun": ["birds"]
+    },
+    "¿chicos": {
+      "main": "guys",
+      "noun": ["guys", "kids", "boys"]
+    },
+    "yo": {
+      "main": "I",
+      "pronoun": ["I", "me"]
+    },
+    "hey": {
+      "main": "hey",
+      "interjection": ["hey", "hi"]
+    },
+    "¿te": {
+      "main": "you",
+      "pronoun": ["you", "to you", "yourself"]
+    },
+    "parece": {
+      "main": "seems",
+      "verb": ["seems", "looks like", "thinks"],
+      "phrase": ["is it OK with you?", "do you mind?"]
+    },
+    "bien": {
+      "main": "well",
+      "adverb": ["well", "fine", "okay", "right"],
+      "adjective": ["good", "fine"]
+    },
+    "acampemos": {
+      "main": "we camp",
+      "verb": ["we camp", "let's camp"]
+    },
+    "esta": {
+      "main": "this",
+      "pronoun": ["this", "this one"]
+    },
+    "¡absolutamente": {
+      "main": "absolutely",
+      "adverb": ["absolutely", "totally", "completely"]
+    },
+    "tal": {
+      "main": "such",
+      "adjective": ["such", "so"],
+      "phrase": ["maybe", "perhaps"]
+    },
+    "vez": {
+      "main": "time",
+      "noun": ["time", "turn", "occasion"],
+      "phrase": ["maybe", "perhaps"]
+    },
+    "fue": {
+      "main": "was",
+      "verb": ["was", "went", "it was"]
+    },
+    "salsa": {
+      "main": "sauce",
+      "noun": ["sauce", "salsa", "dressing", "gravy"]
+    },
+    "tomate": {
+      "main": "tomato",
+      "noun": ["tomato"],
+      "phrase": ["ketchup", "tomato sauce"]
+    },
+    "o": {
+      "main": "or",
+      "conjunction": ["or", "either"]
+    },
+    "¿pintura": {
+      "main": "paint",
+      "noun": ["paint", "painting", "picture"]
+    },
+    "roja": {
+      "main": "red",
+      "adjective": ["red"]
+    },
+    "estaban": {
+      "main": "they were",
+      "verb": ["they were", "were being"]
+    },
+    "pintando": {
+      "main": "painting",
+      "verb": ["painting", "coloring", "drawing"]
+    },
+    "sus": {
+      "main": "their",
+      "pronoun": ["their", "his", "her", "your"]
+    },
+    "sombreritos": {
+      "main": "little hats",
+      "noun": ["little hats", "caps", "mushroom caps"]
+    },
+    "esto": {
+      "main": "this",
+      "pronoun": ["this", "this thing"]
+    },
+    "gracioso": {
+      "main": "funny",
+      "adjective": ["funny", "amusing", "witty", "cute"]
+    },
+    "¡¿chicos": {
+      "main": "guys",
+      "noun": ["guys", "kids", "boys"]
+    },
+    "¡solo": {
+      "main": "only",
+      "adverb": ["just", "only", "merely"]
+    },
+    "íbamos": {
+      "main": "we were going",
+      "verb": ["we were going", "we went", "we used to go"]
+    },
+    "atrapar": {
+      "main": "catch",
+      "verb": ["catch", "trap", "capture"]
+    },
+    "uno": {
+      "main": "one",
+      "numeral": ["one"],
+      "pronoun": ["one", "someone"]
+    },
+    "¡pero": {
+      "main": "but",
+      "conjunction": ["but", "yet"]
+    },
+    "psicópatas": {
+      "main": "psychos",
+      "noun": ["psychopaths", "psychos", "maniacs"]
+    },
+    "¡tienes": {
+      "main": "you have to",
+      "verb": ["you have", "you've got", "you hold"],
+      "phrase": ["you have to", "you've got to", "you must"]
+    },
+    "sacarme": {
+      "main": "get off me",
+      "verb": ["get off me", "take off me", "get me out", "pull me out"]
+    },
+    "¡apúrate": {
+      "main": "hurry up",
+      "interjection": ["hurry up", "quick"],
+      "verb": ["hurry", "rush"]
+    },
+    "¡nos": {
+      "main": "us",
+      "pronoun": ["us", "ourselves"]
+    },
+    "matar": {
+      "main": "kill",
+      "verb": ["kill", "murder", "slaughter"]
+    },
+    "pie": {
+      "main": "foot",
+      "noun": ["foot", "base", "bottom"]
+    },
+    "derecho": {
+      "main": "right",
+      "adjective": ["right", "straight", "upright"],
+      "noun": ["right", "law"],
+      "adverb": ["straight"]
+    },
+    "izquierdo": {
+      "main": "left",
+      "adjective": ["left", "left-hand"]
+    },
+    "hoja": {
+      "main": "leaf",
+      "noun": ["leaf", "sheet", "blade", "page"]
+    },
+    "piedra": {
+      "main": "stone",
+      "noun": ["stone", "rock", "pebble"]
+    },
+    "escogieron": {
+      "main": "you picked",
+      "verb": ["picked", "chose", "selected"]
+    },
+    "lugar": {
+      "main": "spot",
+      "noun": ["place", "spot", "site", "room"]
+    },
+    "equivocado": {
+      "main": "wrong",
+      "adjective": ["wrong", "mistaken", "incorrect"]
+    },
+    "acampar": {
+      "main": "camp",
+      "verb": ["camp", "pitch camp", "go camping"]
+    },
+    "perras": {
+      "main": "bitches",
+      "noun": ["bitches", "female dogs"]
+    },
+    "¡a": {
+      "main": "to",
+      "preposition": ["to", "at", "on"],
+      "phrase": ["get (them)!", "let's"]
+    },
+    "ellos": {
+      "main": "them",
+      "pronoun": ["they", "them"]
+    },
+    "¡¡¡corran": {
+      "main": "run",
+      "verb": ["run", "race", "hurry"]
+    },
+    "¡aaaah": {
+      "main": "aaaah",
+      "interjection": ["aaah", "argh"]
+    },
+    "¡mis": {
+      "main": "my",
+      "pronoun": ["my"]
+    },
+    "ojos": {
+      "main": "eyes",
+      "noun": ["eyes"]
+    },
+    "¿cariño": {
+      "main": "honey",
+      "noun": ["honey", "darling", "sweetheart", "affection"]
+    },
+    "¡ayúdame": {
+      "main": "help me",
+      "verb": ["help me", "give me a hand"]
+    },
+    "¡pastelito": {
+      "main": "cupcake",
+      "noun": ["cupcake", "little cake", "pastry", "sweetie"]
+    },
+    "querida": {
+      "main": "darling",
+      "adjective": ["dear", "beloved", "darling"],
+      "noun": ["darling", "sweetheart"]
+    },
+    "muffin": {
+      "main": "muffin",
+      "noun": ["muffin", "cupcake", "sweetie"]
+    },
+    "¿eh": {
+      "main": "huh?",
+      "interjection": ["huh?", "eh?", "what?"]
+    },
+    "sé": {
+      "main": "I know how",
+      "verb": ["I know", "I know how to", "I can"]
+    },
+    "nadar": {
+      "main": "swim",
+      "verb": ["swim", "float"]
+    },
+    "quiero": {
+      "main": "I want",
+      "verb": ["I want", "I'd like", "I love"]
+    },
+    "hacerles": {
+      "main": "do to you",
+      "verb": ["do to you", "make you", "do to them"],
+      "phrase": ["hurt you", "harm you"]
+    },
+    "daño": {
+      "main": "harm",
+      "noun": ["harm", "damage", "injury", "hurt"]
+    },
+    "¡manténganse": {
+      "main": "stay",
+      "verb": ["keep", "stay", "remain"],
+      "phrase": ["stay back", "keep away"]
+    },
+    "lejos": {
+      "main": "away",
+      "adverb": ["far", "far away", "away"]
+    },
+    "acuerdo": {
+      "main": "agreement",
+      "noun": ["agreement", "deal", "accord"],
+      "phrase": ["all right", "okay", "agreed"]
+    },
+    "¡coman": {
+      "main": "eat",
+      "verb": ["eat", "have lunch", "devour"]
+    },
+    "pequeños": {
+      "main": "little",
+      "adjective": ["little", "small", "young"],
+      "noun": ["little ones", "kids"]
+    },
+    "verdes": {
+      "main": "green",
+      "adjective": ["green", "unripe", "inexperienced"]
+    },
+    "nooo": {
+      "main": "nuh-uh",
+      "interjection": ["no", "nope", "nuh-uh"]
+    },
+    "esos": {
+      "main": "those",
+      "pronoun": ["those", "those ones"]
+    },
+    "punks": {
+      "main": "punks",
+      "noun": ["punks", "hooligans", "thugs"]
+    },
+    "trataban": {
+      "main": "treated",
+      "verb": ["treated", "handled", "tried"]
+    },
+    "mundo": {
+      "main": "world",
+      "noun": ["world", "earth", "everyone"]
+    },
+    "propio": {
+      "main": "own",
+      "adjective": ["own", "proper", "typical", "very"]
+    },
+    "basurero": {
+      "main": "garbage dump",
+      "noun": ["garbage dump", "trash can", "landfill", "garbage collector"]
+    },
+    "personal": {
+      "main": "personal",
+      "adjective": ["personal", "private", "individual"],
+      "noun": ["staff", "personnel"]
+    },
+    "dejaste": {
+      "main": "you let",
+      "verb": ["you left", "you let", "you allowed", "you quit"]
+    },
+    "libres": {
+      "main": "free",
+      "adjective": ["free", "loose", "available", "vacant"]
+    },
+    "¡ahora": {
+      "main": "now",
+      "adverb": ["now", "at present", "right away"]
+    },
+    "les": {
+      "main": "them",
+      "pronoun": ["them", "to them", "you", "to you"]
+    },
+    "unirás": {
+      "main": "you'll join",
+      "verb": ["you'll join", "you'll unite", "you'll link"]
+    },
+    "perdonaré": {
+      "main": "I'll forgive",
+      "verb": ["I'll forgive", "I'll pardon", "I'll spare", "I'll let off"]
+    },
+    "hermano": {
+      "main": "brother",
+      "noun": ["brother", "bro", "sibling"]
+    },
+    "pájaro": {
+      "main": "bird",
+      "noun": ["bird"]
+    },
+    "quemar": {
+      "main": "burn",
+      "verb": ["burn", "scorch", "torch"]
+    },
+    "cuerpos": {
+      "main": "bodies",
+      "noun": ["bodies", "corpses", "corps"]
+    },
+    "tomar": {
+      "main": "drink",
+      "verb": ["take", "drink", "have", "grab"]
+    }
+  }
+}

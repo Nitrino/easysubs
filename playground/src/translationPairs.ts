@@ -2,13 +2,12 @@
 // at runtime). One file per pair in playground/fixtures/translations; `pnpm playground:translations` lists what's
 // missing after subtitles change.
 
-// [subtitles language, translation language]: each subtitle track into Russian, and Russian into English
-export const TRANSLATION_PAIRS = [
-  ["en", "ru"],
-  ["es", "ru"],
-  ["de", "ru"],
-  ["ru", "en"],
-] as const;
+const LANGUAGES = ["en", "ru", "es", "de"] as const;
+
+// [subtitles language, translation language]: every direction between the languages of the playground's subtitles
+export const TRANSLATION_PAIRS = LANGUAGES.flatMap((source) =>
+  LANGUAGES.filter((target) => target !== source).map((target) => [source, target] as const),
+);
 
 // A word: its main translation, then other translations grouped by part of speech, e.g.
 // "snail": { "main": "улитка", "noun": ["улитка", "слизень"] }

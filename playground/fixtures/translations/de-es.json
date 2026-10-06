@@ -1,0 +1,1342 @@
+{
+  "credit": "Subtitle lines: Sprite Fright © Blender Studio, CC BY 4.0. Translations written for the EasySubs playground.",
+  "lines": {
+    "Hallo, Herr Schnecke!": "¡Hola, señor Caracol!",
+    "Aw, du kleine süße Cornu Aspersum.": "Aww, mi pequeño y lindo Cornu aspersum.",
+    "Lateinischer Name, Bonuspunkte!": "Nombre en latín: ¡puntos extra!",
+    "Ich kann nicht glauben, dass wir hier mit dem Baumfreak fest stecken.": "No puedo creer que estemos atrapados aquí con la abraza-árboles.",
+    "Wenn ich noch einen Tiernamen auf Latein hören muss, schwör' ich, werd ich sie umbringen.": "Si tengo que oír otro nombre de animal en latín, juro que la mato.",
+    "Entspann dich, Zuckerschnecke. Sie erledigt die ganze Arbeit während wir unsern Spaß haben.": "Relájate, bombón. Ella hace todo el trabajo mientras nosotros nos divertimos.",
+    "Ja! Und geben uns ordentlich die Kante!": "¡Sí! ¡Y nos emborrachamos a lo grande!",
+    "Da bin ich dir weit voraus, Mann.": "En eso te llevo mucha ventaja, hombre.",
+    "Komm schon, Team! Wir können doch nicht bummeln, wenn es noch soviel Natur zu sehen gibt!": "¡Vamos, equipo! ¡No podemos perder el tiempo con tanta naturaleza por ver!",
+    "Ich hab mir gedacht, wir könnten unsere Hausarbeit \"Lustige Vögel im Wald\" nennen.": "Pensé que podríamos llamar a nuestro trabajo de clase \"Pájaros locos en el bosque\".",
+    "Versteht ihr? Denn wir sind eine Gruppe lustiger Vögel.": "¿Lo entienden? Porque somos un grupo de pájaros locos.",
+    "Und außerdem Vögel, da-": "Y además pájaros, por-",
+    "Sssch! Das ist eine Schafstelze. Und sie ist in Not!": "¡Shhh! Es una lavandera boyera. ¡Y está en apuros!",
+    "Ist ja gut, meine kleine Motacilla Flava.": "Ya, ya, mi pequeña Motacilla flava.",
+    "Oh! Seht sie euch an!": "¡Oh! ¡Mírenla!",
+    "Wow!": "¡Guau!",
+    "Aus dem Weg, du Blödspaten! Wir zelten hier.": "¡Quítate de en medio, zoquete! Aquí acampamos nosotros.",
+    "Endlich! Zeit den Grill anzuschmeißen.": "¡Por fin! Hora de encender la parrilla.",
+    "Oh. Du meine Güte.": "Oh. Dios mío.",
+    "Igitt!": "¡Qué asco!",
+    "Oh. Langsam Leute. Wir sollen die Natur erforschen, nicht zerstören.": "Oh. Más despacio, chicos. Tenemos que explorar la naturaleza, no destruirla.",
+    "Pinkelpause!": "¡Pausa para hacer pis!",
+    "Hey, Vogelfreak! Mach dich nützlich und kümmer dich ums Zelt!": "¡Oye, loca de los pájaros! ¡Haz algo útil y encárgate de la carpa!",
+    "Oh, ein bisschen freundschaftliche Neckerei beim Zelten. Spaßig!": "Oh, unas bromitas amistosas de campamento. ¡Qué divertido!",
+    "Sie würde im Wald keine 5 Minuten alleine überstehen.": "No aguantaría ni 5 minutos sola en el bosque.",
+    "Ja. Ein echtes Weichei die Kleine, stimmt's?": "Sí. La pequeña es toda una gallina, ¿verdad?",
+    "Hey, Phil! Was machen die Würstchen?": "¡Oye, Phil! ¿Cómo van esas salchichas?",
+    "Fast fertig! Brauchen nur noch ein bisschen mehr Salz...": "¡Casi listas! Solo necesitan un poco más de sal...",
+    "Das ist unglaublich. Es ist eine neue Spezies.": "Es increíble. Es una nueva especie.",
+    "Was zur Hölle sind das für Dinger?": "¿Qué demonios son esas cosas?",
+    "Als hätte ein Gnom einen Pilz gebumst.": "Como si un gnomo se hubiera acostado con un hongo.",
+    "Die sind absolut bezaubernd.": "Son absolutamente encantadores.",
+    "Ja, absolut verdammt bezaubernd.": "Sí, absoluta y condenadamente encantadores.",
+    "Und ich wette wir machen ein Vermögen, wenn wir eins von den Dingern schnappen.": "Y apuesto a que haríamos una fortuna si atrapamos una de esas cosas.",
+    "Wir würden berühmt werden!": "¡Seríamos famosos!",
+    "Auf MTV kommen.": "Saldríamos en MTV.",
+    "Ich frag mich wie die schmecken.": "Me pregunto a qué sabrán.",
+    "Wir sollten wirklich nicht ihren Lebensraum stören.": "De verdad no deberíamos alterar su hábitat.",
+    "Klar. Sicher, sicher.": "Claro. Seguro, seguro.",
+    "Grüßt euch!": "¡Saludos!",
+    "Willkommen Freunde.": "Bienvenidos, amigos.",
+    "Ich komme gleich runter.": "Enseguida bajo.",
+    "Könnte ich euch zu einem Pfefferminztee einladen?": "¿Puedo invitarlos a un té de menta?",
+    "Was seid ihr für welche?": "¿Y ustedes qué son?",
+    "Wir sind Sprites. Wir bringen den Wald ins Gleichgewicht.": "Somos Sprites. Traemos equilibrio al bosque.",
+    "Wir kümmern uns um die Tiere, Pflanzen, Vögel, Moos, ...": "Cuidamos de los animales, las plantas, los pájaros, el musgo, ...",
+    "Leute? Leute, ich...": "¿Chicos? Chicos, yo...",
+    "Hey, eeh, kleiner Pilzopa, geht das klar, wenn wir hier heute nacht campen?": "Oye, eh, abuelito hongo, ¿está bien si acampamos aquí esta noche?",
+    "Aber natürlich! Ein Freund des Waldes ist ein Freund der Sprites.": "¡Pero por supuesto! Un amigo del bosque es un amigo de los Sprites.",
+    "Vielleicht war es nur Ketchup... oder sowas... wie...": "Tal vez era solo kétchup... o algo así... como...",
+    "Rote Farbe? Ja, vielleicht haben sie einfach ihre kleinen Hüte angemalt oder... sowas...": "¿Pintura roja? Sí, tal vez solo pintaron sus sombreritos o... algo así...",
+    "Leute?": "¿Chicos?",
+    "Leute, das ist nicht lustig.": "Chicos, esto no tiene gracia.",
+    "Wir wollten nur einen fangen! Aber die sind durchgeknallt!": "¡Solo queríamos atrapar uno! ¡Pero se volvieron locos!",
+    "Du musst mich hier rausholen! Schnell! Die bringen uns um!": "¡Tienes que sacarme de aquí! ¡Rápido! ¡Nos van a matar!",
+    "Beeil dich!": "¡Apúrate!",
+    "Rechter Fuß, linker Fuß, Blatt und Stein.": "Pie derecho, pie izquierdo, hoja y piedra.",
+    "Ihr habt euch den falschen Campingplatz ausgesucht, Miststücke.": "Escogieron el lugar equivocado para acampar, sabandijas.",
+    "Spritet sie!": "¡A spritearlos!",
+    "Lauft!!!": "¡¡¡Corran!!!",
+    "Aaaah! Meine Augen!": "¡Aaaah! ¡Mis ojos!",
+    "Zuckerschnecke?! Hilf mir!": "¡¿Bombón?! ¡Ayúdame!",
+    "Sahnetörtchen!": "¡Pastelito!",
+    "Liebesküchlein...": "Mi bizcochito...",
+    "Heh?": "¿Eh?",
+    "Nein, nein, nein! Ich kann nicht schwimmen!": "¡No, no, no! ¡No sé nadar!",
+    "Ja!": "¡Sí!",
+    "Nein!": "¡No!",
+    "Ich will euch nichts tun! Bleibt einfach weg von mir!": "¡No quiero hacerles daño! ¡Solo aléjense de mí!",
+    "Na schön. Dann fresst Salz, ihr kleinen grünen Mistkerle!": "Está bien. ¡Entonces traguen sal, pequeños canallas verdes!",
+    "Nah-ah-ah.": "No-no-no.",
+    "Diese Dreckskerle haben die Welt wie ihren persönlichen Mülleimer behandelt.": "Estos cerdos trataron al mundo como su basurero personal.",
+    "Und du hast sie befreit!": "¡Y tú los liberaste!",
+    "Jetzt wirst du dich ihnen anschliessen!": "¡Ahora te unirás a ellos!",
+    "Den lass' ich dir, Bruder Vogel!": "¡Este te lo dejo, hermano pájaro!",
+    "Also dann Sprites, verbrennen wir die Leichen und trinken einen Pfefferminztee.": "Bueno, Sprites, quememos los cadáveres y tomemos un té de menta."
+  },
+  "words": {
+    "hallo": {
+      "main": "hola",
+      "interjection": ["hola", "buenas", "aló"]
+    },
+    "herr": {
+      "main": "señor",
+      "noun": ["señor", "caballero", "amo"]
+    },
+    "schnecke": {
+      "main": "caracol",
+      "noun": ["caracol", "babosa", "caracola (bollo)"]
+    },
+    "aw": {
+      "main": "aww",
+      "interjection": ["aww", "ay", "oh"]
+    },
+    "du": {
+      "main": "tú",
+      "pronoun": ["tú"]
+    },
+    "kleine": {
+      "main": "pequeña",
+      "adjective": ["pequeño", "chico", "menudo"],
+      "noun": ["pequeña", "chiquita", "niña"]
+    },
+    "süße": {
+      "main": "linda",
+      "adjective": ["dulce", "lindo", "tierno", "mono"]
+    },
+    "cornu": {
+      "main": "cuerno (lat.)",
+      "noun": ["cuerno (lat.)", "Cornu: género del caracol de jardín"]
+    },
+    "aspersum": {
+      "main": "salpicado (lat.)",
+      "adjective": ["salpicado (lat.)", "moteado (lat.)"],
+      "phrase": ["Cornu aspersum: caracol común de jardín"]
+    },
+    "lateinischer": {
+      "main": "en latín",
+      "adjective": ["latino", "en latín", "del latín"]
+    },
+    "name": {
+      "main": "nombre",
+      "noun": ["nombre", "apellido", "denominación"]
+    },
+    "bonuspunkte": {
+      "main": "puntos extra",
+      "noun": ["puntos extra", "puntos de bonificación", "puntos adicionales"]
+    },
+    "ich": {
+      "main": "yo",
+      "pronoun": ["yo"]
+    },
+    "kann": {
+      "main": "puedo",
+      "verb": ["poder", "saber (hacer)"]
+    },
+    "nicht": {
+      "main": "no",
+      "adverb": ["no", "ni"]
+    },
+    "glauben": {
+      "main": "creer",
+      "verb": ["creer", "pensar", "confiar"],
+      "noun": ["fe", "creencia"]
+    },
+    "dass": {
+      "main": "que",
+      "conjunction": ["que", "para que"]
+    },
+    "wir": {
+      "main": "nosotros",
+      "pronoun": ["nosotros", "nosotras"]
+    },
+    "hier": {
+      "main": "aquí",
+      "adverb": ["aquí", "acá", "en este lugar"]
+    },
+    "mit": {
+      "main": "con",
+      "preposition": ["con", "junto con", "en"]
+    },
+    "dem": {
+      "main": "el",
+      "article": ["el", "al", "a este"]
+    },
+    "baumfreak": {
+      "main": "abraza-árboles",
+      "noun": ["abraza-árboles", "fanática de los árboles", "friki de los árboles"]
+    },
+    "fest": {
+      "main": "firmemente",
+      "adverb": ["firmemente", "fijo", "bien sujeto"],
+      "adjective": ["firme", "sólido", "fijo"],
+      "phrase": ["estar atrapado (fest stecken)"]
+    },
+    "stecken": {
+      "main": "estar atrapado",
+      "verb": ["estar atascado", "estar metido", "meter", "clavar"]
+    },
+    "wenn": {
+      "main": "si",
+      "conjunction": ["si", "cuando"]
+    },
+    "noch": {
+      "main": "más",
+      "adverb": ["todavía", "aún", "más", "otra vez"]
+    },
+    "einen": {
+      "main": "un",
+      "article": ["un", "uno"]
+    },
+    "tiernamen": {
+      "main": "nombre de animal",
+      "noun": ["nombre de animal", "nombre de mascota"]
+    },
+    "auf": {
+      "main": "en",
+      "preposition": ["en", "sobre", "a", "por"]
+    },
+    "latein": {
+      "main": "latín",
+      "noun": ["latín"]
+    },
+    "hören": {
+      "main": "oír",
+      "verb": ["oír", "escuchar", "hacer caso"]
+    },
+    "muss": {
+      "main": "tengo que",
+      "verb": ["tener que", "deber", "necesitar"]
+    },
+    "schwör'": {
+      "main": "juro",
+      "verb": ["jurar", "prometer"]
+    },
+    "werd": {
+      "main": "voy a",
+      "auxiliary verb": ["ir a (futuro)"],
+      "verb": ["volverse", "llegar a ser", "convertirse"]
+    },
+    "sie": {
+      "main": "ella",
+      "pronoun": ["ella", "la", "ellos", "los"]
+    },
+    "umbringen": {
+      "main": "matar",
+      "verb": ["matar", "asesinar", "liquidar"]
+    },
+    "entspann": {
+      "main": "relájate",
+      "verb": ["relajarse", "descansar", "calmarse"]
+    },
+    "dich": {
+      "main": "te",
+      "pronoun": ["te", "a ti", "ti"]
+    },
+    "zuckerschnecke": {
+      "main": "bombón",
+      "noun": ["bombón", "cariño", "caracola de azúcar (bollo)"]
+    },
+    "erledigt": {
+      "main": "hace",
+      "verb": ["encargarse de", "hacer", "terminar", "resolver"],
+      "adjective": ["hecho", "terminado", "agotado"]
+    },
+    "die": {
+      "main": "la",
+      "article": ["la", "el", "los", "las"],
+      "pronoun": ["que", "esa", "esos", "ellos"]
+    },
+    "ganze": {
+      "main": "todo",
+      "adjective": ["todo", "entero", "completo"]
+    },
+    "arbeit": {
+      "main": "trabajo",
+      "noun": ["trabajo", "tarea", "labor", "empleo"]
+    },
+    "während": {
+      "main": "mientras",
+      "conjunction": ["mientras", "mientras que"],
+      "preposition": ["durante"]
+    },
+    "unsern": {
+      "main": "nuestro",
+      "pronoun": ["nuestro", "nuestra"]
+    },
+    "spaß": {
+      "main": "diversión",
+      "noun": ["diversión", "broma", "gracia"],
+      "phrase": ["divertirse (Spaß haben)"]
+    },
+    "haben": {
+      "main": "tener",
+      "verb": ["tener", "poseer"],
+      "auxiliary verb": ["haber"]
+    },
+    "ja": {
+      "main": "sí",
+      "adverb": ["sí"],
+      "particle": ["ya", "pues", "claro"]
+    },
+    "und": {
+      "main": "y",
+      "conjunction": ["y", "e"]
+    },
+    "geben": {
+      "main": "dar",
+      "verb": ["dar", "entregar", "haber (es gibt)"],
+      "phrase": ["emborracharse (sich die Kante geben)"]
+    },
+    "uns": {
+      "main": "nos",
+      "pronoun": ["nos", "a nosotros"]
+    },
+    "ordentlich": {
+      "main": "a lo grande",
+      "adverb": ["bien", "a lo grande", "como es debido", "de verdad"],
+      "adjective": ["ordenado", "decente", "considerable"]
+    },
+    "kante": {
+      "main": "borde",
+      "noun": ["borde", "canto", "arista"],
+      "phrase": ["emborracharse (sich die Kante geben)"]
+    },
+    "da": {
+      "main": "ahí",
+      "adverb": ["ahí", "allí", "entonces"],
+      "conjunction": ["como", "ya que", "porque"]
+    },
+    "bin": {
+      "main": "estoy",
+      "verb": ["ser", "estar"]
+    },
+    "dir": {
+      "main": "te",
+      "pronoun": ["te", "a ti", "ti"]
+    },
+    "weit": {
+      "main": "mucho",
+      "adverb": ["lejos", "mucho", "muy"],
+      "adjective": ["lejano", "amplio", "ancho"]
+    },
+    "voraus": {
+      "main": "por delante",
+      "adverb": ["por delante", "adelante", "adelantado"]
+    },
+    "mann": {
+      "main": "hombre",
+      "noun": ["hombre", "marido", "señor"],
+      "interjection": ["hombre", "tío", "vaya"]
+    },
+    "komm": {
+      "main": "vamos",
+      "verb": ["venir", "llegar", "ir"],
+      "interjection": ["vamos", "venga", "anda"]
+    },
+    "schon": {
+      "main": "ya",
+      "adverb": ["ya", "todavía", "seguro"],
+      "particle": ["vamos", "pues", "sí que"]
+    },
+    "team": {
+      "main": "equipo",
+      "noun": ["equipo", "grupo"]
+    },
+    "können": {
+      "main": "podemos",
+      "verb": ["poder", "saber (hacer)"]
+    },
+    "doch": {
+      "main": "pues",
+      "particle": ["pues", "sí (que)", "de todos modos"],
+      "conjunction": ["pero", "sin embargo"]
+    },
+    "bummeln": {
+      "main": "remolonear",
+      "verb": ["remolonear", "perder el tiempo", "pasear", "holgazanear"]
+    },
+    "es": {
+      "main": "eso",
+      "pronoun": ["eso", "esto", "lo", "él"],
+      "phrase": ["hay (es gibt)"]
+    },
+    "soviel": {
+      "main": "tanto",
+      "adverb": ["tanto", "tanta cantidad"],
+      "conjunction": ["por lo que", "según"]
+    },
+    "natur": {
+      "main": "naturaleza",
+      "noun": ["naturaleza", "carácter", "índole"]
+    },
+    "zu": {
+      "main": "a",
+      "preposition": ["a", "para", "hacia", "en"],
+      "adverb": ["demasiado", "cerrado"]
+    },
+    "sehen": {
+      "main": "ver",
+      "verb": ["ver", "mirar", "observar"]
+    },
+    "gibt": {
+      "main": "hay",
+      "verb": ["haber (es gibt)", "dar", "existir"]
+    },
+    "hab": {
+      "main": "he",
+      "auxiliary verb": ["haber"],
+      "verb": ["tener"]
+    },
+    "mir": {
+      "main": "me",
+      "pronoun": ["me", "a mí", "mí"]
+    },
+    "gedacht": {
+      "main": "pensado",
+      "verb": ["pensar", "imaginar", "creer"]
+    },
+    "könnten": {
+      "main": "podríamos",
+      "verb": ["podríamos", "podrían", "poder"]
+    },
+    "unsere": {
+      "main": "nuestro",
+      "pronoun": ["nuestro", "nuestra", "nuestros", "nuestras"]
+    },
+    "hausarbeit": {
+      "main": "trabajo de clase",
+      "noun": ["trabajo de clase", "deberes", "tareas domésticas"]
+    },
+    "lustige": {
+      "main": "divertidos",
+      "adjective": ["divertido", "gracioso", "alegre", "chistoso"]
+    },
+    "vögel": {
+      "main": "pájaros",
+      "noun": ["pájaros", "aves"],
+      "phrase": ["tipos graciosos (lustige Vögel)"]
+    },
+    "im": {
+      "main": "en el",
+      "preposition": ["en el", "dentro del"]
+    },
+    "wald": {
+      "main": "bosque",
+      "noun": ["bosque", "selva", "monte"]
+    },
+    "nennen": {
+      "main": "llamar",
+      "verb": ["llamar", "nombrar", "mencionar"]
+    },
+    "versteht": {
+      "main": "entienden",
+      "verb": ["entender", "comprender"]
+    },
+    "ihr": {
+      "main": "ustedes",
+      "pronoun": ["ustedes", "vosotros", "su", "le"]
+    },
+    "denn": {
+      "main": "porque",
+      "conjunction": ["porque", "pues", "ya que"],
+      "particle": ["entonces", "pues"]
+    },
+    "sind": {
+      "main": "somos",
+      "verb": ["ser", "estar"]
+    },
+    "eine": {
+      "main": "una",
+      "article": ["una", "un"],
+      "numeral": ["una", "uno"]
+    },
+    "gruppe": {
+      "main": "grupo",
+      "noun": ["grupo", "banda", "equipo"]
+    },
+    "lustiger": {
+      "main": "divertidos",
+      "adjective": ["divertido", "gracioso", "alegre"]
+    },
+    "außerdem": {
+      "main": "además",
+      "adverb": ["además", "aparte", "también"]
+    },
+    "sssch": {
+      "main": "shhh",
+      "interjection": ["shhh", "silencio", "chitón"]
+    },
+    "das": {
+      "main": "eso",
+      "pronoun": ["eso", "esto", "que"],
+      "article": ["el", "lo"]
+    },
+    "ist": {
+      "main": "es",
+      "verb": ["ser", "estar"]
+    },
+    "schafstelze": {
+      "main": "lavandera boyera",
+      "noun": ["lavandera boyera", "lavandera amarilla"]
+    },
+    "in": {
+      "main": "en",
+      "preposition": ["en", "dentro de", "a"]
+    },
+    "not": {
+      "main": "apuros",
+      "noun": ["apuro", "necesidad", "emergencia", "miseria"],
+      "phrase": ["estar en apuros (in Not sein)"]
+    },
+    "gut": {
+      "main": "bien",
+      "adverb": ["bien", "vale"],
+      "adjective": ["bueno", "buen", "bondadoso"]
+    },
+    "meine": {
+      "main": "mi",
+      "pronoun": ["mi", "mis", "mía"]
+    },
+    "motacilla": {
+      "main": "lavandera (lat.)",
+      "noun": ["lavandera (lat.)", "Motacilla: género de las lavanderas"]
+    },
+    "flava": {
+      "main": "amarilla (lat.)",
+      "adjective": ["amarilla (lat.)", "dorada (lat.)"],
+      "phrase": ["Motacilla flava: lavandera boyera"]
+    },
+    "oh": {
+      "main": "oh",
+      "interjection": ["oh", "ay", "vaya"]
+    },
+    "seht": {
+      "main": "miren",
+      "verb": ["ver", "mirar"]
+    },
+    "euch": {
+      "main": "a ustedes",
+      "pronoun": ["a ustedes", "les", "los", "os"]
+    },
+    "an": {
+      "main": "a",
+      "particle": ["a", "hacia", "ansehen: mirar"],
+      "preposition": ["en", "junto a", "a"]
+    },
+    "wow": {
+      "main": "guau",
+      "interjection": ["guau", "vaya", "uau"]
+    },
+    "aus": {
+      "main": "fuera de",
+      "preposition": ["de", "desde", "fuera de"],
+      "adverb": ["fuera", "terminado", "apagado"]
+    },
+    "weg": {
+      "main": "camino",
+      "noun": ["camino", "vía", "manera"],
+      "adverb": ["fuera", "lejos", "afuera"]
+    },
+    "blödspaten": {
+      "main": "zoquete",
+      "noun": ["zoquete", "tarado", "idiota", "bobo"]
+    },
+    "zelten": {
+      "main": "acampar",
+      "verb": ["acampar", "ir de campamento"],
+      "noun": ["acampada", "campamento"]
+    },
+    "endlich": {
+      "main": "por fin",
+      "adverb": ["por fin", "al fin", "finalmente"],
+      "adjective": ["finito", "limitado"]
+    },
+    "zeit": {
+      "main": "hora",
+      "noun": ["tiempo", "hora", "época", "momento"]
+    },
+    "den": {
+      "main": "el",
+      "article": ["el", "al", "a los"],
+      "pronoun": ["este", "ese", "lo"]
+    },
+    "grill": {
+      "main": "parrilla",
+      "noun": ["parrilla", "barbacoa", "asador"]
+    },
+    "anzuschmeißen": {
+      "main": "encender",
+      "verb": ["encender", "prender", "poner en marcha", "arrancar"]
+    },
+    "güte": {
+      "main": "bondad",
+      "noun": ["bondad", "calidad", "amabilidad"],
+      "phrase": ["¡Dios mío! (du meine Güte)"]
+    },
+    "igitt": {
+      "main": "qué asco",
+      "interjection": ["qué asco", "puaj", "uf"]
+    },
+    "langsam": {
+      "main": "despacio",
+      "adverb": ["despacio", "lentamente", "poco a poco"],
+      "adjective": ["lento", "pausado"]
+    },
+    "leute": {
+      "main": "chicos",
+      "noun": ["gente", "personas", "chicos"]
+    },
+    "sollen": {
+      "main": "debemos",
+      "verb": ["deber", "tener que", "se supone que"]
+    },
+    "erforschen": {
+      "main": "explorar",
+      "verb": ["explorar", "investigar", "estudiar"]
+    },
+    "zerstören": {
+      "main": "destruir",
+      "verb": ["destruir", "arruinar", "destrozar"]
+    },
+    "pinkelpause": {
+      "main": "pausa para hacer pis",
+      "noun": ["pausa para hacer pis", "parada para orinar"]
+    },
+    "hey": {
+      "main": "oye",
+      "interjection": ["oye", "eh", "hola"]
+    },
+    "vogelfreak": {
+      "main": "loca de los pájaros",
+      "noun": ["loca de los pájaros", "fanática de las aves", "friki de los pájaros"]
+    },
+    "mach": {
+      "main": "haz",
+      "verb": ["hacer", "volver", "poner"]
+    },
+    "nützlich": {
+      "main": "útil",
+      "adjective": ["útil", "provechoso", "práctico"]
+    },
+    "kümmer": {
+      "main": "encárgate",
+      "verb": ["encargarse de", "ocuparse de", "cuidar"]
+    },
+    "ums": {
+      "main": "de",
+      "preposition": ["de", "por el", "alrededor del"]
+    },
+    "zelt": {
+      "main": "carpa",
+      "noun": ["carpa", "tienda de campaña", "toldo"]
+    },
+    "ein": {
+      "main": "un",
+      "article": ["un", "una"],
+      "numeral": ["uno"]
+    },
+    "bisschen": {
+      "main": "poco",
+      "adverb": ["un poco", "algo", "un poquito"]
+    },
+    "freundschaftliche": {
+      "main": "amistosa",
+      "adjective": ["amistoso", "amigable", "cordial"]
+    },
+    "neckerei": {
+      "main": "bromas",
+      "noun": ["broma", "burla", "pulla", "tomadura de pelo"]
+    },
+    "beim": {
+      "main": "al",
+      "preposition": ["al", "en el", "durante el", "junto al"]
+    },
+    "spaßig": {
+      "main": "divertido",
+      "adjective": ["divertido", "gracioso", "entretenido"]
+    },
+    "würde": {
+      "main": "-ría (condicional)",
+      "auxiliary verb": ["-ría (condicional)", "sería", "se volvería"],
+      "noun": ["dignidad"]
+    },
+    "keine": {
+      "main": "ni",
+      "pronoun": ["ningún", "ninguna", "ni un"]
+    },
+    "5": {
+      "main": "cinco"
+    },
+    "minuten": {
+      "main": "minutos",
+      "noun": ["minutos"]
+    },
+    "alleine": {
+      "main": "sola",
+      "adverb": ["solo", "sola", "por sí solo"],
+      "adjective": ["solo", "solitario"]
+    },
+    "überstehen": {
+      "main": "aguantar",
+      "verb": ["aguantar", "sobrevivir", "superar", "resistir"]
+    },
+    "echtes": {
+      "main": "auténtico",
+      "adjective": ["auténtico", "verdadero", "real", "genuino"]
+    },
+    "weichei": {
+      "main": "gallina",
+      "noun": ["gallina", "blandengue", "cobarde", "llorica"]
+    },
+    "stimmt's": {
+      "main": "¿verdad?",
+      "phrase": ["¿verdad?", "¿no?", "¿a que sí?"]
+    },
+    "phil": {
+      "main": "Phil"
+    },
+    "was": {
+      "main": "qué",
+      "pronoun": ["qué", "lo que", "algo"]
+    },
+    "machen": {
+      "main": "hacer",
+      "verb": ["hacer", "fabricar", "preparar"]
+    },
+    "würstchen": {
+      "main": "salchichas",
+      "noun": ["salchicha", "salchichita", "perrito caliente"]
+    },
+    "fast": {
+      "main": "casi",
+      "adverb": ["casi", "por poco"]
+    },
+    "fertig": {
+      "main": "listo",
+      "adjective": ["listo", "terminado", "acabado", "agotado"]
+    },
+    "brauchen": {
+      "main": "necesitan",
+      "verb": ["necesitar", "requerir", "hacer falta"]
+    },
+    "nur": {
+      "main": "solo",
+      "adverb": ["solo", "solamente", "únicamente", "nada más"]
+    },
+    "mehr": {
+      "main": "más",
+      "adverb": ["más", "ya no (nicht mehr)"]
+    },
+    "salz": {
+      "main": "sal",
+      "noun": ["sal"]
+    },
+    "unglaublich": {
+      "main": "increíble",
+      "adjective": ["increíble", "inaudito"],
+      "adverb": ["increíblemente"]
+    },
+    "neue": {
+      "main": "nueva",
+      "adjective": ["nuevo", "reciente", "otro"]
+    },
+    "spezies": {
+      "main": "especie",
+      "noun": ["especie", "variedad"]
+    },
+    "zur": {
+      "main": "a la",
+      "preposition": ["a la", "al", "para la"]
+    },
+    "hölle": {
+      "main": "infierno",
+      "noun": ["infierno"],
+      "phrase": ["¿qué demonios? (was zur Hölle)"]
+    },
+    "für": {
+      "main": "para",
+      "preposition": ["para", "por", "a favor de"],
+      "phrase": ["qué tipo de (was für)"]
+    },
+    "dinger": {
+      "main": "cosas",
+      "noun": ["cosas", "chismes", "trastos", "bichos"]
+    },
+    "als": {
+      "main": "como si",
+      "conjunction": ["como", "que", "cuando", "como si"]
+    },
+    "hätte": {
+      "main": "hubiera",
+      "auxiliary verb": ["hubiera", "habría"],
+      "verb": ["tendría", "tuviera"]
+    },
+    "gnom": {
+      "main": "gnomo",
+      "noun": ["gnomo", "duende"]
+    },
+    "pilz": {
+      "main": "hongo",
+      "noun": ["hongo", "seta", "champiñón"]
+    },
+    "gebumst": {
+      "main": "acostado con",
+      "verb": ["acostarse con", "tirarse a (vulg.)", "golpear"]
+    },
+    "absolut": {
+      "main": "absolutamente",
+      "adverb": ["absolutamente", "totalmente", "completamente"],
+      "adjective": ["absoluto", "total"]
+    },
+    "bezaubernd": {
+      "main": "encantador",
+      "adjective": ["encantador", "adorable", "precioso", "fascinante"]
+    },
+    "verdammt": {
+      "main": "condenadamente",
+      "adverb": ["condenadamente", "malditamente", "muy"],
+      "adjective": ["maldito", "condenado"],
+      "interjection": ["¡maldita sea!", "¡maldición!"]
+    },
+    "wette": {
+      "main": "apuesto",
+      "verb": ["apostar"],
+      "noun": ["apuesta"]
+    },
+    "vermögen": {
+      "main": "fortuna",
+      "noun": ["fortuna", "patrimonio", "riqueza", "capacidad"],
+      "verb": ["poder", "ser capaz de"]
+    },
+    "eins": {
+      "main": "uno",
+      "numeral": ["uno", "una"],
+      "pronoun": ["uno", "algo"]
+    },
+    "von": {
+      "main": "de",
+      "preposition": ["de", "desde", "por"]
+    },
+    "dingern": {
+      "main": "cosas",
+      "noun": ["cosas", "chismes", "bichos"]
+    },
+    "schnappen": {
+      "main": "atrapar",
+      "verb": ["atrapar", "agarrar", "pillar", "pescar"]
+    },
+    "würden": {
+      "main": "-ríamos (condicional)",
+      "auxiliary verb": ["-ríamos (condicional)", "-rían (condicional)"]
+    },
+    "berühmt": {
+      "main": "famoso",
+      "adjective": ["famoso", "célebre", "conocido"]
+    },
+    "werden": {
+      "main": "volverse",
+      "verb": ["volverse", "hacerse", "llegar a ser", "convertirse en"],
+      "auxiliary verb": ["ir a (futuro)", "ser (pasiva)"]
+    },
+    "mtv": {
+      "main": "MTV"
+    },
+    "kommen": {
+      "main": "salir",
+      "verb": ["venir", "llegar", "salir (en la tele)"]
+    },
+    "frag": {
+      "main": "pregunto",
+      "verb": ["preguntar", "consultar"],
+      "phrase": ["me pregunto (ich frag mich)"]
+    },
+    "mich": {
+      "main": "me",
+      "pronoun": ["me", "a mí", "mí"]
+    },
+    "wie": {
+      "main": "cómo",
+      "adverb": ["cómo", "qué tal", "cuánto"],
+      "conjunction": ["como", "que"]
+    },
+    "schmecken": {
+      "main": "saber",
+      "verb": ["saber (a)", "probar", "gustar (comida)"]
+    },
+    "sollten": {
+      "main": "deberíamos",
+      "verb": ["deber", "tener que"]
+    },
+    "wirklich": {
+      "main": "de verdad",
+      "adverb": ["de verdad", "realmente", "en serio"],
+      "adjective": ["real", "verdadero"]
+    },
+    "ihren": {
+      "main": "su",
+      "pronoun": ["su", "sus", "suyo"]
+    },
+    "lebensraum": {
+      "main": "hábitat",
+      "noun": ["hábitat", "espacio vital", "entorno"]
+    },
+    "stören": {
+      "main": "alterar",
+      "verb": ["molestar", "alterar", "perturbar", "interrumpir"]
+    },
+    "klar": {
+      "main": "claro",
+      "adverb": ["claro", "por supuesto"],
+      "adjective": ["claro", "transparente", "evidente"]
+    },
+    "sicher": {
+      "main": "seguro",
+      "adverb": ["seguro", "por supuesto", "sin duda"],
+      "adjective": ["seguro", "cierto", "fiable"]
+    },
+    "grüßt": {
+      "main": "saludos",
+      "verb": ["saludar", "dar recuerdos"]
+    },
+    "willkommen": {
+      "main": "bienvenidos",
+      "adjective": ["bienvenido", "grato", "oportuno"],
+      "interjection": ["bienvenido", "bienvenidos"]
+    },
+    "freunde": {
+      "main": "amigos",
+      "noun": ["amigos", "amigas", "compañeros"]
+    },
+    "komme": {
+      "main": "voy",
+      "verb": ["venir", "ir", "llegar"]
+    },
+    "gleich": {
+      "main": "enseguida",
+      "adverb": ["enseguida", "ahora mismo", "en un momento"],
+      "adjective": ["igual", "mismo"]
+    },
+    "runter": {
+      "main": "abajo",
+      "adverb": ["abajo", "hacia abajo"],
+      "particle": ["abajo (runterkommen: bajar)"]
+    },
+    "könnte": {
+      "main": "podría",
+      "verb": ["podría", "poder", "ser posible"]
+    },
+    "einem": {
+      "main": "un",
+      "article": ["un", "una", "a un"]
+    },
+    "pfefferminztee": {
+      "main": "té de menta",
+      "noun": ["té de menta", "infusión de menta"]
+    },
+    "einladen": {
+      "main": "invitar",
+      "verb": ["invitar", "convidar", "cargar"]
+    },
+    "seid": {
+      "main": "son",
+      "verb": ["ser", "estar"]
+    },
+    "welche": {
+      "main": "cuáles",
+      "pronoun": ["cuál", "cuáles", "algunos", "los que"],
+      "phrase": ["qué tipo de (was für welche)"]
+    },
+    "sprites": {
+      "main": "sprites",
+      "noun": ["sprites", "duendes", "espíritus del bosque"]
+    },
+    "bringen": {
+      "main": "traer",
+      "verb": ["traer", "llevar", "poner"],
+      "phrase": ["matar (jemanden umbringen)"]
+    },
+    "ins": {
+      "main": "en el",
+      "preposition": ["en el", "al", "a la", "hacia el"]
+    },
+    "gleichgewicht": {
+      "main": "equilibrio",
+      "noun": ["equilibrio", "balance", "estabilidad"]
+    },
+    "kümmern": {
+      "main": "cuidar",
+      "verb": ["cuidar", "ocuparse de", "preocuparse"]
+    },
+    "um": {
+      "main": "de",
+      "preposition": ["alrededor de", "a (hora)", "por", "de"],
+      "particle": ["um- (umbringen: matar)"]
+    },
+    "tiere": {
+      "main": "animales",
+      "noun": ["animales", "bestias", "bichos"]
+    },
+    "pflanzen": {
+      "main": "plantas",
+      "noun": ["plantas", "vegetales"],
+      "verb": ["plantar", "sembrar"]
+    },
+    "moos": {
+      "main": "musgo",
+      "noun": ["musgo", "pasta (dinero, coloq.)"]
+    },
+    "eeh": {
+      "main": "eh",
+      "interjection": ["eh", "ehm", "este..."]
+    },
+    "kleiner": {
+      "main": "pequeño",
+      "adjective": ["pequeño", "chiquito", "menor"],
+      "noun": ["pequeño", "pequeñín"]
+    },
+    "pilzopa": {
+      "main": "abuelito hongo",
+      "noun": ["abuelito hongo", "abuelo seta"]
+    },
+    "geht": {
+      "main": "va",
+      "verb": ["ir", "andar", "funcionar"],
+      "phrase": ["¿está bien? (geht das klar?)"]
+    },
+    "heute": {
+      "main": "hoy",
+      "adverb": ["hoy", "hoy en día", "actualmente"],
+      "phrase": ["esta noche (heute Nacht)"]
+    },
+    "nacht": {
+      "main": "noche",
+      "noun": ["noche"]
+    },
+    "campen": {
+      "main": "acampar",
+      "verb": ["acampar", "ir de camping"]
+    },
+    "aber": {
+      "main": "pero",
+      "conjunction": ["pero", "sino", "sin embargo"],
+      "particle": ["sí que", "pues"]
+    },
+    "natürlich": {
+      "main": "por supuesto",
+      "adverb": ["por supuesto", "claro", "naturalmente"],
+      "adjective": ["natural"]
+    },
+    "freund": {
+      "main": "amigo",
+      "noun": ["amigo", "novio", "partidario"]
+    },
+    "des": {
+      "main": "del",
+      "article": ["del", "de la", "de los"]
+    },
+    "waldes": {
+      "main": "bosque",
+      "noun": ["bosque", "selva"]
+    },
+    "der": {
+      "main": "de los",
+      "article": ["el", "la", "de los", "de la"],
+      "pronoun": ["que", "el cual", "ese"]
+    },
+    "vielleicht": {
+      "main": "tal vez",
+      "adverb": ["tal vez", "quizás", "a lo mejor"]
+    },
+    "war": {
+      "main": "era",
+      "verb": ["era", "fue", "estaba"]
+    },
+    "ketchup": {
+      "main": "kétchup",
+      "noun": ["kétchup", "salsa de tomate"]
+    },
+    "oder": {
+      "main": "o",
+      "conjunction": ["o", "u", "o sea"]
+    },
+    "sowas": {
+      "main": "algo así",
+      "pronoun": ["algo así", "algo parecido", "una cosa así"],
+      "interjection": ["¡vaya!", "¡qué cosa!"]
+    },
+    "rote": {
+      "main": "roja",
+      "adjective": ["rojo", "colorado", "tinto"]
+    },
+    "farbe": {
+      "main": "pintura",
+      "noun": ["color", "pintura", "tinte"]
+    },
+    "einfach": {
+      "main": "simplemente",
+      "adverb": ["simplemente", "solo", "sencillamente"],
+      "adjective": ["simple", "fácil", "sencillo"]
+    },
+    "ihre": {
+      "main": "sus",
+      "pronoun": ["su", "sus", "suyo"]
+    },
+    "kleinen": {
+      "main": "pequeños",
+      "adjective": ["pequeño", "chico", "menudo"]
+    },
+    "hüte": {
+      "main": "sombreros",
+      "noun": ["sombreros", "gorros"]
+    },
+    "angemalt": {
+      "main": "pintado",
+      "verb": ["pintar", "colorear", "maquillar"]
+    },
+    "lustig": {
+      "main": "gracioso",
+      "adjective": ["gracioso", "divertido", "chistoso"]
+    },
+    "wollten": {
+      "main": "queríamos",
+      "verb": ["querer", "desear", "pretender"]
+    },
+    "fangen": {
+      "main": "atrapar",
+      "verb": ["atrapar", "capturar", "pescar", "agarrar"]
+    },
+    "durchgeknallt": {
+      "main": "locos",
+      "adjective": ["chiflado", "loco", "pirado", "desquiciado"]
+    },
+    "musst": {
+      "main": "tienes que",
+      "verb": ["tener que", "deber", "necesitar"]
+    },
+    "rausholen": {
+      "main": "sacar",
+      "verb": ["sacar", "rescatar", "extraer"]
+    },
+    "schnell": {
+      "main": "rápido",
+      "adverb": ["rápido", "deprisa", "pronto"],
+      "adjective": ["rápido", "veloz"]
+    },
+    "beeil": {
+      "main": "apúrate",
+      "verb": ["apurarse", "darse prisa", "apresurarse"]
+    },
+    "rechter": {
+      "main": "derecho",
+      "adjective": ["derecho", "de la derecha", "derechista"]
+    },
+    "fuß": {
+      "main": "pie",
+      "noun": ["pie", "pata", "base"]
+    },
+    "linker": {
+      "main": "izquierdo",
+      "adjective": ["izquierdo", "de la izquierda", "izquierdista"]
+    },
+    "blatt": {
+      "main": "hoja",
+      "noun": ["hoja", "página", "periódico"]
+    },
+    "stein": {
+      "main": "piedra",
+      "noun": ["piedra", "roca", "hueso (de fruta)"]
+    },
+    "habt": {
+      "main": "han",
+      "auxiliary verb": ["haber"],
+      "verb": ["tener"]
+    },
+    "falschen": {
+      "main": "equivocado",
+      "adjective": ["equivocado", "falso", "incorrecto"]
+    },
+    "campingplatz": {
+      "main": "camping",
+      "noun": ["camping", "lugar para acampar", "campamento"]
+    },
+    "ausgesucht": {
+      "main": "escogido",
+      "verb": ["escoger", "elegir", "seleccionar"],
+      "adjective": ["selecto", "exquisito"]
+    },
+    "miststücke": {
+      "main": "sabandijas",
+      "noun": ["desgraciados", "sabandijas", "malnacidos"]
+    },
+    "spritet": {
+      "main": "spritear",
+      "verb": ["spritear", "convertir en sprite"]
+    },
+    "lauft": {
+      "main": "corran",
+      "verb": ["correr", "huir", "funcionar"]
+    },
+    "aaaah": {
+      "main": "aaaah",
+      "interjection": ["aaaah", "ay"]
+    },
+    "augen": {
+      "main": "ojos",
+      "noun": ["ojos", "vista"]
+    },
+    "hilf": {
+      "main": "ayuda",
+      "verb": ["ayudar", "socorrer"]
+    },
+    "sahnetörtchen": {
+      "main": "pastelito",
+      "noun": ["pastelito", "pastelito de nata", "tartaleta de crema"]
+    },
+    "liebesküchlein": {
+      "main": "bizcochito",
+      "noun": ["bizcochito", "pastelito de amor", "cariño"]
+    },
+    "heh": {
+      "main": "¿eh?",
+      "interjection": ["¿eh?", "¿qué?", "¿cómo?"]
+    },
+    "nein": {
+      "main": "no",
+      "adverb": ["no"]
+    },
+    "schwimmen": {
+      "main": "nadar",
+      "verb": ["nadar", "flotar"],
+      "noun": ["natación"]
+    },
+    "will": {
+      "main": "quiero",
+      "verb": ["querer", "desear"]
+    },
+    "nichts": {
+      "main": "nada",
+      "pronoun": ["nada"],
+      "phrase": ["no hacer daño (nichts tun)"]
+    },
+    "tun": {
+      "main": "hacer",
+      "verb": ["hacer", "poner", "meter"]
+    },
+    "bleibt": {
+      "main": "manténganse",
+      "verb": ["quedarse", "mantenerse", "permanecer"]
+    },
+    "na": {
+      "main": "bueno",
+      "interjection": ["bueno", "pues", "vaya"]
+    },
+    "schön": {
+      "main": "bien",
+      "adjective": ["bonito", "hermoso", "lindo"],
+      "adverb": ["bien", "vale"]
+    },
+    "dann": {
+      "main": "entonces",
+      "adverb": ["entonces", "luego", "después"]
+    },
+    "fresst": {
+      "main": "traguen",
+      "verb": ["comer (animales)", "devorar", "tragar", "zampar"]
+    },
+    "grünen": {
+      "main": "verdes",
+      "adjective": ["verde", "ecologista", "inmaduro"]
+    },
+    "mistkerle": {
+      "main": "canallas",
+      "noun": ["canallas", "desgraciados", "sinvergüenzas"]
+    },
+    "nahahah": {
+      "main": "no-no-no"
+    },
+    "diese": {
+      "main": "estos",
+      "pronoun": ["este", "esta", "estos", "estas"]
+    },
+    "dreckskerle": {
+      "main": "cerdos",
+      "noun": ["cerdos", "sinvergüenzas", "canallas", "desgraciados"]
+    },
+    "welt": {
+      "main": "mundo",
+      "noun": ["mundo", "tierra", "gente"]
+    },
+    "persönlichen": {
+      "main": "personal",
+      "adjective": ["personal", "propio", "privado"]
+    },
+    "mülleimer": {
+      "main": "basurero",
+      "noun": ["basurero", "cubo de basura", "papelera", "bote de basura"]
+    },
+    "behandelt": {
+      "main": "tratado",
+      "verb": ["tratar", "manejar", "atender"]
+    },
+    "hast": {
+      "main": "has",
+      "auxiliary verb": ["haber"],
+      "verb": ["tener"]
+    },
+    "befreit": {
+      "main": "liberado",
+      "verb": ["liberar", "soltar", "librar"],
+      "adjective": ["libre", "exento"]
+    },
+    "jetzt": {
+      "main": "ahora",
+      "adverb": ["ahora", "ya", "en este momento"]
+    },
+    "wirst": {
+      "main": "vas a",
+      "auxiliary verb": ["vas a", "-rás (futuro)"],
+      "verb": ["volverte", "llegar a ser"]
+    },
+    "ihnen": {
+      "main": "a ellos",
+      "pronoun": ["a ellos", "les", "con ellos", "a usted (Ihnen)"]
+    },
+    "anschliessen": {
+      "main": "unirse",
+      "verb": ["unirse", "sumarse", "conectar", "enchufar"]
+    },
+    "lass'": {
+      "main": "dejo",
+      "verb": ["dejar", "permitir", "soltar"]
+    },
+    "bruder": {
+      "main": "hermano",
+      "noun": ["hermano", "fraile", "colega"]
+    },
+    "vogel": {
+      "main": "pájaro",
+      "noun": ["pájaro", "ave"]
+    },
+    "also": {
+      "main": "bueno",
+      "adverb": ["entonces", "así que", "bueno", "o sea"]
+    },
+    "verbrennen": {
+      "main": "quemar",
+      "verb": ["quemar", "incinerar", "arder"]
+    },
+    "leichen": {
+      "main": "cadáveres",
+      "noun": ["cadáveres", "cuerpos", "restos"]
+    },
+    "trinken": {
+      "main": "tomar",
+      "verb": ["beber", "tomar"]
+    }
+  }
+}

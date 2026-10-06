@@ -1,0 +1,1785 @@
+{
+  "credit": "Subtitle lines: the playground sample dialogue and Sprite Fright © Blender Studio, CC BY 4.0. Translations written for the EasySubs playground.",
+  "lines": {
+    "Hello there! Are you ready to go?": "¡Hola! ¿Estás lista para salir?",
+    "Almost. I just need to pick up my keys.": "Casi. Solo me falta agarrar las llaves.",
+    "Hold on, the train leaves at 7:45, right?": "Espera, el tren sale a las 7:45, ¿verdad?",
+    "- Right. - Then we should set off now.": "- Exacto. - Entonces deberíamos salir ya.",
+    "She always says that, and we're never late.": "Ella siempre dice eso, y nunca llegamos tarde.",
+    "Did you turn off the lights in the kitchen?": "¿Apagaste las luces de la cocina?",
+    "Yes. And I asked Sam to look after the cat.": "Sí. Y le pedí a Sam que cuidara al gato.",
+    "What if we run out of time at the station?": "¿Y si nos quedamos sin tiempo en la estación?",
+    "We won't. Don't give up before we even start.": "No pasará. No te rindas antes de empezar.",
+    "I still can't figure out how to read this ticket.": "Sigo sin entender cómo se lee este boleto.",
+    "Platform four, carriage \"B\", seat 12.": "Andén cuatro, vagón \"B\", asiento 12.",
+    "Let's find out where the café is first.": "Primero averigüemos dónde está la cafetería.",
+    "Coffee sounds perfect. I barely slept.": "Un café sería perfecto. Apenas dormí.",
+    "You should get up earlier, not later!": "¡Deberías levantarte más temprano, no más tarde!",
+    "Next train: 7:45 to the coast.": "Próximo tren: 7:45 a la costa.",
+    "We'll come back on Sunday evening, I promise.": "Volvemos el domingo por la noche, te lo prometo.",
+    "Can we put off the museum until tomorrow?": "¿Podemos dejar el museo para mañana?",
+    "Sure. Today is for the sea, the sun and nothing else.": "Claro. Hoy toca mar, sol y nada más.",
+    "Look! The train is already here.": "¡Mira! El tren ya está aquí.",
+    "Quick, grab your bag. Let's go!": "Rápido, agarra tu bolso. ¡Vamos!",
+    "This is a very long subtitle line to check how the overlay wraps text when somebody talks for a while.": "Esta es una línea de subtítulos muy larga para comprobar cómo la superposición ajusta el texto cuando alguien habla un buen rato.",
+    "Finally. Window seats, as promised.": "Por fin. Asientos de ventanilla, como prometí.",
+    "Wake me up when we see the sea.": "Despiértame cuando veamos el mar.",
+    "Hello, Mr. Snail!": "¡Hola, señor Caracol!",
+    "Aw, you cute little Cornu aspersum.": "Aww, mi lindo y pequeño Cornu aspersum.",
+    "Latin name—bonus points!": "Nombre en latín: ¡puntos extra!",
+    "Can’t believe we got stuck with the tree hugger.": "No puedo creer que nos haya tocado la abraza-árboles.",
+    "If I have to hear the Latin name for one more animal, I swear I’m gonna kill her.": "Si tengo que oír el nombre en latín de un animal más, te juro que la mato.",
+    "Relax, Sugar Buns. While she does all the work we’ll have all the fun.": "Relájate, bomboncito. Mientras ella hace todo el trabajo, nosotros nos divertimos.",
+    "Yeah! And get wasted out of our minds!": "¡Sí! ¡Y a emborracharnos hasta perder la cabeza!",
+    "Way ahead of you, man.": "Ya te llevo ventaja, amigo.",
+    "C’mon, team! We mustn’t dilly-dally when there’s so much nature to see!": "¡Vamos, equipo! ¡No debemos entretenernos cuando hay tanta naturaleza por ver!",
+    "I was thinking we should call our class project “Fungis in a Forest!”": "Estaba pensando que podríamos llamar a nuestro proyecto de clase “¡Fungis en el bosque!”",
+    "Get it? Because we’re a group of fun guys.": "¿Lo entienden? Porque somos un grupo de “fun guys”: chicos divertidos.",
+    "And also fungis, which—": "Y también hongos, que—",
+    "Shush! That’s a yellow wagtail. And she’s in distress!": "¡Shh! Es una lavandera amarilla. ¡Y está en apuros!",
+    "There, there, my little Motacilla flava.": "Ya, ya, mi pequeña Motacilla flava.",
+    "Oh! Look at her go!": "¡Oh! ¡Mira cómo vuela!",
+    "Wow!": "¡Guau!",
+    "Out of the way, dorkwad! We’re camping here.": "¡Quítate de en medio, nerd! Aquí acampamos nosotros.",
+    "Finally! Time to get that barbecue burning.": "¡Por fin! Hora de encender esa barbacoa.",
+    "Oh. Oh, dear.": "Oh. Ay, Dios mío.",
+    "Gross!": "¡Qué asco!",
+    "Oh. Easy, guys. We’re supposed to be studying nature, not wrecking it.": "Oh. Tranquilos, chicos. Se supone que debemos estudiar la naturaleza, no destrozarla.",
+    "Piss break!": "¡Pausa para mear!",
+    "Oi, fungus freak! Make yourself useful and fix the tent.": "¡Oye, loca de los hongos! Haz algo útil y arregla la carpa.",
+    "Oh, a bit of friendly campsite ribbing. Fun.": "Oh, unas bromitas amistosas de campamento. Qué divertido.",
+    "She wouldn’t survive five minutes alone in these woods.": "No sobreviviría ni cinco minutos sola en este bosque.",
+    "Yeah. She’s a real weenie that one, innit?": "Sí. Esa es una auténtica debilucha, ¿no?",
+    "Oi, Phil! How those sausages coming?": "¡Oye, Phil! ¿Cómo van esas salchichas?",
+    "Almost ready! Just need a bit more salt...": "¡Casi listas! Solo falta un poco más de sal...",
+    "It’s incredible. It’s a new species.": "Es increíble. Es una especie nueva.",
+    "What the bloody hell are those things?": "¿Qué demonios son esas cosas?",
+    "It’s like a gnome shagged a mushroom.": "Es como si un gnomo se hubiera acostado con un hongo.",
+    "They’re absolutely adorable.": "Son absolutamente adorables.",
+    "Yeah, absolutely bloody adorable.": "Sí, condenadamente adorables.",
+    "And I bet we’ll make a fortune if we catch one of those things.": "Y apuesto a que haremos una fortuna si atrapamos una de esas cosas.",
+    "We’d be famous!": "¡Seríamos famosos!",
+    "Get on MTV.": "Saldríamos en MTV.",
+    "I wonder what they taste like.": "Me pregunto a qué sabrán.",
+    "We really shouldn’t disrupt their habitat.": "En serio, no deberíamos alterar su hábitat.",
+    "Right. Sure, sure.": "Ya. Claro, claro.",
+    "Greetings.": "Saludos.",
+    "Welcome, friends.": "Bienvenidos, amigos.",
+    "I’ll be right down.": "Enseguida bajo.",
+    "Could I interest you in some peppermint tea?": "¿Puedo ofrecerles un té de menta?",
+    "What are you guys?": "¿Y ustedes qué son?",
+    "We are sprites. We sprite balance to the forest.": "Somos sprites. Le spriteamos equilibrio al bosque.",
+    "We take care of the animals, plants, birds, moss…": "Cuidamos de los animales, las plantas, los pájaros, el musgo…",
+    "Guys? Guys, I…": "¿Chicos? Chicos, yo…",
+    "Hey, uh, little mushroom geezer, you cool with us camping here for the night?": "Oye, eh, abuelito hongo, ¿te parece bien que acampemos aquí esta noche?",
+    "Absolutely. A friend of the forest is a friend of the sprites.": "Por supuesto. Un amigo del bosque es amigo de los sprites.",
+    "Maybe it was just ketchup… or something… like…": "Tal vez solo era kétchup… o algo… como…",
+    "Red paint? Yeah, maybe they were just painting their little hats or... something...": "¿Pintura roja? Sí, tal vez solo estaban pintando sus sombreritos o... algo...",
+    "Guys?": "¿Chicos?",
+    "Guys, this isn’t funny.": "Chicos, esto no tiene gracia.",
+    "We were just gonna catch one! But they’re psycho!": "¡Solo íbamos a atrapar uno! ¡Pero son unos psicópatas!",
+    "You gotta get me outta these! Hurry! They’re gonna kill us!": "¡Tienes que soltarme! ¡Rápido! ¡Nos van a matar!",
+    "Hurry!": "¡Rápido!",
+    "Right foot, left foot, leaf and stone.": "Pie derecho, pie izquierdo, hoja y piedra.",
+    "You picked the wrong camping spot, bitches.": "Escogieron el lugar equivocado para acampar, perras.",
+    "Sprite them!": "¡A spritearlos!",
+    "Run!": "¡Corran!",
+    "Aaaah! My eyes!": "¡Aaaah! ¡Mis ojos!",
+    "Sugar Buns! Help me!": "¡Bomboncito! ¡Ayúdame!",
+    "Sweet cakes!": "¡Pastelito!",
+    "Love muffin...": "Mi muffin de amor...",
+    "Huh?": "¿Eh?",
+    "No, no, no! I can’t swim!": "¡No, no, no! ¡No sé nadar!",
+    "Yes!": "¡Sí!",
+    "No!": "¡No!",
+    "Son of a spriteberry!": "¡Hijo de la gran spritebaya!",
+    "It burns! It burns!": "¡Quema! ¡Quema!",
+    "I don’t want to hurt you! Just keep your distance!": "¡No quiero hacerles daño! ¡Solo mantengan la distancia!",
+    "All right, then. Eat salt, you little green bastards!": "Pues muy bien. ¡Coman sal, pequeños desgraciados verdes!",
+    "Nuh-uh-uh.": "No-no-no.",
+    "Those punks treated the world as their own personal rubbish bin.": "Esos vándalos trataban al mundo como su basurero personal.",
+    "And you set them free!": "¡Y tú los liberaste!",
+    "Now you’ll join them!": "¡Ahora te unirás a ellos!",
+    "I’ll give you that one, brother bird!": "¡Esta te la concedo, hermano pájaro!",
+    "Alright, sprites, let’s burn the bodies and have some peppermint tea.": "Muy bien, sprites, quememos los cuerpos y tomemos un té de menta."
+  },
+  "words": {
+    "hello": {
+      "main": "hola",
+      "interjection": ["hola", "buenas", "aló"],
+      "noun": ["saludo"]
+    },
+    "there": {
+      "main": "ahí",
+      "adverb": ["ahí", "allí", "allá"],
+      "interjection": ["ya, ya", "vamos"]
+    },
+    "are": {
+      "main": "estar",
+      "verb": ["estar", "ser"]
+    },
+    "you": {
+      "main": "tú",
+      "pronoun": ["tú", "usted", "ustedes", "te"]
+    },
+    "ready": {
+      "main": "listo",
+      "adjective": ["listo", "preparado", "dispuesto"]
+    },
+    "to": {
+      "main": "a",
+      "preposition": ["a", "para", "hacia", "hasta"]
+    },
+    "go": {
+      "main": "ir",
+      "verb": ["ir", "irse", "salir", "marcharse"],
+      "noun": ["intento", "turno"]
+    },
+    "almost": {
+      "main": "casi",
+      "adverb": ["casi", "por poco"]
+    },
+    "i": {
+      "main": "yo",
+      "pronoun": ["yo"]
+    },
+    "just": {
+      "main": "solo",
+      "adverb": ["solo", "justo", "apenas", "simplemente"],
+      "adjective": ["justo", "equitativo"]
+    },
+    "need": {
+      "main": "necesitar",
+      "verb": ["necesitar", "hacer falta", "requerir"],
+      "noun": ["necesidad", "falta"]
+    },
+    "pick": {
+      "main": "recoger",
+      "verb": ["recoger", "elegir", "escoger", "agarrar"],
+      "noun": ["elección", "pico"]
+    },
+    "up": {
+      "main": "arriba",
+      "adverb": ["arriba", "hacia arriba"],
+      "preposition": ["por", "hacia arriba de"]
+    },
+    "my": {
+      "main": "mi",
+      "pronoun": ["mi", "mis", "mío", "mía"]
+    },
+    "keys": {
+      "main": "llaves",
+      "noun": ["llaves", "teclas", "claves"]
+    },
+    "hold": {
+      "main": "esperar",
+      "verb": ["sostener", "sujetar", "esperar", "contener"],
+      "noun": ["agarre", "bodega"]
+    },
+    "on": {
+      "main": "en",
+      "preposition": ["en", "sobre", "encima de"],
+      "adverb": ["encendido", "adelante"]
+    },
+    "the": {
+      "main": "el",
+      "article": ["el", "la", "los", "las"]
+    },
+    "train": {
+      "main": "tren",
+      "noun": ["tren", "convoy"],
+      "verb": ["entrenar", "formar", "adiestrar"]
+    },
+    "leaves": {
+      "main": "sale",
+      "verb": ["sale", "se va", "parte", "deja"],
+      "noun": ["hojas", "follaje"]
+    },
+    "at": {
+      "main": "a",
+      "preposition": ["a", "en", "junto a"]
+    },
+    "745": {
+      "main": "7:45"
+    },
+    "right": {
+      "main": "verdad",
+      "adjective": ["correcto", "derecho", "adecuado"],
+      "adverb": ["justo", "bien", "enseguida"],
+      "noun": ["derecho", "derecha"]
+    },
+    "then": {
+      "main": "entonces",
+      "adverb": ["entonces", "luego", "después"]
+    },
+    "we": {
+      "main": "nosotros",
+      "pronoun": ["nosotros", "nosotras"]
+    },
+    "should": {
+      "main": "debería",
+      "auxiliary verb": ["debería", "tendría que", "convendría"]
+    },
+    "set": {
+      "main": "poner",
+      "verb": ["poner", "colocar", "fijar", "establecer"],
+      "noun": ["conjunto", "juego", "plató"]
+    },
+    "off": {
+      "main": "fuera",
+      "adverb": ["fuera", "lejos", "apagado"],
+      "preposition": ["de", "desde", "fuera de"]
+    },
+    "now": {
+      "main": "ahora",
+      "adverb": ["ahora", "ya", "ahora mismo"],
+      "conjunction": ["ahora que"]
+    },
+    "she": {
+      "main": "ella",
+      "pronoun": ["ella"]
+    },
+    "always": {
+      "main": "siempre",
+      "adverb": ["siempre"]
+    },
+    "says": {
+      "main": "dice",
+      "verb": ["dice", "cuenta", "afirma"]
+    },
+    "that": {
+      "main": "eso",
+      "pronoun": ["eso", "ese", "aquello"],
+      "conjunction": ["que"]
+    },
+    "and": {
+      "main": "y",
+      "conjunction": ["y", "e"]
+    },
+    "we're": {
+      "main": "somos",
+      "phrase": ["somos", "estamos"]
+    },
+    "never": {
+      "main": "nunca",
+      "adverb": ["nunca", "jamás"]
+    },
+    "late": {
+      "main": "tarde",
+      "adverb": ["tarde"],
+      "adjective": ["tardío", "atrasado", "difunto"]
+    },
+    "did": {
+      "main": "hiciste",
+      "verb": ["hizo", "hice", "hiciste", "hicieron"]
+    },
+    "turn": {
+      "main": "girar",
+      "verb": ["girar", "dar la vuelta", "convertirse"],
+      "noun": ["turno", "vuelta", "giro"]
+    },
+    "lights": {
+      "main": "luces",
+      "noun": ["luces", "lámparas"]
+    },
+    "in": {
+      "main": "en",
+      "preposition": ["en", "dentro de"],
+      "adverb": ["dentro", "adentro"]
+    },
+    "kitchen": {
+      "main": "cocina",
+      "noun": ["cocina"],
+      "adjective": ["de cocina"]
+    },
+    "yes": {
+      "main": "sí",
+      "interjection": ["sí", "claro"],
+      "noun": ["sí"]
+    },
+    "asked": {
+      "main": "pedí",
+      "verb": ["pedí", "pregunté", "pidió", "preguntó"]
+    },
+    "sam": {
+      "main": "Sam",
+      "noun": ["Sam"]
+    },
+    "look": {
+      "main": "mirar",
+      "verb": ["mirar", "parecer", "buscar"],
+      "noun": ["mirada", "aspecto", "look"]
+    },
+    "after": {
+      "main": "después de",
+      "preposition": ["después de", "tras", "detrás de"],
+      "adverb": ["después", "luego"],
+      "conjunction": ["después de que"]
+    },
+    "cat": {
+      "main": "gato",
+      "noun": ["gato", "gata", "felino"]
+    },
+    "what": {
+      "main": "qué",
+      "pronoun": ["qué", "lo que", "cuál"]
+    },
+    "if": {
+      "main": "si",
+      "conjunction": ["si", "en caso de que", "aunque"]
+    },
+    "run": {
+      "main": "correr",
+      "verb": ["correr", "dirigir", "funcionar", "huir"],
+      "noun": ["carrera", "racha"]
+    },
+    "out": {
+      "main": "fuera",
+      "adverb": ["fuera", "afuera"],
+      "preposition": ["de", "fuera de"]
+    },
+    "of": {
+      "main": "de",
+      "preposition": ["de", "del"]
+    },
+    "time": {
+      "main": "tiempo",
+      "noun": ["tiempo", "hora", "vez", "momento"],
+      "verb": ["cronometrar", "programar"]
+    },
+    "station": {
+      "main": "estación",
+      "noun": ["estación", "parada", "emisora"],
+      "verb": ["destinar", "apostar"]
+    },
+    "won't": {
+      "main": "no lo haremos",
+      "phrase": ["no va a", "no lo hará", "no quiere"]
+    },
+    "don't": {
+      "main": "no",
+      "phrase": ["no", "no lo hagas"]
+    },
+    "give": {
+      "main": "dar",
+      "verb": ["dar", "regalar", "entregar", "ceder"]
+    },
+    "before": {
+      "main": "antes de",
+      "preposition": ["antes de", "ante", "delante de"],
+      "conjunction": ["antes de que"],
+      "adverb": ["antes", "anteriormente"]
+    },
+    "even": {
+      "main": "siquiera",
+      "adverb": ["incluso", "aun", "hasta", "siquiera"],
+      "adjective": ["par", "llano", "uniforme"]
+    },
+    "start": {
+      "main": "empezar",
+      "verb": ["empezar", "comenzar", "iniciar", "arrancar"],
+      "noun": ["inicio", "comienzo", "salida"]
+    },
+    "still": {
+      "main": "todavía",
+      "adverb": ["todavía", "aún", "sin embargo"],
+      "adjective": ["quieto", "tranquilo", "inmóvil"]
+    },
+    "can't": {
+      "main": "no puedo",
+      "phrase": ["no puedo", "no puede", "no se puede"]
+    },
+    "figure": {
+      "main": "entender",
+      "verb": ["entender", "calcular", "suponer", "figurar"],
+      "noun": ["figura", "cifra", "tipo"]
+    },
+    "how": {
+      "main": "cómo",
+      "adverb": ["cómo", "qué tal", "cuán"]
+    },
+    "read": {
+      "main": "leer",
+      "verb": ["leer", "interpretar", "marcar"]
+    },
+    "this": {
+      "main": "este",
+      "pronoun": ["este", "esta", "esto"]
+    },
+    "ticket": {
+      "main": "boleto",
+      "noun": ["boleto", "billete", "entrada", "multa"]
+    },
+    "platform": {
+      "main": "andén",
+      "noun": ["andén", "plataforma", "tarima"]
+    },
+    "four": {
+      "main": "cuatro",
+      "numeral": ["cuatro"]
+    },
+    "carriage": {
+      "main": "vagón",
+      "noun": ["vagón", "coche", "carruaje"]
+    },
+    "b": {
+      "main": "B"
+    },
+    "seat": {
+      "main": "asiento",
+      "noun": ["asiento", "plaza", "escaño"],
+      "verb": ["sentar", "tener capacidad para"]
+    },
+    "12": {
+      "main": "12"
+    },
+    "let's": {
+      "main": "vamos a",
+      "phrase": ["vamos a", "hagamos", "vamos"]
+    },
+    "find": {
+      "main": "averiguar",
+      "verb": ["encontrar", "hallar", "averiguar", "descubrir"],
+      "noun": ["hallazgo", "descubrimiento"]
+    },
+    "where": {
+      "main": "dónde",
+      "adverb": ["dónde", "donde", "adónde"]
+    },
+    "café": {
+      "main": "cafetería",
+      "noun": ["cafetería", "café", "bar"]
+    },
+    "is": {
+      "main": "está",
+      "verb": ["es", "está", "hay"]
+    },
+    "first": {
+      "main": "primero",
+      "adverb": ["primero", "antes", "en primer lugar"],
+      "adjective": ["primer", "primero", "principal"]
+    },
+    "coffee": {
+      "main": "café",
+      "noun": ["café"]
+    },
+    "sounds": {
+      "main": "suena",
+      "verb": ["suena", "parece", "resuena"],
+      "noun": ["sonidos", "ruidos"]
+    },
+    "perfect": {
+      "main": "perfecto",
+      "adjective": ["perfecto", "ideal", "impecable"],
+      "verb": ["perfeccionar"]
+    },
+    "barely": {
+      "main": "apenas",
+      "adverb": ["apenas", "casi no", "escasamente"]
+    },
+    "slept": {
+      "main": "dormí",
+      "verb": ["dormí", "dormió", "dormido"]
+    },
+    "get": {
+      "main": "conseguir",
+      "verb": ["conseguir", "obtener", "recibir", "llegar"]
+    },
+    "earlier": {
+      "main": "más temprano",
+      "adverb": ["más temprano", "antes", "previamente"],
+      "adjective": ["anterior", "previo"]
+    },
+    "not": {
+      "main": "no",
+      "adverb": ["no", "ni"]
+    },
+    "later": {
+      "main": "más tarde",
+      "adverb": ["más tarde", "después", "luego"],
+      "adjective": ["posterior", "ulterior"]
+    },
+    "next": {
+      "main": "próximo",
+      "adjective": ["próximo", "siguiente", "contiguo"],
+      "adverb": ["después", "luego", "a continuación"]
+    },
+    "coast": {
+      "main": "costa",
+      "noun": ["costa", "litoral", "orilla"],
+      "verb": ["deslizarse", "ir en punto muerto"]
+    },
+    "we'll": {
+      "main": "vamos a",
+      "phrase": ["vamos a", "lo haremos"]
+    },
+    "come": {
+      "main": "venir",
+      "verb": ["venir", "llegar", "acudir"]
+    },
+    "back": {
+      "main": "de vuelta",
+      "adverb": ["de vuelta", "atrás", "de regreso"],
+      "noun": ["espalda", "parte trasera", "dorso"],
+      "adjective": ["trasero", "posterior"]
+    },
+    "sunday": {
+      "main": "domingo",
+      "noun": ["domingo"],
+      "adjective": ["dominical", "de domingo"]
+    },
+    "evening": {
+      "main": "noche",
+      "noun": ["tarde", "noche", "velada"],
+      "adjective": ["vespertino", "de noche"]
+    },
+    "promise": {
+      "main": "prometer",
+      "verb": ["prometer", "asegurar"],
+      "noun": ["promesa", "compromiso"]
+    },
+    "can": {
+      "main": "poder",
+      "verb": ["poder", "saber"],
+      "noun": ["lata", "bote"]
+    },
+    "put": {
+      "main": "poner",
+      "verb": ["poner", "colocar", "meter", "dejar"]
+    },
+    "museum": {
+      "main": "museo",
+      "noun": ["museo"]
+    },
+    "until": {
+      "main": "hasta",
+      "preposition": ["hasta"],
+      "conjunction": ["hasta que"]
+    },
+    "tomorrow": {
+      "main": "mañana",
+      "adverb": ["mañana"],
+      "noun": ["mañana", "el día de mañana", "futuro"]
+    },
+    "sure": {
+      "main": "claro",
+      "adverb": ["claro", "por supuesto", "seguro"],
+      "adjective": ["seguro", "cierto"]
+    },
+    "today": {
+      "main": "hoy",
+      "adverb": ["hoy", "hoy en día"],
+      "noun": ["hoy", "actualidad"]
+    },
+    "for": {
+      "main": "para",
+      "preposition": ["para", "por", "durante"],
+      "conjunction": ["pues", "ya que"]
+    },
+    "sea": {
+      "main": "mar",
+      "noun": ["mar", "océano"],
+      "adjective": ["marino", "marítimo"]
+    },
+    "sun": {
+      "main": "sol",
+      "noun": ["sol"],
+      "verb": ["tomar el sol", "asolearse"]
+    },
+    "nothing": {
+      "main": "nada",
+      "pronoun": ["nada"],
+      "noun": ["nada", "cero"]
+    },
+    "else": {
+      "main": "más",
+      "adverb": ["más", "otro", "si no"]
+    },
+    "already": {
+      "main": "ya",
+      "adverb": ["ya", "antes"]
+    },
+    "here": {
+      "main": "aquí",
+      "adverb": ["aquí", "acá"]
+    },
+    "quick": {
+      "main": "rápido",
+      "adjective": ["rápido", "veloz", "ágil"],
+      "adverb": ["rápido", "deprisa"]
+    },
+    "grab": {
+      "main": "agarrar",
+      "verb": ["agarrar", "coger", "tomar", "pillar"],
+      "noun": ["agarrón", "manotazo"]
+    },
+    "your": {
+      "main": "tu",
+      "pronoun": ["tu", "tus", "su", "vuestro"]
+    },
+    "bag": {
+      "main": "bolso",
+      "noun": ["bolso", "bolsa", "mochila", "maleta"],
+      "verb": ["embolsar", "meter en una bolsa"]
+    },
+    "a": {
+      "main": "un",
+      "article": ["un", "una"]
+    },
+    "very": {
+      "main": "muy",
+      "adverb": ["muy", "mucho"],
+      "adjective": ["mismo", "propio"]
+    },
+    "long": {
+      "main": "largo",
+      "adjective": ["largo", "extenso", "prolongado"],
+      "adverb": ["mucho tiempo"],
+      "verb": ["anhelar", "añorar"]
+    },
+    "subtitle": {
+      "main": "subtítulo",
+      "noun": ["subtítulo"],
+      "verb": ["subtitular"]
+    },
+    "line": {
+      "main": "línea",
+      "noun": ["línea", "frase", "fila", "cola"],
+      "verb": ["forrar", "alinear"]
+    },
+    "check": {
+      "main": "comprobar",
+      "verb": ["comprobar", "revisar", "verificar", "chequear"],
+      "noun": ["control", "revisión", "cheque", "cuenta"]
+    },
+    "overlay": {
+      "main": "superposición",
+      "noun": ["superposición", "capa", "revestimiento"],
+      "verb": ["superponer", "recubrir"]
+    },
+    "wraps": {
+      "main": "ajusta",
+      "verb": ["envuelve", "ajusta", "rodea"],
+      "noun": ["envoltorios", "chales"]
+    },
+    "text": {
+      "main": "texto",
+      "noun": ["texto", "mensaje"],
+      "verb": ["enviar un mensaje", "escribir"]
+    },
+    "when": {
+      "main": "cuando",
+      "conjunction": ["cuando", "mientras"],
+      "adverb": ["cuándo"]
+    },
+    "somebody": {
+      "main": "alguien",
+      "pronoun": ["alguien"],
+      "noun": ["alguien importante"]
+    },
+    "talks": {
+      "main": "habla",
+      "verb": ["habla", "conversa", "charla"],
+      "noun": ["charlas", "conversaciones", "negociaciones"]
+    },
+    "while": {
+      "main": "mientras",
+      "conjunction": ["mientras", "mientras que", "aunque"],
+      "noun": ["rato", "tiempo"]
+    },
+    "finally": {
+      "main": "por fin",
+      "adverb": ["por fin", "finalmente", "al fin"]
+    },
+    "window": {
+      "main": "ventanilla",
+      "noun": ["ventana", "ventanilla", "escaparate"]
+    },
+    "seats": {
+      "main": "asientos",
+      "noun": ["asientos", "plazas", "escaños"]
+    },
+    "as": {
+      "main": "como",
+      "conjunction": ["como", "mientras", "ya que"],
+      "adverb": ["tan"],
+      "preposition": ["como", "de"]
+    },
+    "promised": {
+      "main": "prometido",
+      "adjective": ["prometido"],
+      "verb": ["prometí", "prometió"]
+    },
+    "wake": {
+      "main": "despertar",
+      "verb": ["despertar", "despertarse"],
+      "noun": ["estela", "velatorio"]
+    },
+    "me": {
+      "main": "me",
+      "pronoun": ["me", "mí", "yo"]
+    },
+    "see": {
+      "main": "ver",
+      "verb": ["ver", "mirar", "entender", "visitar"]
+    },
+    "mr": {
+      "main": "señor",
+      "abbreviation": ["Sr.", "señor", "don"]
+    },
+    "snail": {
+      "main": "caracol",
+      "noun": ["caracol"]
+    },
+    "aw": {
+      "main": "ay",
+      "interjection": ["ay", "oh", "aww"]
+    },
+    "cute": {
+      "main": "lindo",
+      "adjective": ["lindo", "mono", "tierno", "adorable"]
+    },
+    "little": {
+      "main": "pequeño",
+      "adjective": ["pequeño", "chico", "poco"],
+      "adverb": ["poco"]
+    },
+    "cornu": {
+      "main": "caracol (lat.)",
+      "noun": ["caracol", "cuerno"]
+    },
+    "aspersum": {
+      "main": "moteado (lat.)",
+      "adjective": ["moteado", "salpicado", "manchado"]
+    },
+    "latin": {
+      "main": "latín",
+      "adjective": ["latino", "en latín"],
+      "noun": ["latín"]
+    },
+    "name—bonus": {
+      "main": "nombre — extra"
+    },
+    "points": {
+      "main": "puntos",
+      "noun": ["puntos", "puntas", "cuestiones"],
+      "verb": ["señala", "apunta"]
+    },
+    "can’t": {
+      "main": "no puedo",
+      "phrase": ["no puedo", "no puede", "no se puede"]
+    },
+    "believe": {
+      "main": "creer",
+      "verb": ["creer", "pensar", "confiar"]
+    },
+    "got": {
+      "main": "quedamos",
+      "verb": ["consiguió", "obtuvo", "recibió", "se volvió"]
+    },
+    "stuck": {
+      "main": "atrapado",
+      "adjective": ["atrapado", "atascado", "pegado"],
+      "verb": ["pegó", "clavó", "metió"]
+    },
+    "with": {
+      "main": "con",
+      "preposition": ["con", "de"]
+    },
+    "tree": {
+      "main": "árbol",
+      "noun": ["árbol"]
+    },
+    "hugger": {
+      "main": "abrazador",
+      "noun": ["abrazador", "persona cariñosa"],
+      "phrase": ["abraza-árboles", "ecologista"]
+    },
+    "have": {
+      "main": "tener",
+      "verb": ["tener", "haber", "tomar"]
+    },
+    "hear": {
+      "main": "oír",
+      "verb": ["oír", "escuchar", "enterarse"]
+    },
+    "name": {
+      "main": "nombre",
+      "noun": ["nombre", "fama"],
+      "verb": ["nombrar", "llamar"]
+    },
+    "one": {
+      "main": "uno",
+      "numeral": ["uno", "una"],
+      "pronoun": ["uno", "alguien"]
+    },
+    "more": {
+      "main": "más",
+      "adverb": ["más"],
+      "adjective": ["más", "adicional"]
+    },
+    "animal": {
+      "main": "animal",
+      "noun": ["animal", "bestia"],
+      "adjective": ["animal"]
+    },
+    "swear": {
+      "main": "jurar",
+      "verb": ["jurar", "decir palabrotas", "maldecir"]
+    },
+    "i’m": {
+      "main": "estoy",
+      "phrase": ["estoy", "soy"]
+    },
+    "gonna": {
+      "main": "voy a",
+      "phrase": ["voy a", "va a", "vamos a"]
+    },
+    "kill": {
+      "main": "matar",
+      "verb": ["matar", "acabar con", "asesinar"],
+      "noun": ["presa", "matanza"]
+    },
+    "her": {
+      "main": "la",
+      "pronoun": ["la", "ella", "su", "le"]
+    },
+    "relax": {
+      "main": "relajarse",
+      "verb": ["relajarse", "tranquilizarse", "relajar"]
+    },
+    "sugar": {
+      "main": "azúcar",
+      "noun": ["azúcar", "cariño"],
+      "adjective": ["de azúcar", "azucarado"]
+    },
+    "buns": {
+      "main": "bollitos",
+      "noun": ["bollos", "panecillos", "moños", "nalgas"]
+    },
+    "does": {
+      "main": "hace",
+      "verb": ["hace", "realiza", "lleva a cabo"]
+    },
+    "all": {
+      "main": "todo",
+      "adjective": ["todo", "toda", "todos"],
+      "pronoun": ["todo", "todos"],
+      "adverb": ["completamente", "totalmente"]
+    },
+    "work": {
+      "main": "trabajo",
+      "noun": ["trabajo", "obra", "labor"],
+      "verb": ["trabajar", "funcionar"]
+    },
+    "we’ll": {
+      "main": "vamos a",
+      "phrase": ["vamos a", "lo haremos"]
+    },
+    "fun": {
+      "main": "diversión",
+      "noun": ["diversión", "entretenimiento", "gracia"],
+      "adjective": ["divertido", "entretenido"]
+    },
+    "yeah": {
+      "main": "sí",
+      "interjection": ["sí", "ya", "claro"]
+    },
+    "wasted": {
+      "main": "borracho",
+      "adjective": ["borracho", "colocado", "desperdiciado"],
+      "verb": ["desperdició", "malgastó"]
+    },
+    "our": {
+      "main": "nuestro",
+      "pronoun": ["nuestro", "nuestra", "nuestros", "nuestras"]
+    },
+    "minds": {
+      "main": "mentes",
+      "noun": ["mentes", "cabezas", "juicio"]
+    },
+    "way": {
+      "main": "camino",
+      "noun": ["camino", "manera", "forma", "vía"],
+      "adverb": ["mucho", "muy"]
+    },
+    "ahead": {
+      "main": "adelante",
+      "adverb": ["adelante", "delante", "por delante"]
+    },
+    "man": {
+      "main": "amigo",
+      "noun": ["hombre", "tío", "tipo", "persona"]
+    },
+    "c’mon": {
+      "main": "vamos",
+      "phrase": ["vamos", "venga", "anda"]
+    },
+    "team": {
+      "main": "equipo",
+      "noun": ["equipo", "grupo"],
+      "verb": ["formar equipo", "aliarse"]
+    },
+    "mustn’t": {
+      "main": "no debemos",
+      "phrase": ["no debe", "no hay que", "no se puede"]
+    },
+    "dillydally": {
+      "main": "entretenerse",
+      "verb": ["entretenerse", "remolonear", "perder el tiempo", "demorarse"]
+    },
+    "there’s": {
+      "main": "hay",
+      "phrase": ["hay", "ahí está", "existe"]
+    },
+    "so": {
+      "main": "tan",
+      "adverb": ["tan", "tanto", "así"],
+      "conjunction": ["así que", "por eso", "entonces"]
+    },
+    "much": {
+      "main": "mucho",
+      "adverb": ["mucho", "muy"],
+      "adjective": ["mucho", "mucha"]
+    },
+    "nature": {
+      "main": "naturaleza",
+      "noun": ["naturaleza", "carácter", "índole"]
+    },
+    "was": {
+      "main": "estaba",
+      "verb": ["estaba", "era", "fue"]
+    },
+    "thinking": {
+      "main": "pensando",
+      "verb": ["pensando", "creyendo", "considerando"],
+      "noun": ["pensamiento", "opinión", "reflexión"]
+    },
+    "call": {
+      "main": "llamar",
+      "verb": ["llamar", "nombrar", "telefonear"],
+      "noun": ["llamada", "decisión"]
+    },
+    "class": {
+      "main": "clase",
+      "noun": ["clase", "curso", "categoría"],
+      "adjective": ["de clase", "escolar"]
+    },
+    "project": {
+      "main": "proyecto",
+      "noun": ["proyecto", "trabajo", "plan"],
+      "verb": ["proyectar", "prever", "sobresalir"]
+    },
+    "“fungis": {
+      "main": "hongos",
+      "noun": ["hongos", "fungi", "setas"]
+    },
+    "forest”": {
+      "main": "bosque",
+      "noun": ["bosque", "selva"],
+      "adjective": ["forestal", "del bosque"]
+    },
+    "it": {
+      "main": "lo",
+      "pronoun": ["lo", "la", "eso", "ello"]
+    },
+    "because": {
+      "main": "porque",
+      "conjunction": ["porque", "ya que", "puesto que"]
+    },
+    "we’re": {
+      "main": "somos",
+      "phrase": ["somos", "estamos"]
+    },
+    "group": {
+      "main": "grupo",
+      "noun": ["grupo", "conjunto", "banda"],
+      "verb": ["agrupar", "reunir"]
+    },
+    "guys": {
+      "main": "chicos",
+      "noun": ["chicos", "tipos", "muchachos", "gente"]
+    },
+    "also": {
+      "main": "también",
+      "adverb": ["también", "además", "asimismo"]
+    },
+    "fungis": {
+      "main": "hongos",
+      "noun": ["hongos", "fungi", "setas"]
+    },
+    "which—": {
+      "main": "que",
+      "pronoun": ["que", "cual", "el cual", "cuál"]
+    },
+    "shush": {
+      "main": "shh",
+      "interjection": ["shh", "chis", "silencio"],
+      "verb": ["hacer callar", "mandar callar"]
+    },
+    "that’s": {
+      "main": "eso es",
+      "phrase": ["eso es", "es", "ese es"]
+    },
+    "yellow": {
+      "main": "amarillo",
+      "adjective": ["amarillo"],
+      "noun": ["amarillo"],
+      "verb": ["amarillear", "ponerse amarillo"]
+    },
+    "wagtail": {
+      "main": "lavandera",
+      "noun": ["lavandera", "aguzanieves"]
+    },
+    "she’s": {
+      "main": "está",
+      "phrase": ["está", "es", "ella es"]
+    },
+    "distress": {
+      "main": "apuros",
+      "noun": ["apuros", "angustia", "aflicción", "peligro"],
+      "verb": ["angustiar", "afligir"]
+    },
+    "motacilla": {
+      "main": "lavandera (lat.)",
+      "noun": ["lavandera", "aguzanieves"]
+    },
+    "flava": {
+      "main": "amarilla (lat.)",
+      "adjective": ["amarilla", "dorada"]
+    },
+    "oh": {
+      "main": "oh",
+      "interjection": ["oh", "ah", "ay", "vaya"]
+    },
+    "wow": {
+      "main": "guau",
+      "interjection": ["guau", "vaya", "hala"],
+      "verb": ["impresionar", "deslumbrar"]
+    },
+    "dorkwad": {
+      "main": "nerd",
+      "noun": ["nerd", "bobo", "friki", "pringado"]
+    },
+    "camping": {
+      "main": "acampar",
+      "verb": ["acampar", "acampando"],
+      "noun": ["camping", "acampada"]
+    },
+    "barbecue": {
+      "main": "barbacoa",
+      "noun": ["barbacoa", "parrilla", "asado"],
+      "verb": ["asar a la parrilla"]
+    },
+    "burning": {
+      "main": "ardiendo",
+      "adjective": ["ardiente", "en llamas", "abrasador"],
+      "verb": ["ardiendo", "quemando"],
+      "noun": ["quema", "ardor"]
+    },
+    "dear": {
+      "main": "Dios mío",
+      "interjection": ["Dios mío", "vaya", "ay"],
+      "adjective": ["querido", "caro", "estimado"]
+    },
+    "gross": {
+      "main": "qué asco",
+      "interjection": ["qué asco", "puaj"],
+      "adjective": ["asqueroso", "repugnante", "bruto"]
+    },
+    "easy": {
+      "main": "tranquilo",
+      "adverb": ["con calma", "despacio", "tranquilo"],
+      "adjective": ["fácil", "sencillo", "tranquilo"]
+    },
+    "supposed": {
+      "main": "se supone",
+      "adjective": ["supuesto", "presunto"],
+      "verb": ["se supone", "supuso"]
+    },
+    "be": {
+      "main": "estar",
+      "verb": ["ser", "estar", "existir"]
+    },
+    "studying": {
+      "main": "estudiando",
+      "verb": ["estudiando", "estudiar", "examinando"],
+      "noun": ["estudio"]
+    },
+    "wrecking": {
+      "main": "destrozando",
+      "verb": ["destrozando", "destruyendo", "arruinando"],
+      "noun": ["destrucción", "demolición"]
+    },
+    "piss": {
+      "main": "mear",
+      "verb": ["mear", "orinar"],
+      "noun": ["pis", "orina", "meado"]
+    },
+    "break": {
+      "main": "pausa",
+      "noun": ["pausa", "descanso", "recreo"],
+      "verb": ["romper", "quebrar", "estropear"]
+    },
+    "oi": {
+      "main": "oye",
+      "interjection": ["oye", "eh", "ey"]
+    },
+    "fungus": {
+      "main": "hongo",
+      "noun": ["hongo", "seta", "moho"]
+    },
+    "freak": {
+      "main": "fanático",
+      "noun": ["fanático", "bicho raro", "friki", "monstruo"],
+      "adjective": ["extraño", "insólito"]
+    },
+    "make": {
+      "main": "hacer",
+      "verb": ["hacer", "fabricar", "preparar", "obligar"],
+      "noun": ["marca", "modelo"]
+    },
+    "yourself": {
+      "main": "ti mismo",
+      "pronoun": ["tú mismo", "ti mismo", "te", "usted mismo"]
+    },
+    "useful": {
+      "main": "útil",
+      "adjective": ["útil", "provechoso", "práctico"]
+    },
+    "fix": {
+      "main": "arreglar",
+      "verb": ["arreglar", "reparar", "fijar", "preparar"],
+      "noun": ["apuro", "solución", "dosis"]
+    },
+    "tent": {
+      "main": "carpa",
+      "noun": ["carpa", "tienda de campaña", "toldo"]
+    },
+    "bit": {
+      "main": "poco",
+      "noun": ["poco", "trozo", "pedazo", "bit"],
+      "adverb": ["un poco", "algo"]
+    },
+    "friendly": {
+      "main": "amistoso",
+      "adjective": ["amistoso", "amable", "simpático", "cordial"]
+    },
+    "campsite": {
+      "main": "campamento",
+      "noun": ["campamento", "camping", "zona de acampada"]
+    },
+    "ribbing": {
+      "main": "bromas",
+      "noun": ["bromas", "burlas", "pullas"],
+      "verb": ["tomando el pelo", "burlándose"]
+    },
+    "wouldn’t": {
+      "main": "no haría",
+      "phrase": ["no haría", "no querría", "no podría"]
+    },
+    "survive": {
+      "main": "sobrevivir",
+      "verb": ["sobrevivir", "subsistir", "resistir"]
+    },
+    "five": {
+      "main": "cinco",
+      "numeral": ["cinco"]
+    },
+    "minutes": {
+      "main": "minutos",
+      "noun": ["minutos", "acta"]
+    },
+    "alone": {
+      "main": "solo",
+      "adverb": ["solo", "a solas"],
+      "adjective": ["solo", "sola", "aislado"]
+    },
+    "these": {
+      "main": "estos",
+      "pronoun": ["estos", "estas"]
+    },
+    "woods": {
+      "main": "bosque",
+      "noun": ["bosque", "arboleda", "madera"]
+    },
+    "real": {
+      "main": "auténtico",
+      "adjective": ["real", "auténtico", "verdadero"],
+      "adverb": ["muy", "realmente"]
+    },
+    "weenie": {
+      "main": "debilucho",
+      "noun": ["debilucho", "gallina", "blandengue", "salchicha"]
+    },
+    "innit": {
+      "main": "¿no?",
+      "phrase": ["¿no?", "¿verdad?", "¿a que sí?"]
+    },
+    "phil": {
+      "main": "Phil",
+      "noun": ["Phil"]
+    },
+    "those": {
+      "main": "esos",
+      "pronoun": ["esos", "esas", "aquellos", "aquellas"]
+    },
+    "sausages": {
+      "main": "salchichas",
+      "noun": ["salchichas", "embutidos", "chorizos"]
+    },
+    "coming": {
+      "main": "avanzando",
+      "verb": ["viniendo", "llegando", "avanzando"],
+      "adjective": ["próximo", "venidero"]
+    },
+    "salt": {
+      "main": "sal",
+      "noun": ["sal"],
+      "verb": ["salar", "echar sal"],
+      "adjective": ["salado"]
+    },
+    "it’s": {
+      "main": "es",
+      "phrase": ["es", "está", "eso es"]
+    },
+    "incredible": {
+      "main": "increíble",
+      "adjective": ["increíble", "asombroso", "extraordinario"]
+    },
+    "new": {
+      "main": "nuevo",
+      "adjective": ["nuevo", "reciente", "novedoso"]
+    },
+    "species": {
+      "main": "especie",
+      "noun": ["especie", "especies", "clase"]
+    },
+    "bloody": {
+      "main": "maldito",
+      "adjective": ["maldito", "condenado", "sangriento", "ensangrentado"],
+      "adverb": ["condenadamente", "terriblemente", "muy"]
+    },
+    "hell": {
+      "main": "demonios",
+      "interjection": ["demonios", "diablos", "maldición"],
+      "noun": ["infierno"]
+    },
+    "things": {
+      "main": "cosas",
+      "noun": ["cosas", "objetos", "bichos"]
+    },
+    "like": {
+      "main": "como",
+      "preposition": ["como", "igual que"],
+      "conjunction": ["como si"],
+      "verb": ["gustar", "querer"]
+    },
+    "gnome": {
+      "main": "gnomo",
+      "noun": ["gnomo", "duende", "enano"]
+    },
+    "shagged": {
+      "main": "se acostó con",
+      "verb": ["se acostó con", "se tiró a"],
+      "adjective": ["agotado", "reventado"]
+    },
+    "mushroom": {
+      "main": "hongo",
+      "noun": ["hongo", "seta", "champiñón"],
+      "verb": ["multiplicarse", "crecer rápidamente"]
+    },
+    "they’re": {
+      "main": "son",
+      "phrase": ["son", "están", "ellos son"]
+    },
+    "absolutely": {
+      "main": "absolutamente",
+      "adverb": ["absolutamente", "totalmente", "por supuesto"]
+    },
+    "adorable": {
+      "main": "adorable",
+      "adjective": ["adorable", "encantador", "precioso"]
+    },
+    "bet": {
+      "main": "apostar",
+      "verb": ["apostar", "jugarse"],
+      "noun": ["apuesta"]
+    },
+    "fortune": {
+      "main": "fortuna",
+      "noun": ["fortuna", "dineral", "suerte", "destino"]
+    },
+    "catch": {
+      "main": "atrapar",
+      "verb": ["atrapar", "coger", "pescar", "pillar"],
+      "noun": ["captura", "pesca", "trampa"]
+    },
+    "we’d": {
+      "main": "seríamos",
+      "phrase": ["seríamos", "habríamos", "preferiríamos"]
+    },
+    "famous": {
+      "main": "famoso",
+      "adjective": ["famoso", "célebre", "conocido"]
+    },
+    "mtv": {
+      "main": "MTV",
+      "noun": ["MTV"]
+    },
+    "wonder": {
+      "main": "preguntarse",
+      "verb": ["preguntarse", "plantearse", "maravillarse"],
+      "noun": ["maravilla", "asombro", "milagro"]
+    },
+    "they": {
+      "main": "ellos",
+      "pronoun": ["ellos", "ellas"]
+    },
+    "taste": {
+      "main": "saber",
+      "verb": ["saber a", "probar", "degustar"],
+      "noun": ["sabor", "gusto"]
+    },
+    "really": {
+      "main": "realmente",
+      "adverb": ["realmente", "de verdad", "en serio", "muy"]
+    },
+    "shouldn’t": {
+      "main": "no debería",
+      "phrase": ["no debería", "no deberías", "no conviene"]
+    },
+    "disrupt": {
+      "main": "alterar",
+      "verb": ["alterar", "perturbar", "interrumpir", "trastornar"]
+    },
+    "their": {
+      "main": "su",
+      "pronoun": ["su", "sus", "suyo"]
+    },
+    "habitat": {
+      "main": "hábitat",
+      "noun": ["hábitat", "medio", "entorno"]
+    },
+    "greetings": {
+      "main": "saludos",
+      "interjection": ["saludos", "buenas"],
+      "noun": ["saludos", "felicitaciones"]
+    },
+    "welcome": {
+      "main": "bienvenidos",
+      "interjection": ["bienvenido", "bienvenidos"],
+      "verb": ["dar la bienvenida", "acoger", "recibir"],
+      "adjective": ["bienvenido", "grato"]
+    },
+    "friends": {
+      "main": "amigos",
+      "noun": ["amigos", "amigas", "compañeros"]
+    },
+    "i’ll": {
+      "main": "voy a",
+      "phrase": ["voy a", "lo haré"]
+    },
+    "down": {
+      "main": "abajo",
+      "adverb": ["abajo", "hacia abajo"],
+      "preposition": ["por", "bajando"],
+      "adjective": ["deprimido", "caído"]
+    },
+    "could": {
+      "main": "podría",
+      "auxiliary verb": ["podría", "podía", "pudo"]
+    },
+    "interest": {
+      "main": "interesar",
+      "verb": ["interesar", "atraer"],
+      "noun": ["interés", "afición", "intereses"]
+    },
+    "some": {
+      "main": "un poco de",
+      "adjective": ["algún", "unos", "un poco de"],
+      "pronoun": ["algunos", "algo"]
+    },
+    "peppermint": {
+      "main": "menta",
+      "noun": ["menta", "menta piperita", "caramelo de menta"],
+      "adjective": ["de menta", "mentolado"]
+    },
+    "tea": {
+      "main": "té",
+      "noun": ["té", "infusión", "merienda"]
+    },
+    "sprites": {
+      "main": "sprites",
+      "noun": ["sprites", "duendes", "hadas", "espíritus"]
+    },
+    "sprite": {
+      "main": "spritear",
+      "verb": ["spritear"],
+      "noun": ["sprite", "duende", "hada", "espíritu"]
+    },
+    "balance": {
+      "main": "equilibrio",
+      "noun": ["equilibrio", "balance", "saldo"],
+      "verb": ["equilibrar", "balancear"]
+    },
+    "forest": {
+      "main": "bosque",
+      "noun": ["bosque", "selva"],
+      "adjective": ["forestal", "del bosque"]
+    },
+    "take": {
+      "main": "tomar",
+      "verb": ["tomar", "llevar", "coger", "aceptar"]
+    },
+    "care": {
+      "main": "cuidado",
+      "noun": ["cuidado", "atención", "preocupación"],
+      "verb": ["importar", "preocuparse", "cuidar"]
+    },
+    "animals": {
+      "main": "animales",
+      "noun": ["animales", "bestias"]
+    },
+    "plants": {
+      "main": "plantas",
+      "noun": ["plantas", "fábricas"],
+      "verb": ["planta", "siembra"]
+    },
+    "birds": {
+      "main": "pájaros",
+      "noun": ["pájaros", "aves"]
+    },
+    "moss…": {
+      "main": "musgo",
+      "noun": ["musgo"]
+    },
+    "i…": {
+      "main": "yo",
+      "pronoun": ["yo"]
+    },
+    "hey": {
+      "main": "oye",
+      "interjection": ["oye", "eh", "hola"]
+    },
+    "uh": {
+      "main": "eh",
+      "interjection": ["eh", "este", "em"]
+    },
+    "geezer": {
+      "main": "viejito",
+      "noun": ["viejo", "vejete", "tipo", "abuelo"]
+    },
+    "cool": {
+      "main": "de acuerdo",
+      "adjective": ["genial", "fresco", "tranquilo", "guay"],
+      "verb": ["enfriar", "refrescar"]
+    },
+    "us": {
+      "main": "nosotros",
+      "pronoun": ["nos", "nosotros", "nosotras"]
+    },
+    "night": {
+      "main": "noche",
+      "noun": ["noche", "anochecer"],
+      "adjective": ["nocturno", "de noche"]
+    },
+    "friend": {
+      "main": "amigo",
+      "noun": ["amigo", "amiga", "compañero"]
+    },
+    "maybe": {
+      "main": "tal vez",
+      "adverb": ["tal vez", "quizá", "a lo mejor", "puede que"]
+    },
+    "ketchup…": {
+      "main": "kétchup",
+      "noun": ["kétchup", "salsa de tomate"]
+    },
+    "or": {
+      "main": "o",
+      "conjunction": ["o", "u", "ni"]
+    },
+    "something…": {
+      "main": "algo",
+      "pronoun": ["algo", "alguna cosa"]
+    },
+    "like…": {
+      "main": "como",
+      "preposition": ["como", "tipo", "igual que"]
+    },
+    "red": {
+      "main": "rojo",
+      "adjective": ["rojo", "colorado", "tinto"],
+      "noun": ["rojo"]
+    },
+    "paint": {
+      "main": "pintura",
+      "noun": ["pintura"],
+      "verb": ["pintar"]
+    },
+    "were": {
+      "main": "estaban",
+      "verb": ["estaban", "eran", "fueron", "estábamos"]
+    },
+    "painting": {
+      "main": "pintando",
+      "verb": ["pintando", "pintar"],
+      "noun": ["cuadro", "pintura"]
+    },
+    "hats": {
+      "main": "sombreros",
+      "noun": ["sombreros", "gorros", "sombreritos"]
+    },
+    "something": {
+      "main": "algo",
+      "pronoun": ["algo", "alguna cosa"],
+      "noun": ["algo", "cosa"]
+    },
+    "isn’t": {
+      "main": "no es",
+      "phrase": ["no es", "no está"]
+    },
+    "funny": {
+      "main": "gracioso",
+      "adjective": ["gracioso", "divertido", "raro", "extraño"]
+    },
+    "but": {
+      "main": "pero",
+      "conjunction": ["pero", "sino"],
+      "preposition": ["excepto", "salvo"]
+    },
+    "psycho": {
+      "main": "psicópata",
+      "noun": ["psicópata", "loco", "chiflado"],
+      "adjective": ["psicópata", "loco", "desquiciado"]
+    },
+    "gotta": {
+      "main": "tienes que",
+      "phrase": ["tengo que", "tienes que", "hay que"]
+    },
+    "outta": {
+      "main": "fuera de",
+      "preposition": ["fuera de", "de"]
+    },
+    "hurry": {
+      "main": "darse prisa",
+      "verb": ["darse prisa", "apurarse", "apresurarse"],
+      "noun": ["prisa", "apuro"]
+    },
+    "foot": {
+      "main": "pie",
+      "noun": ["pie", "pata", "base"]
+    },
+    "left": {
+      "main": "izquierdo",
+      "adjective": ["izquierdo"],
+      "noun": ["izquierda"],
+      "verb": ["dejó", "salió", "se fue"]
+    },
+    "leaf": {
+      "main": "hoja",
+      "noun": ["hoja", "página", "lámina"],
+      "verb": ["hojear"]
+    },
+    "stone": {
+      "main": "piedra",
+      "noun": ["piedra", "hueso", "canto"],
+      "adjective": ["de piedra"]
+    },
+    "picked": {
+      "main": "escogieron",
+      "verb": ["eligió", "escogió", "recogió", "arrancó"]
+    },
+    "wrong": {
+      "main": "equivocado",
+      "adjective": ["equivocado", "incorrecto", "erróneo"],
+      "adverb": ["mal"],
+      "noun": ["mal", "injusticia"]
+    },
+    "spot": {
+      "main": "lugar",
+      "noun": ["lugar", "sitio", "mancha", "punto"],
+      "verb": ["divisar", "detectar", "ver"]
+    },
+    "bitches": {
+      "main": "perras",
+      "noun": ["perras", "zorras"]
+    },
+    "them": {
+      "main": "los",
+      "pronoun": ["los", "las", "ellos", "ellas"]
+    },
+    "aaaah": {
+      "main": "aaah",
+      "interjection": ["ah", "ay"]
+    },
+    "eyes": {
+      "main": "ojos",
+      "noun": ["ojos", "mirada", "vista"]
+    },
+    "help": {
+      "main": "ayudar",
+      "verb": ["ayudar", "socorrer", "auxiliar"],
+      "noun": ["ayuda", "auxilio", "socorro"]
+    },
+    "sweet": {
+      "main": "dulce",
+      "adjective": ["dulce", "lindo", "rico", "encantador"],
+      "noun": ["caramelo", "dulce", "postre"]
+    },
+    "cakes": {
+      "main": "pasteles",
+      "noun": ["pasteles", "tartas", "bizcochos", "pastelitos"]
+    },
+    "love": {
+      "main": "amor",
+      "noun": ["amor", "cariño"],
+      "verb": ["amar", "querer", "encantar"]
+    },
+    "muffin": {
+      "main": "muffin",
+      "noun": ["muffin", "magdalena", "panecillo", "bollito"]
+    },
+    "huh": {
+      "main": "¿eh?",
+      "interjection": ["¿eh?", "¿qué?", "¿cómo?"]
+    },
+    "no": {
+      "main": "no",
+      "interjection": ["no"],
+      "adjective": ["ningún", "ninguna"]
+    },
+    "swim": {
+      "main": "nadar",
+      "verb": ["nadar", "bañarse"],
+      "noun": ["baño", "nado"]
+    },
+    "son": {
+      "main": "hijo",
+      "noun": ["hijo"]
+    },
+    "spriteberry": {
+      "main": "spritebaya",
+      "noun": ["spritebaya", "baya de los sprites"]
+    },
+    "burns": {
+      "main": "quema",
+      "verb": ["quema", "arde", "escuece"],
+      "noun": ["quemaduras"]
+    },
+    "don’t": {
+      "main": "no",
+      "phrase": ["no", "no lo hagas"]
+    },
+    "want": {
+      "main": "querer",
+      "verb": ["querer", "desear", "necesitar"],
+      "noun": ["falta", "carencia", "deseo"]
+    },
+    "hurt": {
+      "main": "hacer daño",
+      "verb": ["hacer daño", "lastimar", "herir", "doler"],
+      "noun": ["daño", "dolor", "herida"],
+      "adjective": ["herido", "dolido", "lastimado"]
+    },
+    "keep": {
+      "main": "mantener",
+      "verb": ["mantener", "guardar", "seguir", "conservar"]
+    },
+    "distance": {
+      "main": "distancia",
+      "noun": ["distancia", "lejanía"],
+      "verb": ["distanciar", "alejar"]
+    },
+    "eat": {
+      "main": "comer",
+      "verb": ["comer", "comerse", "tragar"]
+    },
+    "green": {
+      "main": "verde",
+      "adjective": ["verde", "ecológico", "novato"],
+      "noun": ["verde", "césped"]
+    },
+    "bastards": {
+      "main": "desgraciados",
+      "noun": ["desgraciados", "bastardos", "cabrones"]
+    },
+    "nuhuhuh": {
+      "main": "no-no-no",
+      "interjection": ["ni hablar", "de eso nada"]
+    },
+    "punks": {
+      "main": "vándalos",
+      "noun": ["vándalos", "gamberros", "punks", "macarras"]
+    },
+    "treated": {
+      "main": "trataban",
+      "verb": ["trataron", "trataban", "curó", "invitó"]
+    },
+    "world": {
+      "main": "mundo",
+      "noun": ["mundo", "tierra"],
+      "adjective": ["mundial"]
+    },
+    "own": {
+      "main": "propio",
+      "adjective": ["propio"],
+      "verb": ["poseer", "tener", "ser dueño de"]
+    },
+    "personal": {
+      "main": "personal",
+      "adjective": ["personal", "privado", "particular"]
+    },
+    "rubbish": {
+      "main": "basura",
+      "noun": ["basura", "desperdicios", "tonterías"],
+      "adjective": ["malísimo", "pésimo", "de pena"]
+    },
+    "bin": {
+      "main": "cubo",
+      "noun": ["cubo", "papelera", "contenedor", "basurero"]
+    },
+    "free": {
+      "main": "libre",
+      "adjective": ["libre", "gratis", "gratuito"],
+      "verb": ["liberar", "soltar"],
+      "adverb": ["gratis"]
+    },
+    "you’ll": {
+      "main": "vas a",
+      "phrase": ["vas a", "van a"]
+    },
+    "join": {
+      "main": "unirse",
+      "verb": ["unirse", "juntar", "afiliarse", "acompañar"],
+      "noun": ["unión", "juntura"]
+    },
+    "brother": {
+      "main": "hermano",
+      "noun": ["hermano", "compañero", "colega"]
+    },
+    "bird": {
+      "main": "pájaro",
+      "noun": ["pájaro", "ave"]
+    },
+    "alright": {
+      "main": "muy bien",
+      "adverb": ["bien", "de acuerdo", "vale"],
+      "adjective": ["bien", "aceptable"]
+    },
+    "let’s": {
+      "main": "vamos a",
+      "phrase": ["vamos a", "vamos"]
+    },
+    "burn": {
+      "main": "quemar",
+      "verb": ["quemar", "arder", "incendiar"],
+      "noun": ["quemadura"]
+    },
+    "bodies": {
+      "main": "cuerpos",
+      "noun": ["cuerpos", "cadáveres", "organismos"]
+    }
+  }
+}
