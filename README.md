@@ -24,6 +24,30 @@ The extension supports Chrome and Chrome-based browsers. It should also work in 
 3. Go to folder and install dependencies `cd easysubs && pnpm i`
 4. Build extension `pnpm build`
 
+## Playground and integration tests
+
+`pnpm playground` opens http://localhost:5180: a local video player with sample subtitles that runs the extension code
+from `src/` with hot reload, so features can be tried without building the extension or opening a streaming service.
+The Inspector window switches between live translation services and an offline mock, loads your own video and subtitle files,
+and logs every message sent to the background script.
+
+Its Screenshot section makes marketing images with a transparent background: pick a size (player only, Chrome Web
+Store, marquee, website, social), a window or full-bleed frame, the scale and whether to show the player controls, then press Capture or ⌥S. ⌥S keeps
+a hovered word's translation open. The dev server renders the page in headless Chromium at the exact size and saves
+the PNG to `playground/screenshots/`.
+
+For screenshots on real footage, `pnpm playground:movies` downloads the open movie
+[Sprite Fright](https://studio.blender.org/films/sprite-fright/) with English, Russian, Spanish and German subtitles;
+pick it in the Inspector's Video menu. It's licensed CC BY 4.0: credit "Sprite Fright © Blender Studio, CC BY 4.0"
+next to published images.
+
+The offline mock translates the playground's subtitles from `playground/fixtures/translations` (English, Spanish and
+German into Russian, Russian into English), so screenshots and tests show real translations without network access.
+After subtitles change, `pnpm playground:translations --write-missing` lists the words and lines to translate.
+
+`pnpm test:e2e` runs the Playwright tests from `e2e/` against the playground (offline mock, no build needed);
+`pnpm test:e2e:ui` opens them in Playwright's UI mode. Run `pnpm exec playwright install chromium` once beforehand.
+
 ## Manual install
 
 1. Download and unzip [latest version](https://github.com/Nitrino/easysubs/releases)

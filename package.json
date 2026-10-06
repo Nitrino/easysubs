@@ -16,9 +16,14 @@
     "wss": "node utils/reload/initReloadServer.js",
     "dev": "pnpm build:hmr && (run-p wss build:watch)",
     "dev:firefox": "pnpm build:hmr && (run-p wss build:firefox:watch)",
+    "playground": "vite --config playground/vite.config.ts",
+    "playground:movies": "node playground/scripts/download-movies.ts",
+    "playground:translations": "node playground/scripts/translation-keys.ts",
     "test": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "commitlint": "commitlint --edit",
-    "lint": "eslint src",
+    "lint": "eslint src playground e2e",
     "lint:fix": "pnpm lint --fix",
     "prettier": "prettier . --write"
   },
@@ -45,6 +50,7 @@
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^5.23.5",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@rollup/plugin-typescript": "^12.3.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/chrome": "^0.3.4",

@@ -3,3 +3,13 @@ dist
 .DS_Store
 .env
 .mcp.json
+
+# Playground screenshots and downloaded movies
+playground/screenshots
+playground/public/movies
+playground/fixtures/translations/missing.json
+
+# Playwright
+test-results
+playwright-report
+blob-report

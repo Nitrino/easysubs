@@ -1,0 +1,1203 @@
+/* A macOS desktop with two Liquid Glass windows: the player, with a full-width control bar after Video.js, and the
+   Inspector. The EasySubs HUD keeps its own styles; only its placement in this player is set at the end. */
+
+:root {
+  color-scheme: dark;
+
+  --pg-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --pg-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Wallpaper: a lake at dusk */
+  --pg-wall-deep: #0b1a33;
+  --pg-wall-water: #163d66;
+  --pg-wall-teal: #3e9db3;
+  --pg-wall-violet: #7a68c9;
+  --pg-wall-ember: #e8956f;
+
+  --pg-wallpaper:
+    radial-gradient(110% 70% at 12% 108%, color-mix(in srgb, var(--pg-wall-ember) 38%, transparent), transparent 58%),
+    radial-gradient(80% 70% at 88% 4%, color-mix(in srgb, var(--pg-wall-violet) 50%, transparent), transparent 62%),
+    radial-gradient(70% 55% at 48% 62%, color-mix(in srgb, var(--pg-wall-teal) 34%, transparent), transparent 70%),
+    linear-gradient(165deg, var(--pg-wall-deep) 0%, var(--pg-wall-water) 48%, var(--pg-wall-deep) 100%);
+
+  --pg-label: rgba(255, 255, 255, 0.92);
+  --pg-secondary: rgba(255, 255, 255, 0.6);
+  --pg-tertiary: rgba(255, 255, 255, 0.38);
+  --pg-separator: rgba(255, 255, 255, 0.1);
+  --pg-fill: rgba(255, 255, 255, 0.1);
+  --pg-fill-hover: rgba(255, 255, 255, 0.16);
+  --pg-accent: #0a84ff;
+  --pg-cyan: #64d2ff;
+  --pg-error: #ff6961;
+  --pg-focus: 0 0 0 3px rgba(10, 132, 255, 0.6);
+
+  --pg-window-radius: 20px;
+  --pg-window-shadow: 0 30px 80px rgba(3, 8, 20, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(0, 0, 0, 0.55);
+
+  --pg-osc-inset: 16px;
+  --pg-osc-bottom: 20px;
+  --pg-osc-height: 48px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pg-wallpaper);
+  background-attachment: fixed;
+  color: var(--pg-label);
+  font: 13px/1.4 var(--pg-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+code {
+  font: 12px var(--pg-mono);
+  color: var(--pg-label);
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--pg-focus);
+}
+
+.pg-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.pg-fill {
+  fill: currentColor;
+}
+
+.pg-stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- Liquid Glass: blurred tint, a specular rim brighter at the top-left, and a soft drop shadow ---- */
+
+.pg-glass {
+  background: rgba(24, 24, 28, 0.48);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.pg-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(255, 255, 255, 0.03) 60%,
+    rgba(255, 255, 255, 0.2)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---- Desktop ---- */
+
+.pg-desktop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.pg-traffic {
+  display: flex;
+  gap: 8px;
+}
+
+.pg-traffic__light {
+  display: block;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.pg-traffic__light svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+}
+
+.pg-traffic__light path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.pg-traffic__light .pg-fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.pg-traffic:hover .pg-traffic__light svg,
+.pg-traffic__light:focus-visible svg {
+  opacity: 1;
+}
+
+.pg-traffic__light--close {
+  background: #ff5f57;
+}
+
+.pg-traffic__light--minimize {
+  background: #febc2e;
+}
+
+.pg-traffic__light--zoom {
+  background: #28c840;
+  cursor: pointer;
+}
+
+.pg-traffic--inactive .pg-traffic__light {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+}
+
+/* ---- Player window ---- */
+
+.pg-player {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: min(1120px, calc((100vh - 64px) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  border-radius: var(--pg-window-radius);
+  background: #000;
+  box-shadow: var(--pg-window-shadow);
+  container-type: inline-size;
+  user-select: none;
+}
+
+/* Hairline rim over the video edge */
+.pg-player::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+
+.pg-player:fullscreen {
+  max-width: none;
+  border-radius: 0;
+}
+
+.pg-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #000;
+  object-fit: contain;
+  cursor: default;
+}
+
+/* Hidden controls, for screenshots */
+.pg-player--bare .pg-titlebar,
+.pg-player--bare .pg-osc {
+  display: none;
+}
+
+.pg-titlebar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 88px;
+  border-radius: var(--pg-window-radius) var(--pg-window-radius) 0 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), transparent);
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.pg-titlebar .pg-traffic {
+  position: absolute;
+  left: 16px;
+  pointer-events: auto;
+}
+
+.pg-titlebar__title {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+/* The control bar: one frosted capsule across the bottom of the video, with the Video.js skin's edge */
+.pg-osc {
+  position: absolute;
+  right: var(--pg-osc-inset);
+  bottom: var(--pg-osc-bottom);
+  left: var(--pg-osc-inset);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--pg-osc-height);
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  backdrop-filter: blur(16px) saturate(1.1);
+  /* A faint dark ring and a soft drop shadow outside */
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.15),
+    0 1px 2px -1px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
+
+/* A faint light ring inside, brighter along the top edge, drawn over the controls */
+.pg-osc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.pg-player--idle .pg-titlebar,
+.pg-player--idle .pg-osc {
+  opacity: 0;
+}
+
+.pg-player--idle .pg-osc {
+  transform: translateY(6px);
+}
+
+.pg-player--idle .pg-video {
+  cursor: none;
+}
+
+.pg-button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.pg-button:hover {
+  background: var(--pg-fill);
+}
+
+.pg-button:active {
+  transform: scale(0.92);
+}
+
+.pg-button svg {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+/* Sound is off until the mute button is pressed */
+.pg-icon-muted,
+.pg-player--muted .pg-icon-sound {
+  display: none;
+}
+
+.pg-player--muted .pg-icon-muted {
+  display: block;
+}
+
+.pg-icon-pause,
+.pg-player--playing .pg-icon-play {
+  display: none;
+}
+
+.pg-player--playing .pg-icon-pause {
+  display: block;
+}
+
+.pg-time {
+  flex: none;
+  min-width: 40px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.pg-time--end {
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pg-time--end:hover {
+  color: #fff;
+}
+
+.pg-seek {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 40px;
+  margin: 0 6px;
+}
+
+/* A thin track: played, loaded, the rest; the knob shows up on hover */
+.pg-seek__input {
+  --pg-track: linear-gradient(
+    to right,
+    #fff var(--pg-progress, 0%),
+    rgba(255, 255, 255, 0.45) var(--pg-progress, 0%) var(--pg-buffered, 0%),
+    rgba(255, 255, 255, 0.22) var(--pg-buffered, 0%)
+  );
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.pg-seek__input::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--pg-track);
+}
+
+.pg-seek__input::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--pg-track);
+}
+
+.pg-seek__input::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 150ms ease;
+  appearance: none;
+}
+
+.pg-seek__input::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+}
+
+.pg-seek:hover .pg-seek__input::-webkit-slider-thumb,
+.pg-seek__input:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.pg-seek:hover .pg-seek__input::-moz-range-thumb,
+.pg-seek__input:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+.pg-seek__input:focus-visible {
+  border-radius: 6px;
+}
+
+.pg-seek__tooltip {
+  position: absolute;
+  bottom: calc(100% + 18px);
+  padding: 3px 8px;
+  border-radius: 8px;
+  color: var(--pg-label);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 150ms ease;
+  pointer-events: none;
+}
+
+.pg-seek:hover .pg-seek__tooltip {
+  opacity: 1;
+}
+
+.pg-speed {
+  flex: none;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.pg-speed:hover {
+  background: var(--pg-fill);
+}
+
+/* The subtitles menu: an icon button over an invisible native select */
+.pg-menu {
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.pg-menu:hover {
+  background: var(--pg-fill);
+}
+
+.pg-menu:has(select:focus-visible) {
+  box-shadow: var(--pg-focus);
+}
+
+.pg-menu select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pg-menu option {
+  background: #2c2c30;
+  color: var(--pg-label);
+}
+
+.pg-menu__icon {
+  position: absolute;
+  inset: 0;
+  width: 22px;
+  height: 22px;
+  margin: auto;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+}
+
+/* A short bar under the icon while subtitles are on */
+.pg-menu::after {
+  content: "";
+  position: absolute;
+  right: 11px;
+  bottom: 5px;
+  left: 11px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--pg-cyan);
+  pointer-events: none;
+}
+
+.pg-menu--off .pg-menu__icon {
+  opacity: 0.5;
+}
+
+.pg-menu--off::after {
+  display: none;
+}
+
+/* Small windows keep play, the seek bar, the time left and the subtitle controls */
+@container (max-width: 520px) {
+  .pg-osc,
+  #es,
+  .es-settings-content {
+    --pg-osc-inset: 10px;
+    --pg-osc-bottom: 12px;
+    --pg-osc-height: 40px;
+  }
+
+  .pg-osc {
+    padding: 0 4px;
+  }
+
+  .pg-speed,
+  .pg-time--current {
+    display: none;
+  }
+
+  .pg-button,
+  .pg-menu {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ---- Inspector window ---- */
+
+.pg-inspector {
+  position: relative;
+  display: flex;
+  flex: 0 0 320px;
+  flex-direction: column;
+  height: min(780px, calc(100vh - 64px));
+  border-radius: var(--pg-window-radius);
+  background: rgba(30, 30, 36, 0.55);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    var(--pg-window-shadow);
+}
+
+.pg-inspector__titlebar {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+}
+
+.pg-inspector__titlebar .pg-traffic {
+  position: absolute;
+  left: 16px;
+}
+
+.pg-inspector__titlebar h1 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pg-inspector__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+  padding: 0 16px 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.pg-log {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.pg-footnote {
+  margin: 8px 4px 0;
+  color: var(--pg-secondary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.pg-inspector__content > .pg-footnote {
+  margin-top: 0;
+}
+
+.pg-section__title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 4px 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pg-segmented {
+  display: flex;
+  padding: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+}
+
+.pg-segmented__item {
+  flex: 1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--pg-secondary);
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.pg-segmented__item:hover {
+  color: var(--pg-label);
+}
+
+button.pg-segmented__item {
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button.pg-segmented__item:disabled {
+  color: var(--pg-tertiary);
+  cursor: default;
+}
+
+.pg-segmented--small {
+  flex: none;
+}
+
+.pg-segmented--small .pg-segmented__item {
+  padding: 2px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.pg-segmented__item--active {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.35),
+    0 1px 4px rgba(0, 0, 0, 0.25);
+  color: var(--pg-label);
+}
+
+/* Inset grouped rows, as in System Settings */
+.pg-group {
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.07);
+}
+
+.pg-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 6px 8px 6px 12px;
+}
+
+.pg-row + .pg-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 12px;
+  height: 0.5px;
+  background: var(--pg-separator);
+}
+
+.pg-row__label {
+  flex: 1 1 auto;
+}
+
+.pg-row__value {
+  max-width: 110px;
+  overflow: hidden;
+  color: var(--pg-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pg-push {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 24px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.2),
+    0 0.5px 1px rgba(0, 0, 0, 0.3);
+  color: var(--pg-label);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pg-push:hover {
+  background: rgba(255, 255, 255, 0.19);
+}
+
+.pg-push:active {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.pg-push:has(:focus-visible) {
+  box-shadow: var(--pg-focus);
+}
+
+.pg-push--primary {
+  background: var(--pg-accent);
+  font-weight: 500;
+}
+
+.pg-push--primary:hover {
+  background: #2b95ff;
+}
+
+.pg-push--primary:active {
+  background: #0a74e0;
+}
+
+.pg-push:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* A pop-up button around a native select */
+.pg-popup {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.2),
+    0 0.5px 1px rgba(0, 0, 0, 0.3);
+}
+
+.pg-popup:has(select:focus-visible) {
+  box-shadow: var(--pg-focus);
+}
+
+.pg-popup select {
+  max-width: 190px;
+  height: 100%;
+  padding: 0 26px 0 12px;
+  border: 0;
+  background: none;
+  color: var(--pg-label);
+  font: 13px var(--pg-font);
+  text-overflow: ellipsis;
+  cursor: pointer;
+  appearance: none;
+}
+
+.pg-popup select:focus-visible {
+  box-shadow: none;
+}
+
+.pg-popup option {
+  background: #2c2c30;
+}
+
+.pg-popup__chevron {
+  position: absolute;
+  right: 8px;
+  width: 12px;
+  height: 12px;
+  color: var(--pg-secondary);
+  pointer-events: none;
+}
+
+.pg-switch {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 18px;
+  margin: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  appearance: none;
+}
+
+.pg-switch::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: transform 150ms ease;
+}
+
+.pg-switch:checked {
+  background: var(--pg-accent);
+}
+
+.pg-switch:checked::before {
+  transform: translateX(14px);
+}
+
+.pg-captures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pg-captures:empty {
+  display: none;
+}
+
+.pg-capture {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--pg-secondary);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.pg-capture img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  object-fit: contain;
+}
+
+.pg-capture:hover {
+  color: var(--pg-label);
+}
+
+.pg-keys {
+  display: flex;
+  gap: 4px;
+  color: var(--pg-secondary);
+  font-size: 12px;
+}
+
+.pg-keys kbd {
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.15);
+  color: var(--pg-label);
+  font: 500 11px/20px var(--pg-font);
+  text-align: center;
+}
+
+.pg-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pg-accent);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.pg-link:hover {
+  color: #409cff;
+}
+
+.pg-section--log {
+  display: flex;
+  flex: 1 0 220px;
+  flex-direction: column;
+}
+
+.pg-log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.pg-log:empty::before {
+  content: "Messages appear here as the extension translates words and lines.";
+  display: block;
+  padding: 12px;
+  color: var(--pg-tertiary);
+  font-size: 12px;
+}
+
+.pg-log__row + .pg-log__row {
+  border-top: 0.5px solid var(--pg-separator);
+}
+
+.pg-log__row summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.pg-log__row summary::-webkit-details-marker {
+  display: none;
+}
+
+.pg-log__type {
+  color: var(--pg-cyan);
+  font: 11px var(--pg-mono);
+}
+
+.pg-log__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pg-log__status {
+  color: var(--pg-tertiary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pg-log__status--error {
+  color: var(--pg-error);
+}
+
+.pg-log__row pre {
+  max-height: 220px;
+  margin: 0 12px 10px;
+  padding: 8px 10px;
+  overflow: auto;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--pg-secondary);
+  font: 11px/1.45 var(--pg-mono);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ---- Screenshot canvas ---- */
+
+/* Outside screenshot mode the wrappers don't take part in the layout */
+.pg-stage-frame,
+.pg-stage {
+  display: contents;
+}
+
+/* A fixed-size canvas shrunk to fit the window with a transform, so the layout inside keeps the real size */
+.pg-desktop--shot .pg-stage-frame {
+  display: block;
+  flex: none;
+  width: calc(var(--pg-shot-width) * var(--pg-shot-scale, 1) * 1px);
+  height: calc(var(--pg-shot-height) * var(--pg-shot-scale, 1) * 1px);
+}
+
+.pg-desktop--shot .pg-stage {
+  --pg-shot-padding: calc(min(var(--pg-shot-width), var(--pg-shot-height)) * 0.07px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--pg-shot-width) * 1px);
+  height: calc(var(--pg-shot-height) * 1px);
+  padding: var(--pg-shot-padding);
+  overflow: hidden;
+  /* The usual checkerboard for transparency: screenshots have no background under the player */
+  background: repeating-conic-gradient(#2c2c31 0 25%, #222226 0 50%) 0 0 / 20px 20px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.45);
+  transform: scale(var(--pg-shot-scale, 1));
+  transform-origin: 0 0;
+}
+
+.pg-desktop--shot .pg-player {
+  flex: none;
+  width: min(100%, calc((var(--pg-shot-height) * 1px - 2 * var(--pg-shot-padding)) * 16 / 9));
+  max-width: none;
+}
+
+.pg-desktop--bleed .pg-stage {
+  padding: 0;
+}
+
+.pg-desktop--bleed .pg-player {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.pg-desktop--bleed .pg-player::after,
+.pg-desktop--bleed .pg-titlebar {
+  display: none;
+}
+
+.pg-desktop--bleed .pg-video {
+  object-fit: cover;
+}
+
+/* The page as the capture server renders it: only the canvas, or the player alone, at the top left */
+.pg-snapshot body {
+  min-height: 0;
+  background: none;
+}
+
+.pg-snapshot .pg-desktop {
+  display: block;
+  min-height: 0;
+  padding: 0;
+}
+
+.pg-snapshot .pg-inspector {
+  display: none;
+}
+
+.pg-snapshot .pg-stage-frame {
+  width: auto;
+  height: auto;
+}
+
+.pg-snapshot .pg-stage {
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.pg-snapshot .pg-player {
+  max-width: none;
+}
+
+@media (max-width: 1080px) {
+  .pg-desktop {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .pg-player {
+    flex: none;
+    max-width: none;
+  }
+
+  .pg-inspector {
+    flex: none;
+    height: auto;
+  }
+
+  .pg-log {
+    max-height: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-titlebar,
+  .pg-osc,
+  .pg-button,
+  .pg-seek__tooltip,
+  .pg-segmented__item {
+    transition: none;
+  }
+}
+
+/* ---- EasySubs placement for this player, like the per-service blocks in src/assets/style/content ---- */
+
+.es-playground .es-settings {
+  line-height: 0;
+}
+
+.es-playground .es-settings-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.es-playground .es-settings-icon:hover {
+  background: var(--pg-fill);
+  color: #fff;
+}
+
+.es-playground .es-settings-icon svg {
+  width: 22px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+/* Above the control bar's right end */
+.es-playground .es-settings-content {
+  right: var(--pg-osc-inset);
+  bottom: calc(var(--pg-osc-bottom) + var(--pg-osc-height) - 6px);
+}
+
+.es-playground.es-enabled #es {
+  bottom: calc(var(--pg-osc-bottom) + var(--pg-osc-height) + 16px);
+  z-index: 10;
+}
+
+/* Along the window's bottom edge, under the control bar; clipped to the rounded corners */
+.es-playground .es-progress-bar {
+  bottom: 0;
+  overflow: hidden;
+  border-radius: 0 0 var(--pg-window-radius) var(--pg-window-radius);
+}
+
+.pg-player:fullscreen .es-progress-bar {
+  border-radius: 0;
+}
