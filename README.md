@@ -36,6 +36,11 @@ Store, marquee, website, social), a window or full-bleed frame, the scale and wh
 a hovered word's translation open. The dev server renders the page in headless Chromium at the exact size and saves
 the PNG to `playground/screenshots/`.
 
+For screenshots on real footage, `pnpm playground:movies` downloads the open movie
+[Sprite Fright](https://studio.blender.org/films/sprite-fright/) with English, Russian, Spanish and German subtitles;
+pick it in the Inspector's Video menu. It's licensed CC BY 4.0: credit "Sprite Fright © Blender Studio, CC BY 4.0"
+next to published images.
+
 `pnpm test:e2e` runs the Playwright tests from `e2e/` against the playground (offline mock, no build needed);
 `pnpm test:e2e:ui` opens them in Playwright's UI mode. Run `pnpm exec playwright install chromium` once beforehand.
 
