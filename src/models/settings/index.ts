@@ -6,25 +6,30 @@ import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/
 import { TLearningService, TTranslationService } from "../types";
 import { fetchCurrentStreamingFx } from "../streamings";
 
-export const $enabled = withPersist(createStore<boolean>(true));
+// Settings are saved under their names. Up to v3.1.3 they were saved under the ids effector gave the stores
+// ("persist:202"), which change with the order units are created in; withPersist moves them from there once.
+const createSetting = <State>(name: string, defaultState: State, legacyId: number) =>
+  withPersist(createStore<State>(defaultState, { name }), { legacyKey: `persist:${legacyId}` });
+
+export const $enabled = createSetting("enabled", true, 202);
 export const enableToggleChanged = createEvent<boolean>();
 export const enableToggleChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
 
-export const $activeSettingsTab = withPersist(createStore<number>(0));
+export const $activeSettingsTab = createSetting("activeSettingsTab", 0, 220);
 export const activeSettingsTabChanged = createEvent<number>();
 
-export const $progressBarEnabled = withPersist(createStore<boolean>(true));
+export const $progressBarEnabled = createSetting("progressBarEnabled", true, 225);
 export const progressBarEnabledChanged = createEvent<boolean>();
 export const progressBarEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => isEnabled);
 
-export const $autoStopEnabled = withPersist(createStore<boolean>(true));
+export const $autoStopEnabled = createSetting("autoStopEnabled", true, 243);
 export const autoStopEnabledChanged = createEvent<boolean>();
 
-export const $netflixOnFlightEnabled = withPersist(createStore<boolean>(false));
+export const $netflixOnFlightEnabled = createSetting("netflixOnFlightEnabled", false, 248);
 export const netflixOnFlightEnabledChanged = createEvent<boolean>();
 export const netflixOnFlightEnabledChangedFx = createEffect<boolean, void>(() => location.reload());
 
-export const $moveBySubsEnabled = withPersist(createStore<boolean>(true));
+export const $moveBySubsEnabled = createSetting("moveBySubsEnabled", true, 266);
 export const moveBySubsEnabledChanged = createEvent<boolean>();
 export const moveBySubsEnabledChangeFx = createEffect<boolean, boolean>((isEnabled) => {
   if (isEnabled) {
@@ -35,19 +40,19 @@ export const moveBySubsEnabledChangeFx = createEffect<boolean, boolean>((isEnabl
   return isEnabled;
 });
 
-export const $translateLanguage = withPersist(createStore<string>(window.navigator.language.split("-")[0]));
+export const $translateLanguage = createSetting("translateLanguage", window.navigator.language.split("-")[0], 284);
 export const translateLanguageChanged = createEvent<string>();
 export const translateLanguageChangeFx = createEffect<string, string>((value) => value);
 
-export const $learningService = withPersist(createStore<TLearningService>("disabled"));
+export const $learningService = createSetting<TLearningService>("learningService", "disabled", 302);
 export const learningServiceChanged = createEvent<TLearningService>();
 export const learningServiceChangeFx = createEffect<TLearningService, TLearningService>((value) => value);
 
-export const $translationService = withPersist(createStore<TTranslationService>("google"));
+export const $translationService = createSetting<TTranslationService>("translationService", "google", 320);
 export const translationServiceChanged = createEvent<TTranslationService>();
 export const translationServiceChangeFx = createEffect<TTranslationService, TTranslationService>((value) => value);
 
-export const $deeplApiKey = withPersist(createStore<string>(""));
+export const $deeplApiKey = createSetting("deeplApiKey", "", 338);
 export const deeplApiKeyChanged = createEvent<string>();
 export const deeplApiKeyChangeFx = createEffect<string, string>((value) => value);
 
@@ -55,11 +60,11 @@ export const $deeplApiKeyModalOpen = createStore<boolean>(false);
 export const deeplApiKeyModalOpened = createEvent();
 export const deeplApiKeyModalClosed = createEvent();
 
-export const $chatGPTApiKey = withPersist(createStore<string>(""));
+export const $chatGPTApiKey = createSetting("chatGPTApiKey", "", 361);
 export const chatGPTApiKeyChanged = createEvent<string>();
 export const chatGPTApiKeyChangeFx = createEffect<string, string>((value) => value);
 
-export const $chatGPTModel = withPersist(createStore<string>("gpt-4o-mini"));
+export const $chatGPTModel = createSetting("chatGPTModel", "gpt-4o-mini", 379);
 export const chatGPTModelChanged = createEvent<string>();
 export const chatGPTModelChangeFx = createEffect<string, string>((value) => value);
 
@@ -67,19 +72,19 @@ export const $chatGPTApiKeyModalOpen = createStore<boolean>(false);
 export const chatGPTApiKeyModalOpened = createEvent();
 export const chatGPTApiKeyModalClosed = createEvent();
 
-export const $subsFontSize = withPersist(createStore<number>(100));
+export const $subsFontSize = createSetting("subsFontSize", 100, 402);
 export const subsFontSizeButtonPressed = createEvent<number>();
 export const subsFontSizeChangeFx = createEffect<number, number>((value) => value);
 
-export const $subsBackground = withPersist(createStore<boolean>(true));
+export const $subsBackground = createSetting("subsBackground", true, 420);
 export const subsBackgroundButtonPressed = createEvent<boolean>();
 export const subsBackgroundToggleFx = createEffect<boolean, boolean>((value) => value);
 
-export const $subsBackgroundOpacity = withPersist(createStore<number>(50));
+export const $subsBackgroundOpacity = createSetting("subsBackgroundOpacity", 50, 438);
 export const subsBackgroundOpacityButtonPressed = createEvent<number>();
 export const subsBackgroundOpacityChangeFx = createEffect<number, number>((value) => value);
 
-export const $autoPause = withPersist(createStore<boolean>(false));
+export const $autoPause = createSetting("autoPause", false, 456);
 export const autoPauseChanged = createEvent<boolean>();
 $autoPause.on(autoPauseChanged, (_, value) => value);
 
