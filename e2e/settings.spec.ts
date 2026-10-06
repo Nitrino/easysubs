@@ -110,6 +110,7 @@ test.describe("settings", () => {
     await playground.openSettings("General");
     await playground.choose("Learning service", "Anki");
     await playground.choose("Translation service", "Yandex Translate");
+    await playground.choose("Pronunciation", "Wiktionary");
     await playground.settingsPanel.locator(".es-settings-content__menu__item", { hasText: "Experiments" }).click();
 
     await page.reload();
@@ -122,6 +123,7 @@ test.describe("settings", () => {
     await playground.settingsPanel.locator(".es-settings-content__menu__item", { hasText: "General" }).click();
     await expect(playground.settingsRow("Learning service")).toContainText("Anki");
     await expect(playground.settingsRow("Translation service")).toContainText("Yandex Translate");
+    await expect(playground.settingsRow("Pronunciation")).toContainText("Wiktionary");
   });
 
   test("closes on a click outside", async ({ playground, page }) => {
