@@ -343,6 +343,11 @@
   line-height: 15px;
 }
 
+// A caution under a row, in the system yellow
+.es-settings-content__status--warning {
+  color: rgba(255, 214, 10, 0.85);
+}
+
 // Where a second line comes from: the video (green) or a translator (orange)
 .es-tag {
   flex: none;

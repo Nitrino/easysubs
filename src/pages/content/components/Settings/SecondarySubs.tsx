@@ -134,10 +134,14 @@ const TRANSLATOR_OPTIONS: { label: string; value: TSecondaryTranslator }[] = [
   { label: TRANSLATOR_TITLES.chatgpt, value: "chatgpt" },
 ];
 
-const TRANSLATOR_NOTES: Record<TSecondaryTranslator, string | null> = {
-  google: null,
-  deepl: "Uses your DeepL API key. A film is about 50–70k characters.",
-  chatgpt: "Uses your ChatGPT API key, billed by OpenAI.",
+const TRANSLATOR_NOTES: Record<TSecondaryTranslator, { text: string; warning?: boolean }> = {
+  // A film is many requests, and Google's free endpoint stops answering an address that sends too many
+  google: {
+    text: "Google may block frequent requests for a while. If lines stop translating, pick DeepL or ChatGPT.",
+    warning: true,
+  },
+  deepl: { text: "Uses your DeepL API key. A film is about 50–70k characters." },
+  chatgpt: { text: "Uses your ChatGPT API key, billed by OpenAI." },
 };
 
 // Google unless DeepL or ChatGPT is picked here. It stays editable while the line comes from a track: it's what
@@ -148,7 +152,8 @@ export const SecondarySubsTranslator: FC = () => {
     secondarySubsTranslatorChanged,
     $secondarySource,
   ]);
-  const note = source.type === "track" ? "Used when the second line is translated." : TRANSLATOR_NOTES[translator];
+  const note =
+    source.type === "track" ? { text: "Used when the second line is translated." } : TRANSLATOR_NOTES[translator];
 
   return (
     <>
@@ -159,7 +164,9 @@ export const SecondarySubsTranslator: FC = () => {
           onChange={(option: (typeof TRANSLATOR_OPTIONS)[number]) => handleChanged(option.value)}
         />
       </Row>
-      {note && <p className="es-settings-content__status">{note}</p>}
+      <p className={cn("es-settings-content__status", { "es-settings-content__status--warning": note.warning })}>
+        {note.text}
+      </p>
     </>
   );
 };

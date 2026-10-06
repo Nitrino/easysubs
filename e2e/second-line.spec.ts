@@ -49,6 +49,9 @@ test.describe("second subtitle line", () => {
     await expect(playground.secondLineStatus()).toHaveText(
       "Auto-translateNo Russian subtitles in this video. Google Translate translates as you watch.",
     );
+    await expect(playground.settingsPanel.locator(".es-settings-content__status--warning")).toHaveText(
+      "Google may block frequent requests for a while. If lines stop translating, pick DeepL or ChatGPT.",
+    );
     await playground.closeSettings();
 
     await expect(playground.secondLine).toHaveText(russian(ALMOST));

@@ -245,6 +245,17 @@ describe("background: lines of the second subtitle line", () => {
     expect(new URLSearchParams(String(fetchMock.mock.calls[0][1].body)).get("q")).toBe("Yes. Let's go.");
   });
 
+  it("explains Google refusing the requests", async () => {
+    stubFetch({
+      "https://translate.google.com/translate_a/single": () =>
+        new Response("<html>Our systems have detected unusual traffic</html>", { status: 429 }),
+    });
+
+    expect(await translateBatch("google")).toEqual({
+      error: "it refused the request, probably after too many of them. Try again later or pick DeepL or ChatGPT",
+    });
+  });
+
   it("sends the lines to DeepL as one list", async () => {
     const fetchMock = stubFetch({
       "https://api-free.deepl.com/v2/translate": () =>

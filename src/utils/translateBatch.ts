@@ -15,12 +15,22 @@ export type TTranslateBatchRequest = {
 // How many lines are translated at once when a batch has to be retried line by line
 const LINE_BY_LINE_CONCURRENCY = 5;
 
-// The text of Google's `dj=1` answer: its sentences, without the transliteration entry
-const googleText = (answer: string): string =>
-  (JSON.parse(answer).sentences as { trans?: string }[])
+// The text of Google's `dj=1` answer: its sentences, without the transliteration entry. When Google stops answering
+// an address that sent too many requests, it serves a page instead of JSON.
+function googleText(answer: string): string {
+  let sentences: { trans?: string }[];
+  try {
+    sentences = JSON.parse(answer).sentences;
+  } catch {
+    throw new Error(
+      "it refused the request, probably after too many of them. Try again later or pick DeepL or ChatGPT",
+    );
+  }
+  return sentences
     .filter((sentence) => typeof sentence.trans === "string")
     .map((sentence) => sentence.trans)
     .join("");
+}
 
 async function translateLineByLine(texts: string[], translate: (text: string) => Promise<string>) {
   const translations: string[] = [];
