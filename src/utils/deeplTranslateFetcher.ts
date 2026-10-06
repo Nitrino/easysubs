@@ -101,6 +101,38 @@ class DeepLTranslateFetcher {
     }
   }
 
+  // Several texts in one request, answered in the same order. The API takes up to 50 texts; without an API key the
+  // free endpoint takes one text, so the lines go as one text and are split back, or one by one if that fails.
+  async getBatchTranslation({ texts, lang }: { texts: string[]; lang: TRequest["lang"] }): Promise<string[]> {
+    if (!this.#apiKey || !this.#apiKey.length) {
+      const joined = await this.getFullTextTranslation({ text: texts.join("\n"), lang });
+      const lines = joined.split("\n");
+      if (lines.length === texts.length) return lines.map((line) => line.trim());
+      const translations: string[] = [];
+      for (const text of texts) translations.push(await this.getFullTextTranslation({ text, lang }));
+      return translations;
+    }
+
+    const response = await fetch(this.#baseUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `DeepL-Auth-Key ${this.#apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: texts, target_lang: lang }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 403) throw new Error("Invalid DeepL API key or quota exceeded");
+      if (response.status === 456) throw new Error("DeepL quota exceeded");
+      throw new Error(`DeepL API error: ${response.status}`);
+    }
+
+    const data: { translations?: { text: string }[] } = await response.json();
+    if (data.translations?.length !== texts.length) throw new Error("No translation received from DeepL");
+    return data.translations.map((translation) => translation.text);
+  }
+
   private getDeepLLanguageCode(googleLangCode: string): string {
     const langMap: Record<string, string> = {
       zh: "ZH",

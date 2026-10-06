@@ -159,6 +159,15 @@ class ChatGPTTranslateFetcher {
       throw error;
     }
   }
+
+  // Several lines in one prompt: the model sees the neighbouring lines, and answers an array of the same length
+  async getBatchTranslation({ texts, lang }: { texts: string[]; lang: TRequest["lang"] }): Promise<string[]> {
+    if (!this.#translator || !this.#apiKey) {
+      throw new Error("ChatGPT API key is required for translation");
+    }
+    const translations = await this.#translator.translateBatch(texts, "auto", lang);
+    return translations.map((translation) => translation ?? "");
+  }
 }
 
 export const chatGPTTranslateFetcher = new ChatGPTTranslateFetcher();

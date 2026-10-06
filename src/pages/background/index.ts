@@ -7,6 +7,7 @@ import { bingTranslateFetcher } from "@src/utils/bingTranslateFetcher";
 import { yandexTranslateFetcher } from "@src/utils/yandexTranslateFetcher";
 import { chatGPTTranslateFetcher } from "@src/utils/chatGPTTranslateFetcher";
 import { fetchSpeech } from "@src/utils/tts";
+import { translateBatch } from "@src/utils/translateBatch";
 
 import "webext-dynamic-content-scripts";
 
@@ -123,6 +124,12 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
         .getFullTextTranslation({ text: message.text, lang: message.language })
         .then((respData: unknown) => sendResponse(respData));
     }
+  }
+  // The second subtitle line: several lines in one request, one translation per line in the same order
+  if (message.type === "translateBatch") {
+    translateBatch(message)
+      .then((translations) => sendResponse(translations))
+      .catch((error: Error) => sendResponse({ error: error.message }));
   }
   if (message.type === "pronounce") {
     fetchSpeech(message)
