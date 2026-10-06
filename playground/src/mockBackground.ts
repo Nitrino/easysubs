@@ -29,6 +29,36 @@ let subtitlesLanguage: string | null = null;
 
 export const mockTranslate = (text: string, language: string) => `[${language}] ${text}`;
 
+let tone: string | undefined;
+
+// What every pronunciation service "says" offline: a short beep, as a WAV data: URL like the background's audio
+export function toneWav() {
+  if (tone) return tone;
+  const sampleRate = 22050;
+  const samples = Math.round(sampleRate * 0.25);
+  const view = new DataView(new ArrayBuffer(44 + samples * 2));
+  const writeText = (offset: number, text: string) =>
+    [...text].forEach((char, index) => view.setUint8(offset + index, char.charCodeAt(0)));
+  writeText(0, "RIFF");
+  view.setUint32(4, 36 + samples * 2, true);
+  writeText(8, "WAVEfmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); // PCM
+  view.setUint16(22, 1, true); // mono
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeText(36, "data");
+  view.setUint32(40, samples * 2, true);
+  for (let i = 0; i < samples; i++) {
+    const fade = Math.min(1, i / 400, (samples - i) / 400);
+    view.setInt16(44 + i * 2, Math.sin((2 * Math.PI * 660 * i) / sampleRate) * 8000 * fade, true);
+  }
+  tone = `data:audio/wav;base64,${btoa(String.fromCharCode(...new Uint8Array(view.buffer)))}`;
+  return tone;
+}
+
 function guessLanguage(text: string) {
   if (/[а-яё]/i.test(text)) return "ru";
   if (/[äöüß]/i.test(text) || /(^|\s)(der|die|das|und|ich|nicht|ist)(\s|$)/i.test(text)) return "de";
@@ -134,6 +164,8 @@ function handle(message: Message): unknown {
       return { lingualeoResponse: { status: "ok", data: [{ word: { wordValue: message.word } }] } };
     case "addWordToPuzzleEnglish":
       return { status: true };
+    case "pronounce":
+      return { audio: toneWav(), service: message.service ?? "google" };
     default:
       return { error: `Mock background: unsupported message type "${message.type}"` };
   }

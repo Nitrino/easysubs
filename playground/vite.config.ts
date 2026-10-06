@@ -11,6 +11,10 @@ const rootDir = resolve(import.meta.dirname, "..");
 const srcDir = resolve(rootDir, "src");
 const screenshotsDir = resolve(import.meta.dirname, "screenshots");
 
+// Services the background reaches without host_permissions, because they answer with CORS headers (Wiktionary's
+// pronunciations, src/utils/tts/wiktionary.ts)
+const CORS_ORIGINS = ["https://en.wiktionary.org", "https://upload.wikimedia.org"];
+
 // Dev server for the playground page: it runs the extension's content and background code straight from
 // src/, so every change is picked up by HMR without building or reloading the extension.
 export default defineConfig({
@@ -52,10 +56,13 @@ const SKIPPED_REQUEST_HEADERS = new Set([
 /**
  * The extension's background script calls translation and learning services cross-origin, which only works
  * thanks to the manifest's host_permissions. In the playground the background code runs inside the page, so its
- * requests are routed through `/__proxy?url=...`. Only the hosts from host_permissions are allowed.
+ * requests are routed through `/__proxy?url=...`. Only the hosts from host_permissions and CORS_ORIGINS are allowed.
  */
 function extensionHostsProxy(): Plugin {
-  const allowedOrigins = new Set(manifest.host_permissions.map((pattern) => new URL(pattern.replace("*", "")).origin));
+  const allowedOrigins = new Set([
+    ...manifest.host_permissions.map((pattern) => new URL(pattern.replace("*", "")).origin),
+    ...CORS_ORIGINS,
+  ]);
 
   return {
     name: "easysubs-playground-proxy",

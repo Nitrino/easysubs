@@ -1,4 +1,4 @@
-import { test, expect, offlineTranslations } from "./playground";
+import { test, expect, offlineTranslations, type Playground } from "./playground";
 
 // The mock background answers from playground/fixtures/translations
 const enRu = offlineTranslations("en-ru");
@@ -125,15 +125,87 @@ test.describe("translation", () => {
 });
 
 test.describe("pronunciation", () => {
-  test("pronounces the word in the subtitles language, slowly", async ({ playground }) => {
+  test.beforeEach(async ({ playground }) => {
     await playground.recordSpeech();
+    await playground.recordAudio();
     await playground.open();
     await playground.seek(5);
+  });
 
-    await playground.word("keys").hover();
+  const pronounce = async (playground: Playground, word = "keys") => {
+    await playground.word(word).hover();
+    await playground.wordPopover.getByTitle("Pronounce").click();
+  };
+
+  test("plays the word in the subtitles language from Google", async ({ playground }) => {
+    await pronounce(playground);
+
+    await expect.poll(() => playground.played()).toEqual([{ duration: expect.closeTo(0.25) }]);
+    expect(await playground.messages("pronounce")).toEqual([
+      { type: "pronounce", text: "keys", language: "en", service: "google" },
+    ]);
+    expect(await playground.spoken()).toEqual([]);
+  });
+
+  for (const [option, service] of [
+    ["Youdao", "youdao"],
+    ["Wiktionary", "wiktionary"],
+  ]) {
+    test(`plays the word from ${option}`, async ({ playground }) => {
+      await playground.changeSettings("General", () => playground.choose("Pronunciation", option));
+
+      await pronounce(playground);
+
+      await expect.poll(() => playground.played()).toHaveLength(1);
+      expect(await playground.messages("pronounce")).toEqual([expect.objectContaining({ text: "keys", service })]);
+    });
+  }
+
+  test("speaks the word slowly with the browser voice", async ({ playground }) => {
+    await playground.changeSettings("General", () => playground.choose("Pronunciation", "Browser voice"));
+
+    await pronounce(playground);
+
+    await expect.poll(() => playground.spoken()).toEqual([{ text: "keys", lang: "en", rate: expect.closeTo(0.8) }]);
+    expect(await playground.messages("pronounce")).toEqual([]);
+    expect(await playground.played()).toEqual([]);
+  });
+
+  test("speaks with the browser voice when no service has the word", async ({ playground }) => {
+    await playground.mockAnswer("pronounce", { error: 'Google has no pronunciation of "keys"' });
+
+    await pronounce(playground);
+
+    await expect.poll(() => playground.spoken()).toEqual([{ text: "keys", lang: "en", rate: expect.closeTo(0.8) }]);
+    expect(await playground.played()).toEqual([]);
+  });
+
+  test("asks for a ChatGPT API key and sends it with the word", async ({ playground, page }) => {
+    await playground.openSettings("General");
+    await playground.choose("Pronunciation", "ChatGPT");
+
+    const modal = page.locator(".es-modal-content");
+    await expect(modal.getByRole("heading")).toHaveText("ChatGPT API Key Configuration");
+    await modal.getByLabel("API Key:").fill("test-chatgpt-key");
+    await modal.getByRole("button", { name: "Save" }).click();
+    await playground.closeSettings();
+
+    await pronounce(playground);
+
+    await expect.poll(() => playground.played()).toHaveLength(1);
+    expect(await playground.messages("pronounce")).toEqual([
+      expect.objectContaining({ service: "chatgpt", chatGPTApiKey: "test-chatgpt-key" }),
+    ]);
+  });
+
+  test("plays a word again without fetching it again", async ({ playground }) => {
+    await pronounce(playground);
+    await expect.poll(() => playground.played()).toHaveLength(1);
+
     await playground.wordPopover.getByTitle("Pronounce").click();
 
-    expect(await playground.spoken()).toEqual([{ text: "keys", lang: "en", rate: expect.closeTo(0.8) }]);
+    await expect.poll(() => playground.played()).toHaveLength(2);
+    expect(await playground.messages("pronounce")).toHaveLength(1);
   });
 });
 

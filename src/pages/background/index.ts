@@ -6,6 +6,7 @@ import { deeplTranslateFetcher } from "@src/utils/deeplTranslateFetcher";
 import { bingTranslateFetcher } from "@src/utils/bingTranslateFetcher";
 import { yandexTranslateFetcher } from "@src/utils/yandexTranslateFetcher";
 import { chatGPTTranslateFetcher } from "@src/utils/chatGPTTranslateFetcher";
+import { fetchSpeech } from "@src/utils/tts";
 
 import "webext-dynamic-content-scripts";
 
@@ -122,6 +123,11 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
         .getFullTextTranslation({ text: message.text, lang: message.language })
         .then((respData: unknown) => sendResponse(respData));
     }
+  }
+  if (message.type === "pronounce") {
+    fetchSpeech(message)
+      .then((speech) => sendResponse(speech))
+      .catch((error: Error) => sendResponse({ error: error.message }));
   }
   if (message.type === "getTextLanguage") {
     googleTranslateBatchFetcher

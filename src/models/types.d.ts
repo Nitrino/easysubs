@@ -78,6 +78,8 @@ export type TLearningService = "anki" | "lingualeo" | "puzzle-english" | "disabl
 
 export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt";
 
+export type TTtsService = "google" | "youdao" | "wiktionary" | "chatgpt" | "browser";
+
 export type Captions = subTitleType[];
 
 export type TPhrasalVerb = {

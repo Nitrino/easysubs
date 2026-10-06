@@ -131,6 +131,24 @@ export class Playground {
     return this.page.evaluate(() => (window as unknown as { spoken: unknown[] }).spoken);
   }
 
+  // Records the sounds played through Web Audio (the pronunciation services' audio), still playing them; call before
+  // open()
+  async recordAudio() {
+    await this.page.addInitScript(() => {
+      const played: { duration: number }[] = [];
+      Object.assign(window, { played });
+      const start = AudioBufferSourceNode.prototype.start;
+      AudioBufferSourceNode.prototype.start = function (...args) {
+        played.push({ duration: this.buffer?.duration ?? 0 });
+        return start.apply(this, args);
+      };
+    });
+  }
+
+  played() {
+    return this.page.evaluate(() => (window as unknown as { played: { duration: number }[] }).played);
+  }
+
   // Messages the content script sent to the background, oldest first
   messages(type?: string) {
     return this.page.evaluate(

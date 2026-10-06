@@ -20,6 +20,7 @@ import {
   $chatGPTApiKey,
   $chatGPTModel,
   $netflixOnFlightEnabled,
+  $ttsService,
   deeplApiKeyChanged,
   deeplApiKeyModalClosed,
   enableToggleChanged,
@@ -29,6 +30,7 @@ import {
   subsBackgroundOpacityButtonPressed,
   subsFontSizeButtonPressed,
   translationServiceChanged,
+  ttsServiceChanged,
 } from ".";
 import { fetchCurrentStreamingFx } from "../streamings";
 import { moveKeyPressed } from "../videos";
@@ -45,6 +47,7 @@ const PERSISTED_SETTINGS: Record<string, StoreWritable<unknown>> = {
   $translateLanguage,
   $learningService,
   $translationService,
+  $ttsService,
   $deeplApiKey,
   $chatGPTApiKey,
   $chatGPTModel,
@@ -68,6 +71,10 @@ describe("settings defaults", () => {
     expect($translateLanguage.defaultState).toBe("en");
     expect($translationService.defaultState).toBe("google");
     expect($learningService.defaultState).toBe("disabled");
+  });
+
+  it("pronounces words with Google", () => {
+    expect($ttsService.defaultState).toBe("google");
   });
 
   it("shows subtitles at 100% on a 50% background", () => {
@@ -129,10 +136,28 @@ describe("settings changes", () => {
     expect(scope.getState($deeplApiKeyModalOpen)).toBe(false);
   });
 
+  it("asks for a ChatGPT API key when ChatGPT pronunciation is chosen without one", async () => {
+    const scope = fork();
+
+    await allSettled(ttsServiceChanged, { scope, params: "chatgpt" });
+
+    expect(scope.getState($ttsService)).toBe("chatgpt");
+    expect(scope.getState($chatGPTApiKeyModalOpen)).toBe(true);
+  });
+
+  it("uses the saved ChatGPT API key for pronunciation", async () => {
+    const scope = fork({ values: [[$chatGPTApiKey, "sk-test"]] });
+
+    await allSettled(ttsServiceChanged, { scope, params: "chatgpt" });
+
+    expect(scope.getState($chatGPTApiKeyModalOpen)).toBe(false);
+  });
+
   it("asks for no key for the other services", async () => {
     const scope = fork();
 
     await allSettled(translationServiceChanged, { scope, params: "yandex" });
+    await allSettled(ttsServiceChanged, { scope, params: "wiktionary" });
 
     expect(scope.getState($deeplApiKeyModalOpen)).toBe(false);
     expect(scope.getState($chatGPTApiKeyModalOpen)).toBe(false);
