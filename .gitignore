@@ -3,3 +3,6 @@ dist
 .DS_Store
 .env
 .mcp.json
+
+# Playground screenshots
+playground/screenshots
