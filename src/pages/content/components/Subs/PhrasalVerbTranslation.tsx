@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useUnit } from "effector-react";
 
 import { TPhrasalVerb } from "@src/models/types";
@@ -32,7 +32,7 @@ export const PhrasalVerbTranslation: FC<{ phrasalVerb: TPhrasalVerb }> = ({ phra
   };
 
   return (
-    <Popover variant="word" style={service ? ({ "--es-service": service.color } as CSSProperties) : undefined}>
+    <Popover variant="word">
       <div className="es-title" dir="auto">
         {phrasalVerb.text}
       </div>

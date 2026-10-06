@@ -6,12 +6,6 @@ type TLingualeoMessageResponse = {
 };
 
 export class LinguaLeo implements ILearningService {
-  public color: string;
-
-  constructor() {
-    this.color = "#FFC900";
-  }
-
   public async addWord(word: string, translation: string, _aditionalData: TAditionalData): Promise<string> {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(

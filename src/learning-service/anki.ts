@@ -33,12 +33,6 @@ const ANKI_MODEL_BACK = `{{FrontSide}}
 {{#Part of Speech}}<div class="part-of-speech">{{Part of Speech}}</div>{{/Part of Speech}}`;
 
 export class Anki implements ILearningService {
-  public color: string;
-
-  constructor() {
-    this.color = "#0d6efd";
-  }
-
   public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
     const createDeskResult = await this.request("createDeck", { deck: ANKI_DESK });
 

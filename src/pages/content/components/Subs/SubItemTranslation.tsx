@@ -1,4 +1,4 @@
-import { CSSProperties, FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useGate, useUnit } from "effector-react";
 import { $learningService, $translateLanguage } from "@src/models/settings";
 
@@ -6,7 +6,6 @@ import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGat
 import toast from "react-hot-toast";
 import { SoundIcon } from "./assets/SoundIcon";
 import { PlusIcon } from "./assets/PlusIcon";
-import { ExternalIcon } from "./assets/ExternalIcon";
 import { joinTranslations } from "@src/utils/joinTranslations";
 
 import ILearningService from "@src/learning-service/learningService";
@@ -95,7 +94,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     typeof transcription === "string" && transcription && transcription.toLowerCase() !== source;
 
   return (
-    <Popover variant="word" style={service ? ({ "--es-service": service.color } as CSSProperties) : undefined}>
+    <Popover variant="word">
       <div
         className={service ? "es-title es-addable" : "es-title"}
         onClick={() =>
@@ -157,7 +156,6 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
             {DICTIONARIES.map(([name, url]) => (
               <a key={name} className="es-link" href={url(encodeURIComponent(source))} target="_blank" rel="noreferrer">
                 {name}
-                <ExternalIcon />
               </a>
             ))}
           </div>

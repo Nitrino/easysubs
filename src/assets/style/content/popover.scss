@@ -118,8 +118,6 @@ $es-gap: 8px; // how far the arrow sticks out of the body
   }
 
   .es-title {
-    display: flex;
-    align-items: center;
     font-size: 1.2em;
     font-weight: 600;
     line-height: 1.25;
@@ -131,14 +129,8 @@ $es-gap: 8px; // how far the arrow sticks out of the body
   }
 
   .es-src {
-    display: flex;
-    align-items: center;
     font-size: 0.93em;
     color: var(--es-secondary);
-  }
-
-  .es-src > * + * {
-    margin-left: 0.3em;
   }
 
   .es-src-word {
@@ -146,18 +138,22 @@ $es-gap: 8px; // how far the arrow sticks out of the body
   }
 
   .es-translit {
+    margin-left: 0.3em;
     color: var(--es-secondary);
   }
 
+  // The box and gap of the "+" badges in the list below (same font size, then 0.8em × 1.2em + 0.4em), so
+  // the speaker sits in their column and the word lines up with the translations.
   .es-speak {
     display: inline-flex;
-    flex: none;
     align-items: center;
     justify-content: center;
-    width: 1.45em;
-    height: 1.3em;
-    margin-left: -0.25em;
-    border-radius: 5px;
+    width: 1.2em;
+    height: 1.2em;
+    margin-inline-end: 0.4em;
+    border-radius: 50%;
+    font-size: 0.8em;
+    vertical-align: middle;
     color: rgba(255, 255, 255, 0.72);
 
     &:hover {
@@ -170,8 +166,8 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     }
 
     svg {
-      width: 1.05em;
-      height: 0.85em;
+      width: 1.1em;
+      height: 0.88em;
     }
   }
 
@@ -192,8 +188,6 @@ $es-gap: 8px; // how far the arrow sticks out of the body
   }
 
   .es-alt-word {
-    display: flex;
-    align-items: baseline;
     hyphens: auto;
   }
 
@@ -206,14 +200,24 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     color: var(--es-tertiary);
   }
 
-  // Words that go to the learning service on click: a quiet "+" badge, tinted with the service's
-  // color (--es-service, set on the popover) while the row is pointed at.
+  // Words that go to the learning service on click: a quiet "+" badge that brightens like the speaker
+  // while the row is pointed at, whatever the service. The badge is inline, so
+  // `vertical-align: middle` centers it on the lowercase letters (baseline + half the x-height) rather
+  // than on the line box, which also holds the ascenders; a hanging indent keeps wrapped lines clear of it.
+  // The badge is 1.2em wide plus a 0.4em gap at its font size, which is 0.8em of a list row. In the title
+  // (1.2em) it gets the same pixel size as in the 0.93em translation list, 0.8em × 0.93 / 1.2, so the
+  // title, the word under it and the translations all start on one line.
+  $es-add-size: 0.8em;
+  $es-title-add-size: 0.62em;
+
   .es-addable {
+    padding-inline-start: $es-add-size * 1.6;
+    text-indent: -$es-add-size * 1.6;
     cursor: pointer;
 
     &:hover .es-add {
       background: var(--es-fill-hover);
-      color: var(--es-service, var(--es-accent));
+      color: #fff;
     }
 
     &:active .es-add {
@@ -223,24 +227,19 @@ $es-gap: 8px; // how far the arrow sticks out of the body
 
   .es-add {
     display: inline-flex;
-    flex: none;
-    align-self: center;
     align-items: center;
     justify-content: center;
     width: 1.2em;
     height: 1.2em;
-    margin-right: 0.4em;
+    margin-inline-end: 0.4em;
     border-radius: 50%;
     background: var(--es-fill);
     color: var(--es-secondary);
-    font-size: 0.8em;
+    font-size: $es-add-size;
+    vertical-align: middle;
     transition:
       color 120ms,
       background-color 120ms;
-
-    .es-title & {
-      font-size: 0.7em;
-    }
 
     svg {
       width: 0.6em;
@@ -248,24 +247,31 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     }
   }
 
-  // Dictionary links: recessed capsules in secondary text, grown to fill the row like a button bar.
+  .es-title.es-addable {
+    padding-inline-start: $es-title-add-size * 1.6;
+    text-indent: -$es-title-add-size * 1.6;
+  }
+
+  .es-title .es-add {
+    font-size: $es-title-add-size;
+  }
+
+  // Dictionary links: rarely used, so small recessed capsules on one line, grown to fill the row like a
+  // button bar. The line is short enough to fit an English popover without widening it.
   .es-links {
     display: flex;
-    flex-wrap: wrap;
-    margin: 0.15em -0.35em -0.35em 0;
-    font-size: 0.8em;
+    gap: 0.25em;
+    margin-top: 0.15em;
+    font-size: 0.73em;
   }
 
   a.es-link {
-    display: inline-flex;
     flex: 1 1 auto;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.35em 0.35em 0;
-    padding: 0.2em 0.55em 0.2em 0.65em;
+    padding: 0.2em 0.4em;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.07);
     color: var(--es-secondary);
+    text-align: center;
     font-weight: 400;
     line-height: 1.25;
     text-decoration: none;
@@ -281,13 +287,6 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     &:active {
       background: var(--es-fill-active);
     }
-
-    svg {
-      width: 0.62em;
-      height: 0.62em;
-      margin-left: 0.35em;
-      opacity: 0.7;
-    }
   }
 
   .es-label {
@@ -302,11 +301,6 @@ $es-gap: 8px; // how far the arrow sticks out of the body
 
   .es-pv-list > * + * {
     margin-top: 0.1em;
-  }
-
-  .es-pv-item {
-    display: flex;
-    align-items: baseline;
   }
 
   .es-note {

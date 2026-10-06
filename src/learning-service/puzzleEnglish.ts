@@ -1,12 +1,6 @@
 import ILearningService, { TAditionalData } from "./learningService";
 
 export class PuzzleEnglish implements ILearningService {
-  public color: string;
-
-  constructor() {
-    this.color = "#88BA28";
-  }
-
   public async addWord(word: string, _translation: string, _aditionalData: TAditionalData): Promise<string> {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
