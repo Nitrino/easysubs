@@ -1,5 +1,14 @@
 import type { MessageLogEntry } from "./chromeShim";
-import { openVideoFile, setFileTrack } from "./player";
+import {
+  FILE_TRACK_ID,
+  VIDEO_SOURCES,
+  getVideoSource,
+  isVideoAvailable,
+  openVideoFile,
+  setFileTrack,
+  switchVideoSource,
+  type VideoSource,
+} from "./player";
 
 const MAX_LOG_ROWS = 50;
 
@@ -17,12 +26,69 @@ function setupBackgroundSwitch() {
   });
 }
 
+const videoSelect = inspector.querySelector<HTMLSelectElement>("#pg-video-source");
+const mediaNote = inspector.querySelector<HTMLElement>(".pg-media-note");
+
+function showMediaNote(content: (string | Node)[] | null) {
+  mediaNote.hidden = !content;
+  mediaNote.replaceChildren(...(content ?? []));
+}
+
+// Movies have to be credited wherever a screenshot with them is published
+function showCredit(source: VideoSource) {
+  if (!source.movie) return showMediaNote(null);
+  const link = document.createElement("a");
+  link.className = "pg-link";
+  link.href = source.movie.creditUrl;
+  link.target = "_blank";
+  link.textContent = source.movie.credit;
+  showMediaNote(["Credit next to published screenshots: ", link]);
+}
+
+function showMissing(source: VideoSource) {
+  const command = document.createElement("code");
+  command.textContent = "pnpm playground:movies";
+  showMediaNote([`${source.title} isn't downloaded yet. Run `, command, ", then pick it again."]);
+}
+
+function renderVideoOptions() {
+  const current = getVideoSource();
+  const options = VIDEO_SOURCES.map((source) => new Option(source.title, source.id));
+  if (current.id === FILE_TRACK_ID) options.push(new Option(current.title, FILE_TRACK_ID));
+  videoSelect.replaceChildren(...options);
+  videoSelect.value = current.id;
+}
+
+function setupVideoPicker() {
+  renderVideoOptions();
+  showCredit(getVideoSource());
+
+  videoSelect.addEventListener("change", async () => {
+    const source = VIDEO_SOURCES.find((item) => item.id === videoSelect.value);
+    if (!source) return;
+    if (!(await isVideoAvailable(source))) {
+      videoSelect.value = getVideoSource().id;
+      showMissing(source);
+      return;
+    }
+    switchVideoSource(source);
+    renderVideoOptions();
+    showCredit(source);
+  });
+
+  window.addEventListener("easysubs-playground:missing-video", (event: CustomEvent<VideoSource>) => {
+    renderVideoOptions();
+    showMissing(event.detail);
+  });
+}
+
 function setupFilePickers() {
   inspector.querySelector<HTMLInputElement>("#pg-video-file").addEventListener("change", (event) => {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
     openVideoFile(file);
-    inspector.querySelector("#pg-video-name").textContent = file.name;
+    renderVideoOptions();
+    showMediaNote(null);
   });
 
   inspector.querySelector<HTMLInputElement>("#pg-subs-file").addEventListener("change", (event) => {
@@ -84,6 +150,7 @@ function setupMessageLog() {
 
 export function setupInspector() {
   setupBackgroundSwitch();
+  setupVideoPicker();
   setupFilePickers();
   setupResetSettings();
   setupMessageLog();

@@ -105,7 +105,12 @@
             <div class="pg-group">
               <div class="pg-row">
                 <span class="pg-row__label">Video</span>
-                <span class="pg-row__value" id="pg-video-name">sample.webm</span>
+                <div class="pg-popup">
+                  <select id="pg-video-source" aria-label="Video"></select>
+                  <svg class="pg-popup__chevron" viewBox="0 0 24 24" aria-hidden="true">
+                    <path class="pg-stroke" d="M8 9.5L12 6l4 3.5M8 14.5l4 3.5 4-3.5" />
+                  </svg>
+                </div>
                 <label class="pg-push">
                   Open…
                   <input id="pg-video-file" class="pg-visually-hidden" type="file" accept="video/*" />
@@ -120,6 +125,7 @@
                 </label>
               </div>
             </div>
+            <p class="pg-footnote pg-media-note" role="status" hidden></p>
           </section>
 
           <section class="pg-section">

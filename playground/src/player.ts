@@ -1,14 +1,43 @@
 // A small HTML5 player in a macOS window: the title over the video and a full-width glass control bar, after the
 // Video.js player, that hide while the video plays. The native subtitles are left to the extension.
 
+import { MOVIES, movieSubtitlesPath, movieVideoPath, type Movie } from "./movies";
+
 export type SubtitleTrack = { id: string; label: string; url: string };
+export type VideoSource = { id: string; title: string; url: string; tracks: SubtitleTrack[]; movie?: Movie };
 
 export const FILE_TRACK_ID = "file";
 
-const tracks: SubtitleTrack[] = [
-  { id: "en", label: "English", url: "/subs/en.srt" },
-  { id: "es", label: "Español", url: "/subs/es.srt" },
+export const SAMPLE_VIDEO: VideoSource = {
+  id: "sample",
+  title: "sample.webm",
+  url: "/media/sample.webm",
+  tracks: [
+    { id: "en", label: "English", url: "/subs/en.srt" },
+    { id: "es", label: "Español", url: "/subs/es.srt" },
+  ],
+};
+
+// The sample clip and the open movies from movies.ts, which may not be downloaded yet
+export const VIDEO_SOURCES: VideoSource[] = [
+  SAMPLE_VIDEO,
+  ...MOVIES.map((movie) => ({
+    id: movie.id,
+    title: movie.title,
+    url: `/${movieVideoPath(movie)}`,
+    tracks: movie.subtitles.map((track) => ({
+      id: track.id,
+      label: track.label,
+      url: `/${movieSubtitlesPath(movie, track.id)}`,
+    })),
+    movie,
+  })),
 ];
+
+const VIDEO_KEY = "easysubs-playground-video";
+
+let tracks: SubtitleTrack[] = [...SAMPLE_VIDEO.tracks];
+let videoSource: VideoSource = SAMPLE_VIDEO;
 
 const PLAYBACK_RATES = [1, 1.25, 1.5, 2, 0.5, 0.75];
 const IDLE_DELAY_MS = 2500;
@@ -66,9 +95,41 @@ export function setFileTrack(label: string, url: string) {
   selectTrack(FILE_TRACK_ID);
 }
 
+export const getVideoSource = () => videoSource;
+
+// The dev server answers missing files with index.html, so the content type tells whether the video is there
+export async function isVideoAvailable(source: VideoSource) {
+  const resp = await fetch(source.url, { method: "HEAD" }).catch(() => null);
+  return Boolean(resp?.ok && resp.headers.get("content-type")?.startsWith("video/"));
+}
+
+// Shows the video with its own subtitle tracks, keeping a subtitle file opened by hand and, if the new video has it,
+// the selected language
+function applyVideoSource(source: VideoSource, preferredTrackId: string) {
+  if (video.src.startsWith("blob:")) URL.revokeObjectURL(video.src);
+  videoSource = source;
+  video.src = source.url;
+  title.textContent = source.title;
+  const fileTrack = getTrack(FILE_TRACK_ID);
+  tracks = fileTrack ? [...source.tracks, fileTrack] : [...source.tracks];
+  renderTrackOptions();
+  trackSelect.value = preferredTrackId === "" || getTrack(preferredTrackId) ? preferredTrackId : (tracks[0]?.id ?? "");
+}
+
+export function switchVideoSource(source: VideoSource) {
+  applyVideoSource(source, trackSelect.value);
+  try {
+    localStorage.setItem(VIDEO_KEY, source.id);
+  } catch {
+    // The choice just isn't remembered
+  }
+  selectTrack(trackSelect.value);
+}
+
 export function openVideoFile(file: File) {
   if (video.src.startsWith("blob:")) URL.revokeObjectURL(video.src);
-  video.src = URL.createObjectURL(file);
+  videoSource = { id: FILE_TRACK_ID, title: file.name, url: URL.createObjectURL(file), tracks: [] };
+  video.src = videoSource.url;
   title.textContent = file.name;
 }
 
@@ -160,12 +221,30 @@ function setupAutoHide() {
   document.addEventListener("keydown", show);
 }
 
+function storedVideoId() {
+  try {
+    return localStorage.getItem(VIDEO_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export function setupPlayer() {
-  renderTrackOptions();
-  const requestedTrack = new URLSearchParams(location.search).get("subs");
-  trackSelect.value =
-    requestedTrack !== null && (requestedTrack === "" || getTrack(requestedTrack)) ? requestedTrack : "en";
+  // ?video= and ?subs= pick the video and the subtitle track; otherwise the last video is shown again
+  const params = new URLSearchParams(location.search);
+  const requestedVideo = params.get("video") ?? storedVideoId();
+  applyVideoSource(
+    VIDEO_SOURCES.find((source) => source.id === requestedVideo) ?? SAMPLE_VIDEO,
+    params.get("subs") ?? "en",
+  );
   showTrackState(getActiveTrack());
+
+  // A movie that isn't downloaded can't play; go back to the sample clip
+  video.addEventListener("error", () => {
+    if (!videoSource.movie) return;
+    window.dispatchEvent(new CustomEvent("easysubs-playground:missing-video", { detail: videoSource }));
+    switchVideoSource(SAMPLE_VIDEO);
+  });
   trackSelect.addEventListener("change", () => selectTrack(trackSelect.value));
 
   setupTimeline();

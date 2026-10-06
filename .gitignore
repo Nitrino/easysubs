@@ -4,8 +4,9 @@ dist
 .env
 .mcp.json
 
-# Playground screenshots
+# Playground screenshots and downloaded movies
 playground/screenshots
+playground/public/movies
 
 # Playwright
 test-results
