@@ -3,6 +3,7 @@ import "./index";
 import { Anki } from "@src/learning-service/anki";
 import { LinguaLeo } from "@src/learning-service/linguaLeo";
 import { chromeMock, dispatchInstalled, sendToBackground } from "@root/test/chrome";
+import { audio, json, stubFetch } from "@root/test/fetch";
 
 // The translators of the anylang package call their services; these answer like them
 vi.mock("anylang/translators", () => {
@@ -19,23 +20,6 @@ vi.mock("anylang/translators", () => {
     ChatGPTLLMTranslator: translator("ChatGPT"),
   };
 });
-
-type Handler = (url: string, init: RequestInit) => Response | Promise<Response>;
-
-// fetch() answered by URL; a request nobody answers fails the test
-function stubFetch(handlers: Record<string, Handler>) {
-  const fetchMock = vi.fn(async (input: string | URL, init: RequestInit = {}) => {
-    const url = String(input);
-    const prefix = Object.keys(handlers).find((key) => url.startsWith(key));
-    if (!prefix) throw new Error(`Unexpected request: ${url}`);
-    return handlers[prefix](url, init);
-  });
-  vi.stubGlobal("fetch", fetchMock);
-  return fetchMock;
-}
-
-const json = (data: unknown, status = 200) =>
-  new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
 
 // The page Google Translate serves with the tokens of its batchexecute requests
 const GOOGLE_PAGE =
@@ -208,6 +192,24 @@ describe("background: other translation services", () => {
 
   it("answers with the error of a failed translation", async () => {
     expect(await translate("bing", {}, "fail")).toEqual({ error: "Bing is unavailable" });
+  });
+});
+
+describe("background: pronunciation", () => {
+  it("answers with the audio of the chosen service as a data: URL", async () => {
+    stubFetch({ "https://dict.youdao.com/dictvoice": () => audio([1, 2, 3]) });
+
+    const answer = await sendToBackground({ type: "pronounce", text: "keys", language: "en", service: "youdao" });
+
+    expect(answer).toEqual({ audio: "data:audio/mpeg;base64,AQID", service: "youdao" });
+  });
+
+  it("answers with the error when no service has the audio", async () => {
+    stubFetch({ "https://translate.google.com/translate_tts": () => json({}, 500) });
+
+    const answer = await sendToBackground({ type: "pronounce", text: "keys", language: "en", service: "google" });
+
+    expect(answer).toEqual({ error: 'Google has no pronunciation of "keys"' });
   });
 });
 
