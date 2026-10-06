@@ -2,6 +2,7 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { parse } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
+import type { TSubsTrack } from "@src/models/types";
 
 class Coursera implements Service {
   name = "coursera";
@@ -38,6 +39,18 @@ class Coursera implements Service {
     const text = await resp.text();
 
     return parse(text);
+  }
+
+  // The player's <track> elements, one per language
+  public async getSubsTracks(): Promise<TSubsTrack[]> {
+    const tracks = [...document.querySelectorAll<HTMLTrackElement>("track[srclang]")];
+    const languages = [...new Set(tracks.map((track) => track.srclang).filter(Boolean))];
+    return languages.map((language) => ({
+      label: language,
+      language,
+      kind: "subtitles",
+      name: tracks.find((track) => track.srclang === language)?.label || undefined,
+    }));
   }
 
   public getSettingsButtonContainer() {

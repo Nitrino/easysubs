@@ -3,7 +3,11 @@ import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
+import type { TSubsTrack } from "@src/models/types";
+import { languageFromTrack } from "@src/utils/languages";
 import Service from "./service";
+
+type TSubtitlesGroup = Record<string, { language?: string; forced?: boolean; uri: string }>;
 
 class KinoPub implements Service {
   name = "kinopub";
@@ -29,12 +33,7 @@ class KinoPub implements Service {
     if (!this.videoPlaylistUrl) return parse("");
 
     const cdnHostName = new URL(this.videoPlaylistUrl)?.hostname ?? "cdn-azure.net";
-    const resp = await fetch(this.videoPlaylistUrl);
-    const data = await resp.text();
-    const parser = new Parser();
-    parser.push(data);
-    parser.end();
-    const subsSegments = parser.manifest.mediaGroups.SUBTITLES.sub;
+    const subsSegments = await this.getSubtitlesGroup();
 
     const uri = isValidHttpsUrl(subsSegments[label].uri)
       ? subsSegments[label].uri
@@ -56,6 +55,26 @@ class KinoPub implements Service {
     const subs = parse(subsData);
 
     return subs;
+  }
+
+  // The subtitles of the HLS manifest; their names are the labels the player shows
+  public async getSubsTracks(): Promise<TSubsTrack[]> {
+    if (!this.videoPlaylistUrl) return [];
+    const group = await this.getSubtitlesGroup();
+    return Object.entries(group).flatMap(([name, entry]): TSubsTrack[] => {
+      const language = languageFromTrack(entry.language, name);
+      if (!language) return [];
+      const kind = entry.forced || /forced|форс/i.test(name) ? "forced" : "subtitles";
+      return [{ label: name, language, kind, name }];
+    });
+  }
+
+  private async getSubtitlesGroup(): Promise<TSubtitlesGroup> {
+    const resp = await fetch(this.videoPlaylistUrl);
+    const parser = new Parser();
+    parser.push(await resp.text());
+    parser.end();
+    return (parser.manifest.mediaGroups?.SUBTITLES?.sub ?? {}) as TSubtitlesGroup;
   }
 
   public getSubsContainer() {
