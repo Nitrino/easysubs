@@ -7,7 +7,7 @@ import prettierRecommended from "eslint-plugin-prettier/recommended";
 export default tseslint.config(
   { ignores: ["dist", "node_modules"] },
   {
-    files: ["src/**/*.{ts,tsx,js,jsx}", "playground/**/*.ts"],
+    files: ["src/**/*.{ts,tsx,js,jsx}", "playground/**/*.ts", "e2e/**/*.ts"],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
@@ -20,5 +20,10 @@ export default tseslint.config(
     rules: {
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
+  },
+  {
+    // Playwright fixtures call `use()`, which the React hooks rules mistake for React's use()
+    files: ["e2e/**/*.ts"],
+    rules: { "@eslint-react/rules-of-hooks": "off" },
   },
 );

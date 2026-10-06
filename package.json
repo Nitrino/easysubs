@@ -18,8 +18,10 @@
     "dev:firefox": "pnpm build:hmr && (run-p wss build:firefox:watch)",
     "playground": "vite --config playground/vite.config.ts",
     "test": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "commitlint": "commitlint --edit",
-    "lint": "eslint src playground",
+    "lint": "eslint src playground e2e",
     "lint:fix": "pnpm lint --fix",
     "prettier": "prettier . --write"
   },

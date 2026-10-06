@@ -6,3 +6,8 @@ dist
 
 # Playground screenshots
 playground/screenshots
+
+# Playwright
+test-results
+playwright-report
+blob-report
