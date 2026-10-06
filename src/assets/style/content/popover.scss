@@ -200,8 +200,8 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     color: var(--es-tertiary);
   }
 
-  // Words that go to the learning service on click: a quiet "+" badge, tinted with the service's
-  // color (--es-service, set on the popover) while the row is pointed at. The badge is inline, so
+  // Words that go to the learning service on click: a quiet "+" badge that brightens like the speaker
+  // while the row is pointed at, whatever the service. The badge is inline, so
   // `vertical-align: middle` centers it on the lowercase letters (baseline + half the x-height) rather
   // than on the line box, which also holds the ascenders; a hanging indent keeps wrapped lines clear of it.
   // The badge is 1.2em wide plus a 0.4em gap at its font size, which is 0.8em of a list row. In the title
@@ -217,7 +217,7 @@ $es-gap: 8px; // how far the arrow sticks out of the body
 
     &:hover .es-add {
       background: var(--es-fill-hover);
-      color: var(--es-service, var(--es-accent));
+      color: #fff;
     }
 
     &:active .es-add {

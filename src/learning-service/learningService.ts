@@ -3,7 +3,6 @@ export type TAditionalData = {
   partOfSpeech?: string;
 };
 interface ILearningService {
-  color: string;
   addWord: (word: string, translation: string, aditionalData: TAditionalData) => Promise<string>;
 }
 

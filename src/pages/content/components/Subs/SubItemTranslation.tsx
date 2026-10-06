@@ -1,4 +1,4 @@
-import { CSSProperties, FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useGate, useUnit } from "effector-react";
 import { $learningService, $translateLanguage } from "@src/models/settings";
 
@@ -94,7 +94,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     typeof transcription === "string" && transcription && transcription.toLowerCase() !== source;
 
   return (
-    <Popover variant="word" style={service ? ({ "--es-service": service.color } as CSSProperties) : undefined}>
+    <Popover variant="word">
       <div
         className={service ? "es-title es-addable" : "es-title"}
         onClick={() =>
