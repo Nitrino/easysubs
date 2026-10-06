@@ -3,6 +3,7 @@ import cn from "classnames";
 import { EnableToggle } from "./EnableToggle";
 import { TranslateLanguage } from "./TranslateLanguage";
 import { TranslationService } from "./TranslationService";
+import { TtsService } from "./TtsService";
 import { DeepLApiKeyModal } from "./DeepLApiKeyModal";
 import { ChatGPTApiKeyModal } from "./ChatGPTApiKeyModal";
 import { LearningService } from "./LearningService";
@@ -110,6 +111,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
               </div>
               <div className="es-settings-content__item">
                 <TranslationService />
+              </div>
+              <div className="es-settings-content__item">
+                <TtsService />
               </div>
               <div className="es-settings-content__item">
                 <LearningService />

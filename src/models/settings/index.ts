@@ -3,13 +3,17 @@ import { debug } from "patronum";
 
 import { withPersist } from "@src/utils/withPersist";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
-import { TLearningService, TTranslationService } from "../types";
+import { TLearningService, TTranslationService, TTtsService } from "../types";
 import { fetchCurrentStreamingFx } from "../streamings";
 
 // Settings are saved under their names. Up to v3.1.3 they were saved under the ids effector gave the stores
-// ("persist:202"), which change with the order units are created in; withPersist moves them from there once.
-const createSetting = <State>(name: string, defaultState: State, legacyId: number) =>
-  withPersist(createStore<State>(defaultState, { name }), { legacyKey: `persist:${legacyId}` });
+// ("persist:202"), which change with the order units are created in; withPersist moves them from there once. Settings
+// added later have no legacy id.
+const createSetting = <State>(name: string, defaultState: State, legacyId?: number) =>
+  withPersist(
+    createStore<State>(defaultState, { name }),
+    legacyId === undefined ? undefined : { legacyKey: `persist:${legacyId}` },
+  );
 
 export const $enabled = createSetting("enabled", true, 202);
 export const enableToggleChanged = createEvent<boolean>();
@@ -67,6 +71,10 @@ export const chatGPTApiKeyChangeFx = createEffect<string, string>((value) => val
 export const $chatGPTModel = createSetting("chatGPTModel", "gpt-4o-mini", 379);
 export const chatGPTModelChanged = createEvent<string>();
 export const chatGPTModelChangeFx = createEffect<string, string>((value) => value);
+
+export const $ttsService = createSetting<TTtsService>("ttsService", "google");
+export const ttsServiceChanged = createEvent<TTtsService>();
+export const ttsServiceChangeFx = createEffect<TTtsService, TTtsService>((value) => value);
 
 export const $chatGPTApiKeyModalOpen = createStore<boolean>(false);
 export const chatGPTApiKeyModalOpened = createEvent();
@@ -133,6 +141,19 @@ sample({
 });
 
 sample({
+  clock: ttsServiceChanged,
+  target: ttsServiceChangeFx,
+});
+
+// Pronunciation shares the key with translation; ask for it only if there's none yet
+sample({
+  clock: ttsServiceChanged,
+  source: $chatGPTApiKey,
+  filter: (apiKey, service) => service === "chatgpt" && !apiKey,
+  target: chatGPTApiKeyModalOpened,
+});
+
+sample({
   clock: deeplApiKeyChanged,
   target: deeplApiKeyChangeFx,
 });
@@ -171,6 +192,7 @@ $moveBySubsEnabled.on(moveBySubsEnabledChangeFx.doneData, (_, isEnabled) => isEn
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
 $translationService.on(translationServiceChangeFx.doneData, (_, service) => service);
+$ttsService.on(ttsServiceChangeFx.doneData, (_, service) => service);
 $deeplApiKey.on(deeplApiKeyChangeFx.doneData, (_, key) => key);
 $deeplApiKeyModalOpen.on(deeplApiKeyModalOpened, () => true);
 $deeplApiKeyModalOpen.on(deeplApiKeyModalClosed, () => false);
