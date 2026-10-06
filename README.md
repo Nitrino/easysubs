@@ -24,7 +24,7 @@ The extension supports Chrome and Chrome-based browsers. It should also work in 
 3. Go to folder and install dependencies `cd easysubs && pnpm i`
 4. Build extension `pnpm build`
 
-## Playground and integration tests
+## Playground and tests
 
 `pnpm playground` opens http://localhost:5180: a local video player with sample subtitles that runs the extension code
 from `src/` with hot reload, so features can be tried without building the extension or opening a streaming service.
@@ -47,6 +47,8 @@ After subtitles change, `pnpm playground:translations --write-missing` lists the
 
 `pnpm test:e2e` runs the Playwright tests from `e2e/` against the playground (offline mock, no build needed);
 `pnpm test:e2e:ui` opens them in Playwright's UI mode. Run `pnpm exec playwright install chromium` once beforehand.
+`pnpm test` runs the Vitest unit tests of the models, utils, learning services and background script. See
+[TESTING.md](TESTING.md) for both suites.
 
 ## Manual install
 
