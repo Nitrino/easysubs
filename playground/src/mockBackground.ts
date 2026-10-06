@@ -155,6 +155,10 @@ function handle(message: Message): unknown {
       const service = message.translationService ?? "google";
       return service === "google" ? JSON.stringify({ sentences: [{ trans: translation }] }) : translation;
     }
+    case "translateBatch":
+      return ((message.texts as string[]) ?? []).map(
+        (line) => findLine(line, language) ?? mockTranslate(line, language),
+      );
     case "getTextLanguage":
       subtitlesLanguage = detectLanguage(text);
       return subtitlesLanguage;
