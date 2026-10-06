@@ -11,6 +11,7 @@ import { joinTranslations } from "@src/utils/joinTranslations";
 import ILearningService from "@src/learning-service/learningService";
 import { TWordTranslationItem } from "@src/models/types";
 import { $subsLanguage } from "@src/models/subs";
+import { wordPronounced } from "@src/models/pronunciation";
 import { getLearningService } from "@src/utils/getLearningService";
 import { TranslateSelect } from "../ui/TranslateSelect";
 import { Popover } from "../ui/Popover";
@@ -25,12 +26,20 @@ const DICTIONARIES: [string, (word: string) => string][] = [
 
 export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
   useGate(WordTranslationsGate, text);
-  const [currentWordTranslation, learningService, subsLanguage, translateLanguage, wordTranslationsPendings] = useUnit([
+  const [
+    currentWordTranslation,
+    learningService,
+    subsLanguage,
+    translateLanguage,
+    wordTranslationsPendings,
+    pronounceWord,
+  ] = useUnit([
     $currentWordTranslation,
     $learningService,
     $subsLanguage,
     $translateLanguage,
     $wordTranslationsPendings,
+    wordPronounced,
   ]);
 
   const [service, setService] = useState<ILearningService>(null);
@@ -81,13 +90,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     }
   };
 
-  const handlePlaySound = async () => {
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = currentWordTranslation.source;
-    msg.lang = subsLanguage;
-    msg.rate = 0.8;
-    window.speechSynthesis.speak(msg);
-  };
+  const handlePlaySound = () => pronounceWord(currentWordTranslation.source);
 
   const { transcription } = currentWordTranslation;
   const showTranscription =
