@@ -62,6 +62,7 @@ const trackListeners = new Set<(track: SubtitleTrack | null) => void>();
 export const getTrack = (id: string) => tracks.find((track) => track.id === id) ?? null;
 export const getActiveTrack = () => getTrack(trackSelect.value);
 
+const muteButton = playerRoot.querySelector<HTMLButtonElement>(".pg-mute");
 export function onTrackChange(listener: (track: SubtitleTrack | null) => void) {
   trackListeners.add(listener);
   return () => trackListeners.delete(listener);
@@ -160,6 +161,8 @@ function toggleFullscreen() {
 }
 
 const isTyping = (target: EventTarget | null) =>
+const toggleMute = () => (video.muted = !video.muted);
+
   target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(target.tagName));
 
 function setupTimeline() {
@@ -262,6 +265,16 @@ export function setupPlayer() {
   });
 
   let clickTimer: number | undefined;
+
+  // Muted on every load; the video element is muted in index.html as well, before this runs
+  video.muted = true;
+  const showMuted = () => {
+    playerRoot.classList.toggle("pg-player--muted", video.muted);
+    muteButton.setAttribute("aria-pressed", String(video.muted));
+  };
+  video.addEventListener("volumechange", showMuted);
+  muteButton.addEventListener("click", toggleMute);
+  showMuted();
   video.addEventListener("click", () => {
     window.clearTimeout(clickTimer);
     clickTimer = window.setTimeout(togglePlay, DOUBLE_CLICK_MS);
@@ -284,3 +297,5 @@ export function setupPlayer() {
     }
   });
 }
+    } else if (event.code === "KeyM" && !event.altKey && !event.metaKey && !event.ctrlKey) {
+      toggleMute();
