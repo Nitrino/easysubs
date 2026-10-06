@@ -248,24 +248,22 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     }
   }
 
-  // Dictionary links: recessed capsules in secondary text, grown to fill the row like a button bar.
+  // Dictionary links: rarely used, so small recessed capsules on one line, grown to fill the row like a
+  // button bar. The line is short enough to fit an English popover without widening it.
   .es-links {
     display: flex;
-    flex-wrap: wrap;
-    margin: 0.15em -0.35em -0.35em 0;
-    font-size: 0.8em;
+    gap: 0.25em;
+    margin-top: 0.15em;
+    font-size: 0.73em;
   }
 
   a.es-link {
-    display: inline-flex;
     flex: 1 1 auto;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.35em 0.35em 0;
-    padding: 0.2em 0.55em 0.2em 0.65em;
+    padding: 0.2em 0.4em;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.07);
     color: var(--es-secondary);
+    text-align: center;
     font-weight: 400;
     line-height: 1.25;
     text-decoration: none;
@@ -280,13 +278,6 @@ $es-gap: 8px; // how far the arrow sticks out of the body
 
     &:active {
       background: var(--es-fill-active);
-    }
-
-    svg {
-      width: 0.62em;
-      height: 0.62em;
-      margin-left: 0.35em;
-      opacity: 0.7;
     }
   }
 

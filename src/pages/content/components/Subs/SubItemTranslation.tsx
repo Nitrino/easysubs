@@ -6,7 +6,6 @@ import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGat
 import toast from "react-hot-toast";
 import { SoundIcon } from "./assets/SoundIcon";
 import { PlusIcon } from "./assets/PlusIcon";
-import { ExternalIcon } from "./assets/ExternalIcon";
 import { joinTranslations } from "@src/utils/joinTranslations";
 
 import ILearningService from "@src/learning-service/learningService";
@@ -157,7 +156,6 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
             {DICTIONARIES.map(([name, url]) => (
               <a key={name} className="es-link" href={url(encodeURIComponent(source))} target="_blank" rel="noreferrer">
                 {name}
-                <ExternalIcon />
               </a>
             ))}
           </div>
