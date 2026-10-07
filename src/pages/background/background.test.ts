@@ -4,6 +4,7 @@ import { Anki } from "@src/learning-service/anki";
 import { LinguaLeo } from "@src/learning-service/linguaLeo";
 import { chromeMock, dispatchInstalled, sendToBackground } from "@root/test/chrome";
 import { audio, json, stubFetch } from "@root/test/fetch";
+import { lexicon } from "@root/test/expressions";
 
 // The translators of the anylang package call their services; these answer like them
 vi.mock("anylang/translators", () => {
@@ -283,6 +284,75 @@ describe("background: lines of the second subtitle line", () => {
     expect(await translateBatch("chatgpt", { chatGPTApiKey: "" })).toEqual({
       error: "ChatGPT API key is required for translation",
     });
+  });
+});
+
+describe("background: expressions", () => {
+  // The extension's file of a language's list, as the background fetches it
+  const serveLexicons = () =>
+    stubFetch({
+      "chrome-extension://easysubs-test/expressions/": (url) => {
+        const language = url.match(/expressions\/(\w+)\.json$/)?.[1];
+        return json(lexicon(language));
+      },
+    });
+
+  it("finds the expressions of each cue in the list of the subtitles' language", async () => {
+    const fetchMock = serveLexicons();
+
+    const answer = await sendToBackground({
+      type: "findExpressions",
+      language: "de",
+      cues: [
+        ["Ich", "rufe", "dich", "morgen", "an."],
+        ["Hallo", "Welt!"],
+      ],
+    });
+
+    expect(answer).toEqual([[{ expression: "anrufen", kind: "separable verb", indexes: [1, 4] }], []]);
+    expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual([
+      "chrome-extension://easysubs-test/expressions/de.json",
+    ]);
+  });
+
+  it("answers with the error when the list can't be loaded", async () => {
+    stubFetch({ "chrome-extension://easysubs-test/expressions/": () => json({}, 404) });
+
+    expect(await sendToBackground({ type: "findExpressions", language: "it", cues: [["Fa", "finta"]] })).toEqual({
+      error: 'No expressions for "it": 404',
+    });
+  });
+
+  it("translates the expressions of a line with ChatGPT in one request", async () => {
+    const fetchMock = stubFetch({
+      "https://api.openai.com/v1/chat/completions": () =>
+        json({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({ expressions: [{ expression: "pick up", translation: "забрать" }] }),
+              },
+            },
+          ],
+        }),
+    });
+
+    const answer = await sendToBackground({
+      type: "translateExpressions",
+      text: "Almost. I just need to pick up my keys.",
+      expressions: ["pick up"],
+      language: "ru",
+      chatGPTApiKey: "sk-test",
+    });
+
+    expect(answer).toEqual({ "pick up": { main: "забрать", alternatives: [] } });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("asks for a ChatGPT API key to translate expressions", async () => {
+    expect(
+      await sendToBackground({ type: "translateExpressions", text: "x", expressions: ["pick up"], language: "ru" }),
+    ).toEqual({ error: "ChatGPT API key is required for translation" });
   });
 });
 

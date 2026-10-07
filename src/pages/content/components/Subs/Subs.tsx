@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
 
-import { $currentSubs } from "@src/models/subs";
+import { $currentSubs, $subsLanguage } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
 import {
@@ -12,17 +12,13 @@ import {
   $subsBackground,
   $subsBackgroundOpacity,
   $subsFontSize,
+  $translateLanguage,
 } from "@src/models/settings";
 import { $currentSecondarySubs } from "@src/models/secondarySubs";
-import {
-  $findPhrasalVerbsPendings,
-  subItemMouseEntered,
-  subItemMouseLeft,
-  $currentPhrasalVerb,
-} from "@src/models/translations";
+import { $currentExpression, wordHovered, wordLeft } from "@src/models/expressions";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
-import { PhrasalVerbTranslation } from "./PhrasalVerbTranslation";
+import { ExpressionTranslation } from "./ExpressionTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
 import { SecondaryLine, SecondaryNotice, SecondarySubsTop } from "./SecondarySubs";
 import { useHoverPause } from "./useHoverPause";
@@ -80,20 +76,12 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
 
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
-  const [subsBackground, subsBackgroundOpacity, findPhrasalVerbsPendings] = useUnit([
-    $subsBackground,
-    $subsBackgroundOpacity,
-    $findPhrasalVerbsPendings,
-  ]);
+  const [subsBackground, subsBackgroundOpacity] = useUnit([$subsBackground, $subsBackgroundOpacity]);
 
   const handleOnClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setShowTranslation(true);
   };
-
-  if (findPhrasalVerbsPendings[sub.text]) {
-    return null;
-  }
 
   return (
     <div
@@ -105,7 +93,7 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
       }}
     >
       {sub.items.map((item, index) => (
-        <SubItem key={index} subItem={item} index={index} />
+        <SubItem key={index} sub={sub} subItem={item} index={index} />
       ))}
       {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
     </div>
@@ -113,54 +101,56 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
 };
 
 type TSubItemProps = {
+  sub: TSub;
   subItem: TSubItem;
   index: number;
 };
 
-const SubItem: FC<TSubItemProps> = ({ subItem, index }) => {
-  const [currentPhrasalVerb, handleSubItemMouseEntered, handleSubItemMouseLeft, findPhrasalVerbsPendings] = useUnit([
-    $currentPhrasalVerb,
-    subItemMouseEntered,
-    subItemMouseLeft,
-    $findPhrasalVerbsPendings,
+const SubItem: FC<TSubItemProps> = ({ sub, subItem, index }) => {
+  const [currentExpression, handleWordHovered, handleWordLeft, subsLanguage, translateLanguage] = useUnit([
+    $currentExpression,
+    wordHovered,
+    wordLeft,
+    $subsLanguage,
+    $translateLanguage,
   ]);
   const [showTranslation, setShowTranslation] = useState(false);
 
   const handleOnMouseLeave = () => {
     setShowTranslation(false);
-    handleSubItemMouseLeft();
+    handleWordLeft();
   };
 
   const handleOnMouseEnter = () => {
     setShowTranslation(true);
-    handleSubItemMouseEntered(subItem.cleanedText);
+    handleWordHovered({ id: sub.id, cue: sub.text, index });
   };
 
   const handleClick = () => {
     setShowTranslation(false);
-    handleSubItemMouseLeft();
+    handleWordLeft();
   };
+
+  // The expression of the hovered word, highlighted in its own cue only
+  const inExpression = currentExpression?.id === sub.id && currentExpression.indexes.includes(index);
+  // Subtitles already in the translation language get the word popover, which asks for another language
+  const showExpression = inExpression && subsLanguage !== translateLanguage;
 
   return (
     <>
       <pre
         onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}
-        className={`es-sub-item ${subItem.tag} ${
-          currentPhrasalVerb?.indexes?.includes(index) ? "es-sub-item-highlighted" : ""
-        }`}
+        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""}`}
         onClick={handleClick}
       >
         {subItem.text}
-        {!findPhrasalVerbsPendings[subItem.cleanedText] && showTranslation && (
-          <>
-            {currentPhrasalVerb ? (
-              <PhrasalVerbTranslation phrasalVerb={currentPhrasalVerb} />
-            ) : (
-              <SubItemTranslation text={subItem.cleanedText} />
-            )}
-          </>
-        )}
+        {showTranslation &&
+          (showExpression ? (
+            <ExpressionTranslation expression={currentExpression} word={subItem.cleanedText} />
+          ) : (
+            <SubItemTranslation text={subItem.cleanedText} />
+          ))}
       </pre>
       <pre className="es-sub-item-space"> </pre>
     </>

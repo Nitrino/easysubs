@@ -303,6 +303,26 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     margin-top: 0.1em;
   }
 
+  // An expression's translation in the line it's in, above its other translations
+  .es-pv-main {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.96);
+  }
+
+  .es-pv-item .es-alt-pos {
+    margin-inline-start: 0.5em;
+  }
+
+  // The hovered word's own translation under the expression, in case the expression isn't meant here
+  .es-pv-word {
+    font-size: 0.93em;
+    color: var(--es-secondary);
+  }
+
+  .es-pv-word > * + * {
+    margin-inline-start: 0.5em;
+  }
+
   .es-note {
     max-width: 17em;
     font-size: 0.93em;

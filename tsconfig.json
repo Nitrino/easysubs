@@ -32,6 +32,7 @@
     "utils",
     "vite.config.ts",
     "playground",
+    "scripts",
     "e2e",
     "test",
     "playwright.config.ts",

@@ -76,7 +76,7 @@ export type TGoogleTranslation = unknown;
 
 export type TLearningService = "anki" | "lingualeo" | "puzzle-english" | "disabled";
 
-export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt";
+export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt" | "chrome";
 
 export type TTtsService = "google" | "youdao" | "wiktionary" | "chatgpt" | "browser";
 
@@ -99,7 +99,7 @@ export type TSubsTrack = {
 // translated even where the video has a track in it
 export type TSecondaryChoice = { language: string; kind?: TSubsTrackKind; translate?: boolean };
 
-export type TSecondaryTranslator = "google" | "deepl" | "chatgpt";
+export type TSecondaryTranslator = "google" | "deepl" | "chatgpt" | "chrome";
 export type TSecondaryPosition = "below" | "above" | "top";
 export type TSecondaryReveal = "always" | "hover" | "paused";
 
@@ -190,9 +190,18 @@ export type TFoundShow = {
   group?: string;
 };
 
-export type TPhrasalVerb = {
-  key: string;
-  text: string;
+// A multi-word expression found in a cue, see src/utils/expressions
+export type TExpressionKind = "phrasal verb" | "idiom" | "separable verb" | "expression";
+export type TExpressionMatch = {
+  // The expression as the dictionary writes it: "pick up" for "picked it up", "anrufen" for "rief … an"
+  expression: string;
+  kind: TExpressionKind;
+  // The cue's words that make it up
   indexes: number[];
-  translations: string[];
+};
+
+// An expression's translation: the main one and others, with their part of speech when the service gives one
+export type TExpressionTranslation = {
+  main: string;
+  alternatives: { text: string; partOfSpeech?: TPartOfSpeach }[];
 };

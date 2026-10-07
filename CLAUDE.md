@@ -18,6 +18,7 @@ EasySubs is a browser extension that helps users learn languages by watching mov
 - `pnpm lint` - Run ESLint on TypeScript/JavaScript files
 - `pnpm lint:fix` - Auto-fix linting issues
 - `pnpm prettier` - Format code with Prettier
+- `pnpm expressions [language...] [--cache <dir>]` - Rebuild the phrasal verb and idiom lists in `public/expressions` from Wiktionary (see Expressions below)
 
 ## Testing
 
@@ -30,23 +31,29 @@ To cut a new release (version bump, changelog, release commit, GitHub release, b
 ## Architecture
 
 ### State Management
+
 Uses Effector for state management with these main models:
+
 - `src/models/streamings/` - Current streaming service detection and management
 - `src/models/settings/` - Extension settings and preferences
 - `src/models/subs/` - Subtitle data and operations
 - `src/models/translations/` - Translation data and caching
+- `src/models/expressions/` - Phrasal verbs, idioms and other expressions in the subtitles (see below)
 - `src/models/videos/` - Video player state and time tracking
 - `src/models/secondarySubs/` - The second subtitle line (see below)
 - `src/models/foundSubs/` - Subtitles found online or opened from a file (see below)
 
 ### Browser Extension Structure
+
 - `src/pages/content/` - Content scripts injected into streaming websites
 - `src/pages/background/` - Service worker/background script
 - `src/pages/popup/` - Extension popup interface
 - `public/` - Static assets including manifest and localization files
 
 ### Streaming Service Integration
+
 Each streaming service implements the `Service` interface defined in `src/streamings/service.ts`:
+
 - `getSubs()` - Fetch subtitles for a language
 - `getSubsContainer()` - DOM element for subtitle rendering
 - `getSettingsButtonContainer()` - Where to inject settings button
@@ -59,11 +66,13 @@ Each streaming service implements the `Service` interface defined in `src/stream
 - `getTitle()` (optional) - What's playing (title, year, season and episode, IMDb id when known), for the search for subtitles online. Netflix (its player state through `public/assets/js/netflix.js`, else the title over the player), InOriginal (the subtitle paths), Jellyfin (its item API) and the playground have it
 
 ### Second Subtitle Line
+
 A second line under or above the subtitles, or in its own draggable block at the top of the player (`#es-top`), set up in the settings' Second line tab and off by default:
+
 - `src/utils/resolveSecondarySubs.ts` picks the source for the chosen language: a track of the video (YouTube's `tlang` auto-translate counts as one), the translator otherwise, or nothing when the subtitles are already in that language. A language picked under Auto-translate is always translated, even where the video has a track in it (`translate: true` in the saved choice)
 - A track is anchored to the main cues by overlap (`src/utils/anchorSubs.ts`); the delay buttons and Netflix ad reloads move both tracks
 - Translation runs about two minutes ahead of the playhead in batches (`src/utils/secondaryTranslationWindow.ts`) through the background's `translateBatch` message (`src/utils/translateBatch.ts`: Google with lines joined by newlines, DeepL as a list, ChatGPT through anylang's `translateBatch`), line by line on services that show one line at a time, and is cached in `chrome.storage` per video, track, language and translator (`src/utils/translationCache.ts`)
-- The second line uses Google unless DeepL or ChatGPT is picked for it in the Translator row
+- The second line uses Google unless DeepL, ChatGPT or Chrome is picked for it in the Translator row. Chrome's translator runs in the content script and waits for the subtitles' language
 - `src/utils/secondarySubsKeys.ts`: V shows or hides the line for the current video, holding R reveals it when it's blurred until hover or pause; both only while the line is on
 
 ### Subtitles Found Online
@@ -75,10 +84,12 @@ A search sheet in place of the settings panel finds subtitles for the video and 
 - Files are also opened from the settings or dropped on the player (`src/utils/subtitleDrop.ts`, Shift for the second line); ads and, if asked, sound descriptions are removed (`src/utils/cleanFoundSubs.ts`)
 
 ### Playground and Integration Tests
+
 `playground/` is a Vite page that runs the real content and background scripts without the extension runtime:
+
 - `playground/src/chromeShim.ts` - `chrome.storage` on localStorage, `chrome.runtime.sendMessage` straight to the background listeners in the same page
 - `playground/src/playgroundService.ts` - `Service` for the local player; `main.ts` swaps it in for `getCurrentService()`
-- `?background=mock` (default) uses `playground/src/mockBackground.ts`, which answers from the offline translations in `playground/fixtures/translations` (every direction between en, ru, es and de, written for the playground's subtitles; `pnpm playground:translations` lists missing words and lines) and falls back to `[ru] text`; `?background=live` runs `src/pages/background` with cross-origin requests proxied by the dev server (only `host_permissions` hosts)
+- `?background=mock` (default) uses `playground/src/mockBackground.ts`, which answers from the offline translations in `playground/fixtures/translations` (every direction between en, ru, es and de, written for the playground's subtitles; `pnpm playground:translations` lists missing words and lines; expressions like "pick up" are among the words) and falls back to `[ru] text`, and finds expressions with the real lists and matcher; `?background=live` runs `src/pages/background` with cross-origin requests proxied by the dev server (only `host_permissions` hosts) and `/expressions/*.json` served from `public/expressions`
 - `?subs=en|es|` picks the subtitle track (the player's tracks are also the second line's, see `getSubsTracks()` in `playgroundService.ts`) and `?t=` the start time (20 s by default); fixtures live in `playground/public/subs`, the video is generated by `playground/scripts/generate-sample-video.ts`
 - `playground/src/movies.ts` lists open movies (Sprite Fright, CC BY 4.0) that `pnpm playground:movies` downloads with subtitles into `playground/public/movies/` (gitignored); `?video=<id>` opens one
 - `playground/src/screenshot.ts` serializes the page (DOM, CSS, current video frame) and posts it to the dev server's `/__capture`, which renders it with Playwright at the chosen size and scale into `playground/screenshots/` (gitignored)
@@ -87,25 +98,39 @@ A search sheet in place of the settings panel finds subtitles for the video and 
 - Unit tests use `test/chrome.ts` for `chrome.*` and can import `playground/src/mockBackground.ts` to get the same offline answers
 
 ### Component Architecture
+
 - React components use TypeScript and SCSS for styling
 - Main UI components: `Settings`, `Subs`, `ProgressBar`
 - Uses React Draggable for moveable subtitles
 - Tailwind CSS for utility classes
 
 ### Translation System
+
 - Google Translate integration for word and phrase translation
 - Batch and single word translation fetchers
-- Phrasal verb detection and translation
+- Chrome's built-in Translator API (`src/utils/chromeTranslator.ts`) as the "Chrome (on device)" translation service and second line translator: offered only where the browser has it, called from the content script (it isn't available in workers), Google where it can't translate a pair. Chrome downloads a pair's model only during a click, so picking it starts the download (`src/models/settings/init.ts`)
+- Phrasal verbs, idioms and set phrases, see Expressions below
 - Export to learning services (Anki, LinguaLeo, Puzzle English)
 - Word pronunciation from the service chosen in the settings (`$ttsService`): the background fetches Google, Youdao, Wiktionary or ChatGPT audio (`src/utils/tts/`, falling back to Google) and answers the `pronounce` message with a data: URL; `src/models/pronunciation` plays it through Web Audio and falls back to the browser's `speechSynthesis`
 
+### Expressions
+
+Phrasal verbs, idioms, set phrases and German and Dutch separable verbs, in any subtitle language with a list (`EXPRESSION_LANGUAGES` in `src/utils/expressions/lexicon.ts`: en, de, es, fr, it, pt, ru, nl), translated into any language:
+
+- `public/expressions/<language>.json` is built by `scripts/expressions/build.ts` (`pnpm expressions`) from kaikki.org's Wiktextract dumps of Wiktionary (CC BY-SA 4.0): each expression with its kind and inflected forms, and the forms of verbs that start expressions without forms of their own ("бить баклуши" → "бьёт баклуши", `src/utils/expressions/verbHeads.ts`). The pure transforms are in `scripts/expressions/wiktextract.ts`
+- `src/utils/expressions/findExpressions.ts` indexes every form by its first word and matches a cue's words with per-language rules: an English object before the particle ("pick the box up"), a German or Dutch verb with its particle at the end of the clause ("rufe dich morgen an"), placeholders like `one's` and `someone`. `normalize.ts` is shared with the build
+- The background's `findExpressions` message loads a language's list once and answers for a batch of cues; `src/models/expressions` sends the whole track once its language is detected, then only new cues
+- Hovering a word of an expression shows it in `ExpressionTranslation.tsx` with the hovered word's own translation under it. Expressions are translated with Google's dictionary (`translateWordFull` on the dictionary form), with Chrome's translator when it's the translation service, and by ChatGPT when it's the translation service: one `translateExpressions` request per cue for all its expressions, in context (`src/utils/chatGPTExpressions.ts`)
+
 ### Build System
+
 - Vite for bundling with custom plugins for manifest generation
 - Separate builds for Chrome and Firefox
 - Hot module replacement for development
 - TypeScript compilation with strict checking
 
 ## Key Files to Understand
+
 - `src/pages/content/main.tsx` - Main content script entry point that sets up streaming service detection and UI rendering
 - `src/models/init.ts` - Initializes all Effector models
 - `manifest.js` - Dynamic manifest generation for different browsers

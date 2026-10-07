@@ -40,9 +40,15 @@ export const TRANSLATOR_TITLES: Record<TSecondaryTranslator, string> = {
   google: "Google Translate",
   deepl: "DeepL",
   chatgpt: "ChatGPT",
+  chrome: "Chrome (on device)",
 };
 
-const TRANSLATOR_TAGS: Record<TSecondaryTranslator, string> = { google: "Google", deepl: "DeepL", chatgpt: "ChatGPT" };
+const TRANSLATOR_TAGS: Record<TSecondaryTranslator, string> = {
+  google: "Google",
+  deepl: "DeepL",
+  chatgpt: "ChatGPT",
+  chrome: "Chrome",
+};
 
 const trackLabel = (track: TSubsTrack) => `${languageName(track.language)}${track.kind === "cc" ? " (CC)" : ""}`;
 

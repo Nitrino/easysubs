@@ -26,12 +26,79 @@ test.describe("translation", () => {
     await expect(playground.linePopover).toHaveText(enRu.lines["Almost. I just need to pick up my keys."]);
   });
 
-  test("highlights a phrasal verb and shows its dictionary translation", async ({ playground }) => {
+  test("highlights a phrasal verb and shows its translations and the word's own", async ({ playground }) => {
     await playground.word("pick").hover();
 
     await expect(playground.word("up")).toHaveClass(/es-sub-item-highlighted/);
-    await expect(playground.wordPopover).toContainText("pick up");
-    expect(await playground.messages("translateWordFull")).toHaveLength(0);
+    await expect(playground.word("my")).not.toHaveClass(/es-sub-item-highlighted/);
+    const popover = playground.wordPopover;
+    await expect(popover.locator(".es-title")).toHaveText("pick up");
+    await expect(popover.locator(".es-label")).toHaveText("phrasal verb");
+    await expect(popover.locator(".es-pv-main")).toHaveText(enRu.words["pick up"].main);
+    const [main, ...alternatives] = enRu.words["pick up"].verb as string[];
+    await expect(popover.locator(".es-pv-item")).toHaveText([main, ...alternatives.map((text) => `${text}verb`)]);
+    await expect(popover.locator(".es-pv-word")).toHaveText(`pick${enRu.words.pick.main}`);
+    expect(await playground.messages("translateWordFull")).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ text: "pick up", language: "ru" }),
+        expect.objectContaining({ text: "pick", language: "ru" }),
+      ]),
+    );
+  });
+
+  test("looks up the expressions of the whole track in one message", async ({ playground }) => {
+    expect(await playground.messages("findExpressions")).toEqual([
+      expect.objectContaining({
+        language: "en",
+        cues: expect.arrayContaining([["Almost.", "I", "just", "need", "to", "pick", "up", "my", "keys."]]),
+      }),
+    ]);
+  });
+
+  test("shows the word popover for words outside expressions", async ({ playground }) => {
+    await playground.word("keys").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toHaveText(enRu.words.keys.main);
+    await expect(playground.subs.locator(".es-sub-item-highlighted")).toHaveCount(0);
+  });
+
+  test("highlights a phrasal verb split by its object", async ({ playground }) => {
+    await playground.loadSubtitles("1\n00:00:00,000 --> 00:01:00,000\nCould you turn the radio off, please?\n");
+    await expect(playground.subs).toHaveText("Could you turn the radio off, please?");
+
+    await playground.word("off").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toHaveText("turn off");
+    await expect(playground.word("turn")).toHaveClass(/es-sub-item-highlighted/);
+    await expect(playground.word("radio")).not.toHaveClass(/es-sub-item-highlighted/);
+    await expect(playground.subs.locator(".es-sub-item-highlighted")).toHaveCount(2);
+  });
+
+  test("highlights an expression only in its own cue", async ({ playground }) => {
+    await playground.loadSubtitles(
+      "1\n00:00:00,000 --> 00:01:00,000\nPlease pick up my keys.\n\n" +
+        "2\n00:00:00,000 --> 00:01:00,000\nI am up to it.\n",
+    );
+    await expect(playground.subs.locator(".es-sub")).toHaveCount(2);
+
+    await playground.word("pick").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toHaveText("pick up");
+    await expect(playground.subs.locator(".es-sub").first().locator(".es-sub-item-highlighted")).toHaveCount(2);
+    await expect(playground.subs.locator(".es-sub").nth(1).locator(".es-sub-item-highlighted")).toHaveCount(0);
+  });
+
+  test("shows idioms", async ({ playground }) => {
+    await playground.loadSubtitles("1\n00:00:00,000 --> 00:01:00,000\nI finally made up my mind.\n");
+    await expect(playground.subs).toHaveText("I finally made up my mind.");
+
+    await playground.word("mind").hover();
+
+    await expect(playground.word("my")).toHaveClass(/es-sub-item-highlighted/);
+    await expect(playground.word("finally")).not.toHaveClass(/es-sub-item-highlighted/);
+    await expect(playground.subs.locator(".es-sub-item-highlighted")).toHaveCount(4);
+    await expect(playground.wordPopover.locator(".es-title")).toHaveText("make up one's mind");
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("idiom");
   });
 
   test("highlights a phrasal verb that starts a sentence", async ({ playground }) => {
@@ -267,6 +334,70 @@ test.describe("line translation services", () => {
         chatGPTModel: "gpt-4o",
       }),
     ]);
+  });
+
+  test("translates all the expressions of a line with ChatGPT in one request", async ({ playground, page }) => {
+    await playground.openSettings("General");
+    await playground.choose("Translation service", "ChatGPT");
+    const modal = page.locator(".es-modal-content");
+    await modal.getByLabel("API Key:").fill("test-chatgpt-key");
+    await modal.getByRole("button", { name: "Save" }).click();
+    await playground.closeSettings();
+    await playground.seek(25);
+    await expect(playground.subs).toContainText("What if we run out of time");
+
+    await playground.word("run").hover();
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verb, in this line");
+    await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText(enRu.words["run out"].main);
+    await playground.word("time").hover();
+    await expect(playground.wordPopover.locator(".es-title")).toHaveText("out of time");
+    await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText(enRu.words["out of time"].main);
+
+    expect(await playground.messages("translateExpressions")).toEqual([
+      expect.objectContaining({ expressions: ["run out", "out of time"], chatGPTApiKey: "test-chatgpt-key" }),
+    ]);
+  });
+});
+
+test.describe("Chrome's built-in translator", () => {
+  test("translates lines and expressions on the device", async ({ playground }) => {
+    await playground.stubChromeTranslator();
+    await playground.open();
+    await playground.seek(5);
+    await playground.changeSettings("General", () => playground.choose("Translation service", "Chrome (on device)"));
+
+    await playground.word("need").click();
+    await expect(playground.linePopover).toHaveText("[chrome:ru] Almost. I just need to pick up my keys.");
+    await playground.word("pick").hover();
+    await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText("[chrome:ru] pick up");
+
+    expect(await playground.messages("translateFullText")).toEqual([]);
+    expect(await playground.chromeTranslators()).toEqual([{ sourceLanguage: "en", targetLanguage: "ru" }]);
+  });
+
+  test("translates with Google where Chrome can't", async ({ playground }) => {
+    await playground.stubChromeTranslator({ availability: "unavailable" });
+    await playground.open();
+    await playground.seek(5);
+    await playground.changeSettings("General", () => playground.choose("Translation service", "Chrome (on device)"));
+
+    await playground.word("need").click();
+
+    await expect(playground.linePopover).toHaveText(enRu.lines["Almost. I just need to pick up my keys."]);
+    expect(await playground.messages("translateFullText")).toEqual([
+      expect.objectContaining({ translationService: "google" }),
+    ]);
+  });
+
+  test("isn't offered in browsers without it", async ({ playground, page }) => {
+    await page.addInitScript(() => delete (window as { Translator?: unknown }).Translator);
+    await playground.open();
+    await playground.openSettings("General");
+
+    await playground.settingsRow("Translation service").locator(".es-select").click();
+
+    await expect(page.getByRole("option", { name: "ChatGPT", exact: true })).toBeVisible();
+    await expect(page.getByRole("option", { name: "Chrome (on device)" })).toHaveCount(0);
   });
 });
 

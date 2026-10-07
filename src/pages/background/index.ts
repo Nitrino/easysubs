@@ -16,6 +16,8 @@ import {
   opensubtitlesSignOut,
   searchSubtitles,
 } from "@src/subsSources";
+import { createExpressionFinder } from "@src/utils/expressions/lookup";
+import { translateExpressionsWithChatGPT } from "@src/utils/chatGPTExpressions";
 
 import "webext-dynamic-content-scripts";
 
@@ -38,6 +40,8 @@ chrome.runtime.onInstalled.addListener(function (object) {
     });
   }
 });
+
+const findExpressionsInCues = createExpressionFinder();
 
 class LinguaLeoAuthError extends Error {}
 
@@ -164,6 +168,18 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   if (message.type === "opensubtitlesLogout") {
     opensubtitlesSignOut()
       .then(() => sendResponse({ signedOut: true }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // Phrasal verbs, idioms and other expressions in the cues of the subtitles, each cue given as its words
+  if (message.type === "findExpressions") {
+    findExpressionsInCues(message.language, message.cues)
+      .then((expressions) => sendResponse(expressions))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // The expressions of a cue translated by ChatGPT in one request, as they're used in the cue
+  if (message.type === "translateExpressions") {
+    translateExpressionsWithChatGPT(message)
+      .then((translations) => sendResponse(translations))
       .catch((error: Error) => sendResponse({ error: error.message }));
   }
   if (message.type === "pronounce") {
