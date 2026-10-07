@@ -7,6 +7,13 @@
 
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { TRANSLATION_PAIRS, type TranslationFixture, type WordTranslation } from "./translationPairs";
+import {
+  downloadSubtitle,
+  lookupTitle,
+  opensubtitlesLogin,
+  opensubtitlesLogout,
+  searchSubtitles,
+} from "./mockSubtitles";
 
 type Message = { type: string } & Record<string, unknown>;
 
@@ -170,12 +177,23 @@ function handle(message: Message): unknown {
       return { status: true };
     case "pronounce":
       return { audio: toneWav(), service: message.service ?? "google" };
+    // Subtitles found online, see mockSubtitles.ts
+    case "lookupTitle":
+      return lookupTitle(message);
+    case "searchSubtitles":
+      return searchSubtitles(message);
+    case "downloadSubtitle":
+      return downloadSubtitle(message);
+    case "opensubtitlesLogin":
+      return opensubtitlesLogin(message);
+    case "opensubtitlesLogout":
+      return opensubtitlesLogout();
     default:
       return { error: `Mock background: unsupported message type "${message.type}"` };
   }
 }
 
 chrome.runtime.onMessage.addListener((message: Message, _sender, sendResponse) => {
-  setTimeout(() => sendResponse(handle(message)), LATENCY_MS);
+  Promise.resolve(handle(message)).then((answer) => setTimeout(() => sendResponse(answer), LATENCY_MS));
   return true;
 });

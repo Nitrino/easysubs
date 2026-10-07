@@ -20,11 +20,14 @@ export class Playground {
   // The second subtitle line: under or above the cues, or in its own block at the top of the player
   readonly secondLine: Locator;
   readonly topBlock: Locator;
+  // The search for subtitles online, in place of the settings panel
+  readonly sheet: Locator;
 
   constructor(readonly page: Page) {
     this.subs = page.locator("#es-subs");
     this.secondLine = page.locator(".es-sub--secondary");
     this.topBlock = page.locator("#es-top-subs");
+    this.sheet = page.locator(".es-found");
     this.wordPopover = this.subs.locator(".es-popover--word");
     this.linePopover = this.subs.locator(".es-popover--line");
     this.progressBar = page.locator(".es-progress-bar");
@@ -128,6 +131,23 @@ export class Playground {
   // The line under the Second line picker naming where the line comes from
   secondLineStatus() {
     return this.settingsPanel.locator(".es-settings-content__status").first();
+  }
+
+  // Opens the search for subtitles from the Subtitles tab ("Subtitles from" → Find subtitles…), for the main line
+  async openSearch() {
+    await this.openSettings("Subtitles");
+    await this.choose("Subtitles from", "Find subtitles…");
+    await expect(this.sheet).toBeVisible();
+  }
+
+  // A result of the search by its release name
+  result(release: string) {
+    return this.sheet.locator(".es-found__result", { has: this.page.getByText(release, { exact: true }) });
+  }
+
+  // The file loaded on the line the sheet loads to: name, release, how it was synced
+  loadedFile() {
+    return this.sheet.locator(".es-found__loaded");
   }
 
   // Opens the settings, changes them and closes the panel again

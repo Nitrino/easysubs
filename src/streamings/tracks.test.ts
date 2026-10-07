@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Youtube, { youtubeTracks, type YoutubeTrackList } from "./youtube";
-import { netflixTrack } from "./netflix";
+import { netflixTitleFromPage, netflixTrack } from "./netflix";
+import { inoriginalTitle } from "./inoriginal";
 import Coursera from "./coursera";
 import KinoPub from "./kinopub";
 import { json, stubFetch } from "@root/test/fetch";
@@ -137,5 +138,42 @@ describe("KinoPub tracks", () => {
       { label: "English", language: "en", kind: "subtitles", name: "English" },
       { label: "Русские (форсированные)", language: "ru", kind: "forced", name: "Русские (форсированные)" },
     ]);
+  });
+});
+
+// What's playing, for the search for subtitles online
+describe("titles", () => {
+  const page = (html: string) => new DOMParser().parseFromString(html, "text/html");
+
+  it("reads Netflix's title over the player", () => {
+    expect(
+      netflixTitleFromPage(page('<div data-uia="video-title"><h4>Dark</h4><span>S1:E2</span><span>Lies</span></div>')),
+    ).toEqual({ title: "Dark", type: "episode", season: 1, episode: 2 });
+    expect(netflixTitleFromPage(page('<div data-uia="video-title"><h4>Dark</h4><span>E3</span></div>'))).toEqual({
+      title: "Dark",
+      type: "episode",
+      episode: 3,
+    });
+    expect(netflixTitleFromPage(page('<div data-uia="video-title"><h4>Roma</h4></div>'))).toEqual({
+      title: "Roma",
+      type: "movie",
+    });
+    expect(netflixTitleFromPage(page("<div></div>"))).toBeNull();
+  });
+
+  it("reads InOriginal's subtitle paths", () => {
+    expect(inoriginalTitle("/../../uploads/subtitles/series/new-girl-2011/s1/e1/eng.vtt")).toEqual({
+      title: "New Girl",
+      type: "episode",
+      year: 2011,
+      season: 1,
+      episode: 1,
+    });
+    expect(inoriginalTitle("/uploads/subtitles/films/the-matrix-1999/eng.vtt")).toEqual({
+      title: "The Matrix",
+      type: "movie",
+      year: 1999,
+    });
+    expect(inoriginalTitle("/somewhere/else.vtt")).toBeNull();
   });
 });

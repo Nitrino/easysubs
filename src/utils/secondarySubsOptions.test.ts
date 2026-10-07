@@ -134,3 +134,42 @@ describe("the second line's status", () => {
     });
   });
 });
+
+describe("files found online in the picker", () => {
+  const FOUND = { source: "opensubtitles", id: "1", language: "es", release: "Show.S01E02.NF.WEB-DL" } as const;
+
+  it("offers to find subtitles or open a file, and lists the file loaded on the video", () => {
+    expect(group(options(), "Found online")?.options).toEqual([
+      { value: "find", label: "Find subtitles…" },
+      { value: "file", label: "Open a file…" },
+    ]);
+    expect(group(options({ found: FOUND }), "Found online")?.options[0]).toEqual({
+      value: "found:current",
+      label: "Spanish",
+      tag: "OpenSubtitles",
+      tagKind: "found",
+    });
+  });
+
+  it("shows the loaded file as the value, and names its source", () => {
+    const source = { type: "found", language: "es", result: FOUND } as const;
+    expect(secondarySubsValue({ language: "es" }, source)).toBe("found:current");
+    expect(secondarySubsChoice("find", [])).toBeNull();
+    expect(describeSecondarySource({ source, service: "netflix", translator: "google", error: null })).toEqual({
+      tag: "found",
+      text: "Spanish from OpenSubtitles, for this video.",
+    });
+    expect(
+      describeSecondarySource({
+        source: {
+          type: "found",
+          language: "ru",
+          result: { source: "file", id: "x", language: "", release: "mine.srt" },
+        },
+        service: "netflix",
+        translator: "google",
+        error: null,
+      }).text,
+    ).toBe("From mine.srt, for this video.");
+  });
+});

@@ -4,6 +4,7 @@
 export type Movie = {
   id: string;
   title: string;
+  year: number;
   // Required next to anything published with the movie in it
   credit: string;
   creditUrl: string;
@@ -20,6 +21,7 @@ export const MOVIES: Movie[] = [
   {
     id: "sprite-fright",
     title: "Sprite Fright",
+    year: 2021,
     credit: "Sprite Fright © Blender Studio, CC BY 4.0",
     creditUrl: "https://studio.blender.org/films/sprite-fright/",
     videoSource: `https://upload.wikimedia.org/wikipedia/commons/7/76/${SPRITE_FRIGHT_FILE}`,

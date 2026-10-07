@@ -8,6 +8,8 @@ const srcDir = resolve(rootDir, "src");
 // Unit tests for the extension code in src/ (models, utils, learning services, the background script), run in jsdom
 // with the chrome.* mock from test/chrome.ts. The whole extension is tested in the playground by e2e/ (pnpm test:e2e).
 export default defineConfig({
+  // No .env: tests don't depend on local keys (VITE_OPENSUBTITLES_API_KEY), they stub what they need
+  envDir: resolve(rootDir, "test"),
   resolve: {
     alias: {
       "@root": rootDir,

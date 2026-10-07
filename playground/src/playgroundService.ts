@@ -3,8 +3,21 @@ import { parse } from "subtitle";
 import type Service from "@src/streamings/service";
 import { esRenderSetings } from "@src/models/settings";
 import { esSubsChanged } from "@src/models/subs";
-import type { TSubsTrack } from "@src/models/types";
-import { getActiveTrack, getTrack, getTracks, onTrackChange, playerRoot, trackMenu } from "./player";
+import type { TSubsTrack, TTitleInfo } from "@src/models/types";
+import {
+  SAMPLE_VIDEO,
+  getActiveTrack,
+  getTrack,
+  getTracks,
+  getVideoSource,
+  onTrackChange,
+  playerRoot,
+  trackMenu,
+} from "./player";
+
+// The sample's train scene stands for an episode of a series, so the search for subtitles has one to look for; the
+// mock background answers for it (playground/src/mockBackground.ts)
+export const SAMPLE_TITLE: TTitleInfo = { title: "The Night Train", type: "episode", season: 1, episode: 2 };
 
 let initialized = false;
 
@@ -45,6 +58,12 @@ class Playground implements Service {
     return getTracks()
       .filter((track) => track.language)
       .map((track) => ({ label: track.id, language: track.language, kind: "subtitles", name: track.label }));
+  }
+
+  public async getTitle(): Promise<TTitleInfo | null> {
+    const source = getVideoSource();
+    if (source.movie) return { title: source.movie.title, type: "movie", year: source.movie.year };
+    return source.id === SAMPLE_VIDEO.id ? SAMPLE_TITLE : null;
   }
 
   public getSubsContainer() {
