@@ -3,8 +3,6 @@ import { allSettled, fork } from "effector";
 import "@src/models/init";
 import "@root/playground/src/mockBackground";
 import {
-  $currentPhrasalVerb,
-  $currentPhrasalVerbs,
   $currentSubTranslation,
   $currentWordTranslation,
   $subTranslationPendings,
@@ -14,16 +12,13 @@ import {
   WordTranslationsGate,
   requestSubTranslation,
   requestWordTranslation,
-  subItemMouseEntered,
-  subItemMouseLeft,
 } from ".";
 import { $deeplApiKey, $translateLanguage, $translationService, translateLanguageChanged } from "../settings";
-import { $rawSubs, $subsLanguage } from "../subs";
-import { $video, videoTimeUpdate } from "../videos";
+import { $subsLanguage } from "../subs";
 import type { TTranslationService } from "../types";
 import { chromeMock, sentMessages } from "@root/test/chrome";
-import { offlineTranslations, playgroundCaptions } from "@root/test/fixtures";
-import { createVideo } from "@root/test/video";
+import { offlineTranslations } from "@root/test/fixtures";
+import { stubChromeTranslator } from "@root/test/chromeTranslator";
 
 const enRu = offlineTranslations("en-ru");
 const enDe = offlineTranslations("en-de");
@@ -176,6 +171,7 @@ describe("line translation", () => {
     const scope = fork({
       values: [
         [$translateLanguage, "ru"],
+        [$subsLanguage, "en"],
         [$translationService, translationService],
         [$deeplApiKey, "key:fx"],
       ],
@@ -221,6 +217,32 @@ describe("line translation", () => {
     },
   );
 
+  it("translates a line with Chrome's built-in translator, without the background", async () => {
+    const translator = stubChromeTranslator();
+
+    const scope = await translateLine("chrome");
+
+    expect(scope.getState($currentSubTranslation)).toBe(`[chrome:ru] ${CUE}`);
+    expect(translator.create).toHaveBeenCalledWith({ sourceLanguage: "en", targetLanguage: "ru" });
+    expect(sentMessages()).toEqual([]);
+  });
+
+  it.each([
+    ["the browser has no built-in translator", () => {}],
+    ["Chrome can't translate the pair", () => stubChromeTranslator({ availability: "unavailable" })],
+    ["Chrome may not download the pair without a click", () => stubChromeTranslator({ refuseCreate: true })],
+  ])("translates a line with Google when %s", async (_, stub) => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    stub();
+
+    const scope = await translateLine("chrome");
+
+    expect(scope.getState($currentSubTranslation)).toBe(enRu.lines[CUE]);
+    expect(sentMessages()).toEqual([
+      expect.objectContaining({ type: "translateFullText", translationService: "google" }),
+    ]);
+  });
+
   it("shows no translation when the service fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     chromeMock.runtime.sendMessage.mockResolvedValueOnce({ error: "Invalid DeepL API key or quota exceeded" });
@@ -241,70 +263,5 @@ describe("line translation", () => {
 
     await allSettled(SubTranslationGate.close, { scope, params: CUE });
     expect(scope.getState($currentSubTranslation)).toBe(null);
-  });
-});
-
-describe("phrasal verbs", () => {
-  // Plays the video to the cue at `time` with the playground's English subtitles
-  async function showCueAt(time: number, { translateLanguage = "ru", subsLanguage = "en" } = {}) {
-    const scope = fork({
-      values: [
-        [$translateLanguage, translateLanguage],
-        [$subsLanguage, subsLanguage],
-        [$rawSubs, playgroundCaptions("en")],
-        [$video, createVideo({ currentTime: time })],
-      ],
-    });
-    await allSettled(videoTimeUpdate, { scope });
-    return scope;
-  }
-
-  it("finds the phrasal verbs of the cue on screen in English subtitles translated into Russian", async () => {
-    const scope = await showCueAt(5);
-
-    expect(scope.getState($currentPhrasalVerbs).map((phrasalVerb) => phrasalVerb.text)).toContain("pick up");
-  });
-
-  it("looks for phrasal verbs only from English into Russian", async () => {
-    expect((await showCueAt(5, { translateLanguage: "de" })).getState($currentPhrasalVerbs)).toEqual([]);
-    expect((await showCueAt(5, { subsLanguage: "es" })).getState($currentPhrasalVerbs)).toEqual([]);
-  });
-
-  it("shows the phrasal verb of a hovered word until the pointer leaves", async () => {
-    const scope = await showCueAt(5);
-
-    await allSettled(subItemMouseEntered, { scope, params: "up" });
-    expect(scope.getState($currentPhrasalVerb)).toMatchObject({ key: "pick up", indexes: [5, 6] });
-
-    await allSettled(subItemMouseLeft, { scope });
-    expect(scope.getState($currentPhrasalVerb)).toBe(null);
-  });
-
-  it("shows the phrasal verb that starts a sentence", async () => {
-    // "Hold on, the train leaves at 7:45, right?"
-    const scope = await showCueAt(8);
-
-    await allSettled(subItemMouseEntered, { scope, params: "Hold" });
-
-    expect(scope.getState($currentPhrasalVerb)).toMatchObject({ key: "hold on", indexes: [0, 1] });
-  });
-
-  it("shows no phrasal verb for other words, even those inside its words", async () => {
-    const scope = await showCueAt(5);
-
-    await allSettled(subItemMouseEntered, { scope, params: "I" });
-    expect(scope.getState($currentPhrasalVerb)).toBe(null);
-
-    await allSettled(subItemMouseEntered, { scope, params: "keys" });
-    expect(scope.getState($currentPhrasalVerb)).toBe(null);
-  });
-
-  it("hovers other words without errors", async () => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    const scope = await showCueAt(5);
-
-    await allSettled(subItemMouseEntered, { scope, params: "keys" });
-
-    expect(console.error).not.toHaveBeenCalled();
   });
 });

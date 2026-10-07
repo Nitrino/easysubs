@@ -20,6 +20,7 @@ import { captions, offlineTranslations, playgroundCaptions } from "@root/test/fi
 import { createService } from "@root/test/service";
 import { createVideo } from "@root/test/video";
 import { chromeMock, sentMessages } from "@root/test/chrome";
+import { stubChromeTranslator } from "@root/test/chromeTranslator";
 import type Service from "@src/streamings/service";
 
 const PLAYGROUND_TRACKS: TSubsTrack[] = [
@@ -169,6 +170,35 @@ describe("second line translated as the video plays", () => {
     await showEnglish();
 
     expect(batches()[0]).toMatchObject({ translator: "deepl" });
+  });
+
+  it("translates with Chrome's built-in translator in the page, from the subtitles' language", async () => {
+    const translator = stubChromeTranslator();
+    const { scope, showEnglish } = setup({ choice: { language: "ru" } });
+    await allSettled($secondarySubsTranslator, { scope, params: "chrome" });
+
+    await showEnglish();
+
+    expect(batches()).toEqual([]);
+    expect(translator.create).toHaveBeenCalledWith({ sourceLanguage: "en", targetLanguage: "ru" });
+    expect(scope.getState($currentSecondarySubs)).toEqual([
+      { text: "[chrome:ru] Almost. I just need to pick up my keys.", pending: false },
+    ]);
+  });
+
+  it("translates with Google where Chrome can't", async () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    stubChromeTranslator({ availability: "unavailable" });
+    const { scope, showEnglish } = setup({ choice: { language: "ru" } });
+    await allSettled($secondarySubsTranslator, { scope, params: "chrome" });
+
+    await showEnglish();
+
+    expect(batches()[0]).toMatchObject({ translator: "google", language: "ru" });
+    expect(batches()[0]).not.toHaveProperty("sourceLanguage");
+    expect(scope.getState($currentSecondarySubs)).toEqual([
+      { text: russian("Almost. I just need to pick up my keys."), pending: false },
+    ]);
   });
 
   it("asks for the next window when the playhead nears its end", async () => {

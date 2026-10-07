@@ -6,6 +6,9 @@
  */
 
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
+import { createExpressionFinder } from "@src/utils/expressions/lookup";
+import type { TLexicon } from "@src/utils/expressions/lexicon";
+import type { TExpressionTranslation } from "@src/models/types";
 import { TRANSLATION_PAIRS, type TranslationFixture, type WordTranslation } from "./translationPairs";
 import {
   downloadSubtitle,
@@ -121,6 +124,29 @@ function wordFullTranslation(word: string, target: string) {
   ];
 }
 
+// The extension's own expression lists and matcher: phrasal verbs and idioms are found offline as in the extension
+const lexicons = import.meta.glob<TLexicon>("../../public/expressions/*.json", { import: "default" });
+const findExpressionsInCues = createExpressionFinder(async (language) => {
+  const load = lexicons[`../../public/expressions/${language}.json`];
+  if (!load) throw new Error(`Mock background: no expressions for "${language}"`);
+  return load();
+});
+
+// ChatGPT's translations of a line's expressions, from the words of the fixtures (they have "pick up" and others)
+function expressionTranslations(expressions: string[], target: string) {
+  return Object.fromEntries(
+    expressions.map((expression): [string, TExpressionTranslation] => {
+      const found = findWord(expression, target)?.translation;
+      const main = found?.main ?? mockTranslate(expression, target);
+      const alternatives = found ? partsOfSpeech(found).flatMap(([, variants]) => variants) : [];
+      return [
+        expression,
+        { main, alternatives: alternatives.filter((text) => text !== main).map((text) => ({ text })) },
+      ];
+    }),
+  );
+}
+
 function ankiResponse(action: string) {
   switch (action) {
     case "modelNames":
@@ -169,6 +195,10 @@ function handle(message: Message): unknown {
     case "getTextLanguage":
       subtitlesLanguage = detectLanguage(text);
       return subtitlesLanguage;
+    case "findExpressions":
+      return findExpressionsInCues(language, (message.cues as string[][]) ?? []);
+    case "translateExpressions":
+      return expressionTranslations((message.expressions as string[]) ?? [], language);
     case "post":
       return ankiResponse(String((message.data as { action?: string })?.action));
     case "addWordToLingualeo":
@@ -194,6 +224,8 @@ function handle(message: Message): unknown {
 }
 
 chrome.runtime.onMessage.addListener((message: Message, _sender, sendResponse) => {
-  Promise.resolve(handle(message)).then((answer) => setTimeout(() => sendResponse(answer), LATENCY_MS));
+  Promise.resolve(handle(message))
+    .catch((error: Error) => ({ error: error.message }))
+    .then((answer) => setTimeout(() => sendResponse(answer), LATENCY_MS));
   return true;
 });

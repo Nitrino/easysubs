@@ -9,6 +9,7 @@ import { resolveSecondarySubs } from "@src/utils/resolveSecondarySubs";
 import { anchorSubs } from "@src/utils/anchorSubs";
 import { readTranslationCache, writeTranslationCache, type TTranslations } from "@src/utils/translationCache";
 import { $foundSecondCaptions, $foundSecondResult } from "../foundSubs";
+import { chromeTranslateBatch } from "@src/utils/chromeTranslator";
 
 // The second subtitle line: a track of the video in another language, anchored to the main subtitles, or the main
 // subtitles translated a window ahead of the playhead. The settings are in src/models/settings ($secondarySubs…).
@@ -78,16 +79,29 @@ export const $secondaryRetryAt = createStore(0);
 export type TTranslateSecondaryParams = {
   texts: string[];
   language: string;
+  // The main subtitles' language, for Chrome's translator, which can't detect it
+  sourceLanguage: string;
   translator: TSecondaryTranslator;
   deeplApiKey: string;
   chatGPTApiKey: string;
   chatGPTModel: string;
 };
 export const secondaryBatchPicked = createEvent<TTranslateSecondaryParams>();
-export const translateSecondaryFx = createEffect<TTranslateSecondaryParams, string[]>(async (params) => {
+async function translateWithBackground({ sourceLanguage: _, ...params }: TTranslateSecondaryParams) {
   const response = await chrome.runtime.sendMessage({ type: "translateBatch", ...params });
   if (!Array.isArray(response)) throw new Error(response?.error ?? "No translation received");
   return response;
+}
+
+// Chrome's translator runs here, in the content script; Google translates where it can't
+export const translateSecondaryFx = createEffect<TTranslateSecondaryParams, string[]>(async (params) => {
+  if (params.translator !== "chrome") return translateWithBackground(params);
+  try {
+    return await chromeTranslateBatch(params.texts, params.sourceLanguage, params.language);
+  } catch (error) {
+    console.warn("Chrome's translator failed, using Google:", error);
+    return translateWithBackground({ ...params, translator: "google" });
+  }
 });
 
 export const secondaryTranslationsReceived = createEvent<TTranslations>();

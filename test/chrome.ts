@@ -115,6 +115,18 @@ export const sentMessages = (type?: string) =>
     .map(([message]) => message)
     .filter((message) => !type || message.type === type);
 
+// Answers the next message of a type with `response`; other messages go to the background as usual
+export function answerNextMessage(type: string, response: unknown) {
+  const send = chromeMock.runtime.sendMessage.getMockImplementation();
+  let answered = false;
+  chromeMock.runtime.sendMessage.mockImplementation((message: Message, callback?: (response: unknown) => void) => {
+    if (answered || message.type !== type) return send(message, callback);
+    answered = true;
+    callback?.(response);
+    return Promise.resolve(response);
+  });
+}
+
 // Sends a message the way a content script does and waits for the background's answer
 export const sendToBackground = (message: Message) => dispatchMessage(message);
 

@@ -114,6 +114,22 @@ test.describe("second subtitle line", () => {
     await expect(page.getByText("DeepL API Key Configuration")).toBeVisible();
   });
 
+  test("translates with Chrome's built-in translator, without requests", async ({ playground }) => {
+    await playground.stubChromeTranslator();
+    await playground.open();
+    await playground.seek(5);
+
+    await playground.openSettings("Second line");
+    await playground.choose("Translator", "Chrome (on device)");
+    await playground.chooseSecondLine("Russian");
+    await expect(playground.secondLineStatus()).toContainText("Chrome (on device) translates as you watch.");
+    await expect(playground.settingsPanel).toContainText("Translates on this device, free and without limits.");
+    await playground.closeSettings();
+
+    await expect(playground.secondLine).toHaveText(`[chrome:ru] ${ALMOST}`);
+    expect(await playground.messages("translateBatch")).toEqual([]);
+  });
+
   test("goes above the subtitles", async ({ playground }) => {
     await playground.changeSettings("Second line", async () => {
       await playground.chooseSecondLine("Spanish");

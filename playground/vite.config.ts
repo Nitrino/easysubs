@@ -1,7 +1,7 @@
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import type { IncomingMessage } from "http";
 import type { Browser } from "@playwright/test";
 import addHmr from "../utils/plugins/add-hmr.ts";
@@ -34,7 +34,13 @@ export default defineConfig({
   css: {
     postcss: rootDir,
   },
-  plugins: [react(), addHmr({ background: false, view: false }), extensionHostsProxy(), screenshotCapture()],
+  plugins: [
+    react(),
+    addHmr({ background: false, view: false }),
+    extensionHostsProxy(),
+    extensionFiles(),
+    screenshotCapture(),
+  ],
   server: {
     port: 5180,
     strictPort: true,
@@ -98,6 +104,34 @@ function extensionHostsProxy(): Plugin {
         } catch (error) {
           res.statusCode = 502;
           res.end(`Proxy request to ${targetUrl.href} failed: ${error}`);
+        }
+      });
+    },
+  };
+}
+
+/**
+ * The extension's own files the live background fetches with chrome.runtime.getURL(): the expression lists in
+ * public/expressions. The playground's public dir is its own.
+ */
+function extensionFiles(): Plugin {
+  const expressionsDir = resolve(rootDir, "public/expressions");
+  return {
+    name: "easysubs-playground-extension-files",
+    configureServer(server) {
+      server.middlewares.use("/expressions", async (req, res) => {
+        const name = (req.url ?? "").replace(/^\//, "").split("?")[0];
+        if (!/^[a-z]{2}\.json$/.test(name)) {
+          res.statusCode = 404;
+          res.end();
+          return;
+        }
+        try {
+          res.setHeader("content-type", "application/json");
+          res.end(await readFile(resolve(expressionsDir, name)));
+        } catch {
+          res.statusCode = 404;
+          res.end();
         }
       });
     },

@@ -28,6 +28,7 @@ import { $subsLanguage } from "@src/models/subs";
 import { $streaming } from "@src/models/streamings";
 import type { TSecondaryPosition, TSecondaryReveal, TSecondaryTranslator } from "@src/models/types";
 import { languageName } from "@src/utils/languages";
+import { isChromeTranslatorSupported } from "@src/utils/chromeTranslator";
 import {
   FILE_OPTION,
   FIND_OPTION,
@@ -163,11 +164,17 @@ export const SecondarySubsLanguage: FC = () => {
   );
 };
 
+// Chrome only where the browser has its built-in translator
 const TRANSLATOR_OPTIONS: { label: string; value: TSecondaryTranslator }[] = [
   { label: TRANSLATOR_TITLES.google, value: "google" },
   { label: TRANSLATOR_TITLES.deepl, value: "deepl" },
   { label: TRANSLATOR_TITLES.chatgpt, value: "chatgpt" },
+  { label: TRANSLATOR_TITLES.chrome, value: "chrome" },
 ];
+const translatorOptions = (translator: TSecondaryTranslator) =>
+  TRANSLATOR_OPTIONS.filter(
+    (option) => option.value !== "chrome" || isChromeTranslatorSupported() || translator === "chrome",
+  );
 
 const TRANSLATOR_NOTES: Record<TSecondaryTranslator, { text: string; warning?: boolean }> = {
   // A film is many requests, and Google's free endpoint stops answering an address that sends too many
@@ -177,6 +184,9 @@ const TRANSLATOR_NOTES: Record<TSecondaryTranslator, { text: string; warning?: b
   },
   deepl: { text: "Uses your DeepL API key. A film is about 50–70k characters." },
   chatgpt: { text: "Uses your ChatGPT API key, billed by OpenAI." },
+  chrome: {
+    text: "Translates on this device, free and without limits. Chrome downloads each language pair once; Google translates where it can't.",
+  },
 };
 
 // Google unless DeepL or ChatGPT is picked here. It stays editable while the line comes from a track: it's what
@@ -194,7 +204,7 @@ export const SecondarySubsTranslator: FC = () => {
     <>
       <Row label="Translator">
         <Select
-          options={TRANSLATOR_OPTIONS}
+          options={translatorOptions(translator)}
           value={TRANSLATOR_OPTIONS.find((option) => option.value === translator)}
           onChange={(option: (typeof TRANSLATOR_OPTIONS)[number]) => handleChanged(option.value)}
         />

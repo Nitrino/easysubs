@@ -1,19 +1,12 @@
 import { createEffect, createEvent, createStore, sample, split } from "effector";
 import { debug } from "patronum";
 
-import {
-  TPartOfSpeach,
-  TPhrasalVerb,
-  TSub,
-  TTranslateAlternative,
-  TWordTranslation,
-  TWordTranslationItem,
-} from "../types";
+import { TWordTranslation } from "../types";
 import { $translateLanguage, $translationService, $deeplApiKey, $chatGPTApiKey, $chatGPTModel } from "../settings";
-import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { createGate } from "effector-react";
-import { findPhrasalVerbs } from "@src/utils/findPhrasalVerbs";
-import { $currentSubs, $subsLanguage } from "../subs";
+import { $subsLanguage } from "../subs";
+import { parseGoogleWordAnswer } from "@src/utils/googleWordAnswer";
+import { chromeTranslate } from "@src/utils/chromeTranslator";
 
 export const $wordTranslations = createStore<TWordTranslation[]>([]);
 export const $wordTranslationsPendings = createStore<Record<string, boolean>>({});
@@ -21,68 +14,70 @@ export const WordTranslationsGate = createGate<string>("WordTranslationsGate");
 export const $currentWordTranslation = createStore<TWordTranslation>(null);
 export const requestWordTranslation = createEvent<string>();
 
-export const $currentPhrasalVerbs = createStore<TPhrasalVerb[]>([]);
-export const $currentPhrasalVerb = createStore<TPhrasalVerb>(null);
-export const $findPhrasalVerbsPendings = createStore<Record<string, boolean>>({});
-export const $findCurrentPhrasalVerbPendings = createStore<Record<string, boolean>>({});
-export const SubItemGate = createGate<{ text: string }>("SubItemGate");
-export const findPhrasalVerbsFx = createEffect<{ subs: TSub[] }, TPhrasalVerb[]>(({ subs }) =>
-  subs.flatMap((sub) => findPhrasalVerbs(sub.cleanedText)),
-);
-export const subItemMouseEntered = createEvent<string>();
-export const subItemMouseLeft = createEvent();
-export const findCurrentPhrasalVerbFx = createEffect<
-  { phrasalVerbs: TPhrasalVerb[]; text: string },
-  TPhrasalVerb | null
->(
-  ({ phrasalVerbs, text }) =>
-    phrasalVerbs.find((phrasalVerb) => phrasalVerb.text.split(" ").includes(text.toLowerCase())) ?? null,
-);
-
 export const $currentSubTranslation = createStore<string>(null);
 export const $subTranslationPendings = createStore<Record<string, boolean>>({});
 export const SubTranslationGate = createGate<string>("SubTranslationGate");
 export const requestSubTranslation = createEvent<string>();
 export const cleanSubTranslation = createEvent();
-export const fetchSubTranslationFx = createEffect<
-  {
-    source: string;
-    language: string;
-    translationService: string;
-    deeplApiKey: string;
-    chatGPTApiKey: string;
-    chatGPTModel: string;
-  },
-  string
->(async ({ source, language, translationService, deeplApiKey, chatGPTApiKey, chatGPTModel }) => {
+
+type TSubTranslationParams = {
+  source: string;
+  language: string;
+  // The subtitles' language, for Chrome's translator, which can't detect it
+  sourceLanguage: string;
+  translationService: string;
+  deeplApiKey: string;
+  chatGPTApiKey: string;
+  chatGPTModel: string;
+};
+
+async function translateWithBackground({
+  source,
+  language,
+  translationService,
+  deeplApiKey,
+  chatGPTApiKey,
+  chatGPTModel,
+}: TSubTranslationParams): Promise<string> {
+  const resp = await chrome.runtime.sendMessage({
+    type: "translateFullText",
+    language: language,
+    text: source,
+    translationService: translationService,
+    deeplApiKey: deeplApiKey,
+    chatGPTApiKey: chatGPTApiKey,
+    chatGPTModel: chatGPTModel,
+  });
+
+  if (resp.error) {
+    throw new Error(resp.error);
+  }
+
+  if (
+    translationService === "deepl" ||
+    translationService === "bing" ||
+    translationService === "yandex" ||
+    translationService === "chatgpt"
+  ) {
+    return resp;
+  }
+  return JSON.parse(resp)
+    ["sentences"].map((sentence) => sentence["trans"])
+    .join(" ");
+}
+
+export const fetchSubTranslationFx = createEffect<TSubTranslationParams, string>(async (params) => {
   try {
-    const resp = await chrome.runtime.sendMessage({
-      type: "translateFullText",
-      language: language,
-      text: source,
-      translationService: translationService,
-      deeplApiKey: deeplApiKey,
-      chatGPTApiKey: chatGPTApiKey,
-      chatGPTModel: chatGPTModel,
-    });
-
-    if (resp.error) {
-      throw new Error(resp.error);
+    if (params.translationService === "chrome") {
+      try {
+        return await chromeTranslate(params.source, params.sourceLanguage, params.language);
+      } catch (error) {
+        // Google where Chrome can't translate: another browser, a pair it has no model for
+        console.warn("Chrome's translator failed, using Google:", error);
+        return await translateWithBackground({ ...params, translationService: "google" });
+      }
     }
-
-    if (
-      translationService === "deepl" ||
-      translationService === "bing" ||
-      translationService === "yandex" ||
-      translationService === "chatgpt"
-    ) {
-      return resp;
-    } else {
-      const reponseText: string = JSON.parse(resp)
-        ["sentences"].map((sentence) => sentence["trans"])
-        .join(" ");
-      return reponseText;
-    }
+    return await translateWithBackground(params);
   } catch (error) {
     console.error(error);
     throw error;
@@ -99,28 +94,13 @@ export const fetchWordTranslationFx = createEffect<
       language: language,
       text: source,
     });
-
-    const transcription: string = result[0][0];
-    const mainTranslation: string = result[1][0][0][5][0][0];
-    const alternativesRaw = (result[3] && result[3][5] && result[3][5][0]) || [];
-    const alternatives: [] = alternativesRaw
-      .flatMap((alternative: TTranslateAlternative): TWordTranslationItem[] => {
-        const variants: [string, string[], number][] = alternative[1].map((val) => [val[0], val[2], val[3]]);
-        return variants.map((variant) => ({
-          word: variant[0],
-          partOfSpeech: googleNumberToPartOfSpeach(alternative[4]) as TPartOfSpeach,
-          synonyms: variant[1].slice(0, 3),
-          popularity: variant[2],
-        }));
-      })
-      .sort((a: TWordTranslationItem, b: TWordTranslationItem) => a.popularity - b.popularity)
-      .slice(0, 5);
+    const { transcription, mainTranslation, translations } = parseGoogleWordAnswer(result);
 
     return {
       source: source,
       mainTranslation: mainTranslation,
       targetLanguage: language,
-      translations: alternatives.slice(0, 5),
+      translations: translations,
       transcription: transcription,
     };
   } catch (error) {
@@ -196,14 +176,16 @@ sample({
   clock: requestSubTranslation,
   source: {
     language: $translateLanguage,
+    sourceLanguage: $subsLanguage,
     translationService: $translationService,
     deeplApiKey: $deeplApiKey,
     chatGPTApiKey: $chatGPTApiKey,
     chatGPTModel: $chatGPTModel,
   },
-  fn: ({ language, translationService, deeplApiKey, chatGPTApiKey, chatGPTModel }, source) => ({
+  fn: ({ language, sourceLanguage, translationService, deeplApiKey, chatGPTApiKey, chatGPTModel }, source) => ({
     source,
     language,
+    sourceLanguage,
     translationService,
     deeplApiKey,
     chatGPTApiKey,
@@ -228,46 +210,6 @@ sample({
   target: requestSubTranslation,
 });
 
-$currentPhrasalVerbs.on(findPhrasalVerbsFx.doneData, (_, phrasalVerbs) => phrasalVerbs);
-$findPhrasalVerbsPendings.on(findPhrasalVerbsFx, (pendings, { subs }) => ({
-  ...pendings,
-  [subs[0].cleanedText]: true,
-}));
-$findPhrasalVerbsPendings.on(findPhrasalVerbsFx.finally, (pendings, { params: { subs } }) => {
-  const copy = { ...pendings };
-  delete copy[subs[0].cleanedText];
-  return copy;
-});
-sample({
-  clock: $currentSubs,
-  source: {
-    translateLanguage: $translateLanguage,
-    subsLanguage: $subsLanguage,
-  },
-  filter: ({ translateLanguage, subsLanguage }, subs) =>
-    translateLanguage === "ru" && subsLanguage === "en" && subs.length > 0,
-  fn: (_, subs) => ({ subs }),
-  target: findPhrasalVerbsFx,
-});
-
-$findCurrentPhrasalVerbPendings.on(findCurrentPhrasalVerbFx, (pendings, { text }) => ({
-  ...pendings,
-  [text]: true,
-}));
-$findCurrentPhrasalVerbPendings.on(findCurrentPhrasalVerbFx.finally, (pendings, { params: { text } }) => {
-  const copy = { ...pendings };
-  delete copy[text];
-  return copy;
-});
-$currentPhrasalVerb.on(findCurrentPhrasalVerbFx.doneData, (_, phrasalVerb) => phrasalVerb);
-$currentPhrasalVerb.reset(subItemMouseLeft);
-sample({
-  clock: subItemMouseEntered,
-  source: { phrasalVerbs: $currentPhrasalVerbs },
-  fn: ({ phrasalVerbs }, text) => ({ phrasalVerbs, text }),
-  target: findCurrentPhrasalVerbFx,
-});
-
 $wordTranslations.reset($translateLanguage);
 
 sample({
@@ -287,7 +229,4 @@ debug(
   requestSubTranslation,
   cleanSubTranslation,
   fetchSubTranslationFx.doneData,
-  findCurrentPhrasalVerbFx,
-  $currentPhrasalVerb,
-  $currentPhrasalVerbs,
 );

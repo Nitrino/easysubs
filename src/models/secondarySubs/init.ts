@@ -28,7 +28,7 @@ import {
   translateSecondaryFx,
   writeSecondaryCacheFx,
 } from ".";
-import { $subs, $subsTitle, fetchSubsFx, subsResyncFx, updateCustomSubsFx } from "../subs";
+import { $subs, $subsLanguage, $subsTitle, fetchSubsFx, subsResyncFx, updateCustomSubsFx } from "../subs";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
 import { $chatGPTApiKey, $chatGPTModel, $deeplApiKey, $secondarySubsTranslator } from "../settings";
@@ -104,6 +104,7 @@ sample({
     secondaryTranslationsReceived,
     $secondaryHidden,
     readSecondaryCacheFx.fail,
+    $subsLanguage,
   ],
   source: {
     source: $secondarySource,
@@ -117,15 +118,35 @@ sample({
     // Lines of an earlier visit come from the cache first
     readingCache: readSecondaryCacheFx.pending,
     translator: $secondarySubsTranslator,
+    sourceLanguage: $subsLanguage,
     deeplApiKey: $deeplApiKey,
     chatGPTApiKey: $chatGPTApiKey,
     chatGPTModel: $chatGPTModel,
   },
-  filter: ({ source, video, hidden, inFlight, readingCache, retryAt }) =>
-    source.type === "translate" && video !== null && !hidden && !inFlight && !readingCache && Date.now() >= retryAt,
-  fn: ({ source, subs, video, translations, pendings, translator, deeplApiKey, chatGPTApiKey, chatGPTModel }) => ({
+  filter: ({ source, video, hidden, inFlight, readingCache, retryAt, translator, sourceLanguage }) =>
+    source.type === "translate" &&
+    video !== null &&
+    !hidden &&
+    !inFlight &&
+    !readingCache &&
+    Date.now() >= retryAt &&
+    // Chrome's translator needs the subtitles' language, which is detected after they load
+    (translator !== "chrome" || sourceLanguage !== "auto"),
+  fn: ({
+    source,
+    subs,
+    video,
+    translations,
+    pendings,
+    translator,
+    sourceLanguage,
+    deeplApiKey,
+    chatGPTApiKey,
+    chatGPTModel,
+  }) => ({
     texts: nextTranslationBatch({ subs, time: video.currentTime * 1000, translations, pendings }),
     language: source.type === "translate" ? source.language : "",
+    sourceLanguage,
     translator,
     deeplApiKey,
     chatGPTApiKey,

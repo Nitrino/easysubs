@@ -22,7 +22,7 @@ export default defineConfig({
   },
   plugins: [addHmr({ background: false, view: false })],
   test: {
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.ts"],
     environment: "jsdom",
     setupFiles: ["test/setup.ts"],
     mockReset: true,
@@ -32,7 +32,7 @@ export default defineConfig({
     onConsoleLog: (log) => (/^\[(store|event|effect)\]|^Add effector's Babel/.test(log) ? false : undefined),
     coverage: {
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.d.ts", "src/utils/phrasalVerbs.ts"],
+      exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.d.ts"],
     },
   },
 });

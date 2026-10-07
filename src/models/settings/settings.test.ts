@@ -43,11 +43,14 @@ import {
   secondarySubsSizeButtonPressed,
   secondarySubsTopMoved,
   secondarySubsTranslatorChanged,
+  translateLanguageChanged,
 } from ".";
 import { fetchCurrentStreamingFx } from "../streamings";
+import { $subsLanguage } from "../subs";
 import { moveKeyPressed } from "../videos";
 import { createService } from "@root/test/service";
 import { storedItems } from "@root/test/chrome";
+import { stubChromeTranslator } from "@root/test/chromeTranslator";
 
 const PERSISTED_SETTINGS: Record<string, StoreWritable<unknown>> = {
   $enabled,
@@ -235,6 +238,52 @@ describe("settings changes", () => {
 
     expect(scope.getState($deeplApiKeyModalOpen)).toBe(false);
     expect(scope.getState($chatGPTApiKeyModalOpen)).toBe(false);
+  });
+});
+
+// Chrome downloads a pair's model only during a click, so picking it starts the download
+describe("Chrome's built-in translator", () => {
+  const pairs = (api: ReturnType<typeof stubChromeTranslator>) => api.create.mock.calls.map(([pair]) => pair);
+
+  it("prepares the pair of the subtitles on screen when it's picked for translation or the second line", async () => {
+    const api = stubChromeTranslator({ availability: "downloadable" });
+    const scope = fork({
+      values: [
+        [$subsLanguage, "en"],
+        [$translateLanguage, "ru"],
+      ],
+    });
+
+    await allSettled(translationServiceChanged, { scope, params: "chrome" });
+    await allSettled(secondarySubsTranslatorChanged, { scope, params: "chrome" });
+
+    expect(pairs(api)).toEqual([{ sourceLanguage: "en", targetLanguage: "ru" }]);
+    expect(scope.getState($deeplApiKeyModalOpen)).toBe(false);
+  });
+
+  it("prepares the new pair when the language changes while it's picked", async () => {
+    const api = stubChromeTranslator({ availability: "downloadable" });
+    const scope = fork({
+      values: [
+        [$subsLanguage, "en"],
+        [$translateLanguage, "ru"],
+        [$secondarySubsTranslator, "chrome"],
+      ],
+    });
+
+    await allSettled(translateLanguageChanged, { scope, params: "de" });
+
+    expect(pairs(api)).toEqual([{ sourceLanguage: "en", targetLanguage: "de" }]);
+  });
+
+  it("prepares nothing for other translators or before the subtitles' language is known", async () => {
+    const api = stubChromeTranslator({ availability: "downloadable" });
+
+    await allSettled(translationServiceChanged, { scope: fork({ values: [[$subsLanguage, "en"]] }), params: "deepl" });
+    await allSettled(translationServiceChanged, { scope: fork(), params: "chrome" });
+    await allSettled(translateLanguageChanged, { scope: fork({ values: [[$subsLanguage, "en"]] }), params: "de" });
+
+    expect(api.create).not.toHaveBeenCalled();
   });
 });
 

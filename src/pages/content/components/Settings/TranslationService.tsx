@@ -3,11 +3,16 @@ import { useUnit } from "effector-react";
 
 import { $translationService, translationServiceChanged } from "@src/models/settings";
 import { TTranslationService } from "@src/models/types";
+import { isChromeTranslatorSupported } from "@src/utils/chromeTranslator";
 import { Select } from "../ui/Select";
 
 const getServiceOption = (service: string) => {
   return services.find((option) => option.value === service);
 };
+
+// Chrome only where the browser has its built-in translator
+const availableServices = (current: TTranslationService) =>
+  services.filter((option) => option.value !== "chrome" || isChromeTranslatorSupported() || current === "chrome");
 
 export const TranslationService: FC<HTMLProps<HTMLSelectElement>> = () => {
   const [translationService, handleTranslationServiceChanged] = useUnit([
@@ -22,17 +27,18 @@ export const TranslationService: FC<HTMLProps<HTMLSelectElement>> = () => {
         <Select
           value={getServiceOption(translationService)}
           onChange={(option: { value: TTranslationService }) => handleTranslationServiceChanged(option.value)}
-          options={services}
+          options={availableServices(translationService)}
         />
       </div>
     </div>
   );
 };
 
-const services = [
+const services: { label: string; value: TTranslationService }[] = [
   { label: "Google Translate", value: "google" },
   { label: "DeepL", value: "deepl" },
   { label: "Bing Translator", value: "bing" },
   { label: "Yandex Translate", value: "yandex" },
   { label: "ChatGPT", value: "chatgpt" },
+  { label: "Chrome (on device)", value: "chrome" },
 ];

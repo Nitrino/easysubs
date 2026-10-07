@@ -42,14 +42,39 @@ export class Playground {
     await this.page.goto(`/?${new URLSearchParams({ background: "mock", subs, t: "0" })}`);
     await expect(this.settingsButton).toBeVisible();
     await this.page.waitForFunction(() => document.querySelector("video").readyState >= HTMLMediaElement.HAVE_METADATA);
-    // Phrasal verbs depend on the detected language and are only looked up when the current cue changes
+    // Phrasal verbs and idioms are looked up for the whole track once its language is detected
     if (subs) {
       await this.page.waitForFunction(() =>
-        window.easysubsPlayground.messages.some(
-          (message) => message.request.type === "getTextLanguage" && message.durationMs !== undefined,
+        ["getTextLanguage", "findExpressions"].every((type) =>
+          window.easysubsPlayground.messages.some(
+            (message) => message.request.type === type && message.durationMs !== undefined,
+          ),
         ),
       );
     }
+  }
+
+  // Chrome's built-in Translator API, translating into "[chrome:ru] text"; call before open(). Playwright's Chromium
+  // has no models of its own.
+  async stubChromeTranslator({ availability = "available" } = {}) {
+    await this.page.addInitScript((answer) => {
+      const created: unknown[] = [];
+      Object.assign(window, {
+        chromeTranslators: created,
+        Translator: {
+          availability: async () => answer,
+          create: async (pair: { sourceLanguage: string; targetLanguage: string }) => {
+            created.push(pair);
+            return { translate: async (text: string) => `[chrome:${pair.targetLanguage}] ${text}` };
+          },
+        },
+      });
+    }, availability);
+  }
+
+  // The language pairs Chrome's translator was created for
+  chromeTranslators() {
+    return this.page.evaluate(() => (window as unknown as { chromeTranslators: unknown[] }).chromeTranslators);
   }
 
   async seek(seconds: number) {

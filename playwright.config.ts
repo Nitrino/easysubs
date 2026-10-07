@@ -14,7 +14,7 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
     viewport: { width: 1280, height: 800 },
-    // Translations into Russian enable phrasal verbs and keep the subtitle language (en) apart from the target one
+    // Translations into Russian keep the subtitle language (en) apart from the target one
     locale: "ru-RU",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } } }],
