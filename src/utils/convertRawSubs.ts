@@ -1,10 +1,10 @@
 import { Captions, TSubItem } from "@src/models/types";
 import { TSub } from "@src/models/types";
-import { textToTaggedWords } from "./textToWords";
+import { inertElement, textToTaggedWords } from "./textToWords";
 import { cleanWord } from "./cleanWord";
 
 const cleanText = (text: string): string => {
-  const tmpDiv = document.createElement("div");
+  const tmpDiv = inertElement();
   tmpDiv.innerHTML = text
     .replace(/<\d+:\d+:\d+.\d+><c>/g, "")
     .replace(/<\/c>/g, "")

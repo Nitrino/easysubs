@@ -19,7 +19,7 @@ const nodeWords = (node: Node, cue: Node): TTaggedWord[] => {
   if (node.nodeType === Node.TEXT_NODE) {
     textNodes.push(node);
   } else {
-    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    const walker = (node.ownerDocument ?? document).createTreeWalker(node, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) textNodes.push(walker.currentNode);
   }
 
@@ -32,8 +32,16 @@ const nodeWords = (node: Node, cue: Node): TTaggedWord[] => {
   }));
 };
 
+// Cue text is markup from subtitle files, some of them written by strangers: it's parsed in a document without a window,
+// where images don't load and handlers (<img onerror>) don't run
+let inertDocument: Document | null = null;
+export const inertElement = () => {
+  inertDocument ??= document.implementation.createHTMLDocument("");
+  return inertDocument.createElement("div");
+};
+
 export const textToTaggedWords = (text: string): TTaggedWord[] => {
-  const tmpDiv = document.createElement("div") as HTMLDivElement;
+  const tmpDiv = inertElement();
   tmpDiv.innerHTML = text.replace(/(<\d+:\d+:\d+.\d+>)?<[/]?[c].*?>/g, "").replace(/[\r\n]+/g, "\r\n ");
 
   return Array.from(tmpDiv.childNodes).flatMap((item) => nodeWords(item, tmpDiv));
