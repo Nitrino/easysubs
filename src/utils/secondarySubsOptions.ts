@@ -1,14 +1,21 @@
-import type { TSecondaryChoice, TSecondarySource, TSecondaryTranslator, TSubsTrack } from "@src/models/types";
+import type {
+  TFoundResult,
+  TSecondaryChoice,
+  TSecondarySource,
+  TSecondaryTranslator,
+  TSubsTrack,
+} from "@src/models/types";
 import { LANGUAGES, isSameLanguage, languageName, normalizeLanguage, translationLanguageCode } from "./languages";
+import { FOUND_SOURCE_TITLES, foundName } from "./foundSubsText";
 
 export type TSecondaryOption = {
   value: string;
   label: string;
   // Shown after the label in the menu: the language "Same as translation" stands for
   hint?: string;
-  // Where the line comes from: the video ("Track", "YouTube") or a translator
+  // Where the line comes from: the video ("Track", "YouTube"), a found file ("OpenSubtitles") or a translator
   tag?: string;
-  tagKind?: "track" | "translate";
+  tagKind?: "track" | "translate" | "found";
   isDisabled?: boolean;
 };
 export type TSecondaryOptionGroup = { label: string; options: TSecondaryOption[] };
@@ -47,10 +54,17 @@ type TOptionsParams = {
   translator: TSecondaryTranslator;
   service: string;
   isOnFlight: boolean;
+  // The file loaded on this video's second line
+  found?: TFoundResult | null;
 };
 
-// The second line's language picker: the video's own tracks, then every language for the translator, those with a
-// track too, for a translation in place of the track
+// Values of the Found online group: the loaded file, the search sheet, a file to open
+export const FOUND_OPTION = "found:current";
+export const FIND_OPTION = "find";
+export const FILE_OPTION = "file";
+
+// The second line's language picker: the video's own tracks, files found online, then every language for the
+// translator, those with a track too, for a translation in place of the track
 export function secondarySubsOptions({
   tracks,
   translateLanguage,
@@ -58,6 +72,7 @@ export function secondarySubsOptions({
   translator,
   service,
   isOnFlight,
+  found = null,
 }: TOptionsParams): TSecondaryOptionGroup[] {
   const isMainLanguage = (language: string) => subsLanguage !== "auto" && isSameLanguage(language, subsLanguage);
   const usable = tracks.filter((track) => track.kind !== "forced" && !isMainLanguage(track.language));
@@ -112,6 +127,23 @@ export function secondarySubsOptions({
               },
             ],
     },
+    {
+      label: "Found online",
+      options: [
+        ...(found
+          ? [
+              {
+                value: FOUND_OPTION,
+                label: foundName(found),
+                tag: FOUND_SOURCE_TITLES[found.source],
+                tagKind: "found" as const,
+              },
+            ]
+          : []),
+        { value: FIND_OPTION, label: "Find subtitles…" },
+        { value: FILE_OPTION, label: "Open a file…" },
+      ],
+    },
   ];
   if (translateOptions.length > 0) groups.push({ label: "Auto-translate", options: translateOptions });
   return groups;
@@ -119,6 +151,7 @@ export function secondarySubsOptions({
 
 // The picker's value for what's chosen: the track in use, or the language being translated
 export function secondarySubsValue(choice: TSecondaryChoice, source: TSecondarySource): string {
+  if (source.type === "found") return FOUND_OPTION;
   if (choice.language === "off" || choice.language === "same") return choice.language;
   if (source.type === "track" && !choice.translate) return `track:${source.track.label}`;
   return `translate:${translationLanguageCode(choice.language)}`;
@@ -145,7 +178,7 @@ type TDescribeParams = {
 
 // The status line under the picker: where the second line comes from
 export function describeSecondarySource({ source, service, translator, error }: TDescribeParams): {
-  tag: "track" | "translate" | null;
+  tag: "track" | "translate" | "found" | null;
   text: string;
 } {
   const serviceName = serviceTitle(service);
@@ -165,6 +198,14 @@ export function describeSecondarySource({ source, service, translator, error }: 
       const what = source.track.kind === "cc" ? "captions" : "subtitles";
       return { tag: "track", text: `${name} ${what} from ${serviceName}. No translation needed.${failed}` };
     }
+    case "found":
+      return {
+        tag: "found",
+        text:
+          source.result.source === "file"
+            ? `From ${source.result.release}, for this video.`
+            : `${foundName(source.result)} from ${FOUND_SOURCE_TITLES[source.result.source]}, for this video.`,
+      };
     case "translate": {
       const name = languageName(source.language);
       const by = TRANSLATOR_TITLES[translator];

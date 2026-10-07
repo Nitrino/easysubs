@@ -36,6 +36,8 @@ only run outside scopes, so tests of them call events directly.
 - `mockAnswer("translateFullText", { error: "..." })` to change what the offline background answers: by message type,
   or by AnkiConnect action (`"post:addNote"`)
 - `loadSubtitles(srt)` to put cues at the times a test needs
+- `openSearch()`, `result(release)` and `loadedFile()` for the search for subtitles online, in place of the settings
+  panel
 - `recordSpeech()` to record pronounced words, `messages(type)` to read what the content script sent
 
 ## Known bugs
@@ -74,6 +76,25 @@ a comment on the cause. When the bug is fixed, `it.fails` starts failing: turn i
   Same as translation, a failed translation, the DeepL key dialog, above, top of the player and dragging, size, color
   and background, blurred until hover or pause, V and R
 
+**Subtitles found online**
+
+- Unit: each source's requests and answers (OpenSubtitles with its limit and sign-in, the Stremio mirror, Addic7ed
+  through Gestdown, SubDL, SubSource, Jimaku, Cinemeta), the mirror standing in for OpenSubtitles, ranking (the
+  service's own release, the last release group), ZIPs, ASS and old code pages, cleaning ads and sound descriptions,
+  Auto-sync (shift, 25 fps, too few lines), the file cache and the videos remembered, the services' titles (Netflix,
+  InOriginal), the picker's Found online group, the model: searching for the title playing, loading on either line,
+  Auto-sync on load, Undo and the shift, the service's track not replacing a found main line, removing, a file the
+  user opened, the download count and the mirror after it, signing in and renewing the token, another visit of the
+  video, the next episode (Ask, Load, Off)
+- E2E: the search for the sample's episode, machine translations hidden, a Spanish second line synced −2.40 s, Undo,
+  a 25 fps main line and back to the video's subtitles, the file back after a reload without a download, the mirror
+  after the day's downloads, signing in, opening from the second line's picker and its status link, keys typed in the
+  sheet kept from the player, a file opened from the settings, a file dropped with Shift
+
+The mock background answers the sources from `playground/src/mockSubtitles.ts`: the sample is "The Night Train" S1 E2,
+its English and Spanish files found as a Netflix release, an Addic7ed one 2.4 s late, a BluRay one timed for 25 fps and
+a machine translation.
+
 **Navigation**
 
 - Unit: next/previous/current cue, 5 s seeks when cues are far, Alt to force the jump, short YouTube cues, the
@@ -106,3 +127,5 @@ a comment on the cause. When the bug is fixed, `it.fails` starts failing: turn i
   with cues, needs the real services
 - The extension popup (`src/pages/popup`)
 - The playground with `?background=live`: it calls real translation services
+- The subtitle sources against the real services (their answers are recorded by hand in the tests), Netflix's title in
+  its player state and Jellyfin's item API

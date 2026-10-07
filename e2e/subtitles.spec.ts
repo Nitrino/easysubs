@@ -64,24 +64,6 @@ test.describe("subtitles", () => {
     await expect(playground.subs).toHaveText("A line from my own file.");
   });
 
-  test("loads a subtitle file from the EasySubs settings", async ({ playground }) => {
-    await playground.open();
-    await playground.openSettings("Subtitles");
-
-    await playground
-      .settingsRow("Custom subtitles")
-      .locator("input[type=file]")
-      .setInputFiles({
-        name: "custom.srt",
-        mimeType: "text/plain",
-        buffer: Buffer.from("1\n00:00:01,000 --> 00:00:09,000\nA line from the settings.\n"),
-      });
-    await playground.closeSettings();
-
-    await playground.seek(3);
-    await expect(playground.subs).toHaveText("A line from the settings.");
-  });
-
   test("changes the cue while the video plays", async ({ playground }) => {
     await playground.open();
     await playground.seek(3.2);

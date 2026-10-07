@@ -2,7 +2,7 @@ import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
-import type { TSubsTrack } from "@src/models/types";
+import type { TSubsTrack, TTitleInfo } from "@src/models/types";
 import { languageFromTrack } from "@src/utils/languages";
 import Service from "./service";
 
@@ -76,6 +76,18 @@ class Inoriginal implements Service {
     });
   }
 
+  // The episodes of a show play on one page
+  public getVideoKey(): string | null {
+    return this.videoId ? `${location.host}${location.pathname}#${this.videoId}` : null;
+  }
+
+  // The subtitle paths name the title: ".../series/new-girl-2011/s1/e1/eng.vtt"
+  public async getTitle(): Promise<TTitleInfo | null> {
+    const episode = this.episodes?.find((item) => item.id === this.videoId);
+    const path = episode?.subtitle?.split(",")[0]?.replace(/^\[.*?\]/, "");
+    return path ? inoriginalTitle(path) : null;
+  }
+
   public getSubsContainer() {
     const selector = document.querySelector("#oframeplayerjs");
     if (selector === null) throw new Error("Subtitles container not found");
@@ -129,6 +141,27 @@ class Inoriginal implements Service {
   private setSubName(name: string) {
     this.subsName = name == "off" ? null : name;
   }
+}
+
+// "new-girl-2011/s1/e1" → New Girl, 2011, S1 E1
+export function inoriginalTitle(path: string): TTitleInfo | null {
+  const match = path.match(
+    /\/(series|films?|movies?|cartoons?)\/([a-z0-9-]+?)(?:-(\d{4}))?\/(?:s(\d+)\/e(\d+)\/)?[^/]*$/i,
+  );
+  if (!match) return null;
+  const [, kind, slug, year, season, episode] = match;
+  const title = slug
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  const isSeries = /^series$/i.test(kind) || Boolean(season);
+  return {
+    title,
+    type: isSeries ? "episode" : "movie",
+    ...(year ? { year: Number(year) } : {}),
+    ...(season && episode ? { season: Number(season), episode: Number(episode) } : {}),
+  };
 }
 
 export default Inoriginal;

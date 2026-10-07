@@ -8,6 +8,14 @@ import { yandexTranslateFetcher } from "@src/utils/yandexTranslateFetcher";
 import { chatGPTTranslateFetcher } from "@src/utils/chatGPTTranslateFetcher";
 import { fetchSpeech } from "@src/utils/tts";
 import { translateBatch } from "@src/utils/translateBatch";
+import {
+  downloadFailure,
+  downloadSubtitle,
+  lookupTitle,
+  opensubtitlesSignIn,
+  opensubtitlesSignOut,
+  searchSubtitles,
+} from "@src/subsSources";
 
 import "webext-dynamic-content-scripts";
 
@@ -129,6 +137,33 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   if (message.type === "translateBatch") {
     translateBatch(message)
       .then((translations) => sendResponse(translations))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // Subtitles found online, see src/subsSources
+  if (message.type === "lookupTitle") {
+    lookupTitle({ title: message.title, type: message.kind })
+      .then((candidates) => sendResponse(candidates))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "searchSubtitles") {
+    searchSubtitles(message)
+      .then((answer) => sendResponse(answer))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "downloadSubtitle") {
+    downloadSubtitle(message)
+      .then((downloaded) => sendResponse(downloaded))
+      .catch((error: unknown) => sendResponse(downloadFailure(error)));
+  }
+  // The account stays in the background; the page gets the username
+  if (message.type === "opensubtitlesLogin") {
+    opensubtitlesSignIn(message.username, message.password)
+      .then((account) => sendResponse(account))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "opensubtitlesLogout") {
+    opensubtitlesSignOut()
+      .then(() => sendResponse({ signedOut: true }))
       .catch((error: Error) => sendResponse({ error: error.message }));
   }
   if (message.type === "pronounce") {

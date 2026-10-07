@@ -10,6 +10,7 @@ import { Subs } from "./components/Subs";
 import { ProgressBar } from "./components/ProgressBar";
 import { removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { addSecondarySubsKeyListeners } from "@src/utils/secondarySubsKeys";
+import { addSubtitleDropListeners } from "@src/utils/subtitleDrop";
 
 refreshOnUpdate("pages/content");
 
@@ -35,6 +36,7 @@ $streaming.watch((streaming) => {
   detectionRetries = 0;
   document.body.classList.add("es-" + streaming.name);
   addSecondarySubsKeyListeners();
+  addSubtitleDropListeners();
 
   esRenderSetings.watch(() => {
     console.log("Event:", "esRenderSetings");

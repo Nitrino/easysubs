@@ -12,13 +12,15 @@ const srcDir = resolve(rootDir, "src");
 const screenshotsDir = resolve(import.meta.dirname, "screenshots");
 
 // Services the background reaches without host_permissions, because they answer with CORS headers (Wiktionary's
-// pronunciations, src/utils/tts/wiktionary.ts)
-const CORS_ORIGINS = ["https://en.wiktionary.org", "https://upload.wikimedia.org"];
+// pronunciations, src/utils/tts/wiktionary.ts; the Stremio mirror's file host, src/subsSources/stremio.ts)
+const CORS_ORIGINS = ["https://en.wiktionary.org", "https://upload.wikimedia.org", "https://subs5.strem.io"];
 
 // Dev server for the playground page: it runs the extension's content and background code straight from
 // src/, so every change is picked up by HMR without building or reloading the extension.
 export default defineConfig({
   root: import.meta.dirname,
+  // The extension's .env (VITE_OPENSUBTITLES_API_KEY), not one of the playground's own
+  envDir: rootDir,
   resolve: {
     alias: {
       "@root": rootDir,

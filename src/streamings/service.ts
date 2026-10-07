@@ -1,4 +1,4 @@
-import { Captions, TSubsTrack } from "@src/models/types";
+import { Captions, TSubsTrack, TTitleInfo } from "@src/models/types";
 
 interface Service {
   name: string;
@@ -9,6 +9,15 @@ interface Service {
   // The subtitle tracks of the current video that getSubs() can load, for the second subtitle line. Services that
   // read each line off the page have none: their second line is translated.
   getSubsTracks?: () => Promise<TSubsTrack[]>;
+
+  // What's playing, to search subtitle libraries for it. Services that can't tell open the search with an empty field.
+  getTitle?: () => Promise<TTitleInfo | null>;
+
+  // The video playing, where the page's address doesn't change between videos; null when unknown
+  getVideoKey?: () => string | null;
+
+  // Captions moved the way the service moves its own (Netflix's ad breaks), for files found online
+  adjustCaptions?: (captions: Captions) => Captions;
 
   // Player container selector, required to render subtitles
   getSubsContainer: () => HTMLElement;

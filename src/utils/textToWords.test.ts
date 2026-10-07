@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { textToWords } from "./textToWords";
+import { describe, expect, it, vi } from "vitest";
+import { inertElement, textToTaggedWords, textToWords } from "./textToWords";
 
 describe("textToWords", () => {
   it("splits text on spaces and keeps punctuation", () => {
@@ -26,5 +26,21 @@ describe("textToWords", () => {
     expect(textToWords("What if we run out of time\nat the station?")).toEqual([
       ...["What", "if", "we", "run", "out", "of", "time\n", "at", "the", "station?"],
     ]);
+  });
+});
+
+describe("markup of strangers' files", () => {
+  it("is read without loading images or running handlers", () => {
+    const ran = vi.fn();
+    Object.assign(window, { ran });
+    const words = textToTaggedWords('<img src="x" onerror="window.ran()"><i>Hi</i> there');
+
+    expect(words).toEqual([
+      { text: "Hi", tag: "i" },
+      { text: "there", tag: "span" },
+    ]);
+    expect(inertElement().ownerDocument).not.toBe(document);
+    expect(inertElement().ownerDocument.defaultView).toBeNull();
+    expect(ran).not.toHaveBeenCalled();
   });
 });

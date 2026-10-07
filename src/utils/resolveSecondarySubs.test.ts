@@ -93,3 +93,20 @@ describe("resolveSecondarySubs", () => {
     expect(resolve({ subsLanguage: "auto", tracks: [SPANISH] })).toMatchObject({ type: "track" });
   });
 });
+
+describe("a file found for the video", () => {
+  const FOUND = { source: "gestdown", id: "a", language: "es", release: "show S01E02 WEB" } as const;
+
+  it("comes before the video's tracks and the translator, once the line is on", () => {
+    expect(resolve({ tracks: [SPANISH], found: FOUND })).toEqual({ type: "found", language: "es", result: FOUND });
+    expect(resolve({ choice: { language: "ru" }, found: FOUND })).toMatchObject({ type: "found", language: "es" });
+    expect(resolve({ choice: { language: "off" }, found: FOUND })).toEqual({ type: "off" });
+  });
+
+  it("takes the chosen language for a file without one", () => {
+    expect(resolve({ choice: { language: "same" }, found: { ...FOUND, source: "file", language: "" } })).toMatchObject({
+      type: "found",
+      language: "ru",
+    });
+  });
+});

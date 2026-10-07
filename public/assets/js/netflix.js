@@ -118,3 +118,34 @@ observer.observe(document, {
   childList: true,
   subtree: true,
 });
+
+// What's playing, for the search for subtitles online: the title's metadata in Netflix's player state, with the
+// season and episode of the episode playing. Answers null when the state has none.
+function getTitleInfo() {
+  const state = window.netflix.appContext.state.playerApp.getState();
+  const videoId = Number(document.querySelector("[data-videoid]")?.dataset.videoid);
+  const metadata = state.videoPlayer?.videoMetadata?.[videoId]?._metadata?.video;
+  if (!metadata?.title) return null;
+
+  const info = { title: metadata.title, type: metadata.type === "show" ? "episode" : "movie" };
+  if (metadata.year) info.year = metadata.year;
+  for (const season of metadata.seasons ?? []) {
+    for (const episode of season.episodes ?? []) {
+      if (episode.id === videoId || episode.episodeId === videoId) {
+        info.season = season.seq;
+        info.episode = episode.seq;
+      }
+    }
+  }
+  return info;
+}
+
+window.addEventListener("esNetflixTitleRequest", () => {
+  let info = null;
+  try {
+    info = getTitleInfo();
+  } catch (error) {
+    console.error(error);
+  }
+  window.dispatchEvent(new CustomEvent("esNetflixTitle", { detail: info }));
+});

@@ -3,7 +3,13 @@ import { moveKeyPressed } from "@src/models/videos";
 
 const keyboardEvents = ["keyup", "keydown", "keypress"] as const;
 
+const isTyping = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+
 export const keyboardHandler = (event: KeyboardEvent) => {
+  // The search sheet's fields
+  if (isTyping(event.target)) return;
   if (event.code === "ArrowLeft") {
     event.stopPropagation();
     if (event.type === "keydown") {

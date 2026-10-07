@@ -2,7 +2,7 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { esSubsChanged, rawSubsAdded } from "@src/models/subs";
 import { $video, getCurrentVideoFx } from "@src/models/videos";
-import type { Captions, TSubsTrack } from "@src/models/types";
+import type { Captions, TSubsTrack, TTitleInfo } from "@src/models/types";
 import { languageFromTrack } from "@src/utils/languages";
 
 class Jellyfin implements Service {
@@ -159,6 +159,34 @@ class Jellyfin implements Service {
     return tracks;
   }
 
+  // Every video plays at /web/#/video: the item id in the stream's address tells them apart
+  public getVideoKey(): string | null {
+    const itemId = jellyfinItemId();
+    return itemId ? `${location.host}/jellyfin/${itemId}` : null;
+  }
+
+  // The item playing from Jellyfin's API, with the IMDb id it keeps: the server serves this page, and the web client
+  // keeps the user's token in localStorage
+  public async getTitle(): Promise<TTitleInfo | null> {
+    const itemId = jellyfinItemId();
+    const credentials = jellyfinCredentials();
+    if (!itemId || !credentials) return null;
+    const item = await jellyfinItem(credentials, itemId);
+    if (!item) return null;
+    if (item.Type !== "Episode") {
+      return { title: item.Name, type: "movie", year: item.ProductionYear, imdbId: item.ProviderIds?.Imdb };
+    }
+    const series = item.SeriesId ? await jellyfinItem(credentials, item.SeriesId) : null;
+    return {
+      title: item.SeriesName ?? series?.Name ?? item.Name,
+      type: "episode",
+      year: series?.ProductionYear,
+      season: item.ParentIndexNumber,
+      episode: item.IndexNumber,
+      imdbId: series?.ProviderIds?.Imdb,
+    };
+  }
+
   public getSubsContainer() {
     return document.body;
   }
@@ -180,6 +208,46 @@ class Jellyfin implements Service {
 
 // Labels of other tracks: their index in video.textTracks
 const SECONDARY_PREFIX = "textTrack:";
+
+type TJellyfinItem = {
+  Name: string;
+  Type: string;
+  SeriesId?: string;
+  SeriesName?: string;
+  ParentIndexNumber?: number;
+  IndexNumber?: number;
+  ProductionYear?: number;
+  ProviderIds?: { Imdb?: string };
+};
+
+// Direct play and transcoding stream from /Videos/<item id>/…; HLS through a blob: has no id
+const jellyfinItemId = () => $video.getState()?.currentSrc.match(/\/videos\/([0-9a-f]{32})\//i)?.[1] ?? null;
+
+type TJellyfinCredentials = { token: string; userId: string; address: string };
+
+// The signed-in server; its address carries a base path when Jellyfin is served under one
+function jellyfinCredentials(): TJellyfinCredentials | null {
+  try {
+    const servers = JSON.parse(localStorage.getItem("jellyfin_credentials") ?? "{}").Servers ?? [];
+    const server = servers.find((candidate: { AccessToken?: string }) => candidate.AccessToken) ?? null;
+    if (!server) return null;
+    const address = String(server.ManualAddress || server.LocalAddress || location.origin).replace(/\/$/, "");
+    return { token: server.AccessToken, userId: server.UserId, address };
+  } catch {
+    return null;
+  }
+}
+
+async function jellyfinItem({ token, userId, address }: TJellyfinCredentials, id: string) {
+  try {
+    const response = await fetch(`${address}/Users/${userId}/Items/${id}`, {
+      headers: { "X-Emby-Token": token },
+    });
+    return response.ok ? ((await response.json()) as TJellyfinItem) : null;
+  } catch {
+    return null;
+  }
+}
 
 function cuesToCaptions(track: TextTrack): Captions {
   const cues = track.cues ? ([...track.cues] as VTTCue[]) : [];

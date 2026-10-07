@@ -440,3 +440,57 @@ describe("learning services through the background", () => {
     await expect(new LinguaLeo().addWord("keys", "ключи", {})).resolves.toBe("Word added to LinguaLeo");
   });
 });
+
+describe("subtitles found online", () => {
+  it("looks titles up on Cinemeta", async () => {
+    stubFetch({
+      "https://v3-cinemeta.strem.io/catalog/series/top/search=Dark.json": () =>
+        json({ metas: [{ imdb_id: "tt5753856", name: "Dark", releaseInfo: "2017-2020" }] }),
+    });
+    expect(await sendToBackground({ type: "lookupTitle", title: "Dark", kind: "episode" })).toEqual([
+      { imdbId: "tt5753856", name: "Dark", year: 2017, type: "episode" },
+    ]);
+  });
+
+  it("searches the sources, through the mirror without an OpenSubtitles key", async () => {
+    stubFetch({
+      "https://opensubtitles-v3.strem.io/subtitles/movie/tt0133093.json": () =>
+        json({
+          subtitles: [{ id: "1", url: "https://subs5.strem.io/1", lang: "eng", movieReleaseName: "The.Matrix.1999" }],
+        }),
+    });
+    expect(
+      await sendToBackground({
+        type: "searchSubtitles",
+        query: { title: "The Matrix", type: "movie", imdbId: "tt0133093", language: "en" },
+        sources: ["opensubtitles"],
+        auth: {},
+        mirror: true,
+      }),
+    ).toEqual({
+      results: [
+        { source: "stremio", id: "1", language: "en", release: "The.Matrix.1999", url: "https://subs5.strem.io/1" },
+      ],
+      failed: [],
+      mirrored: true,
+    });
+  });
+
+  it("downloads a file, and says what went wrong when it can't", async () => {
+    stubFetch({
+      "https://subs5.strem.io/1": () => new Response("1\n00:00:01,000 --> 00:00:02,000\nHi\n"),
+      "https://subs5.strem.io/2": () => new Response("", { status: 404 }),
+    });
+    const result = { source: "stremio", id: "1", language: "en", release: "", url: "https://subs5.strem.io/1" };
+    expect(await sendToBackground({ type: "downloadSubtitle", result, auth: {} })).toEqual({
+      text: "1\n00:00:01,000 --> 00:00:02,000\nHi\n",
+    });
+    expect(
+      await sendToBackground({
+        type: "downloadSubtitle",
+        result: { ...result, url: "https://subs5.strem.io/2" },
+        auth: {},
+      }),
+    ).toEqual({ error: "The Stremio mirror answered 404", kind: "failed", status: 404 });
+  });
+});
