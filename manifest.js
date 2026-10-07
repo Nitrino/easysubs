@@ -46,7 +46,8 @@ const manifest = {
       css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
   ],
-  permissions: ["scripting", "storage", "activeTab"],
+  // unlimitedStorage: found subtitle files and translations are kept on the device
+  permissions: ["scripting", "storage", "unlimitedStorage", "activeTab"],
   optional_host_permissions: ["*://*/*"],
   optional_permissions: [],
   host_permissions: [
@@ -62,6 +63,18 @@ const manifest = {
     "https://translate.yandex.net/*",
     "https://api.openai.com/*",
     "https://dict.youdao.com/*",
+    // Subtitles found online (src/subsSources): OpenSubtitles, its file host, the Stremio mirror and Cinemeta,
+    // Addic7ed through Gestdown, SubDL, SubSource and Jimaku
+    "https://api.opensubtitles.com/*",
+    "https://vip-api.opensubtitles.com/*",
+    "https://www.opensubtitles.com/*",
+    "https://opensubtitles-v3.strem.io/*",
+    "https://v3-cinemeta.strem.io/*",
+    "https://api.gestdown.info/*",
+    "https://api.subdl.com/*",
+    "https://dl.subdl.com/*",
+    "https://api.subsource.net/*",
+    "https://jimaku.cc/*",
   ],
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self'",

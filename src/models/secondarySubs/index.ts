@@ -8,6 +8,7 @@ import { $secondarySubs, $secondarySubsTranslator, $translateLanguage } from "..
 import { resolveSecondarySubs } from "@src/utils/resolveSecondarySubs";
 import { anchorSubs } from "@src/utils/anchorSubs";
 import { readTranslationCache, writeTranslationCache, type TTranslations } from "@src/utils/translationCache";
+import { $foundSecondCaptions, $foundSecondResult } from "../foundSubs";
 
 // The second subtitle line: a track of the video in another language, anchored to the main subtitles, or the main
 // subtitles translated a window ahead of the playhead. The settings are in src/models/settings ($secondarySubs…).
@@ -34,8 +35,9 @@ export const $secondarySource = combine(
     translateLanguage: $translateLanguage,
     subsLanguage: $subsLanguage,
     streaming: $streaming,
+    found: $foundSecondResult,
   },
-  ({ choice, tracks, translateLanguage, subsLanguage, streaming }): TSecondarySource =>
+  ({ choice, tracks, translateLanguage, subsLanguage, streaming, found }): TSecondarySource =>
     resolveSecondarySubs({
       choice,
       tracks,
@@ -43,6 +45,7 @@ export const $secondarySource = combine(
       subsLanguage,
       // The stub stands in until a service is detected, and implements nothing
       isOnFlight: streaming.name !== "stub" && streaming.isOnFlight(),
+      found,
     }),
 );
 
@@ -56,6 +59,10 @@ export const fetchSecondarySubsFx = createEffect<{ streaming: Service; label: st
 );
 // The second track's text by main cue id
 export const $secondaryTrackLines = combine($subs, $secondaryRawSubs, anchorSubs);
+// The same for a found file, see src/models/foundSubs
+export const $foundSecondLines = combine($subs, $foundSecondCaptions, (subs, captions) =>
+  captions ? anchorSubs(subs, captions) : {},
+);
 
 // "language:translator" when the second line is translated, null otherwise; translations start over when it changes
 export const $secondaryTranslationKey = combine($secondarySource, $secondarySubsTranslator, (source, translator) =>
@@ -101,11 +108,13 @@ export const $currentSecondarySubs = combine(
     source: $secondarySource,
     trackLines: $secondaryTrackLines,
     trackLoading: fetchSecondarySubsFx.pending,
+    foundLines: $foundSecondLines,
     translations: $secondaryTranslations,
   },
-  ({ current, source, trackLines, trackLoading, translations }): TSecondaryLine[] =>
+  ({ current, source, trackLines, trackLoading, foundLines, translations }): TSecondaryLine[] =>
     current.map((sub) => {
       if (source.type === "track") return { text: trackLines[sub.id] ?? "", pending: trackLoading };
+      if (source.type === "found") return { text: foundLines[sub.id] ?? "", pending: false };
       if (source.type === "translate") {
         const translation = translations[sub.cleanedText];
         return translation === undefined ? { text: "", pending: true } : { text: translation, pending: false };

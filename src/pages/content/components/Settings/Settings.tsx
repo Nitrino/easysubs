@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";
+import { sheetClosed } from "@src/models/foundSubs";
 
 import { useUnit } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
@@ -36,18 +37,19 @@ export const Settings: FC<TSettingsProps> = () => {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
+    if (showSettings) sheetClosed();
     setShowSettings(!showSettings);
+  };
+  const close = () => {
+    sheetClosed();
+    setShowSettings(false);
   };
   return (
     <>
       <div className="es-settings-icon" onClick={handleClick}>
         <MonoLogo />
       </div>
-      {showSettings &&
-        createPortal(
-          <SettingsContent onClose={() => setShowSettings(false)} />,
-          streaming.getSettingsContentContainer(),
-        )}
+      {showSettings && createPortal(<SettingsContent onClose={close} />, streaming.getSettingsContentContainer())}
       {createPortal(
         <div className="es-toast">
           <Toaster toastOptions={TOAST_OPTIONS} />

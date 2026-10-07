@@ -4,7 +4,11 @@ import { debug } from "patronum";
 import { withPersist } from "@src/utils/withPersist";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import {
+  TFoundShow,
+  TFoundVideo,
   TLearningService,
+  TNextEpisodeMode,
+  TOpenSubtitlesQuota,
   TSecondaryChoice,
   TSecondaryPosition,
   TSecondaryReveal,
@@ -143,6 +147,42 @@ export type TOffset = { x: number; y: number };
 export const $secondarySubsTopOffset = createSetting<Record<string, TOffset>>("secondarySubsTopOffset", {});
 export const secondarySubsTopMoved = createEvent<{ service: string } & TOffset>();
 
+// Subtitles found online (src/models/foundSubs). Accounts and keys are set in the search sheet's Sources view.
+
+// The Stremio mirror stands in for OpenSubtitles when the day's downloads are used or its API is down
+export const $foundSubsMirror = createSetting("foundSubsMirror", true);
+export const foundSubsMirrorChanged = createEvent<boolean>();
+// Addic7ed through Gestdown, for TV episodes
+export const $foundSubsAddic7ed = createSetting("foundSubsAddic7ed", true);
+export const foundSubsAddic7edChanged = createEvent<boolean>();
+// Machine and AI translations are left out of the results unless the sheet's switch shows them
+export const $foundSubsHideMachine = createSetting("foundSubsHideMachine", true);
+export const foundSubsHideMachineChanged = createEvent<boolean>();
+// Sound descriptions of hearing-impaired files: "[door creaks]", "♪ … ♪", "JOHN:"
+export const $foundSubsStripSdh = createSetting("foundSubsStripSdh", false);
+export const foundSubsStripSdhChanged = createEvent<boolean>();
+export const $foundSubsNextEpisode = createSetting<TNextEpisodeMode>("foundSubsNextEpisode", "ask");
+export const foundSubsNextEpisodeChanged = createEvent<TNextEpisodeMode>();
+
+// The user's own keys of sources that need one
+export const $subdlApiKey = createSetting("subdlApiKey", "");
+export const subdlApiKeyChanged = createEvent<string>();
+export const $subsourceApiKey = createSetting("subsourceApiKey", "");
+export const subsourceApiKeyChanged = createEvent<string>();
+export const $jimakuApiKey = createSetting("jimakuApiKey", "");
+export const jimakuApiKeyChanged = createEvent<string>();
+
+// The OpenSubtitles account the background signed in to (src/subsSources/session.ts keeps its password and token)
+export const $opensubtitlesAccount = createSetting<{ username: string } | null>("opensubtitlesAccount", null);
+export const opensubtitlesAccountChanged = createEvent<{ username: string } | null>();
+// Downloads left today, as OpenSubtitles last said
+export const $opensubtitlesQuota = createSetting<TOpenSubtitlesQuota | null>("opensubtitlesQuota", null);
+export const opensubtitlesQuotaChanged = createEvent<TOpenSubtitlesQuota | null>();
+
+// What was loaded on each video ("service:page"), and the last found file of each show
+export const $foundSubsByVideo = createSetting<Record<string, TFoundVideo>>("foundSubsByVideo", {});
+export const $foundSubsShows = createSetting<Record<string, TFoundShow>>("foundSubsShows", {});
+
 export const esRenderSetings = createEvent();
 
 sample({
@@ -264,6 +304,16 @@ $secondarySubsTopOffset.on(secondarySubsTopMoved, (offsets, { service, x, y }) =
   ...offsets,
   [service]: { x, y },
 }));
+$foundSubsMirror.on(foundSubsMirrorChanged, (_, value) => value);
+$foundSubsAddic7ed.on(foundSubsAddic7edChanged, (_, value) => value);
+$foundSubsHideMachine.on(foundSubsHideMachineChanged, (_, value) => value);
+$foundSubsStripSdh.on(foundSubsStripSdhChanged, (_, value) => value);
+$foundSubsNextEpisode.on(foundSubsNextEpisodeChanged, (_, value) => value);
+$subdlApiKey.on(subdlApiKeyChanged, (_, key) => key.trim());
+$subsourceApiKey.on(subsourceApiKeyChanged, (_, key) => key.trim());
+$jimakuApiKey.on(jimakuApiKeyChanged, (_, key) => key.trim());
+$opensubtitlesAccount.on(opensubtitlesAccountChanged, (_, account) => account);
+$opensubtitlesQuota.on(opensubtitlesQuotaChanged, (_, quota) => quota);
 
 // Picking a paid translator for the second line asks for its key when there's none yet
 sample({

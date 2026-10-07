@@ -383,7 +383,9 @@
   }
 
   &__hint {
+    flex: none;
     color: var(--es-secondary);
+    white-space: nowrap;
   }
 
   .es-tag {

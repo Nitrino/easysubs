@@ -1,0 +1,662 @@
+// The search for subtitles online: a sheet in place of the settings panel, in the same HUD material, wider and taller
+// for release names. Also the drop target over the player and the next-episode prompt.
+
+// As tall as the player allows above the panel's offset, never shorter than the settings panel
+.es-settings-content--sheet {
+  width: 368px;
+  height: min(520px, max(336px, calc(100% - 132px)));
+}
+
+.es-found {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+
+  &__header {
+    display: grid;
+    flex: none;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 10px 8px;
+  }
+
+  &__back {
+    display: inline-flex;
+    justify-self: start;
+    align-items: center;
+    gap: 1px;
+    margin: 0;
+    padding: 2px 6px 2px 2px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--es-link);
+    font: 500 12px/16px var(--es-font);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--es-fill);
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__title {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  &__actions {
+    display: flex;
+    justify-self: end;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--es-fill);
+    color: var(--es-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--es-fill-hover);
+      color: var(--es-primary);
+    }
+
+    svg {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 10px 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+
+  // ---- Search field and episode ----
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    height: 28px;
+    margin: 0;
+    padding: 0 9px;
+    border-radius: 7px;
+    background: var(--es-fill);
+    color: var(--es-secondary);
+
+    &:focus-within {
+      box-shadow: 0 0 0 2px var(--es-focus-ring);
+    }
+
+    svg {
+      flex: none;
+      width: 12px;
+      height: 12px;
+    }
+
+    .es-spinner {
+      flex: none;
+    }
+  }
+
+  &__search-input {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--es-primary);
+    font: 400 13px/16px var(--es-font);
+    appearance: none;
+
+    &::placeholder {
+      color: var(--es-tertiary);
+    }
+
+    &::-webkit-search-cancel-button {
+      filter: invert(1) opacity(0.5);
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    margin: 8px 0 10px;
+  }
+
+  &__number {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin: 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+
+    input {
+      box-sizing: border-box;
+      width: 34px;
+      height: 22px;
+      margin: 0;
+      padding: 0 4px;
+      border: 0;
+      border-radius: 6px;
+      outline: none;
+      background: var(--es-fill);
+      color: var(--es-primary);
+      font: 400 12px/22px var(--es-font);
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+
+      &:focus {
+        box-shadow: 0 0 0 2px var(--es-focus-ring);
+      }
+    }
+  }
+
+  &__hint {
+    margin-left: auto;
+    color: var(--es-secondary);
+    font-size: 12px;
+  }
+
+  // ---- Groups ----
+
+  &__group {
+    margin: 0;
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+
+    .es-settings-content__element__right .es-select {
+      width: 168px;
+    }
+  }
+
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 14px 10px 6px;
+    color: var(--es-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__empty {
+    margin: 0;
+    padding: 10px;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  // ---- The loaded file ----
+
+  &__loaded {
+    display: grid;
+    gap: 7px;
+    margin: 10px 0 0;
+    padding: 9px 10px 10px;
+    border: 0.5px solid rgba(10, 132, 255, 0.4);
+    border-radius: 10px;
+    background: rgba(10, 132, 255, 0.14);
+  }
+
+  &__loaded-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__loaded-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+
+    b {
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+
+  &__release {
+    color: var(--es-primary);
+    font: 500 11.5px/15px ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    overflow-wrap: anywhere;
+  }
+
+  &__status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 6px;
+    margin: 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  &__button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 24px;
+    margin: 0;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--es-fill-hover);
+    color: var(--es-primary);
+    font: 500 12px/24px var(--es-font);
+    white-space: nowrap;
+    cursor: pointer;
+    appearance: none;
+    transition: background-color 150ms;
+
+    &:hover:not(:disabled) {
+      background: var(--es-fill-active);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &--primary {
+      background: var(--es-accent);
+      color: #fff;
+
+      &:hover:not(:disabled) {
+        background: var(--es-accent-hover);
+      }
+    }
+  }
+
+  &__link {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--es-link);
+    font: inherit;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__warnings {
+    display: grid;
+    gap: 6px;
+    margin: 10px 2px 0;
+  }
+
+  &__warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  // ---- Results ----
+
+  &__results {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__result {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 8px 10px;
+
+    & + &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      border-top: 0.5px solid var(--es-separator);
+    }
+
+    &--loaded {
+      border-radius: 8px;
+      background: rgba(10, 132, 255, 0.16);
+    }
+
+    &--loaded::before,
+    &--loaded + &::before {
+      display: none;
+    }
+  }
+
+  &__result-text {
+    display: grid;
+    flex: 1 1 auto;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 6px;
+    color: var(--es-secondary);
+    font-size: 11.5px;
+    line-height: 15px;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 10px 10px 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+  }
+
+  // ---- OpenSubtitles count ----
+
+  &__quota {
+    display: grid;
+    gap: 6px;
+    margin: 14px 10px 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__quota-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--es-primary);
+
+    span:last-child {
+      color: var(--es-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  &__meter {
+    height: 4px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--es-fill-hover);
+
+    i {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: #30d158;
+      transition: width 300ms ease;
+    }
+
+    &--low i {
+      background: #ff9f0a;
+    }
+  }
+
+  // ---- Sources ----
+
+  &__login {
+    margin: 0;
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  &__field {
+    box-sizing: border-box;
+    width: 100%;
+    height: 26px;
+    margin: 0;
+    padding: 0 8px;
+    border: 0.5px solid rgba(255, 255, 255, 0.14);
+    border-radius: 7px;
+    outline: none;
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--es-primary);
+    font: 400 12px var(--es-font);
+
+    &:focus {
+      border-color: var(--es-accent);
+      box-shadow: 0 0 0 3px var(--es-focus-ring);
+    }
+
+    &::placeholder {
+      color: var(--es-tertiary);
+    }
+
+    &--key {
+      width: 150px;
+    }
+  }
+}
+
+// The found file on the main line, under the Subtitles from row
+.es-source-card {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 0.5px solid rgba(10, 132, 255, 0.4);
+  border-radius: 10px;
+  background: rgba(10, 132, 255, 0.14);
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__release {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--es-primary);
+    font: 500 11.5px/15px ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  &__timing {
+    min-width: 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .es-found__link {
+    font-size: 12px;
+  }
+}
+
+// Two or three choices in one capsule
+.es-segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 7px;
+  background: var(--es-fill);
+
+  &__item {
+    margin: 0;
+    padding: 2px 8px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--es-secondary);
+    font: 500 12px/16px var(--es-font);
+    white-space: nowrap;
+    cursor: pointer;
+    appearance: none;
+
+    &:hover {
+      color: var(--es-primary);
+    }
+
+    &--selected,
+    &--selected:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--es-accent);
+    }
+  }
+}
+
+.es-tag {
+  // A file found online (cyan), where a result is from (neutral)
+  &--found {
+    background: rgba(100, 210, 255, 0.16);
+    color: var(--es-hl);
+  }
+
+  &--source {
+    background: var(--es-fill-hover);
+    color: var(--es-primary);
+    font-weight: 500;
+  }
+
+  &--fps {
+    background: rgba(255, 214, 10, 0.14);
+    color: #ffd60a;
+  }
+
+  &--quiet {
+    background: var(--es-fill);
+    color: var(--es-secondary);
+  }
+
+  &--limit {
+    background: rgba(255, 69, 58, 0.16);
+    color: #ff453a;
+  }
+}
+
+.es-stepper__value--wide {
+  min-width: 58px;
+}
+
+.es-settings-content__status--error {
+  color: #ff453a;
+}
+
+.es-settings-content__status .es-found__link {
+  font-size: 12px;
+}
+
+// ---- In the player ----
+
+.es-next-episode {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+  margin: 0 auto 8px;
+  padding: 7px 8px 7px 14px;
+  border: 0.5px solid var(--es-hud-border);
+  border-radius: 999px;
+  background: var(--es-hud-strong);
+  -webkit-backdrop-filter: var(--es-hud-blur);
+  backdrop-filter: var(--es-hud-blur);
+  box-shadow: var(--es-glass-edge), var(--es-hud-shadow);
+  color: var(--es-primary);
+  font: 400 13px/18px var(--es-font);
+  white-space: normal;
+}
+
+.es-drop {
+  position: absolute;
+  inset: 0;
+  z-index: 10001;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  font-family: var(--es-font);
+  pointer-events: none;
+  animation: es-fade-in 120ms ease-out;
+
+  &__zone {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    padding: 28px 36px;
+    border: 1.5px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    background: rgba(10, 132, 255, 0.16);
+    text-align: center;
+  }
+
+  &__title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__hint {
+    color: var(--es-secondary);
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .es-drop {
+    animation: none;
+  }
+}

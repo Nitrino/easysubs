@@ -9,6 +9,11 @@ import type Service from "@src/streamings/service";
 import { $autoPause } from "../settings";
 
 export const ES_CUSTOM_SUB_LABEL = "custom";
+// The label of a found file on the main line: "found:opensubtitles:123"
+export const FOUND_SUBS_PREFIX = "found:";
+// Subtitles that don't come from the service: a file opened in the settings, a found file
+export const isOwnSubsLabel = (label: string) => label === ES_CUSTOM_SUB_LABEL || label.startsWith(FOUND_SUBS_PREFIX);
+
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));
 export const $subsLanguage = createStore<string>("auto");
@@ -44,6 +49,14 @@ export const updateCurrentSubsFx = createEffect<{ subs: TSub[]; video: UnitValue
 export const updatePrevCurrentSubsFx = createEffect<TSub[], TSub[]>((subs) => subs);
 export const rawSubsAdded = createEvent<Captions>();
 export const updateCustomSubsFx = createEffect<Captions, Captions>((subs) => subs);
+
+// A found file on the main line (src/models/foundSubs): its cues, under its label
+export const ownSubsLoaded = createEvent<{ label: string; captions: Captions }>();
+// While a found file is the main line of a video, the service's own track changes don't replace it
+export const $pinnedSubs = createStore<{ label: string; page: string } | null>(null);
+// The last track the service showed, to go back to, and its cues, to sync a found file against
+export const $serviceSubsLabel = createStore<string>("");
+export const $serviceRawSubs = createStore<Captions>([]);
 
 export const $subsDelay = createStore<number>(0);
 export const subsDelayButtonPressed = createEvent<number>();

@@ -29,6 +29,9 @@ import { $streaming } from "@src/models/streamings";
 import type { TSecondaryPosition, TSecondaryReveal, TSecondaryTranslator } from "@src/models/types";
 import { languageName } from "@src/utils/languages";
 import {
+  FILE_OPTION,
+  FIND_OPTION,
+  FOUND_OPTION,
   TSecondaryOption,
   TRANSLATOR_TITLES,
   describeSecondarySource,
@@ -36,6 +39,9 @@ import {
   secondarySubsOptions,
   secondarySubsValue,
 } from "@src/utils/secondarySubsOptions";
+import { secondaryLanguage } from "@src/utils/resolveSecondarySubs";
+import { $foundSecondResult, foundRemoved, sheetOpened } from "@src/models/foundSubs";
+import { pickSubtitleFile } from "@src/utils/subtitleFiles";
 import { Select } from "../ui/Select";
 import { Toggle } from "../ui/Toggle";
 import { MinusIcon } from "./assets/MinusIcon";
@@ -50,6 +56,8 @@ const Row: FC<{ label: string; children: React.ReactNode }> = ({ label, children
   </div>
 );
 
+const STATUS_TAGS = { track: "Track", translate: "Auto-translate", found: "Found" } as const;
+
 // The menu shows where each language comes from; the button only its name
 const formatLanguageOption = (option: TSecondaryOption, { context }: FormatOptionLabelMeta<TSecondaryOption>) =>
   context === "value" ? (
@@ -62,9 +70,10 @@ const formatLanguageOption = (option: TSecondaryOption, { context }: FormatOptio
     </span>
   );
 
-// The language of the second line, and a status line naming its source: a track of the video or a translator
+// The language of the second line, and a status line naming its source: a track of the video, a file found online
+// or a translator
 export const SecondarySubsLanguage: FC = () => {
-  const [choice, handleChanged, tracks, source, translateLanguage, subsLanguage, translator, streaming, error] =
+  const [choice, handleChanged, tracks, source, translateLanguage, subsLanguage, translator, streaming, error, found] =
     useUnit([
       $secondarySubs,
       secondarySubsChanged,
@@ -75,6 +84,7 @@ export const SecondarySubsLanguage: FC = () => {
       $secondarySubsTranslator,
       $streaming,
       $secondaryError,
+      $foundSecondResult,
     ]);
   const requestTracks = useUnit(secondaryTracksRequested);
 
@@ -92,8 +102,9 @@ export const SecondarySubsLanguage: FC = () => {
         translator,
         service: streaming.name,
         isOnFlight: streaming.isOnFlight(),
+        found,
       }),
-    [tracks, translateLanguage, subsLanguage, translator, streaming],
+    [tracks, translateLanguage, subsLanguage, translator, streaming, found],
   );
   const options = groups.flatMap((group) => group.options);
   const value = secondarySubsValue(choice, source);
@@ -113,17 +124,41 @@ export const SecondarySubsLanguage: FC = () => {
           menuWidth={250}
           formatOptionLabel={formatLanguageOption}
           onChange={(option: TSecondaryOption) => {
+            if (option.value === FOUND_OPTION) return;
+            if (option.value === FIND_OPTION) {
+              const language =
+                choice.language === "off" ? translateLanguage : secondaryLanguage(choice, translateLanguage);
+              sheetOpened({ role: "second", language });
+              return;
+            }
+            if (option.value === FILE_OPTION) {
+              pickSubtitleFile("second");
+              return;
+            }
             const next = secondarySubsChoice(option.value, tracks);
-            if (next) handleChanged(next);
+            if (!next) return;
+            // Another source replaces the file loaded on this video's second line
+            if (found) foundRemoved("second");
+            handleChanged(next);
           }}
         />
       </Row>
       <p className="es-settings-content__status">
-        {status.tag && (
-          <span className={`es-tag es-tag--${status.tag}`}>{status.tag === "track" ? "Track" : "Auto-translate"}</span>
-        )}
+        {status.tag && <span className={`es-tag es-tag--${status.tag}`}>{STATUS_TAGS[status.tag]}</span>}
         <span>{status.text}</span>
       </p>
+      {/* A human translation instead of the translator's */}
+      {source.type === "translate" && (
+        <p className="es-settings-content__status">
+          <button
+            type="button"
+            className="es-found__link"
+            onClick={() => sheetOpened({ role: "second", language: source.language })}
+          >
+            Find {languageName(source.language)} subtitles online
+          </button>
+        </p>
+      )}
     </>
   );
 };

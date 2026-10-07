@@ -35,6 +35,7 @@
     "classnames": "^2.5.1",
     "effector": "^23.4.4",
     "effector-react": "^23.3.0",
+    "fflate": "^0.8.3",
     "m3u8-parser": "^7.2.0",
     "patronum": "^2.3.0",
     "qs": "^6.16.0",

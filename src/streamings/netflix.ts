@@ -2,7 +2,7 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { parse, subTitleType } from "subtitle";
 import { esSubsChanged, subsReloadRequested } from "@src/models/subs";
-import type { TSubsTrack } from "@src/models/types";
+import type { TSubsTrack, TTitleInfo } from "@src/models/types";
 
 const WEBVTT = "webvtt-lssdh-ios8";
 
@@ -129,6 +129,29 @@ class Netflix implements Service {
     const moveId = this.getMoveId();
     const titles = new Set(this.subCache.filter((item) => item.videoId == moveId).map((item) => item.title));
     return [...titles].map(netflixTrack);
+  }
+
+  // Found files are moved for the ad breaks like the title's own tracks
+  public adjustCaptions(captions: subTitleType[]) {
+    return this.adBreaks.length > 0 ? this.resyncSubsWithAds(captions) : captions;
+  }
+
+  // From the player's state (public/assets/js/netflix.js), or the title over the player when that has nothing
+  public async getTitle(): Promise<TTitleInfo | null> {
+    const fromState = await new Promise<TTitleInfo | null>((resolve) => {
+      const timer = setTimeout(() => {
+        window.removeEventListener("esNetflixTitle", handle as EventListener);
+        resolve(null);
+      }, TITLE_TIMEOUT_MS);
+      const handle = (event: CustomEvent<TTitleInfo | null>) => {
+        clearTimeout(timer);
+        window.removeEventListener("esNetflixTitle", handle as EventListener);
+        resolve(event.detail);
+      };
+      window.addEventListener("esNetflixTitle", handle as EventListener);
+      window.dispatchEvent(new CustomEvent("esNetflixTitleRequest"));
+    });
+    return fromState ?? netflixTitleFromPage(document);
   }
 
   public getSubsContainer() {
@@ -284,6 +307,23 @@ class Netflix implements Service {
     });
     return subs;
   }
+}
+
+const TITLE_TIMEOUT_MS = 500;
+
+// The title over the player: "<h4>Show</h4><span>S1:E2</span><span>Episode</span>", or just "<h4>Film</h4>"
+export function netflixTitleFromPage(page: Document): TTitleInfo | null {
+  const container = page.querySelector('[data-uia="video-title"]');
+  const title = container?.querySelector("h4")?.textContent?.trim();
+  if (!container || !title) return null;
+  for (const span of Array.from(container.querySelectorAll("span"))) {
+    const text = span.textContent?.trim() ?? "";
+    const full = text.match(/^S(\d+)\s*:?\s*E(\d+)$/i);
+    if (full) return { title, type: "episode", season: Number(full[1]), episode: Number(full[2]) };
+    const episode = text.match(/^(?:E|Ep\.?|Episode)\s*(\d+)$/i);
+    if (episode) return { title, type: "episode", episode: Number(episode[1]) };
+  }
+  return { title, type: "movie" };
 }
 
 // A track from its subCache title: "en", "en[cc]", "pt-BR-forced"

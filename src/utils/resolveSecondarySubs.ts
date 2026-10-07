@@ -1,4 +1,4 @@
-import type { TSecondaryChoice, TSecondarySource, TSubsTrack, TSubsTrackKind } from "@src/models/types";
+import type { TFoundResult, TSecondaryChoice, TSecondarySource, TSubsTrack, TSubsTrackKind } from "@src/models/types";
 import { isSameLanguage, translationLanguageCode } from "./languages";
 
 type TResolveParams = {
@@ -10,6 +10,8 @@ type TResolveParams = {
   subsLanguage: string;
   // Services that read each line off the page have no look-ahead
   isOnFlight: boolean;
+  // A file found online or opened for this video's second line
+  found?: TFoundResult | null;
 };
 
 // Subtitles first, then captions, then the service's own translation; forced tracks only translate signs
@@ -21,16 +23,19 @@ export const secondaryLanguage = (choice: TSecondaryChoice, translateLanguage: s
 
 // Where the second line comes from: a track of the video in the chosen language when there is one (YouTube's
 // auto-translate counts), otherwise the translator. The track kind picked in the settings wins when the video has it;
-// a language picked to be translated is translated even when the video has a track in it.
+// a language picked to be translated is translated even when the video has a track in it. A file loaded on the second
+// line of this video comes before all of that.
 export function resolveSecondarySubs({
   choice,
   tracks,
   translateLanguage,
   subsLanguage,
   isOnFlight,
+  found = null,
 }: TResolveParams): TSecondarySource {
   if (choice.language === "off") return { type: "off" };
   const language = secondaryLanguage(choice, translateLanguage);
+  if (found) return { type: "found", language: found.language || language, result: found };
   if (subsLanguage !== "auto" && isSameLanguage(subsLanguage, language)) return { type: "same", language };
 
   const matches = tracks
