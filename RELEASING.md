@@ -71,7 +71,11 @@ Verify: `gh release view vX.Y.Z`.
 
 ### 6. Build and clean the dist
 
+The OpenSubtitles API key of EasySubs goes into the build from `VITE_OPENSUBTITLES_API_KEY` (in `.env`, which isn't
+committed). Without it the search skips OpenSubtitles and its files come from the Stremio mirror.
+
 ```bash
+grep -q VITE_OPENSUBTITLES_API_KEY .env || echo "No OpenSubtitles key in .env"
 pnpm build                        # runs tsc --noEmit && vite build
 grep '"version"' dist/manifest.json    # confirm it says X.Y.Z
 find dist -name .DS_Store -delete

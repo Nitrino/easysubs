@@ -37,6 +37,7 @@ Uses Effector for state management with these main models:
 - `src/models/translations/` - Translation data and caching
 - `src/models/videos/` - Video player state and time tracking
 - `src/models/secondarySubs/` - The second subtitle line (see below)
+- `src/models/foundSubs/` - Subtitles found online or opened from a file (see below)
 
 ### Browser Extension Structure
 - `src/pages/content/` - Content scripts injected into streaming websites
@@ -53,6 +54,9 @@ Each streaming service implements the `Service` interface defined in `src/stream
 - `isOnFlight()` - Check if service is live/streaming
 - `init()` - Initialize service-specific functionality
 - `getSubsTracks()` (optional) - The video's other subtitle tracks that `getSubs()` can load, for the second line. Services that read lines off the page (Amazon, Kinopoisk, Plex, Udemy, Netflix on-flight) don't have it
+- `getVideoKey()` (optional) - The video playing where the page's address doesn't change between videos (Jellyfin's item id, InOriginal's episode id), for what's remembered per video (`src/utils/videoKey.ts`)
+- `adjustCaptions()` (optional) - Moves found subtitle files the way the service moves its own tracks (Netflix's ad breaks)
+- `getTitle()` (optional) - What's playing (title, year, season and episode, IMDb id when known), for the search for subtitles online. Netflix (its player state through `public/assets/js/netflix.js`, else the title over the player), InOriginal (the subtitle paths), Jellyfin (its item API) and the playground have it
 
 ### Second Subtitle Line
 A second line under or above the subtitles, or in its own draggable block at the top of the player (`#es-top`), set up in the settings' Second line tab and off by default:
@@ -61,6 +65,14 @@ A second line under or above the subtitles, or in its own draggable block at the
 - Translation runs about two minutes ahead of the playhead in batches (`src/utils/secondaryTranslationWindow.ts`) through the background's `translateBatch` message (`src/utils/translateBatch.ts`: Google with lines joined by newlines, DeepL as a list, ChatGPT through anylang's `translateBatch`), line by line on services that show one line at a time, and is cached in `chrome.storage` per video, track, language and translator (`src/utils/translationCache.ts`)
 - The second line uses Google unless DeepL or ChatGPT is picked for it in the Translator row
 - `src/utils/secondarySubsKeys.ts`: V shows or hides the line for the current video, holding R reveals it when it's blurred until hover or pause; both only while the line is on
+
+### Subtitles Found Online
+A search sheet in place of the settings panel finds subtitles for the video and loads them as the main line or the second line. It opens from the Subtitles tab's "Subtitles from" row, the second line's picker (Found online group) and the link under a translated second line:
+- `src/subsSources/` runs in the background (`lookupTitle`, `searchSubtitles`, `downloadSubtitle`, `opensubtitlesLogin` messages): OpenSubtitles.com (EasySubs' key from `VITE_OPENSUBTITLES_API_KEY` at build time; users may sign in; `session.ts` keeps the password and the 24-hour token in the background, pages only get the username), the Stremio mirror of OpenSubtitles (no key, used when the day's downloads are used or OpenSubtitles can't be reached), Addic7ed through Gestdown, SubDL/SubSource/Jimaku with the user's own keys, and Cinemeta for a title's IMDb id. `files.ts` unzips, decodes old code pages and converts ASS; `rank.ts` puts the service's own release first (NF on Netflix)
+- `src/models/foundSubs/` keeps what's loaded on the current page. A found main line goes through `ownSubsLoaded` and is pinned (`$pinnedSubs`): the service's track changes don't replace it until "From <service>" is picked. A found second line is a `found` source of the second line, anchored like a track
+- Auto-sync (`src/utils/alignSubs.ts`) runs on load when the video has a track: it tries shifts up to ±60 s and the 25 ↔ 23.976 fps stretch against the main line (or, for a found main line, the service's track), and is skipped for releases of the service itself; the sheet shows the shift with Undo
+- What's loaded on a video is remembered with its timing (`$foundSubsByVideo`) and the files are kept on the device (`src/utils/foundSubsCache.ts`), so a reload costs no download. The last file of a show is offered for its next episode (Off/Ask/Load under Sources)
+- Files are also opened from the settings or dropped on the player (`src/utils/subtitleDrop.ts`, Shift for the second line); ads and, if asked, sound descriptions are removed (`src/utils/cleanFoundSubs.ts`)
 
 ### Playground and Integration Tests
 `playground/` is a Vite page that runs the real content and background scripts without the extension runtime:
@@ -71,6 +83,7 @@ A second line under or above the subtitles, or in its own draggable block at the
 - `playground/src/movies.ts` lists open movies (Sprite Fright, CC BY 4.0) that `pnpm playground:movies` downloads with subtitles into `playground/public/movies/` (gitignored); `?video=<id>` opens one
 - `playground/src/screenshot.ts` serializes the page (DOM, CSS, current video frame) and posts it to the dev server's `/__capture`, which renders it with Playwright at the chosen size and scale into `playground/screenshots/` (gitignored)
 - `e2e/playground.ts` is the Playwright page object; `window.easysubsPlayground.messages` records every background message and `window.easysubsPlayground.mockAnswers` replaces answers of the mock background
+- The mock background answers the subtitle sources from `playground/src/mockSubtitles.ts`: the sample is "The Night Train" S1 E2 (`getTitle()` in `playgroundService.ts`), found in English and Spanish as differently timed releases
 - Unit tests use `test/chrome.ts` for `chrome.*` and can import `playground/src/mockBackground.ts` to get the same offline answers
 
 ### Component Architecture
