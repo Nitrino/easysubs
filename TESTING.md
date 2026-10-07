@@ -3,10 +3,10 @@
 EasySubs has two test suites, both built on the playground's data: the subtitles in `playground/public/subs` and the
 offline translations in `playground/fixtures/translations`.
 
-| Suite       | Command         | Where              | What it runs                                                                              |
-| ----------- | --------------- | ------------------ | ----------------------------------------------------------------------------------------- |
-| Unit        | `pnpm test`     | `src/**/*.test.ts` | Models, utils, learning services and the background script in Vitest + jsdom              |
-| Integration | `pnpm test:e2e` | `e2e/*.spec.ts`    | The whole content script in the playground page (`pnpm playground`), driven by Playwright |
+| Suite       | Command         | Where                                      | What it runs                                                                                            |
+| ----------- | --------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Unit        | `pnpm test`     | `src/**/*.test.ts`, `scripts/**/*.test.ts` | Models, utils, learning services, the background script and the expression list build in Vitest + jsdom |
+| Integration | `pnpm test:e2e` | `e2e/*.spec.ts`                            | The whole content script in the playground page (`pnpm playground`), driven by Playwright               |
 
 `pnpm test` watches in a terminal and runs once in CI; `pnpm test:coverage` writes a coverage report to `coverage/`.
 Run `pnpm exec playwright install chromium` once before the integration tests; they start the playground themselves
@@ -18,7 +18,11 @@ or reuse a running one.
 - `test/chrome.ts` — `chrome.*`: storage in memory, `runtime.sendMessage` delivered to the `onMessage` listeners of the
   test file. Importing `src/pages/background` registers the real background, importing
   `playground/src/mockBackground` the offline one. A test answers a single message with
-  `chromeMock.runtime.sendMessage.mockResolvedValueOnce(...)` and reads what was sent with `sentMessages(type)`
+  `chromeMock.runtime.sendMessage.mockResolvedValueOnce(...)`, or the next message of a type with
+  `answerNextMessage(type, answer)`, and reads what was sent with `sentMessages(type)`
+- `test/chromeTranslator.ts` — `stubChromeTranslator()` puts Chrome's Translator API on `globalThis`, translating into
+  `[chrome:ru] text`; `availability: "unavailable"` or `refuseCreate` make it fail like Chrome does
+- `test/expressions.ts` — the expression lists of `public/expressions` as the background loads them
 - `test/fixtures.ts` — the playground's subtitles (`playgroundCaptions("en")`, `playgroundSubs("en")`), its offline
   translations and `captions([start, end, text], ...)` for cues at chosen times
 - `test/video.ts` and `test/service.ts` — a `<video>` that seeks and plays without media, a streaming service with the
@@ -39,6 +43,10 @@ only run outside scopes, so tests of them call events directly.
 - `openSearch()`, `result(release)` and `loadedFile()` for the search for subtitles online, in place of the settings
   panel
 - `recordSpeech()` to record pronounced words, `messages(type)` to read what the content script sent
+- `stubChromeTranslator()` before `open()` for Chrome's Translator API, which Playwright's Chromium has no models for
+
+The tests start the playground on port 5180 or reuse the one running there. In a second checkout (a git worktree),
+stop the other playground first, or the tests run against its code.
 
 ## Known bugs
 
@@ -59,16 +67,27 @@ a comment on the cause. When the bug is fixed, `it.fails` starts failing: turn i
 **Translation**
 
 - Unit: Google's word answer (main translation, the five most common alternatives, synonyms), caching, pending state,
-  translating again into a new language, line translation by every service, failures, phrasal verbs (English into
-  Russian only) and the background's requests to Google, DeepL, Bing, Yandex and ChatGPT
+  translating again into a new language, line translation by every service, Chrome's translator and its fallback to
+  Google, failures, and the background's requests to Google, DeepL, Bing, Yandex and ChatGPT
 - E2E: hovered word, alternatives with parts of speech, dictionary links (English only), pronunciation, one request
-  per word, the language from the settings or asked for when it matches the subtitles, the whole line, phrasal verbs,
-  Bing/DeepL/ChatGPT with their API key dialogs, a failing service, Spanish into English
+  per word, the language from the settings or asked for when it matches the subtitles, the whole line,
+  Bing/DeepL/ChatGPT with their API key dialogs, Chrome's translator (offered only where the browser has it), a
+  failing service, Spanish into English
+
+**Phrasal verbs and idioms**
+
+- Unit: building the lists from Wiktionary records (kinds, forms, separable verbs, verb forms, merging), matching in
+  English, German, Dutch, Spanish, French, Italian and Russian on the real lists (forms, an object before the
+  particle, a particle at the end of the clause, placeholders, conjugated verb idioms, clause breaks), the
+  background's lookup and loading, the model: one lookup per track once the language is known, new cues only,
+  failures, hovering, translation by Google's dictionary, Chrome and ChatGPT (one request per cue), errors
+- E2E: the popover with the expression, its translations and the word's own, one lookup message, a split phrasal
+  verb, idioms, highlighting in the hovered cue only, ChatGPT's request for a line, adding one to Anki
 
 **Second subtitle line**
 
 - Unit: picking the source (track, YouTube auto-translate, translator, already in the language), anchoring a track to
-  the main cues, the translation window and batch limits, batches by Google, DeepL and ChatGPT, the cache, the language
+  the main cues, the translation window and batch limits, batches by Google, DeepL, ChatGPT and Chrome, the cache, the language
   picker and its status line, the settings, V and R, the services' track lists (Netflix, YouTube, Coursera, KinoPub),
   the model: loading, delay, reloads, translating as the video plays and after seeks, failures, hiding
 - E2E: off by default, the Spanish track, translating into Russian in one request and from the cache after a reload,
@@ -129,3 +148,5 @@ a machine translation.
 - The playground with `?background=live`: it calls real translation services
 - The subtitle sources against the real services (their answers are recorded by hand in the tests), Netflix's title in
   its player state and Jellyfin's item API
+- Chrome's real Translator API: the tests stub it, Playwright's Chromium has no models. Whether a content script in a
+  streaming site's frame may create translators needs desktop Chrome
