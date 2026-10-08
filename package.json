@@ -31,7 +31,10 @@
   },
   "type": "module",
   "dependencies": {
+    "@huggingface/transformers": "4.3.0",
     "@ifyour/deeplx": "^0.1.17",
+    "@vot.js/core": "3.1.5",
+    "@vot.js/shared": "3.1.5",
     "anylang": "~3.2.2",
     "classnames": "^2.5.1",
     "effector": "^23.4.4",
