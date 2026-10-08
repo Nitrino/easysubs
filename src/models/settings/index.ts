@@ -6,6 +6,7 @@ import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/
 import {
   TFoundShow,
   TFoundVideo,
+  TAnkiContext,
   TLearningService,
   TNextEpisodeMode,
   TOpenSubtitlesQuota,
@@ -66,6 +67,14 @@ export const translateLanguageChangeFx = createEffect<string, string>((value) =>
 export const $learningService = createSetting<TLearningService>("learningService", "disabled", 302);
 export const learningServiceChanged = createEvent<TLearningService>();
 export const learningServiceChangeFx = createEffect<TLearningService, TLearningService>((value) => value);
+// The line a word is added from, on its Anki card: the line, its translation, the video frame and the line's sound
+export const $ankiContext = createSetting<TAnkiContext>("ankiContext", {
+  sentence: true,
+  translation: true,
+  picture: true,
+  audio: true,
+});
+export const ankiContextChanged = createEvent<Partial<TAnkiContext>>();
 
 export const $translationService = createSetting<TTranslationService>("translationService", "google", 320);
 export const translationServiceChanged = createEvent<TTranslationService>();
@@ -305,6 +314,7 @@ $netflixOnFlightEnabled.on(netflixOnFlightEnabledChanged, (_, isEnabled) => isEn
 $moveBySubsEnabled.on(moveBySubsEnabledChangeFx.doneData, (_, isEnabled) => isEnabled);
 $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => language);
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
+$ankiContext.on(ankiContextChanged, (context, change) => ({ ...context, ...change }));
 $translationService.on(translationServiceChangeFx.doneData, (_, service) => service);
 $ttsService.on(ttsServiceChangeFx.doneData, (_, service) => service);
 $deeplApiKey.on(deeplApiKeyChangeFx.doneData, (_, key) => key);

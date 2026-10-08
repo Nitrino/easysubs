@@ -10,6 +10,7 @@ import {
 } from "@src/models/expressions";
 import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGate } from "@src/models/translations";
 import { getLearningService } from "@src/utils/getLearningService";
+import { addWordFx } from "@src/models/learning";
 import { PlusIcon } from "./assets/PlusIcon";
 import { Popover } from "../ui/Popover";
 import { Spinner } from "../ui/Spinner";
@@ -23,13 +24,19 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
     [expression.expression, expression.cue],
   );
   useGate(ExpressionTranslationGate, gateProps);
-  const [current, learningService] = useUnit([$currentExpressionTranslation, $learningService]);
+  const [current, learningService, addWord] = useUnit([$currentExpressionTranslation, $learningService, addWordFx]);
 
   const service = useMemo(() => getLearningService(learningService), [learningService]);
 
   const handleAdd = (translation: string) => {
-    service
-      ?.addWord(expression.expression.toLowerCase(), translation, { partOfSpeech: "phrase" })
+    if (!service) return;
+    addWord({
+      word: expression.expression.toLowerCase(),
+      translation,
+      partOfSpeech: "phrase",
+      cueId: expression.id,
+      indexes: expression.indexes,
+    })
       .then((value) => toast.success(value))
       .catch((error) => toast.error(error));
   };

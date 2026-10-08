@@ -133,10 +133,16 @@ a machine translation.
 
 **Learning services**
 
-- Unit: Anki (deck, note type, fields, duplicates, errors), LinguaLeo and Puzzle English answers, the background's
-  requests to AnkiConnect, LinguaLeo and Puzzle English
-- E2E: adding the main translation, an alternative and a phrasal verb to Anki; Anki duplicates and errors; LinguaLeo
-  and its login hint; Puzzle English; no add buttons when disabled
+- Unit: Anki (deck, note type, fields, duplicates, errors, the first version's note type upgraded, the line with its
+  frame and sound stored as media, a new line on the front of a word's card and the examples kept, a line the card
+  has), the line collected for a card (the word or an expression's words in bold, the translation from the second
+  line or the translator, where it's from, a failed translation, each part turned off), cutting the line's sound
+  from buffered segments (padding, two segments, timestampOffset, gaps, segments appended again), splitting appended
+  pieces into WebM clusters and MP4 fragments, WAV, LinguaLeo and Puzzle English answers, the background's requests
+  to AnkiConnect, LinguaLeo and Puzzle English
+- E2E: adding the main translation with its line, the line's translation and the frame, an alternative and a phrasal
+  verb to Anki; the word alone with the line off; the line's settings for Anki only; a new line for a word in Anki;
+  Anki duplicates and errors; LinguaLeo and its login hint; Puzzle English; no add buttons when disabled
 
 **Settings and pausing**
 
@@ -151,6 +157,8 @@ a machine translation.
 
 ## Not covered yet
 
+- The line's sound on an Anki card in the playground: its player doesn't stream through Media Source Extensions.
+  It was checked by hand on YouTube, where the clip matched the video's own sound within 20 ms
 - The streaming services' own code (subtitle downloads from YouTube, Netflix and others, their injected scripts): it
   needs recorded responses of each service. The second line's track lists are covered with made-up answers; whether
   YouTube still serves a track after its URL's `lang` or `tlang` changes, and whether Jellyfin exposes a second track

@@ -43,6 +43,7 @@ Uses Effector for state management with these main models:
 - `src/models/secondarySubs/` - The second subtitle line (see below)
 - `src/models/foundSubs/` - Subtitles found online or opened from a file (see below)
 - `src/models/spokenWord/` - Highlighting the word being said, an experiment (see below)
+- `src/models/learning/` - Adding a word to the learning service, with its line for Anki (see Anki Cards below)
 
 ### Browser Extension Structure
 
@@ -78,7 +79,9 @@ A second line under or above the subtitles, or in its own draggable block at the
 - `src/utils/secondarySubsKeys.ts`: V shows or hides the line for the current video, holding R reveals it when it's blurred until hover or pause; both only while the line is on
 
 ### Subtitles Found Online
+
 A search sheet in place of the settings panel finds subtitles for the video and loads them as the main line or the second line. It opens from the Subtitles tab's "Subtitles from" row, the second line's picker (Found online group) and the link under a translated second line:
+
 - `src/subsSources/` runs in the background (`lookupTitle`, `searchSubtitles`, `downloadSubtitle`, `opensubtitlesLogin` messages): OpenSubtitles.com (EasySubs' key from `VITE_OPENSUBTITLES_API_KEY` at build time; users may sign in; `session.ts` keeps the password and the 24-hour token in the background, pages only get the username), the Stremio mirror of OpenSubtitles (no key, used when the day's downloads are used or OpenSubtitles can't be reached), Addic7ed through Gestdown, SubDL/SubSource/Jimaku with the user's own keys, and Cinemeta for a title's IMDb id. `files.ts` unzips, decodes old code pages and converts ASS; `rank.ts` puts the service's own release first (NF on Netflix)
 - `src/models/foundSubs/` keeps what's loaded on the current page. A found main line goes through `ownSubsLoaded` and is pinned (`$pinnedSubs`): the service's track changes don't replace it until "From <service>" is picked. A found second line is a `found` source of the second line, anchored like a track
 - Auto-sync (`src/utils/alignSubs.ts`) runs on load when the video has a track: it tries shifts up to ±60 s and the 25 ↔ 23.976 fps stretch against the main line (or, for a found main line, the service's track), and is skipped for releases of the service itself; the sheet shows the shift with Undo
@@ -123,8 +126,17 @@ The word being said lights up in the subtitles. Off by default; everything is in
 - Batch and single word translation fetchers
 - Chrome's built-in Translator API (`src/utils/chromeTranslator.ts`) as the "Chrome (on device)" translation service and second line translator: offered only where the browser has it, called from the content script (it isn't available in workers), Google where it can't translate a pair. Chrome downloads a pair's model only during a click, so picking it starts the download (`src/models/settings/init.ts`)
 - Phrasal verbs, idioms and set phrases, see Expressions below
-- Export to learning services (Anki, LinguaLeo, Puzzle English)
+- Export to learning services (Anki, LinguaLeo, Puzzle English), see Anki Cards below
 - Word pronunciation from the service chosen in the settings (`$ttsService`): the background fetches Google, Youdao, Wiktionary or ChatGPT audio (`src/utils/tts/`, falling back to Google) and answers the `pronounce` message with a data: URL; `src/models/pronunciation` plays it through Web Audio and falls back to the browser's `speechSynthesis`
+
+### Anki Cards
+
+The word stays what a card teaches; the subtitle line it was added from comes with it. Each part is a toggle under the Learning service row when Anki is picked (`$ankiContext`):
+
+- `addWordFx` (`src/models/learning`) collects the line with the word or the expression's words in bold (`src/utils/wordContext.ts`), its translation (the second line when it shows the translation language, the translation service otherwise), the frame on screen (`src/utils/videoFrame.ts`, none for DRM video, which draws black), the line's sound and where it's from (the service's title or the page's, linked back to the moment on YouTube)
+- The sound is cut from the audio the player buffered: `public/assets/js/mseTap.js` copies what players append to Media Source Extensions to consumers by name (`clips`, `readAhead`), keeping the latest 2 MB for one that starts late; `src/audio/bufferedAudio.ts` puts the pieces back into segments (`SegmentSplitter` in `containers.ts`: YouTube appends whole clusters at first, then any piece), keeps them around the playhead and decodes the line ±250 ms into a 22.05 kHz WAV. Players that don't stream through MSE (the playground) and DRM audio give no sound
+- `src/learning-service/ankiNote.ts` is the Easysubs note type (Word, Translation, Part of Speech, Context, Context Translation, Picture, Audio, Source, Examples) and its templates. Picture and sound go to Anki's media with `storeMediaFile`. A note type of the first version gets the new fields with `modelFieldAdd` and the new templates (a schema change: Anki asks for a full sync once)
+- Adding a word that's in Anki puts the new line on the front of its card and the one before among the examples on the back, up to 3 lines; the examples' sounds are `<audio>` players, as Anki plays every `[sound:]` of a side. A line the card has already isn't added again
 
 ### Expressions
 

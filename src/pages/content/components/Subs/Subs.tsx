@@ -159,7 +159,7 @@ const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
           (showExpression ? (
             <ExpressionTranslation expression={currentExpression} word={subItem.cleanedText} />
           ) : (
-            <SubItemTranslation text={subItem.cleanedText} />
+            <SubItemTranslation text={subItem.cleanedText} cueId={sub.id} index={index} />
           ))}
       </pre>
       <pre className="es-sub-item-space"> </pre>

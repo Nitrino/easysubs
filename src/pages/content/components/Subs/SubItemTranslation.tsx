@@ -12,6 +12,7 @@ import ILearningService from "@src/learning-service/learningService";
 import { TWordTranslationItem } from "@src/models/types";
 import { $subsLanguage } from "@src/models/subs";
 import { wordPronounced } from "@src/models/pronunciation";
+import { addWordFx } from "@src/models/learning";
 import { getLearningService } from "@src/utils/getLearningService";
 import { TranslateSelect } from "../ui/TranslateSelect";
 import { Popover } from "../ui/Popover";
@@ -24,7 +25,8 @@ const DICTIONARIES: [string, (word: string) => string][] = [
   ["YouGlish", (word) => `https://youglish.com/pronounce/${word}/english`],
 ];
 
-export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
+// The popover of a hovered word: `cueId` and `index` say where it is, for the line Anki keeps with the word
+export const SubItemTranslation: FC<{ text: string; cueId: number; index: number }> = ({ text, cueId, index }) => {
   useGate(WordTranslationsGate, text);
   const [
     currentWordTranslation,
@@ -33,6 +35,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     translateLanguage,
     wordTranslationsPendings,
     pronounceWord,
+    addWord,
   ] = useUnit([
     $currentWordTranslation,
     $learningService,
@@ -40,6 +43,7 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
     $translateLanguage,
     $wordTranslationsPendings,
     wordPronounced,
+    addWordFx,
   ]);
 
   const [service, setService] = useState<ILearningService>(null);
@@ -79,8 +83,13 @@ export const SubItemTranslation: FC<{ text: string }> = ({ text }) => {
 
   const handleAddWord = (word: string, translation: TWordTranslationItem) => {
     if (service) {
-      service
-        .addWord(word.toLowerCase(), translation.word, { partOfSpeech: translation.partOfSpeech })
+      addWord({
+        word: word.toLowerCase(),
+        translation: translation.word,
+        partOfSpeech: translation.partOfSpeech,
+        cueId,
+        indexes: [index],
+      })
         .then((value) => {
           toast.success(value);
         })
