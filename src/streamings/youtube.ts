@@ -1,8 +1,8 @@
-import { parse, subTitleType } from "subtitle";
+import { parse } from "subtitle";
 
 import { esSubsChanged } from "@src/models/subs";
 import { esRenderSetings } from "@src/models/settings";
-import type { TSubsTrack } from "@src/models/types";
+import type { Captions, TSubsTrack } from "@src/models/types";
 import Service from "./service";
 
 // The caption tracks of the video as the page script reads them from the player, see public/assets/js/youtube.js
@@ -17,15 +17,10 @@ type YoutubeRequest = { lang: string; kind: string; tlang: string };
 
 const TRACKS_TIMEOUT_MS = 1000;
 
-type YoutubeSubtitle = {
-  dDurationMs: number;
+export type YoutubeSubtitle = {
+  dDurationMs?: number;
   tStartMs: number;
-  segs:
-    | {
-        utf8: string;
-        tOffsetMs: number;
-      }[]
-    | undefined;
+  segs?: { utf8: string; tOffsetMs?: number }[];
 };
 
 class Youtube implements Service {
@@ -58,24 +53,7 @@ class Youtube implements Service {
     const resp = await fetch(subUri);
     const respJson: { events: YoutubeSubtitle[] } = await resp.json();
 
-    const subs: subTitleType[] = respJson.events.map((sub) => {
-      if (!sub.segs) {
-        return {
-          start: sub.tStartMs,
-          end: sub.tStartMs,
-          text: "",
-        };
-      }
-
-      const end = sub.segs.at(-1).tOffsetMs ? sub.segs.at(-1).tOffsetMs + sub.tStartMs : sub.tStartMs + sub.dDurationMs;
-
-      return {
-        start: sub.tStartMs,
-        end: end,
-        text: sub.segs.map((seg) => seg.utf8).join(""),
-      };
-    });
-    return subs;
+    return youtubeCaptions(respJson.events);
   }
 
   // The video's other caption tracks, and YouTube's auto-translation of the main track into every language it offers.
@@ -184,6 +162,42 @@ class Youtube implements Service {
     script.type = "module";
     document.head.prepend(script);
   }
+}
+
+// The last word of an auto-generated line has no next word to end it: about this long per character
+const LAST_WORD_MS_PER_CHAR = 70;
+const LAST_WORD_MS = { min: 250, max: 900 };
+
+// Cues of a json3 track. Auto-generated tracks time every word (a seg each, `tOffsetMs` from the line's start); a
+// line of them ends when its last word does, so the rolling two-line captions don't overlap.
+export function youtubeCaptions(events: YoutubeSubtitle[]): Captions {
+  return events.map((event, index) => {
+    const segs = event.segs;
+    if (!segs) return { start: event.tStartMs, end: event.tStartMs, text: "" };
+
+    const text = segs.map((seg) => seg.utf8).join("");
+    const timed = segs.length > 1 && segs.slice(1).some((seg) => seg.tOffsetMs);
+    if (!timed) return { start: event.tStartMs, end: event.tStartMs + (event.dDurationMs ?? 0), text };
+
+    const lastStart = segs.at(-1).tOffsetMs ?? 0;
+    const lastLength = Math.min(
+      LAST_WORD_MS.max,
+      Math.max(LAST_WORD_MS.min, segs.at(-1).utf8.trim().length * LAST_WORD_MS_PER_CHAR),
+    );
+    // Up to the next line, within the event's own duration
+    const nextStart = events.slice(index + 1).find((next) => next.segs?.some((seg) => seg.utf8.trim()))?.tStartMs;
+    const limit = Math.min(event.dDurationMs ?? Infinity, (nextStart ?? Infinity) - event.tStartMs);
+    const lineLength = Math.max(lastStart + 1, Math.min(lastStart + lastLength, limit));
+
+    const words = segs
+      .map((seg, segIndex) => ({
+        text: seg.utf8,
+        start: seg.tOffsetMs ?? 0,
+        end: segs[segIndex + 1]?.tOffsetMs ?? lineLength,
+      }))
+      .filter((word) => word.text.trim());
+    return { start: event.tStartMs, end: event.tStartMs + lineLength, text, words };
+  });
 }
 
 // The tracks the second line can load besides the main one. Auto-generated captions count as captions, YouTube's
