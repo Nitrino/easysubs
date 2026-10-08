@@ -42,12 +42,14 @@ Uses Effector for state management with these main models:
 - `src/models/videos/` - Video player state and time tracking
 - `src/models/secondarySubs/` - The second subtitle line (see below)
 - `src/models/foundSubs/` - Subtitles found online or opened from a file (see below)
+- `src/models/spokenWord/` - Highlighting the word being said, an experiment (see below)
 
 ### Browser Extension Structure
 
 - `src/pages/content/` - Content scripts injected into streaming websites
 - `src/pages/background/` - Service worker/background script
 - `src/pages/popup/` - Extension popup interface
+- `src/pages/offscreen/` - Offscreen document (Chrome) running the speech models and tab capture of the spoken-word experiment
 - `public/` - Static assets including manifest and localization files
 
 ### Streaming Service Integration
@@ -82,6 +84,17 @@ A search sheet in place of the settings panel finds subtitles for the video and 
 - Auto-sync (`src/utils/alignSubs.ts`) runs on load when the video has a track: it tries shifts up to ±60 s and the 25 ↔ 23.976 fps stretch against the main line (or, for a found main line, the service's track), and is skipped for releases of the service itself; the sheet shows the shift with Undo
 - What's loaded on a video is remembered with its timing (`$foundSubsByVideo`) and the files are kept on the device (`src/utils/foundSubsCache.ts`), so a reload costs no download. The last file of a show is offered for its next episode (Off/Ask/Load under Sources)
 - Files are also opened from the settings or dropped on the player (`src/utils/subtitleDrop.ts`, Shift for the second line); ads and, if asked, sound descriptions are removed (`src/utils/cleanFoundSubs.ts`)
+
+### Spoken Word Highlight (experiment)
+
+The word being said lights up in the subtitles. Off by default; everything is in the Experiments tab, built to compare where word times come from and keep the best:
+
+- Sources (`TWordTimingSource`, `src/models/spokenWord`): `file` (the subtitles' own times: YouTube's auto-generated json3 `segs`, kept as `words` relative to the cue in `src/streamings/youtube.ts`, and WebVTT `<00:00:01.500>` timestamps, `src/utils/wordTiming/fileWords.ts`), `captions` (the video's auto-generated track in the same language matched to the cues by words, `transfer.ts`), `yandex`, `whisper`, `aligned` (wav2vec2), `speech` (the estimate fitted into detected speech, `speech.ts`) and `estimate` (the line's words at the video's learned speaking rate, `estimate.ts`). "Best available" takes them in that order; a picked source leaves lines without its times unlit
+- Compare sources shows every source's times for the line on screen with the playhead and each one's average start error against the most precise available (`SpokenWordCompare.tsx`)
+- Yandex (`src/utils/yandexWordTimes.ts`, background `yandexWordTimes` message): Yandex Browser's video subtitles with timed tokens through vot.js and the VOT proxy `vot-worker.eu.cc` (Yandex answers 402 to direct requests); public videos only
+- Audio (`src/audio/session.ts`): the `<video>` element's `captureStream()` (refused for DRM), audio players buffered ahead copied from Media Source Extensions by the MAIN-world `public/assets/js/mseTap.js` and decoded with their container times (`containers.ts`, `readAhead.ts`), or the tab from the popup's "Listen to this tab" (`chrome.tabCapture`, an optional permission). All go onto one timeline by video time; live chunks are timed by the audio clock
+- Speech detection by loudness in the page or Silero VAD; wav2vec2 alignment of each cue's audio (English, `ctcAlign.ts`) and Whisper word timestamps for 20 s windows run in the offscreen document with transformers.js (`src/audio/models.ts`), models downloaded from Hugging Face on first use, ONNX Runtime's WebAssembly shipped in `assets/ort` (`utils/plugins/copy-onnx-runtime.ts`). In the playground they run in a Web Worker (`playground/src/audioWorker.ts`)
+- `window.easysubsAudioSession.debug()` shows what the audio analysis covered and did
 
 ### Playground and Integration Tests
 

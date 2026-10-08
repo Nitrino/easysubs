@@ -20,6 +20,7 @@ import { useUnit } from "effector-react";
 import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
 // import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
 import { EnableAutoStop } from "./EnableAutoStop";
+import { SpokenWord } from "./SpokenWord";
 import { JellyfinSubTrack } from "./JellyfinSubTrack";
 import { createPortal } from "react-dom";
 import { $streaming } from "@src/models/streamings";
@@ -210,6 +211,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                   <div className="es-settings-content__item">
                     <EnableAutoStop />
                   </div>
+                  <SpokenWord />
                 </>
               )}
             </div>

@@ -18,6 +18,8 @@ export default defineConfig({
       "@pages": resolve(srcDir, "pages"),
       // Registers content scripts for user-granted hosts; there is no extension runtime in the tests
       "webext-dynamic-content-scripts": resolve(rootDir, "playground/src/noop.ts"),
+      // vot.js imports it outside a window (src/utils/yandexWordTimes.ts)
+      "node:crypto": resolve(srcDir, "utils/webCrypto.ts"),
     },
   },
   plugins: [addHmr({ background: false, view: false })],

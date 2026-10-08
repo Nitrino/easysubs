@@ -9,10 +9,12 @@ import Playground from "./playgroundService";
 import { setupPlayer } from "./player";
 import { setupInspector } from "./inspector";
 import { setupScreenshots } from "./screenshot";
+import { setupAudioWorker } from "./audioWorker";
 
 setupPlayer();
 setupInspector();
 setupScreenshots();
+setupAudioWorker();
 
 // Replaces the hostname-based detection of src/utils/getCurrentService.ts
 fetchCurrentStreamingFx.use(() => new Playground());

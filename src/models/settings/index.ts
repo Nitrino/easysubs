@@ -13,6 +13,9 @@ import {
   TSecondaryPosition,
   TSecondaryReveal,
   TSecondaryTranslator,
+  TSpeechDetector,
+  TSpokenWordAudio,
+  TSpokenWordSource,
   TTranslationService,
   TTtsService,
 } from "../types";
@@ -183,6 +186,30 @@ export const opensubtitlesQuotaChanged = createEvent<TOpenSubtitlesQuota | null>
 export const $foundSubsByVideo = createSetting<Record<string, TFoundVideo>>("foundSubsByVideo", {});
 export const $foundSubsShows = createSetting<Record<string, TFoundShow>>("foundSubsShows", {});
 
+// Highlighting the word being said (src/models/spokenWord), an experiment comparing where word times come from.
+// Off until it's turned on in the Experiments tab.
+export const $spokenWordEnabled = createSetting("spokenWordEnabled", false);
+export const spokenWordEnabledChanged = createEvent<boolean>();
+// "auto" takes the most precise source that has times for the cue
+export const $spokenWordSource = createSetting<TSpokenWordSource>("spokenWordSource", "auto");
+export const spokenWordSourceChanged = createEvent<TSpokenWordSource>();
+// Every source's times for the cue on screen, under the subtitles
+export const $spokenWordCompare = createSetting("spokenWordCompare", false);
+export const spokenWordCompareChanged = createEvent<boolean>();
+// Yandex's recognition of the video, through the VOT proxy (src/utils/yandexSubtitles.ts)
+export const $spokenWordYandex = createSetting("spokenWordYandex", false);
+export const spokenWordYandexChanged = createEvent<boolean>();
+// Listening to the video (src/audio): its element while it plays, or also the audio the player buffered ahead
+export const $spokenWordAudio = createSetting<TSpokenWordAudio>("spokenWordAudio", "off");
+export const spokenWordAudioChanged = createEvent<TSpokenWordAudio>();
+export const $spokenWordDetector = createSetting<TSpeechDetector>("spokenWordDetector", "energy");
+export const spokenWordDetectorChanged = createEvent<TSpeechDetector>();
+// Models that download on first use and run in the offscreen document (Chrome)
+export const $spokenWordWhisper = createSetting("spokenWordWhisper", false);
+export const spokenWordWhisperChanged = createEvent<boolean>();
+export const $spokenWordAligner = createSetting("spokenWordAligner", false);
+export const spokenWordAlignerChanged = createEvent<boolean>();
+
 export const esRenderSetings = createEvent();
 
 sample({
@@ -314,6 +341,14 @@ $subsourceApiKey.on(subsourceApiKeyChanged, (_, key) => key.trim());
 $jimakuApiKey.on(jimakuApiKeyChanged, (_, key) => key.trim());
 $opensubtitlesAccount.on(opensubtitlesAccountChanged, (_, account) => account);
 $opensubtitlesQuota.on(opensubtitlesQuotaChanged, (_, quota) => quota);
+$spokenWordEnabled.on(spokenWordEnabledChanged, (_, value) => value);
+$spokenWordSource.on(spokenWordSourceChanged, (_, value) => value);
+$spokenWordCompare.on(spokenWordCompareChanged, (_, value) => value);
+$spokenWordYandex.on(spokenWordYandexChanged, (_, value) => value);
+$spokenWordAudio.on(spokenWordAudioChanged, (_, value) => value);
+$spokenWordDetector.on(spokenWordDetectorChanged, (_, value) => value);
+$spokenWordWhisper.on(spokenWordWhisperChanged, (_, value) => value);
+$spokenWordAligner.on(spokenWordAlignerChanged, (_, value) => value);
 
 // Picking a paid translator for the second line asks for its key when there's none yet
 sample({

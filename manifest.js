@@ -1,6 +1,24 @@
 import fs from "node:fs";
 const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 
+// The streaming services EasySubs runs on
+const MATCHES = [
+  "https://www.netflix.com/*",
+  "https://www.youtube.com/*",
+  "https://www.coursera.org/*",
+  "https://kinopub.net/*",
+  "https://kino.watch/*",
+  "https://kinopub.cc/*",
+  "https://app.plex.tv/*",
+  "https://plex.ukrapka.tech/*",
+  "https://www.udemy.com/course/*/learn/lecture/*",
+  "https://hd.kinopoisk.ru/*",
+  "https://www.amazon.de/Amazon-Video/*",
+  "https://www.primevideo.com/*",
+  "https://www.amazon.de/*/video/*",
+  "https://inoriginal.online/*",
+];
+
 /**
  * After changing, please reload the extension at `chrome://extensions`
  * @type {chrome.runtime.ManifestV3}
@@ -25,31 +43,26 @@ const manifest = {
   },
   content_scripts: [
     {
-      matches: [
-        "https://www.netflix.com/*",
-        "https://www.youtube.com/*",
-        "https://www.coursera.org/*",
-        "https://kinopub.net/*",
-        "https://kino.watch/*",
-        "https://kinopub.cc/*",
-        "https://app.plex.tv/*",
-        "https://plex.ukrapka.tech/*",
-        "https://www.udemy.com/course/*/learn/lecture/*",
-        "https://hd.kinopoisk.ru/*",
-        "https://www.amazon.de/Amazon-Video/*",
-        "https://www.primevideo.com/*",
-        "https://www.amazon.de/*/video/*",
-        "https://inoriginal.online/*",
-      ],
+      matches: MATCHES,
       js: ["src/pages/contentInjected/index.js"],
       // KEY for cache invalidation
       css: ["assets/css/contentStyle<KEY>.chunk.css"],
     },
+    // Copies the audio players append to Media Source Extensions while the spoken-word experiment listens ahead
+    // (src/audio/readAhead.ts); it has to patch MediaSource before the player starts
+    {
+      matches: MATCHES,
+      js: ["assets/js/mseTap.js"],
+      run_at: "document_start",
+      world: "MAIN",
+    },
   ],
   // unlimitedStorage: found subtitle files and translations are kept on the device
-  permissions: ["scripting", "storage", "unlimitedStorage", "activeTab"],
+  // offscreen: the speech models of the spoken-word experiment (src/pages/offscreen)
+  permissions: ["scripting", "storage", "unlimitedStorage", "activeTab", "offscreen"],
   optional_host_permissions: ["*://*/*"],
-  optional_permissions: [],
+  // tabCapture: "Listen to this tab" in the popup, asked for on first use, as it warns of reading all websites
+  optional_permissions: ["tabCapture"],
   host_permissions: [
     "https://translate.google.com/*",
     "http://localhost:8765/*",
@@ -75,18 +88,18 @@ const manifest = {
     "https://dl.subdl.com/*",
     "https://api.subsource.net/*",
     "https://jimaku.cc/*",
+    // Yandex's recognition of the video for the spoken-word experiment (src/utils/yandexWordTimes.ts): the VOT proxy
+    // and Yandex's subtitle files
+    "https://vot-worker.eu.cc/*",
+    "https://brosubs.s3-private.mds.yandex.net/*",
   ],
   content_security_policy: {
-    extension_pages: "script-src 'self'; object-src 'self'",
+    // WebAssembly for ONNX Runtime in the offscreen document
+    extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
   },
   web_accessible_resources: [
     {
-      resources: [
-        "assets/js/*.js",
-        "assets/css/*.css",
-        "icon-128.png",
-        "icon-34.png",
-      ],
+      resources: ["assets/js/*.js", "assets/css/*.css", "icon-128.png", "icon-34.png"],
       matches: ["*://*/*"],
     },
   ],

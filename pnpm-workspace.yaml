@@ -1,2 +1,5 @@
 allowBuilds:
   '@parcel/watcher': false
+  # Node builds of transformers.js' dependencies: the extension runs the web build
+  onnxruntime-node: false
+  protobufjs: false

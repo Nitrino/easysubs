@@ -16,6 +16,8 @@ export type TSub = {
   text: string;
   cleanedText: string;
   items: TSubItem[];
+  // When each item is said, from the subtitles themselves; absent when they don't tell
+  words?: (TWordTime | null)[];
 };
 
 type FullTranslationItemDefinition = {
@@ -80,7 +82,28 @@ export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chat
 
 export type TTtsService = "google" | "youdao" | "wiktionary" | "chatgpt" | "browser";
 
-export type Captions = subTitleType[];
+// A word and when it's said, in ms. In Captions the times are relative to the cue's start, so whatever moves a cue
+// (the delay buttons, auto-sync, Netflix's ad breaks) moves its words too; everywhere else they're in video time.
+export type TTimedWord = { text: string; start: number; end: number };
+
+export type Captions = (subTitleType & { words?: TTimedWord[] })[];
+
+// When a word of a cue is said, in video ms: TSub.items[i] has times[i], null where a source can't tell
+export type TWordTime = { start: number; end: number };
+
+// Where word times come from, see src/models/spokenWord:
+// file — the subtitles themselves (YouTube's auto-generated captions, WebVTT word timestamps)
+// captions — the auto-generated captions of the video in the same language, matched to the cues by their words
+// yandex — Yandex's speech recognition of the video, matched the same way
+// whisper — Whisper's recognition of the audio in the browser, matched the same way
+// aligned — the cue's text aligned to its audio by wav2vec2 in the browser (English)
+// speech — the estimate fitted into the speech heard in the audio
+// estimate — the cue's text spread over its time
+export type TWordTimingSource = "file" | "captions" | "yandex" | "whisper" | "aligned" | "speech" | "estimate";
+export type TSpokenWordSource = "auto" | TWordTimingSource;
+// Where the audio comes from: the <video> element while it plays, or also what the player has buffered ahead
+export type TSpokenWordAudio = "off" | "element" | "ahead";
+export type TSpeechDetector = "energy" | "silero";
 
 // A subtitle track a service can load besides the one its player shows, see Service.getSubsTracks()
 export type TSubsTrackKind = "subtitles" | "cc" | "forced" | "machine";

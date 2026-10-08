@@ -120,9 +120,100 @@
     &-highlighted {
       color: var(--es-hl);
     }
+
+    // The word being said (src/models/spokenWord): lit at once, fading back as the next word starts
+    &-spoken {
+      color: var(--es-spoken);
+      transition: none;
+    }
   }
   .es-sub-item-space {
     display: inline;
+  }
+
+  // Every source's word times for the cue on screen, to compare them (Experiments → Compare sources)
+  .es-spoken-compare {
+    --es-compare-name: 92px;
+    --es-compare-error: 46px;
+    position: relative;
+    display: grid;
+    gap: 3px;
+    margin-top: 8px;
+    padding: 8px;
+    border: 0.5px solid var(--es-hud-border);
+    border-radius: 10px;
+    background: var(--es-hud-strong);
+    font: 11px/16px var(--es-font);
+    color: var(--es-primary);
+    text-shadow: none;
+    text-align: left;
+    cursor: default;
+
+    &__lane {
+      display: grid;
+      grid-template-columns: var(--es-compare-name) minmax(0, 1fr) var(--es-compare-error);
+      gap: 6px;
+      align-items: center;
+    }
+    &__name {
+      color: var(--es-secondary);
+      white-space: nowrap;
+    }
+    &__track {
+      position: relative;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--es-fill);
+    }
+    &__word {
+      position: absolute;
+      top: 1px;
+      bottom: 1px;
+      overflow: hidden;
+      padding: 0 2px;
+      border-radius: 3px;
+      background: rgba(100, 210, 255, 0.28);
+      white-space: nowrap;
+      font-size: 10px;
+      line-height: 16px;
+
+      &--on {
+        background: var(--es-spoken);
+        color: #1c1c1e;
+      }
+    }
+    &__status {
+      padding: 0 6px;
+      color: var(--es-tertiary);
+    }
+    &__error {
+      color: var(--es-secondary);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    &__overlay {
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: calc(8px + var(--es-compare-name) + 6px);
+      right: calc(8px + var(--es-compare-error) + 6px);
+      pointer-events: none;
+    }
+    &__cue {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-left: 1px dashed var(--es-tertiary);
+      border-right: 1px dashed var(--es-tertiary);
+    }
+    &__playhead {
+      position: absolute;
+      top: -3px;
+      bottom: -3px;
+      width: 2px;
+      margin-left: -1px;
+      background: var(--es-spoken);
+    }
   }
 }
 

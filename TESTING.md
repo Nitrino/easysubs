@@ -114,6 +114,17 @@ The mock background answers the sources from `playground/src/mockSubtitles.ts`: 
 its English and Spanish files found as a Netflix release, an Addic7ed one 2.4 s late, a BluRay one timed for 25 fps and
 a machine translation.
 
+**Spoken word (experiment)**
+
+- Unit: syllables and word weights, the speaking rate and the estimate (squeezing, pauses, two speakers, lines read off
+  the page), YouTube's auto-generated words and line ends, WebVTT timestamps, times moving with a delayed line, matching
+  another source's words to cues, fitting words into detected speech, the word at a time, Yandex's video addresses, the
+  model: auto-generated captions loaded for the line's language, the source order, Yandex's answer and waiting; audio:
+  16 kHz PCM, the timeline, speech by probabilities and loudness, MP4 and WebM segment times, CTC alignment, the job
+  queue
+- E2E: the estimated word lit while playing, WebVTT word timestamps, the comparison lanes with their errors, a picked
+  source without times
+
 **Navigation**
 
 - Unit: next/previous/current cue, 5 s seeks when cues are far, Alt to force the jump, short YouTube cues, the
