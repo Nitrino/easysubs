@@ -16,6 +16,7 @@ import {
 } from "@src/models/settings";
 import { $currentSecondarySubs } from "@src/models/secondarySubs";
 import { $currentExpression, wordHovered, wordLeft } from "@src/models/expressions";
+import { $spokenWord } from "@src/models/spokenWord";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
 import { ExpressionTranslation } from "./ExpressionTranslation";
@@ -23,6 +24,7 @@ import { SubFullTranslation } from "./SubFullTranslation";
 import { SecondaryLine, SecondaryNotice, SecondarySubsTop } from "./SecondarySubs";
 import { useHoverPause } from "./useHoverPause";
 import { NextEpisodePrompt } from "../FoundSubs/NextEpisodePrompt";
+import { SpokenWordCompare } from "./SpokenWordCompare";
 
 // The subtitles over the player; the second line goes under or above each cue, or into its own block in
 // `topContainer` at the top of the player
@@ -65,6 +67,7 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
               {secondaryPosition === "below" && <SecondaryLine line={secondarySubs[index]} />}
             </Fragment>
           ))}
+          <SpokenWordCompare />
         </div>
       </Draggable>
       {secondaryPosition === "top" &&
@@ -76,7 +79,12 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
 
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
-  const [subsBackground, subsBackgroundOpacity] = useUnit([$subsBackground, $subsBackgroundOpacity]);
+  const [subsBackground, subsBackgroundOpacity, spokenWord] = useUnit([
+    $subsBackground,
+    $subsBackgroundOpacity,
+    $spokenWord,
+  ]);
+  const spokenIndex = spokenWord?.cueId === sub.id ? spokenWord.index : -1;
 
   const handleOnClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -93,7 +101,7 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
       }}
     >
       {sub.items.map((item, index) => (
-        <SubItem key={index} sub={sub} subItem={item} index={index} />
+        <SubItem key={index} sub={sub} subItem={item} index={index} spoken={index === spokenIndex} />
       ))}
       {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
     </div>
@@ -104,9 +112,11 @@ type TSubItemProps = {
   sub: TSub;
   subItem: TSubItem;
   index: number;
+  // The word being said, see src/models/spokenWord
+  spoken: boolean;
 };
 
-const SubItem: FC<TSubItemProps> = ({ sub, subItem, index }) => {
+const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
   const [currentExpression, handleWordHovered, handleWordLeft, subsLanguage, translateLanguage] = useUnit([
     $currentExpression,
     wordHovered,
@@ -141,7 +151,7 @@ const SubItem: FC<TSubItemProps> = ({ sub, subItem, index }) => {
       <pre
         onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}
-        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""}`}
+        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""} ${spoken ? "es-sub-item-spoken" : ""}`}
         onClick={handleClick}
       >
         {subItem.text}

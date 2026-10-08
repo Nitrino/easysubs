@@ -218,6 +218,9 @@ function handle(message: Message): unknown {
       return opensubtitlesLogin(message);
     case "opensubtitlesLogout":
       return opensubtitlesLogout();
+    // Yandex knows nothing of the playground's videos; tests answer with words of their own
+    case "yandexWordTimes":
+      return { words: [] };
     default:
       return { error: `Mock background: unsupported message type "${message.type}"` };
   }

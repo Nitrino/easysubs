@@ -6,6 +6,7 @@ import type { IncomingMessage } from "http";
 import type { Browser } from "@playwright/test";
 import addHmr from "../utils/plugins/add-hmr.ts";
 import manifest from "../manifest.js";
+import { ONNX_RUNTIME_FILES, onnxRuntimeDir } from "../utils/plugins/copy-onnx-runtime.ts";
 
 const rootDir = resolve(import.meta.dirname, "..");
 const srcDir = resolve(rootDir, "src");
@@ -29,6 +30,8 @@ export default defineConfig({
       "@pages": resolve(srcDir, "pages"),
       // Registers content scripts for user-granted hosts; there is no extension runtime in the playground
       "webext-dynamic-content-scripts": resolve(import.meta.dirname, "src/noop.ts"),
+      // vot.js imports it outside a window (src/utils/yandexWordTimes.ts)
+      "node:crypto": resolve(srcDir, "utils/webCrypto.ts"),
     },
   },
   css: {
@@ -133,6 +136,18 @@ function extensionFiles(): Plugin {
           res.statusCode = 404;
           res.end();
         }
+      });
+      // ONNX Runtime for the speech models the playground runs in the page (playground/src/audioWorker.ts), from
+      // where the extension has them in assets/ort
+      server.middlewares.use("/ort", async (req, res) => {
+        const name = (req.url ?? "").replace(/^\//, "").split("?")[0];
+        if (!ONNX_RUNTIME_FILES.includes(name)) {
+          res.statusCode = 404;
+          res.end();
+          return;
+        }
+        res.setHeader("content-type", name.endsWith(".wasm") ? "application/wasm" : "text/javascript");
+        res.end(await readFile(resolve(onnxRuntimeDir(), name)));
       });
     },
   };

@@ -6,6 +6,7 @@ import customDynamicImport from "./utils/plugins/custom-dynamic-import.ts";
 import addHmr from "./utils/plugins/add-hmr.ts";
 import watchRebuild from "./utils/plugins/watch-rebuild.ts";
 import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script.ts";
+import copyOnnxRuntime from "./utils/plugins/copy-onnx-runtime.ts";
 
 const rootDir = resolve(import.meta.dirname);
 const srcDir = resolve(rootDir, "src");
@@ -28,6 +29,8 @@ export default defineConfig({
       "@src": srcDir,
       "@assets": assetsDir,
       "@pages": pagesDir,
+      // vot.js imports it outside a window (src/utils/yandexWordTimes.ts)
+      "node:crypto": resolve(srcDir, "utils", "webCrypto.ts"),
     },
   },
   plugins: [
@@ -39,6 +42,7 @@ export default defineConfig({
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
     inlineVitePreloadScript(),
+    copyOnnxRuntime(outDir),
   ],
   publicDir,
   build: {
@@ -55,9 +59,12 @@ export default defineConfig({
         background: resolve(pagesDir, "background", "index.ts"),
         contentStyle: resolve(pagesDir, "content", "style.scss"),
         popup: resolve(pagesDir, "popup", "index.html"),
+        offscreen: resolve(pagesDir, "offscreen", "index.html"),
       },
       output: {
-        minify: isProduction ? { compress: { dropConsole: true, dropDebugger: true }, mangle: true, codegen: true } : false,
+        minify: isProduction
+          ? { compress: { dropConsole: true, dropDebugger: true }, mangle: true, codegen: true }
+          : false,
         entryFileNames: "src/pages/[name]/index.js",
         chunkFileNames: isDev ? "assets/js/[name].js" : "assets/js/[name].[hash].js",
         assetFileNames: (assetInfo) => {

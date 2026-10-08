@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 async function getTab() {
   const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   return tabs[0];
@@ -34,6 +36,25 @@ const Popup = () => {
     }
   };
 
+  // The spoken-word experiment hears the tab, DRM-protected video included: chrome.tabCapture works only from a click
+  // on the extension, like this one (src/pages/background/audio.ts)
+  const [listening, setListening] = useState(false);
+  const [listenStatus, setListenStatus] = useState<string | null>(null);
+  const handleListen = async () => {
+    const tab = await getTab();
+    if (listening) {
+      await chrome.runtime.sendMessage({ type: "stopTabCapture", tabId: tab.id });
+      setListening(false);
+      setListenStatus(null);
+      return;
+    }
+    const granted = await chrome.permissions.request({ permissions: ["tabCapture"] });
+    if (!granted) return;
+    const answer = await chrome.runtime.sendMessage({ type: "startTabCapture", tabId: tab.id });
+    setListening(!answer?.error);
+    setListenStatus(answer?.error ? `Can't listen: ${answer.error}` : "Listening to this tab");
+  };
+
   const handleFaqLinkClick = () => {
     const faqUrl = "https://easysubs.cc/en/faq/";
     chrome.tabs.create({ url: faqUrl });
@@ -51,6 +72,12 @@ const Popup = () => {
         <li onClick={handleRequestPermissions}>
           <a className="es-popup-kinopub">Enable on this site</a>
         </li>
+        {chrome.offscreen && (
+          <li onClick={handleListen}>
+            <a>{listening ? "Stop listening to this tab" : "Listen to this tab"}</a>
+          </li>
+        )}
+        {listenStatus && <li className="es-popup-status">{listenStatus}</li>}
         <li onClick={handleFaqLinkClick}>
           <a>FAQ</a>
         </li>

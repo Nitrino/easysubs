@@ -18,6 +18,8 @@ import {
 } from "@src/subsSources";
 import { createExpressionFinder } from "@src/utils/expressions/lookup";
 import { translateExpressionsWithChatGPT } from "@src/utils/chatGPTExpressions";
+import { yandexWordTimes } from "@src/utils/yandexWordTimes";
+import { openAudioWorker, startTabCapture, stopTabCapture } from "./audio";
 
 import "webext-dynamic-content-scripts";
 
@@ -180,6 +182,28 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   if (message.type === "translateExpressions") {
     translateExpressionsWithChatGPT(message)
       .then((translations) => sendResponse(translations))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // Yandex's recognition of the video with every word timed, for the spoken-word experiment
+  if (message.type === "yandexWordTimes") {
+    yandexWordTimes(message)
+      .then((answer) => sendResponse(answer))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // The speech models of the spoken-word experiment run in an offscreen document; the popup starts tab capture
+  if (message.type === "audioWorkerOpen") {
+    openAudioWorker()
+      .then(() => sendResponse({ open: true }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "startTabCapture") {
+    startTabCapture(message.tabId)
+      .then((answer) => sendResponse(answer))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "stopTabCapture") {
+    stopTabCapture(message.tabId)
+      .then((answer) => sendResponse(answer))
       .catch((error: Error) => sendResponse({ error: error.message }));
   }
   if (message.type === "pronounce") {
