@@ -1,36 +1,32 @@
-import ILearningService, { TAditionalData } from "./learningService";
+import ILearningService, { TAditionalData, TMediaFile, TWordContext } from "./learningService";
+import {
+  ANKI_CARD_TEMPLATE,
+  ANKI_MODEL,
+  ANKI_MODEL_BACK,
+  ANKI_MODEL_CSS,
+  ANKI_MODEL_FIELDS,
+  ANKI_MODEL_FRONT,
+  contextFields,
+  hasLine,
+  withNewLine,
+  type TNoteFields,
+  type TStoredContext,
+} from "./ankiNote";
 
 const ANKI_API_VERSION = 6;
 const ANKI_DESK = "Easysubs";
 const ANKI_URL = "http://localhost:8765";
 
-// Own note type, so cards don't depend on the user's note types or Anki UI language
-const ANKI_MODEL = "Easysubs";
-const ANKI_MODEL_FIELDS = ["Word", "Translation", "Part of Speech", "Context"];
-const ANKI_MODEL_CSS = `.card {
-  font-family: arial;
-  font-size: 20px;
-  line-height: 1.5;
-  text-align: center;
-}
+const ALREADY_EXISTS = "Word already exists in Anki";
 
-.word {
-  font-size: 28px;
-}
+type TAnkiAnswer<T = unknown> = { result?: T; error?: string | null };
+type TNoteInfo = { noteId: number; fields: Record<string, { value: string; order: number }> };
 
-.part-of-speech,
-.context {
-  font-size: 16px;
-  opacity: 0.6;
-}`;
-const ANKI_MODEL_FRONT = `<div class="word">{{Word}}</div>
-{{#Context}}<div class="context">{{Context}}</div>{{/Context}}`;
-const ANKI_MODEL_BACK = `{{FrontSide}}
+// Anki's search treats * and _ as wildcards
+const searchValue = (value: string) => value.replace(/[\\"*_]/g, "\\$&");
 
-<hr id=answer>
-
-<div class="translation">{{Translation}}</div>
-{{#Part of Speech}}<div class="part-of-speech">{{Part of Speech}}</div>{{/Part of Speech}}`;
+const mediaName = (extension: string) =>
+  `easysubs-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.${extension}`;
 
 export class Anki implements ILearningService {
   public async addWord(word: string, translation: string, aditionalData: TAditionalData): Promise<string> {
@@ -44,13 +40,27 @@ export class Anki implements ILearningService {
       return Promise.reject("Anki Error: " + createDeskResult.error);
     }
 
-    const createModelError = await this.createModelIfMissing();
+    const modelError = await this.prepareModel();
 
-    if (createModelError) {
-      return Promise.reject("Anki Error: " + createModelError);
+    if (modelError) {
+      return Promise.reject("Anki Error: " + modelError);
     }
 
-    const partOfSpeech = aditionalData.partOfSpeech === "unknown" ? "" : aditionalData.partOfSpeech;
+    const { context } = aditionalData;
+    try {
+      if (context) {
+        const note = await this.findNote(word);
+        if (note) return await this.addLine(note, context);
+      }
+
+      return await this.addNote(word, translation, aditionalData);
+    } catch (error) {
+      return Promise.reject("Anki Error: " + error);
+    }
+  }
+
+  private async addNote(word: string, translation: string, { partOfSpeech, context }: TAditionalData) {
+    const stored = context ? await this.storeMedia(context) : null;
     const addWordResult = await this.request("addNote", {
       note: {
         deckName: ANKI_DESK,
@@ -58,50 +68,117 @@ export class Anki implements ILearningService {
         fields: {
           Word: word,
           Translation: translation,
-          "Part of Speech": partOfSpeech ?? "",
-          Context: aditionalData.context ?? "",
+          "Part of Speech": partOfSpeech === "unknown" ? "" : (partOfSpeech ?? ""),
+          ...(stored ? contextFields(stored) : { Context: "" }),
         },
       },
     });
 
-    if (addWordResult.error) {
-      if (addWordResult.error === "cannot create note because it is a duplicate") {
-        return Promise.resolve("Word already exists in Anki");
-      }
-
-      return Promise.reject("Anki Error: " + addWordResult.error);
-    } else {
-      return Promise.resolve("Word added to Anki");
-    }
+    if (addWordResult.error === "cannot create note because it is a duplicate") return ALREADY_EXISTS;
+    if (addWordResult.error) throw addWordResult.error;
+    return "Word added to Anki";
   }
 
-  private async createModelIfMissing(): Promise<string | null> {
-    const modelNamesResult = await this.request("modelNames");
+  // The word is in Anki already: the new line goes on its card
+  private async addLine(note: { id: number; fields: TNoteFields }, context: TWordContext) {
+    if (hasLine(note.fields, context.sentence)) return ALREADY_EXISTS;
+
+    const stored = await this.storeMedia(context);
+    const result = await this.request("updateNoteFields", {
+      note: { id: note.id, fields: withNewLine(note.fields, stored) },
+    });
+    if (result.error) throw result.error;
+    return "Word already in Anki: added this line to it";
+  }
+
+  private async findNote(word: string): Promise<{ id: number; fields: TNoteFields } | null> {
+    const found = await this.request<number[]>("findNotes", {
+      query: `"note:${ANKI_MODEL}" "Word:${searchValue(word)}"`,
+    });
+    if (found.error) throw found.error;
+    if (!found.result?.length) return null;
+
+    const info = await this.request<TNoteInfo[]>("notesInfo", { notes: [found.result[0]] });
+    if (info.error) throw info.error;
+    const note = info.result?.[0];
+    if (!note?.fields) return null;
+    const fields = Object.fromEntries(Object.entries(note.fields).map(([name, field]) => [name, field.value]));
+    return { id: note.noteId, fields };
+  }
+
+  // The picture and the sound go into Anki's media folder, the note refers to them by name
+  private async storeMedia({ picture, audio, ...context }: TWordContext): Promise<TStoredContext> {
+    const store = async (file?: TMediaFile) => {
+      if (!file) return undefined;
+      const result = await this.request<string>("storeMediaFile", {
+        filename: mediaName(file.extension),
+        data: file.data,
+      });
+      if (result.error) throw result.error;
+      return result.result;
+    };
+    return { ...context, picture: await store(picture), audio: await store(audio) };
+  }
+
+  // Creates the note type, or adds the fields a note type of an earlier version doesn't have
+  private async prepareModel(): Promise<string | null> {
+    const modelNamesResult = await this.request<string[]>("modelNames");
 
     if (modelNamesResult.error) {
       return modelNamesResult.error;
     }
 
-    if (modelNamesResult.result.includes(ANKI_MODEL)) {
+    if (!modelNamesResult.result.includes(ANKI_MODEL)) {
+      const createModelResult = await this.request("createModel", {
+        modelName: ANKI_MODEL,
+        inOrderFields: ANKI_MODEL_FIELDS,
+        css: ANKI_MODEL_CSS,
+        cardTemplates: [{ Name: ANKI_CARD_TEMPLATE, Front: ANKI_MODEL_FRONT, Back: ANKI_MODEL_BACK }],
+      });
+
+      // Another addWord call may have created the model in the meantime
+      if (createModelResult.error && createModelResult.error !== "Model name already exists") {
+        return createModelResult.error;
+      }
+
       return null;
     }
 
-    const createModelResult = await this.request("createModel", {
-      modelName: ANKI_MODEL,
-      inOrderFields: ANKI_MODEL_FIELDS,
-      css: ANKI_MODEL_CSS,
-      cardTemplates: [{ Name: "Word", Front: ANKI_MODEL_FRONT, Back: ANKI_MODEL_BACK }],
-    });
-
-    // Another addWord call may have created the model in the meantime
-    if (createModelResult.error && createModelResult.error !== "Model name already exists") {
-      return createModelResult.error;
-    }
-
-    return null;
+    return this.upgradeModel();
   }
 
-  private request(action: string, params?: object) {
+  private async upgradeModel(): Promise<string | null> {
+    const fieldNamesResult = await this.request<string[]>("modelFieldNames", { modelName: ANKI_MODEL });
+    if (fieldNamesResult.error) return fieldNamesResult.error;
+
+    const fieldNames = fieldNamesResult.result ?? [];
+    const missing = ANKI_MODEL_FIELDS.filter((field) => !fieldNames.includes(field));
+    if (missing.length === 0) return null;
+
+    for (const [offset, fieldName] of missing.entries()) {
+      const result = await this.request("modelFieldAdd", {
+        modelName: ANKI_MODEL,
+        fieldName,
+        index: fieldNames.length + offset,
+      });
+      // Old versions of AnkiConnect can't add fields
+      if (result.error === "unsupported action") return "please update AnkiConnect to add the line to the cards";
+      if (result.error) return result.error;
+    }
+
+    // The templates and styling of the version that had the fields
+    const templates = await this.request("updateModelTemplates", {
+      model: {
+        name: ANKI_MODEL,
+        templates: { [ANKI_CARD_TEMPLATE]: { Front: ANKI_MODEL_FRONT, Back: ANKI_MODEL_BACK } },
+      },
+    });
+    if (templates.error) return templates.error;
+    const styling = await this.request("updateModelStyling", { model: { name: ANKI_MODEL, css: ANKI_MODEL_CSS } });
+    return styling.error || null;
+  }
+
+  private request<T = unknown>(action: string, params?: object): Promise<TAnkiAnswer<T>> {
     return chrome.runtime.sendMessage({
       type: "post",
       url: ANKI_URL,

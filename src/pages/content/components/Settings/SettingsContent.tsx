@@ -6,7 +6,7 @@ import { TranslationService } from "./TranslationService";
 import { TtsService } from "./TtsService";
 import { DeepLApiKeyModal } from "./DeepLApiKeyModal";
 import { ChatGPTApiKeyModal } from "./ChatGPTApiKeyModal";
-import { LearningService } from "./LearningService";
+import { AnkiContext, LearningService } from "./LearningService";
 import { SubsDelay } from "./SubsDelay";
 import { SubsFontSize } from "./SubsFontSize";
 import { SubsBackground } from "./SubsBackground";
@@ -152,6 +152,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                   <div className="es-settings-content__item">
                     <LearningService />
                   </div>
+                  <AnkiContext />
                 </>
               )}
               {activeSettingsTab === 1 && (

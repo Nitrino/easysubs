@@ -1,18 +1,22 @@
-import { readInit, segmentStart, type TInitInfo } from "./containers";
+import { readInit, segmentStart, SegmentSplitter, type TInitInfo } from "./containers";
 import { SAMPLE_RATE, toMono16k } from "./pcm";
 
 // The audio a player buffered ahead of the playhead, copied from its Media Source Extensions appends by
 // public/assets/js/mseTap.js and decoded here: the speech models get it before it plays, so their word times are ready
 // when the line is shown. DRM-protected segments don't decode; the element's audio is all there is then.
 
-type TTapMessage = {
+export type TTapMessage = {
   source: "es-mse";
   id: number;
   type: string;
   init: boolean;
   timestampOffset: number;
   data: ArrayBuffer;
+  // The consumer kept segments are replayed for; absent on segments as they come
+  to?: string;
 };
+
+const CONSUMER = "readAhead";
 
 // Segments that fail in a row before the tap gives up (encrypted audio)
 const MAX_FAILURES = 4;
@@ -31,42 +35,45 @@ export function tapBufferedAudio(
   onChunk: (start: number, samples: Float32Array) => void,
   onFailure: (reason: string) => void,
 ): () => void {
-  const inits = new Map<number, { bytes: Uint8Array; info: TInitInfo }>();
+  const inits = new Map<number, { bytes: Uint8Array; info: TInitInfo; splitter: SegmentSplitter }>();
   let failures = 0;
   let stopped = false;
   let queue = Promise.resolve();
 
   const listener = (event: MessageEvent<TTapMessage>) => {
     if (event.source !== window || event.data?.source !== "es-mse") return;
+    if (event.data.to && event.data.to !== CONSUMER) return;
     const { id, init, data, timestampOffset } = event.data;
     const bytes = new Uint8Array(data);
     if (init) {
       const info = readInit(bytes);
-      if (info) inits.set(id, { bytes, info });
+      if (info) inits.set(id, { bytes, info, splitter: new SegmentSplitter(info) });
       return;
     }
     const known = inits.get(id);
-    const start = known && segmentStart(bytes, known.info);
-    if (start === null || start === undefined) return;
+    for (const segment of known?.splitter.push(bytes) ?? []) {
+      const start = segmentStart(segment, known.info);
+      if (start === null) continue;
 
-    queue = queue.then(async () => {
-      if (stopped || failures >= MAX_FAILURES) return;
-      try {
-        const samples = await decode(known.bytes, bytes);
-        failures = 0;
-        onChunk(start + timestampOffset * 1000, samples);
-      } catch {
-        failures++;
-        if (failures === MAX_FAILURES) onFailure("The buffered audio doesn't decode (DRM?)");
-      }
-    });
+      queue = queue.then(async () => {
+        if (stopped || failures >= MAX_FAILURES) return;
+        try {
+          const samples = await decode(known.bytes, segment);
+          failures = 0;
+          onChunk(start + timestampOffset * 1000, samples);
+        } catch {
+          failures++;
+          if (failures === MAX_FAILURES) onFailure("The buffered audio doesn't decode (DRM?)");
+        }
+      });
+    }
   };
 
   window.addEventListener("message", listener);
-  window.postMessage({ source: "es-mse-control", enabled: true }, "*");
+  window.postMessage({ source: "es-mse-control", consumer: CONSUMER, enabled: true }, "*");
   return () => {
     stopped = true;
     window.removeEventListener("message", listener);
-    window.postMessage({ source: "es-mse-control", enabled: false }, "*");
+    window.postMessage({ source: "es-mse-control", consumer: CONSUMER, enabled: false }, "*");
   };
 }

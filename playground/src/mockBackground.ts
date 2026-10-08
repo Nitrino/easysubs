@@ -7,6 +7,7 @@
 
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
 import { createExpressionFinder } from "@src/utils/expressions/lookup";
+import { ANKI_MODEL_FIELDS } from "@src/learning-service/ankiNote";
 import type { TLexicon } from "@src/utils/expressions/lexicon";
 import type { TExpressionTranslation } from "@src/models/types";
 import { TRANSLATION_PAIRS, type TranslationFixture, type WordTranslation } from "./translationPairs";
@@ -147,10 +148,17 @@ function expressionTranslations(expressions: string[], target: string) {
   );
 }
 
-function ankiResponse(action: string) {
+// AnkiConnect with the Easysubs note type and no notes yet
+function ankiResponse(action: string, params: Record<string, unknown> = {}) {
   switch (action) {
     case "modelNames":
       return { result: ["Easysubs"], error: null };
+    case "modelFieldNames":
+      return { result: ANKI_MODEL_FIELDS, error: null };
+    case "findNotes":
+      return { result: [], error: null };
+    case "storeMediaFile":
+      return { result: params.filename, error: null };
     case "addNote":
       return { result: Date.now(), error: null };
     default:
@@ -199,8 +207,10 @@ function handle(message: Message): unknown {
       return findExpressionsInCues(language, (message.cues as string[][]) ?? []);
     case "translateExpressions":
       return expressionTranslations((message.expressions as string[]) ?? [], language);
-    case "post":
-      return ankiResponse(String((message.data as { action?: string })?.action));
+    case "post": {
+      const { action, params } = (message.data ?? {}) as { action?: string; params?: Record<string, unknown> };
+      return ankiResponse(String(action), params);
+    }
     case "addWordToLingualeo":
       return { lingualeoResponse: { status: "ok", data: [{ word: { wordValue: message.word } }] } };
     case "addWordToPuzzleEnglish":

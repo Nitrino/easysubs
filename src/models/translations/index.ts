@@ -20,7 +20,7 @@ export const SubTranslationGate = createGate<string>("SubTranslationGate");
 export const requestSubTranslation = createEvent<string>();
 export const cleanSubTranslation = createEvent();
 
-type TSubTranslationParams = {
+export type TSubTranslationParams = {
   source: string;
   language: string;
   // The subtitles' language, for Chrome's translator, which can't detect it
@@ -66,18 +66,23 @@ async function translateWithBackground({
     .join(" ");
 }
 
+// A subtitle line by the translation service from the settings
+export async function translateLine(params: TSubTranslationParams): Promise<string> {
+  if (params.translationService === "chrome") {
+    try {
+      return await chromeTranslate(params.source, params.sourceLanguage, params.language);
+    } catch (error) {
+      // Google where Chrome can't translate: another browser, a pair it has no model for
+      console.warn("Chrome's translator failed, using Google:", error);
+      return await translateWithBackground({ ...params, translationService: "google" });
+    }
+  }
+  return await translateWithBackground(params);
+}
+
 export const fetchSubTranslationFx = createEffect<TSubTranslationParams, string>(async (params) => {
   try {
-    if (params.translationService === "chrome") {
-      try {
-        return await chromeTranslate(params.source, params.sourceLanguage, params.language);
-      } catch (error) {
-        // Google where Chrome can't translate: another browser, a pair it has no model for
-        console.warn("Chrome's translator failed, using Google:", error);
-        return await translateWithBackground({ ...params, translationService: "google" });
-      }
-    }
-    return await translateWithBackground(params);
+    return await translateLine(params);
   } catch (error) {
     console.error(error);
     throw error;

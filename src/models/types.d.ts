@@ -77,6 +77,8 @@ export type TWordTranslation = {
 export type TGoogleTranslation = unknown;
 
 export type TLearningService = "anki" | "lingualeo" | "puzzle-english" | "disabled";
+// What Anki cards get from the subtitle line a word was added from
+export type TAnkiContext = { sentence: boolean; translation: boolean; picture: boolean; audio: boolean };
 
 export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt" | "chrome";
 

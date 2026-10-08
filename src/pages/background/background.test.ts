@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import "./index";
 import { Anki } from "@src/learning-service/anki";
+import { ANKI_MODEL_FIELDS } from "@src/learning-service/ankiNote";
 import { LinguaLeo } from "@src/learning-service/linguaLeo";
 import { chromeMock, dispatchInstalled, sendToBackground } from "@root/test/chrome";
 import { audio, json, stubFetch } from "@root/test/fetch";
@@ -482,7 +483,9 @@ describe("learning services through the background", () => {
     stubFetch({
       "http://localhost:8765": (_, init) => {
         const { action } = JSON.parse(String(init.body));
-        return json(action === "modelNames" ? { result: ["Easysubs"], error: null } : { result: 1, error: null });
+        if (action === "modelNames") return json({ result: ["Easysubs"], error: null });
+        if (action === "modelFieldNames") return json({ result: ANKI_MODEL_FIELDS, error: null });
+        return json({ result: 1, error: null });
       },
     });
 
