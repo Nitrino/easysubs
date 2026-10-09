@@ -1,5 +1,6 @@
 import type { TExpressionTranslation } from "@src/models/types";
 import { languageName } from "./languages";
+import { ollamaJson, type TOllamaSettings } from "./ollama";
 
 export type TTranslateExpressionsRequest = {
   // The subtitle line the expressions are in
@@ -59,8 +60,27 @@ export async function translateExpressionsWithChatGPT({
   } catch {
     throw new Error("ChatGPT didn't answer with the translations");
   }
+  return expressionTranslations(answer, expressions);
+}
 
-  // Matched back to the expressions asked for, whatever case ChatGPT wrote them in
+// The same from the user's Ollama (src/utils/ollama.ts)
+export async function translateExpressionsWithOllama({
+  text,
+  expressions,
+  language,
+  ...settings
+}: TTranslateExpressionsRequest & TOllamaSettings): Promise<Record<string, TExpressionTranslation>> {
+  if (expressions.length === 0) return {};
+  const answer = await ollamaJson<TAnswer>(
+    INSTRUCTIONS,
+    { line: text, expressions, language: languageName(language) },
+    settings,
+  );
+  return expressionTranslations(answer, expressions);
+}
+
+// The answer matched back to the expressions asked for, whatever case the model wrote them in
+function expressionTranslations(answer: TAnswer, expressions: string[]): Record<string, TExpressionTranslation> {
   const byName = new Map(expressions.map((expression) => [expression.toLowerCase(), expression]));
   const translations: Record<string, TExpressionTranslation> = {};
   for (const item of answer.expressions ?? []) {
