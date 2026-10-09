@@ -7,6 +7,7 @@ import type { Browser } from "@playwright/test";
 import addHmr from "../utils/plugins/add-hmr.ts";
 import manifest from "../manifest.js";
 import { ONNX_RUNTIME_FILES, onnxRuntimeDir } from "../utils/plugins/copy-onnx-runtime.ts";
+import { BERGAMOT_FILES, bergamotDir } from "../utils/plugins/copy-bergamot.ts";
 
 const rootDir = resolve(import.meta.dirname, "..");
 const srcDir = resolve(rootDir, "src");
@@ -115,7 +116,9 @@ function extensionHostsProxy(): Plugin {
 
 /**
  * The extension's own files the live background fetches with chrome.runtime.getURL(): the expression lists in
- * public/expressions. The playground's public dir is its own.
+ * public/expressions and Bergamot's engine in assets/bergamot. The playground's public dir is its own. Also what the
+ * extension downloads from GitHub releases: the Wiktionary dictionaries `pnpm dictionaries` built into dictionaries/
+ * and the models `pnpm bergamot-models` mirrored into bergamot-models/.
  */
 function extensionFiles(): Plugin {
   const expressionsDir = resolve(rootDir, "public/expressions");
@@ -135,6 +138,50 @@ function extensionFiles(): Plugin {
         } catch {
           res.statusCode = 404;
           res.end();
+        }
+      });
+      server.middlewares.use("/assets/bergamot", async (req, res) => {
+        const name = (req.url ?? "").replace(/^\//, "").split("?")[0];
+        if (!BERGAMOT_FILES.includes(name)) {
+          res.statusCode = 404;
+          res.end();
+          return;
+        }
+        res.setHeader("content-type", name.endsWith(".wasm") ? "application/wasm" : "text/javascript");
+        res.end(await readFile(resolve(bergamotDir(), name)));
+      });
+      server.middlewares.use("/dictionaries", async (req, res) => {
+        const name = (req.url ?? "").replace(/^\//, "").split("?")[0];
+        if (!/^[a-z]{2}-[a-z]{2}\.json\.gz$/.test(name)) {
+          res.statusCode = 404;
+          res.end();
+          return;
+        }
+        try {
+          const data = await readFile(resolve(rootDir, "dictionaries", name));
+          res.setHeader("content-type", "application/gzip");
+          res.setHeader("content-length", data.length);
+          res.end(data);
+        } catch {
+          res.statusCode = 404;
+          res.end(`No ${name}: build it with pnpm dictionaries`);
+        }
+      });
+      server.middlewares.use("/bergamot-models", async (req, res) => {
+        const name = (req.url ?? "").replace(/^\//, "").split("?")[0];
+        if (!/^[\w.-]+$/.test(name)) {
+          res.statusCode = 404;
+          res.end();
+          return;
+        }
+        try {
+          const data = await readFile(resolve(rootDir, "bergamot-models", name));
+          res.setHeader("content-type", name.endsWith(".json") ? "application/json" : "application/octet-stream");
+          res.setHeader("content-length", data.length);
+          res.end(data);
+        } catch {
+          res.statusCode = 404;
+          res.end(`No ${name}: mirror the models with pnpm bergamot-models`);
         }
       });
       // ONNX Runtime for the speech models the playground runs in the page (playground/src/audioWorker.ts), from

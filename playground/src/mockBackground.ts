@@ -133,6 +133,54 @@ const findExpressionsInCues = createExpressionFinder(async (language) => {
   return load();
 });
 
+// The Wiktionary dictionary's answer, from the words of the fixtures: a meaning per part of speech
+function dictionaryAnswer(text: string, target: string) {
+  const found = findWord(text.toLowerCase(), target);
+  if (!found) return null;
+  return {
+    word: text,
+    transcription: "",
+    entries: partsOfSpeech(found.translation).map(([partOfSpeech, variants]) => [
+      DICTIONARY_POS[partOfSpeech] ?? partOfSpeech,
+      [[variants]],
+    ]),
+  };
+}
+// The fixtures name parts of speech like the popover, the dictionary like Wiktionary
+const DICTIONARY_POS: Record<string, string> = {
+  adjective: "adj",
+  adverb: "adv",
+  pronoun: "pron",
+  preposition: "prep",
+  conjunction: "conj",
+  interjection: "intj",
+  numeral: "num",
+};
+
+// Bergamot's translations of lines, like Google's. In HTML mode the marked words of a line come back marked, as their
+// translation from the words of the fixtures with a "↳" to tell it from the word's own, so the popover gets the word's
+// translation "in its line".
+function bergamotAnswer(request: { type: string; texts?: string[]; to?: string; html?: boolean }) {
+  const target = request.to ?? "";
+  if (request.type === "translate" && request.html) {
+    return {
+      result: (request.texts ?? []).map((line) => {
+        // A word alone comes back as its translation
+        if (!line.includes("<b>"))
+          return findWord(line.toLowerCase(), target)?.translation.main ?? mockTranslate(line, target);
+        const marked = Array.from(line.matchAll(/<b>(.*?)<\/b>/g), (match) => match[1]).join(" ");
+        const found = findWord(marked.toLowerCase(), target);
+        return `<b>${found ? `↳${found.translation.main}` : mockTranslate(marked, target)}</b>`;
+      }),
+    };
+  }
+  if (request.type === "translate") {
+    return { result: (request.texts ?? []).map((line) => findLine(line, target) ?? mockTranslate(line, target)) };
+  }
+  if (request.type === "status") return { result: { state: "ready" } };
+  return { result: null };
+}
+
 // ChatGPT's translations of a line's expressions, from the words of the fixtures (they have "pick up" and others)
 function expressionTranslations(expressions: string[], target: string) {
   return Object.fromEntries(
@@ -192,7 +240,11 @@ function handle(message: Message): unknown {
     case "translateWordFull":
       return wordFullTranslation(text, language);
     case "translateFullText": {
-      const translation = findLine(text, language) ?? mockTranslate(text, language);
+      // A word or expression translated as text gets its main translation from the words of the fixtures
+      const translation =
+        findLine(text, language) ??
+        findWord(text.toLowerCase(), language)?.translation.main ??
+        mockTranslate(text, language);
       const service = message.translationService ?? "google";
       return service === "google" ? JSON.stringify({ sentences: [{ trans: translation }] }) : translation;
     }
@@ -207,6 +259,32 @@ function handle(message: Message): unknown {
       return findExpressionsInCues(language, (message.cues as string[][]) ?? []);
     case "translateExpressions":
       return expressionTranslations((message.expressions as string[]) ?? [], language);
+    case "dictionaryLookup":
+      return { answer: dictionaryAnswer(text, String(message.to ?? "")) };
+    case "dictionaryStatus":
+      return { state: "ready" };
+    case "bergamot":
+      return bergamotAnswer(message.request as { type: string });
+    case "ollamaModels":
+      return { models: ["translategemma:4b", "gemma3:4b"] };
+    // ChatGPT and Ollama look a word up like a dictionary
+    case "chatGPTWord":
+    case "ollamaWord": {
+      const target = String(message.to ?? "");
+      const found = findWord(text.toLowerCase(), target);
+      const main = found?.translation.main ?? mockTranslate(text, target);
+      return {
+        translation: {
+          source: text.toLowerCase(),
+          mainTranslation: main,
+          targetLanguage: target,
+          translations: [{ word: main, partOfSpeech: "unknown", synonyms: [], popularity: 0 }],
+          transcription: "",
+          // Given the line, also the word as it's used there
+          ...(message.line ? { inLine: `↳${main}` } : {}),
+        },
+      };
+    }
     case "post": {
       const { action, params } = (message.data ?? {}) as { action?: string; params?: Record<string, unknown> };
       return ankiResponse(String(action), params);

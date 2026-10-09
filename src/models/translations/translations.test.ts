@@ -13,11 +13,19 @@ import {
   requestSubTranslation,
   requestWordTranslation,
 } from ".";
-import { $deeplApiKey, $translateLanguage, $translationService, translateLanguageChanged } from "../settings";
-import { $subsLanguage } from "../subs";
+import {
+  $chatGPTApiKey,
+  $deeplApiKey,
+  $dictionaryService,
+  $ollamaModel,
+  $translateLanguage,
+  $translationService,
+  translateLanguageChanged,
+} from "../settings";
+import { $subs, $subsLanguage, rawSubsAdded } from "../subs";
 import type { TTranslationService } from "../types";
-import { chromeMock, sentMessages } from "@root/test/chrome";
-import { offlineTranslations } from "@root/test/fixtures";
+import { answerNextMessage, chromeMock, sentMessages } from "@root/test/chrome";
+import { captions, offlineTranslations } from "@root/test/fixtures";
 import { stubChromeTranslator } from "@root/test/chromeTranslator";
 
 const enRu = offlineTranslations("en-ru");
@@ -163,6 +171,246 @@ describe("word translation", () => {
     await allSettled(translateLanguageChanged, { scope, params: "de" });
 
     expect(console.error).not.toHaveBeenCalled();
+  });
+});
+
+// Two lines with "pick"
+const PICK_LINES = captions([1000, 2000, "Almost. I just need to pick up my keys."], [3000, 4000, "Pick it up."]);
+
+describe("word lookup in another dictionary", () => {
+  const settings = (dictionary: string, service = "google") =>
+    fork({
+      values: [
+        [$translateLanguage, "ru"],
+        [$subsLanguage, "en"],
+        [$dictionaryService, dictionary],
+        [$translationService, service],
+        [$ollamaModel, "translategemma:4b"],
+      ],
+    });
+
+  it("looks a word up in the Wiktionary dictionary of the subtitles' language", async () => {
+    const scope = settings("wiktionary");
+
+    await allSettled(requestWordTranslation, { scope, params: "Keys" });
+
+    expect(sentMessages()).toEqual([{ type: "dictionaryLookup", from: "en", to: "ru", text: "keys" }]);
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      source: "keys",
+      mainTranslation: enRu.words.keys.main,
+      translations: [{ word: enRu.words.keys.main, partOfSpeech: "noun" }],
+    });
+  });
+
+  it("shows which meaning a dictionary row is, and the dictionary form of an inflected word", async () => {
+    const scope = settings("wiktionary");
+    answerNextMessage("dictionaryLookup", {
+      answer: {
+        word: "went",
+        transcription: "ɡəʊ",
+        lemma: "go",
+        entries: [["verb", [[["идти", "ходить"], "To move."], [["ехать"]]]]],
+      },
+    });
+
+    await allSettled(requestWordTranslation, { scope, params: "went" });
+
+    expect(scope.getState($currentWordTranslation)).toEqual({
+      source: "went",
+      mainTranslation: "идти",
+      targetLanguage: "ru",
+      transcription: "ɡəʊ",
+      lemma: "go",
+      translations: [
+        { word: "идти", partOfSpeech: "verb", synonyms: ["ходить"], popularity: 0, note: "To move." },
+        { word: "ехать", partOfSpeech: "verb", synonyms: [], popularity: 1 },
+      ],
+    });
+  });
+
+  it("asks Google's dictionary for a word the dictionary lacks when Google is the translation service", async () => {
+    const scope = settings("wiktionary");
+    answerNextMessage("dictionaryLookup", { answer: null });
+
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+
+    expect(sentMessages().map((message) => message.type)).toEqual(["dictionaryLookup", "translateWordFull"]);
+    expect(scope.getState($currentWordTranslation).mainTranslation).toBe(enRu.words.keys.main);
+  });
+
+  it("translates a word the dictionary lacks with an on-device translation service", async () => {
+    const scope = settings("wiktionary", "bergamot");
+    answerNextMessage("dictionaryLookup", { answer: null });
+
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+
+    expect(sentMessages("bergamot")).toEqual([
+      { type: "bergamot", request: { type: "translate", texts: ["keys"], from: "en", to: "ru", html: true } },
+    ]);
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      mainTranslation: enRu.words.keys.main,
+      translations: [],
+    });
+  });
+
+  it("leaves out the word's translation in its line when it only repeats the first meaning", async () => {
+    const scope = settings("wiktionary", "bergamot");
+    await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
+    const [first] = scope.getState($subs);
+    answerNextMessage("bergamot", { result: ["Почти. Мне просто нужно взять <b>ключи</b>."] });
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "keys", cueId: first.id, index: 8 } });
+
+    expect(scope.getState($currentWordTranslation)).not.toHaveProperty("inLine");
+    expect(scope.getState($currentWordTranslation).mainTranslation).toBe(enRu.words.keys.main);
+  });
+
+  it("gives ChatGPT the line, and keeps its translation there for that line", async () => {
+    const scope = settings("chatgpt");
+    await allSettled($chatGPTApiKey, { scope, params: "sk-test" });
+    await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
+    const [first] = scope.getState($subs);
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "keys", cueId: first.id, index: 8 } });
+
+    expect(sentMessages("chatGPTWord")).toEqual([
+      expect.objectContaining({ text: "keys", line: "Almost. I just need to pick up my keys." }),
+    ]);
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      inLine: `↳${enRu.words.keys.main}`,
+      context: `${first.id}:8`,
+    });
+  });
+
+  it("asks ChatGPT with the key from the settings", async () => {
+    const scope = settings("chatgpt");
+    await allSettled($chatGPTApiKey, { scope, params: "sk-test" });
+
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+
+    expect(sentMessages()).toEqual([
+      {
+        type: "chatGPTWord",
+        text: "keys",
+        from: "en",
+        to: "ru",
+        chatGPTApiKey: "sk-test",
+        chatGPTModel: "gpt-4o-mini",
+      },
+    ]);
+    expect(scope.getState($currentWordTranslation).mainTranslation).toBe(enRu.words.keys.main);
+  });
+
+  it("translates the word as text with a translator, whatever the translation service", async () => {
+    const scope = settings("deepl", "google");
+    await allSettled($deeplApiKey, { scope, params: "key:fx" });
+    answerNextMessage("translateFullText", "ключи");
+
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+
+    expect(sentMessages()).toEqual([
+      expect.objectContaining({
+        type: "translateFullText",
+        text: "keys",
+        translationService: "deepl",
+        deeplApiKey: "key:fx",
+      }),
+    ]);
+    expect(scope.getState($currentWordTranslation)).toMatchObject({ mainTranslation: "ключи", translations: [] });
+  });
+
+  it("shows one Bergamot translation when the word alone translates as in its line", async () => {
+    const scope = settings("bergamot");
+    await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
+    const [first] = scope.getState($subs);
+    answerNextMessage("bergamot", { result: ["Почти. Мне просто нужно взять <b>ключи</b>.", "ключ"] });
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "keys", cueId: first.id, index: 8 } });
+
+    expect(scope.getState($currentWordTranslation)).toEqual({
+      source: "keys",
+      mainTranslation: "ключ",
+      targetLanguage: "ru",
+      translations: [],
+      transcription: "",
+    });
+  });
+
+  it("translates the word in its line with Bergamot, apart from the same word in another line", async () => {
+    const scope = settings("bergamot");
+    await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
+    const [first, second] = scope.getState($subs);
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "pick", cueId: first.id, index: 5 } });
+
+    expect(sentMessages("bergamot")).toEqual([
+      {
+        type: "bergamot",
+        request: {
+          type: "translate",
+          texts: ["Almost. I just need to <b>pick</b> up my keys.", "pick"],
+          from: "en",
+          to: "ru",
+          html: true,
+        },
+      },
+    ]);
+    // Alone and in the line differ: both, the line's on top
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      source: "pick",
+      mainTranslation: enRu.words.pick.main,
+      inLine: `↳${enRu.words.pick.main}`,
+      translations: [{ word: enRu.words.pick.main }],
+      context: `${first.id}:5`,
+    });
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "Pick", cueId: second.id, index: 0 } });
+    expect(sentMessages("bergamot")).toHaveLength(2);
+  });
+
+  it("adds the word's translation in its line to Wiktionary's meanings with Bergamot as the translation service", async () => {
+    const scope = settings("wiktionary", "bergamot");
+    await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
+    const [first] = scope.getState($subs);
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "keys", cueId: first.id, index: 8 } });
+
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      mainTranslation: enRu.words.keys.main,
+      inLine: `↳${enRu.words.keys.main}`,
+      context: `${first.id}:8`,
+    });
+  });
+
+  it("asks Ollama, and shows its error without keeping it", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const scope = settings("ollama");
+
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+
+    expect(sentMessages()).toEqual([
+      {
+        type: "ollamaWord",
+        text: "keys",
+        from: "en",
+        to: "ru",
+        ollamaUrl: "http://localhost:11434",
+        ollamaModel: "translategemma:4b",
+      },
+    ]);
+    expect(scope.getState($currentWordTranslation).mainTranslation).toBe(enRu.words.keys.main);
+
+    answerNextMessage("ollamaWord", { error: "Can't reach Ollama at http://localhost:11434. Is it running?" });
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+    // The word was kept the first time; another word fails
+    answerNextMessage("ollamaWord", { error: "Can't reach Ollama at http://localhost:11434. Is it running?" });
+    await allSettled(requestWordTranslation, { scope, params: "pick" });
+
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      source: "pick",
+      error: "Can't reach Ollama at http://localhost:11434. Is it running?",
+    });
+    expect(scope.getState($wordTranslations).map((translation) => translation.source)).toEqual(["keys"]);
   });
 });
 

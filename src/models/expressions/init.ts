@@ -24,7 +24,17 @@ import {
   type TTranslateExpressionParams,
 } from ".";
 import { $subs, $subsLanguage } from "../subs";
-import { $chatGPTApiKey, $chatGPTModel, $translateLanguage, $translationService } from "../settings";
+import { markedLine } from "@src/utils/wordInLine";
+import {
+  $chatGPTApiKey,
+  $chatGPTModel,
+  $deeplApiKey,
+  $dictionaryService,
+  $ollamaModel,
+  $ollamaUrl,
+  $translateLanguage,
+  $translationService,
+} from "../settings";
 import { expressionLanguage } from "@src/utils/expressions/lookup";
 
 // ---- Finding -------------------------------------------------------------------------------------
@@ -112,7 +122,12 @@ sample({
   target: expressionTranslationRequested,
 });
 sample({
-  clock: [ExpressionTranslationGate.state.updates, $translateLanguage.updates, $translationService.updates],
+  clock: [
+    ExpressionTranslationGate.state.updates,
+    $translateLanguage.updates,
+    $translationService.updates,
+    $dictionaryService.updates,
+  ],
   source: { open: ExpressionTranslationGate.status, props: ExpressionTranslationGate.state },
   filter: ({ open, props }) => open && Boolean(props?.expression),
   fn: ({ props }) => props,
@@ -123,25 +138,30 @@ const translationPicked = sample({
   clock: expressionTranslationRequested,
   source: {
     expressions: $expressions,
+    current: $currentExpression,
+    subs: $subs,
     service: $translationService,
+    dictionary: $dictionaryService,
     sourceLanguage: $subsLanguage,
     language: $translateLanguage,
+    deeplApiKey: $deeplApiKey,
     chatGPTApiKey: $chatGPTApiKey,
     chatGPTModel: $chatGPTModel,
+    ollamaUrl: $ollamaUrl,
+    ollamaModel: $ollamaModel,
   },
-  fn: (
-    { expressions, service, sourceLanguage, language, chatGPTApiKey, chatGPTModel },
-    { expression, cue },
-  ): TTranslateExpressionParams => ({
-    translator: expressionTranslator(service),
-    expression,
-    cue,
-    cueExpressions: [...new Set([expression, ...(expressions.cues[cue] ?? []).map((match) => match.expression)])],
-    sourceLanguage,
-    language,
-    chatGPTApiKey,
-    chatGPTModel,
-  }),
+  fn: ({ expressions, current, subs, dictionary, ...settings }, { expression, cue }): TTranslateExpressionParams => {
+    const sub =
+      current?.expression === expression && current.cue === cue ? subs.find(({ id }) => id === current.id) : null;
+    return {
+      ...settings,
+      translator: expressionTranslator(settings.service, dictionary),
+      expression,
+      cue,
+      cueExpressions: [...new Set([expression, ...(expressions.cues[cue] ?? []).map((match) => match.expression)])],
+      marked: sub ? markedLine(sub.items, current!.indexes) : null,
+    };
+  },
 });
 
 sample({

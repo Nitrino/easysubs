@@ -31,7 +31,14 @@ import {
 import { $subs, $subsLanguage, $subsTitle, fetchSubsFx, subsResyncFx, updateCustomSubsFx } from "../subs";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
-import { $chatGPTApiKey, $chatGPTModel, $deeplApiKey, $secondarySubsTranslator } from "../settings";
+import {
+  $chatGPTApiKey,
+  $chatGPTModel,
+  $deeplApiKey,
+  $ollamaModel,
+  $ollamaUrl,
+  $secondarySubsTranslator,
+} from "../settings";
 import { nextTranslationBatch } from "@src/utils/secondaryTranslationWindow";
 import { videoPageKey } from "@src/utils/translationCache";
 import { debug } from "patronum";
@@ -122,6 +129,8 @@ sample({
     deeplApiKey: $deeplApiKey,
     chatGPTApiKey: $chatGPTApiKey,
     chatGPTModel: $chatGPTModel,
+    ollamaUrl: $ollamaUrl,
+    ollamaModel: $ollamaModel,
   },
   filter: ({ source, video, hidden, inFlight, readingCache, retryAt, translator, sourceLanguage }) =>
     source.type === "translate" &&
@@ -130,8 +139,8 @@ sample({
     !inFlight &&
     !readingCache &&
     Date.now() >= retryAt &&
-    // Chrome's translator needs the subtitles' language, which is detected after they load
-    (translator !== "chrome" || sourceLanguage !== "auto"),
+    // Chrome's translator and Bergamot need the subtitles' language, which is detected after they load
+    ((translator !== "chrome" && translator !== "bergamot") || sourceLanguage !== "auto"),
   fn: ({
     source,
     subs,
@@ -143,6 +152,8 @@ sample({
     deeplApiKey,
     chatGPTApiKey,
     chatGPTModel,
+    ollamaUrl,
+    ollamaModel,
   }) => ({
     texts: nextTranslationBatch({ subs, time: video.currentTime * 1000, translations, pendings }),
     language: source.type === "translate" ? source.language : "",
@@ -151,6 +162,8 @@ sample({
     deeplApiKey,
     chatGPTApiKey,
     chatGPTModel,
+    ollamaUrl,
+    ollamaModel,
   }),
   target: secondaryBatchPicked,
 });

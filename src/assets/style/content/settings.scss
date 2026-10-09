@@ -367,6 +367,17 @@
     background: rgba(255, 159, 10, 0.16);
     color: #ff9f0a;
   }
+
+  // What a dictionary gives a hovered word: its meanings, or one translation
+  &--rich {
+    background: rgba(48, 209, 88, 0.16);
+    color: #30d158;
+  }
+
+  &--plain {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--es-secondary);
+  }
 }
 
 // An option of the second line's language menu: name, hint, tag on the right

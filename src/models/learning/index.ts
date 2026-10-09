@@ -9,6 +9,8 @@ import {
   $chatGPTModel,
   $deeplApiKey,
   $learningService,
+  $ollamaModel,
+  $ollamaUrl,
   $translateLanguage,
   $translationService,
 } from "../settings";
@@ -67,6 +69,8 @@ type TAddParams = TWordToAdd & {
   deeplApiKey: string;
   chatGPTApiKey: string;
   chatGPTModel: string;
+  ollamaUrl: string;
+  ollamaModel: string;
   secondary: {
     source: TSecondarySource;
     trackLines: Record<number, string>;
@@ -103,6 +107,8 @@ async function lineTranslation(params: TAddParams, sub: TSub): Promise<string | 
       deeplApiKey: params.deeplApiKey,
       chatGPTApiKey: params.chatGPTApiKey,
       chatGPTModel: params.chatGPTModel,
+      ollamaUrl: params.ollamaUrl,
+      ollamaModel: params.ollamaModel,
     });
     // Google's sentences come joined with a space after each
     return translation.trim() || undefined;
@@ -163,6 +169,8 @@ export const addWordFx = attach({
     deeplApiKey: $deeplApiKey,
     chatGPTApiKey: $chatGPTApiKey,
     chatGPTModel: $chatGPTModel,
+    ollamaUrl: $ollamaUrl,
+    ollamaModel: $ollamaModel,
     secondarySource: $secondarySource,
     trackLines: $secondaryTrackLines,
     foundLines: $foundSecondLines,

@@ -6,6 +6,8 @@ import { TranslationService } from "./TranslationService";
 import { TtsService } from "./TtsService";
 import { DeepLApiKeyModal } from "./DeepLApiKeyModal";
 import { ChatGPTApiKeyModal } from "./ChatGPTApiKeyModal";
+import { OllamaModal } from "./OllamaModal";
+import { DictionaryService } from "./DictionaryService";
 import { AnkiContext, LearningService } from "./LearningService";
 import { SubsDelay } from "./SubsDelay";
 import { SubsFontSize } from "./SubsFontSize";
@@ -147,6 +149,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                     <TranslationService />
                   </div>
                   <div className="es-settings-content__item">
+                    <DictionaryService />
+                  </div>
+                  <div className="es-settings-content__item">
                     <TtsService />
                   </div>
                   <div className="es-settings-content__item">
@@ -221,6 +226,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
       </div>
       {createPortal(<DeepLApiKeyModal />, document.querySelector("body"))}
       {createPortal(<ChatGPTApiKeyModal />, document.querySelector("body"))}
+      {createPortal(<OllamaModal />, document.querySelector("body"))}
     </>
   );
 };

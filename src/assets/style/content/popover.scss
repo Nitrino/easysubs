@@ -200,6 +200,44 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     color: var(--es-tertiary);
   }
 
+  .es-alt-back {
+    min-width: 0;
+  }
+
+  // Which meaning a dictionary row is, under its other words: one line, the rest on hover
+  .es-alt-note {
+    display: block;
+    overflow: hidden;
+    font-size: 0.9em;
+    font-style: italic;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  // A quiet marker next to a translation, not part of it: the translation is for the word in this line
+  .es-badge {
+    display: inline-block;
+    margin-inline-start: 0.5em;
+    padding: 0 0.55em;
+    border-radius: 999px;
+    background: var(--es-fill);
+    color: var(--es-secondary);
+    // The same size by the title and by the smaller labels
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 17px;
+    white-space: nowrap;
+    vertical-align: middle;
+    // An inline-block takes the text-indent of the "+" rows' hanging indent for its own line
+    text-indent: 0;
+  }
+
+  // The dictionary form of an inflected word: "went → go"
+  .es-lemma {
+    margin-left: 0.3em;
+    color: var(--es-secondary);
+  }
+
   // Words that go to the learning service on click: a quiet "+" badge that brightens like the speaker
   // while the row is pointed at, whatever the service. The badge is inline, so
   // `vertical-align: middle` centers it on the lowercase letters (baseline + half the x-height) rather

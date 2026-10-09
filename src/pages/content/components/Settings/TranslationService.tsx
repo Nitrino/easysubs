@@ -5,6 +5,7 @@ import { $translationService, translationServiceChanged } from "@src/models/sett
 import { TTranslationService } from "@src/models/types";
 import { isChromeTranslatorSupported } from "@src/utils/chromeTranslator";
 import { Select } from "../ui/Select";
+import { OllamaStatus, OnDeviceStatus } from "./OnDeviceStatus";
 
 const getServiceOption = (service: string) => {
   return services.find((option) => option.value === service);
@@ -21,16 +22,20 @@ export const TranslationService: FC<HTMLProps<HTMLSelectElement>> = () => {
   ]);
 
   return (
-    <div className="es-settings-content__element">
-      <div className="es-settings-content__element__left">Translation service</div>
-      <div className="es-settings-content__element__right">
-        <Select
-          value={getServiceOption(translationService)}
-          onChange={(option: { value: TTranslationService }) => handleTranslationServiceChanged(option.value)}
-          options={availableServices(translationService)}
-        />
+    <>
+      <div className="es-settings-content__element">
+        <div className="es-settings-content__element__left">Translation service</div>
+        <div className="es-settings-content__element__right">
+          <Select
+            value={getServiceOption(translationService)}
+            onChange={(option: { value: TTranslationService }) => handleTranslationServiceChanged(option.value)}
+            options={availableServices(translationService)}
+          />
+        </div>
       </div>
-    </div>
+      {translationService === "bergamot" && <OnDeviceStatus kind="bergamot" />}
+      {translationService === "ollama" && <OllamaStatus />}
+    </>
   );
 };
 
@@ -41,4 +46,6 @@ const services: { label: string; value: TTranslationService }[] = [
   { label: "Yandex Translate", value: "yandex" },
   { label: "ChatGPT", value: "chatgpt" },
   { label: "Chrome (on device)", value: "chrome" },
+  { label: "Bergamot (on device)", value: "bergamot" },
+  { label: "Ollama", value: "ollama" },
 ];

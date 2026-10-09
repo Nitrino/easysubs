@@ -41,6 +41,8 @@ export const TRANSLATOR_TITLES: Record<TSecondaryTranslator, string> = {
   deepl: "DeepL",
   chatgpt: "ChatGPT",
   chrome: "Chrome (on device)",
+  bergamot: "Bergamot (on device)",
+  ollama: "Ollama",
 };
 
 const TRANSLATOR_TAGS: Record<TSecondaryTranslator, string> = {
@@ -48,6 +50,8 @@ const TRANSLATOR_TAGS: Record<TSecondaryTranslator, string> = {
   deepl: "DeepL",
   chatgpt: "ChatGPT",
   chrome: "Chrome",
+  bergamot: "Bergamot",
+  ollama: "Ollama",
 };
 
 const trackLabel = (track: TSubsTrack) => `${languageName(track.language)}${track.kind === "cc" ? " (CC)" : ""}`;

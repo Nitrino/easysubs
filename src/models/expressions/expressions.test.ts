@@ -10,6 +10,7 @@ import {
   expressionTranslationRequested,
   wordHovered,
   wordLeft,
+  expressionTranslator,
 } from ".";
 import { $chatGPTApiKey, $translateLanguage, $translationService, translateLanguageChanged } from "../settings";
 import { $rawSubs, $subs, $subsLanguage, rawSubsAdded } from "../subs";
@@ -205,6 +206,7 @@ describe("translating an expression", () => {
     expect(sentMessages("translateExpressions")).toEqual([
       {
         type: "translateExpressions",
+        translator: "chatgpt",
         text: subStartingWith(scope, TWO_EXPRESSIONS).text,
         expressions: ["run out", "out of time"],
         language: "ru",
@@ -243,5 +245,17 @@ describe("translating an expression", () => {
     await allSettled(translateLanguageChanged, { scope, params: "de" });
 
     expect(sentMessages("translateWordFull").map((message) => message.language)).toEqual(["ru", "de"]);
+  });
+});
+
+describe("expressionTranslator", () => {
+  it("translates in the line with ChatGPT or Ollama as the translation service, else like single words", () => {
+    expect(expressionTranslator("chatgpt", "wiktionary")).toBe("chatgpt");
+    expect(expressionTranslator("ollama", "google")).toBe("ollama");
+    expect(expressionTranslator("google", "wiktionary")).toBe("wiktionary");
+    expect(expressionTranslator("google", "chatgpt")).toBe("chatgpt");
+    expect(expressionTranslator("google", "deepl")).toBe("deepl");
+    expect(expressionTranslator("chrome", "google")).toBe("chrome");
+    expect(expressionTranslator("deepl", "google")).toBe("google");
   });
 });

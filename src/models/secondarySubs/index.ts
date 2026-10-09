@@ -79,27 +79,43 @@ export const $secondaryRetryAt = createStore(0);
 export type TTranslateSecondaryParams = {
   texts: string[];
   language: string;
-  // The main subtitles' language, for Chrome's translator, which can't detect it
+  // The main subtitles' language, for Chrome's translator and Bergamot, which can't detect it
   sourceLanguage: string;
   translator: TSecondaryTranslator;
   deeplApiKey: string;
   chatGPTApiKey: string;
   chatGPTModel: string;
+  ollamaUrl: string;
+  ollamaModel: string;
 };
 export const secondaryBatchPicked = createEvent<TTranslateSecondaryParams>();
-async function translateWithBackground({ sourceLanguage: _, ...params }: TTranslateSecondaryParams) {
-  const response = await chrome.runtime.sendMessage({ type: "translateBatch", ...params });
+async function translateWithBackground({
+  sourceLanguage,
+  ollamaUrl,
+  ollamaModel,
+  ...params
+}: TTranslateSecondaryParams) {
+  const response = await chrome.runtime.sendMessage({
+    type: "translateBatch",
+    ...params,
+    // What only one translator needs goes to that one
+    ...(params.translator === "bergamot" && { sourceLanguage }),
+    ...(params.translator === "ollama" && { ollamaUrl, ollamaModel }),
+  });
   if (!Array.isArray(response)) throw new Error(response?.error ?? "No translation received");
   return response;
 }
 
-// Chrome's translator runs here, in the content script; Google translates where it can't
+// Chrome's translator runs here, in the content script, Bergamot on the device through the background; Google
+// translates where they can't
 export const translateSecondaryFx = createEffect<TTranslateSecondaryParams, string[]>(async (params) => {
-  if (params.translator !== "chrome") return translateWithBackground(params);
+  if (params.translator !== "chrome" && params.translator !== "bergamot") return translateWithBackground(params);
   try {
-    return await chromeTranslateBatch(params.texts, params.sourceLanguage, params.language);
+    return params.translator === "chrome"
+      ? await chromeTranslateBatch(params.texts, params.sourceLanguage, params.language)
+      : await translateWithBackground(params);
   } catch (error) {
-    console.warn("Chrome's translator failed, using Google:", error);
+    console.warn(`${params.translator === "chrome" ? "Chrome's translator" : "Bergamot"} failed, using Google:`, error);
     return translateWithBackground({ ...params, translator: "google" });
   }
 });
