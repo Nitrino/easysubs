@@ -92,6 +92,7 @@ cd /Users/nitrino/develop/easysubs
 rsync -a \
   --exclude 'node_modules' --exclude '.git' --exclude 'dist' \
   --exclude '.DS_Store' --exclude 'docs' \
+  --exclude 'dictionaries' --exclude 'bergamot-models' \
   --exclude 'package-lock.json' --exclude 'pnpm-workspace.yaml' \
   "easysubs-extension/" "easysubs-extension vX.Y.Z/"
 
@@ -99,6 +100,27 @@ zip -r -X -q "easysubs-extension vX.Y.Z.zip" "easysubs-extension vX.Y.Z" -x "*.D
 ```
 
 Sanity check: the snapshot must **not** contain `node_modules`, `.git`, or `dist`, and the zip should be ~1.5M (a multi-MB zip means `docs/` or `node_modules` leaked in).
+
+## On-device translation files
+
+The Wiktionary dictionaries (`src/utils/dictionary`) and Bergamot's models (`src/bergamot`) aren't in the extension:
+it downloads them from two GitHub releases of their own, named by `DICTIONARIES_RELEASE` in
+`src/utils/dictionary/format.ts` and `BERGAMOT_MODELS_RELEASE` in `src/bergamot/registry.ts`. An extension release
+doesn't touch them. Publish one when its name changes (a new format, other languages, newer models), before the
+extension that reads it:
+
+```bash
+pnpm dictionaries --cache ~/kaikki          # dictionaries/*.json.gz, ~5 MB a pair; the dumps stay in ~/kaikki
+pnpm bergamot-models                        # bergamot-models/: models.json and the models, ~1.2 GB
+gh release create dictionaries-1 dictionaries/*.json.gz --target master --title "Wiktionary dictionaries" \
+  --notes "Dictionaries for hovered words, built from Wiktionary by kaikki.org (CC BY-SA 4.0). Downloaded by EasySubs when picked."
+gh release create bergamot-models-1 bergamot-models/* --target master --title "Bergamot models" \
+  --notes "Firefox Translations models by Mozilla (MPL-2.0), mirrored for EasySubs: Mozilla's CDN serves only Firefox."
+```
+
+Use the names from the code (`dictionaries-1`, `bergamot-models-1` above). These releases aren't the latest one:
+after creating them, check that `gh release list` still marks the extension's `vX.Y.Z` as Latest, and run
+`gh release edit vX.Y.Z --latest` if not.
 
 ## Final checklist
 
