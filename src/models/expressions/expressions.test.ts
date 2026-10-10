@@ -12,9 +12,15 @@ import {
   wordLeft,
   expressionTranslator,
 } from ".";
-import { $chatGPTApiKey, $translateLanguage, $translationService, translateLanguageChanged } from "../settings";
+import {
+  $chatGPTApiKey,
+  $dictionaryService,
+  $translateLanguage,
+  $translationService,
+  translateLanguageChanged,
+} from "../settings";
 import { $rawSubs, $subs, $subsLanguage, rawSubsAdded } from "../subs";
-import type { TTranslationService } from "../types";
+import type { TDictionaryService, TTranslationService } from "../types";
 import { answerNextMessage, sentMessages } from "@root/test/chrome";
 import { captions, offlineTranslations, playgroundCaptions } from "@root/test/fixtures";
 import { stubChromeTranslator } from "@root/test/chromeTranslator";
@@ -25,11 +31,16 @@ const CUE = "Almost. I just need to pick up my keys.";
 const TWO_EXPRESSIONS = "What if we run out of time";
 
 // The playground's English subtitles, translated into Russian by `service`, once their language is detected
-async function loadSubtitles({ language = "en", service = "google" as TTranslationService } = {}) {
+async function loadSubtitles({
+  language = "en",
+  service = "google" as TTranslationService,
+  dictionary = "google" as TDictionaryService,
+} = {}) {
   const scope = fork({
     values: [
       [$translateLanguage, "ru"],
       [$translationService, service],
+      [$dictionaryService, dictionary],
       [$chatGPTApiKey, "sk-test"],
     ],
   });
@@ -197,6 +208,33 @@ describe("translating an expression", () => {
     expect(translation.translation.main).toBe(enRu.words["pick up"].main);
   });
 
+  it("takes an expression Wiktionary has from it with Wiktionary + Bergamot", async () => {
+    const scope = await loadSubtitles({ dictionary: "wiktionary-bergamot" });
+
+    const translation = await openExpression(scope, CUE, 5);
+
+    expect(sentMessages("dictionaryLookup")).toEqual([expect.objectContaining({ text: "pick up" })]);
+    expect(sentMessages("bergamot")).toEqual([]);
+    expect(translation).toMatchObject({ inContext: false, translation: { main: enRu.words["pick up"].main } });
+  });
+
+  it("translates an expression Wiktionary lacks with Bergamot in its line with Wiktionary + Bergamot", async () => {
+    const scope = await loadSubtitles({ dictionary: "wiktionary-bergamot" });
+    answerNextMessage("dictionaryLookup", { answer: null });
+
+    const translation = await openExpression(scope, CUE, 5);
+
+    expect(sentMessages("bergamot")).toEqual([
+      expect.objectContaining({
+        request: expect.objectContaining({ texts: ["Almost. I just need to <b>pick</b> <b>up</b> my keys."] }),
+      }),
+    ]);
+    expect(translation).toMatchObject({
+      inContext: true,
+      translation: { main: `↳${enRu.words["pick up"].main}`, inLine: true },
+    });
+  });
+
   it("translates all the expressions of a line in one ChatGPT request, as they're used in it", async () => {
     const scope = await loadSubtitles({ service: "chatgpt" });
 
@@ -253,6 +291,7 @@ describe("expressionTranslator", () => {
     expect(expressionTranslator("chatgpt", "wiktionary")).toBe("chatgpt");
     expect(expressionTranslator("ollama", "google")).toBe("ollama");
     expect(expressionTranslator("google", "wiktionary")).toBe("wiktionary");
+    expect(expressionTranslator("bergamot", "wiktionary-bergamot")).toBe("wiktionary-bergamot");
     expect(expressionTranslator("google", "chatgpt")).toBe("chatgpt");
     expect(expressionTranslator("google", "deepl")).toBe("deepl");
     expect(expressionTranslator("chrome", "google")).toBe("chrome");

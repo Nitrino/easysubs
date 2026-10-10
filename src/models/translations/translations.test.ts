@@ -238,12 +238,42 @@ describe("word lookup in another dictionary", () => {
     expect(scope.getState($currentWordTranslation).mainTranslation).toBe(enRu.words.keys.main);
   });
 
-  it("translates a word the dictionary lacks with an on-device translation service", async () => {
+  it("translates a word the dictionary lacks as text with another translation service", async () => {
     const scope = settings("wiktionary", "bergamot");
     answerNextMessage("dictionaryLookup", { answer: null });
 
     await allSettled(requestWordTranslation, { scope, params: "keys" });
 
+    expect(sentMessages().map((message) => message.type)).toEqual(["dictionaryLookup", "translateFullText"]);
+    expect(sentMessages("translateFullText")).toEqual([
+      expect.objectContaining({ text: "keys", translationService: "bergamot", sourceLanguage: "en" }),
+    ]);
+    expect(scope.getState($currentWordTranslation)).toMatchObject({
+      mainTranslation: enRu.words.keys.main,
+      translations: [],
+    });
+  });
+
+  it("shows only Wiktionary's meanings with Wiktionary alone, whatever the translation service", async () => {
+    const scope = settings("wiktionary", "bergamot");
+    await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
+    const [first] = scope.getState($subs);
+
+    await allSettled(WordTranslationsGate.open, { scope, params: { text: "keys", cueId: first.id, index: 8 } });
+
+    expect(sentMessages("dictionaryLookup")).toHaveLength(1);
+    expect(sentMessages("bergamot")).toEqual([]);
+    expect(scope.getState($currentWordTranslation)).not.toHaveProperty("inLine");
+  });
+
+  it("translates a word Wiktionary lacks with Bergamot, alone and in its line, with Wiktionary + Bergamot", async () => {
+    const scope = settings("wiktionary-bergamot");
+    answerNextMessage("dictionaryLookup", { answer: null });
+
+    await allSettled(requestWordTranslation, { scope, params: "keys" });
+
+    // One request to Bergamot, asked with the dictionary's
+    expect(sentMessages().map((message) => message.type)).toEqual(["dictionaryLookup", "bergamot"]);
     expect(sentMessages("bergamot")).toEqual([
       { type: "bergamot", request: { type: "translate", texts: ["keys"], from: "en", to: "ru", html: true } },
     ]);
@@ -254,10 +284,10 @@ describe("word lookup in another dictionary", () => {
   });
 
   it("leaves out the word's translation in its line when it only repeats the first meaning", async () => {
-    const scope = settings("wiktionary", "bergamot");
+    const scope = settings("wiktionary-bergamot");
     await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
     const [first] = scope.getState($subs);
-    answerNextMessage("bergamot", { result: ["Почти. Мне просто нужно взять <b>ключи</b>."] });
+    answerNextMessage("bergamot", { result: ["Почти. Мне просто нужно взять <b>ключи</b>.", "ключи"] });
 
     await allSettled(WordTranslationsGate.open, { scope, params: { text: "keys", cueId: first.id, index: 8 } });
 
@@ -368,8 +398,8 @@ describe("word lookup in another dictionary", () => {
     expect(sentMessages("bergamot")).toHaveLength(2);
   });
 
-  it("adds the word's translation in its line to Wiktionary's meanings with Bergamot as the translation service", async () => {
-    const scope = settings("wiktionary", "bergamot");
+  it("adds the word's translation in its line to Wiktionary's meanings with Wiktionary + Bergamot", async () => {
+    const scope = settings("wiktionary-bergamot");
     await allSettled(rawSubsAdded, { scope, params: PICK_LINES });
     const [first] = scope.getState($subs);
 

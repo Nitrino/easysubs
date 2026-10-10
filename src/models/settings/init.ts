@@ -12,6 +12,7 @@ import {
 } from ".";
 import { $subsLanguage } from "../subs";
 import { prepareChromeTranslator } from "@src/utils/chromeTranslator";
+import { usesDictionary } from "@src/utils/dictionaries";
 
 // Chrome downloads a language pair's model only during a click or key press on the page: picking its translator, or
 // a language while it's picked, starts the download for the subtitles on screen
@@ -49,7 +50,7 @@ export const prepareDictionaryFx = createEffect<{ source: string; target: string
 sample({
   clock: [$dictionaryService, $subsLanguage, $translateLanguage],
   source: { dictionary: $dictionaryService, source: $subsLanguage, target: $translateLanguage },
-  filter: ({ dictionary, source, target }) => dictionary === "wiktionary" && source !== "auto" && source !== target,
+  filter: ({ dictionary, source, target }) => usesDictionary(dictionary) && source !== "auto" && source !== target,
   fn: ({ source, target }) => ({ source, target }),
   target: prepareDictionaryFx,
 });

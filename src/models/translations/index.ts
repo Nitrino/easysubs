@@ -174,10 +174,8 @@ async function modelWord(type: "chatGPTWord" | "ollamaWord", params: TWordParams
 // The word translated by Bergamot as it's used in its line, and alone when `alone` is asked too: one request, both in
 // HTML mode (the word alone is plain text in it). Null where there's no line, the word merged into another, or
 // Bergamot failed.
-async function bergamotTexts(
-  params: TWordParams,
-  alone = false,
-): Promise<{ inLine: string | null; alone: string | null }> {
+type TBergamotTexts = { inLine: string | null; alone: string | null };
+async function bergamotTexts(params: TWordParams, alone = false): Promise<TBergamotTexts> {
   const texts = [...(params.marked ? [params.marked] : []), ...(alone ? [escapeHtml(params.source)] : [])];
   if (texts.length === 0) return { inLine: null, alone: null };
   try {
@@ -200,11 +198,9 @@ async function bergamotTexts(
   }
 }
 
-const wordInLine = async (params: TWordParams) => (await bergamotTexts(params)).inLine;
-
 // A word translated by Bergamot alone and as it's used in its line: both when they differ, the line's on top
-async function bergamotWord(params: TWordParams): Promise<TWordTranslation> {
-  const { inLine, alone } = await bergamotTexts(params, true);
+async function bergamotWord(params: TWordParams, texts?: TBergamotTexts): Promise<TWordTranslation> {
+  const { inLine, alone } = texts ?? (await bergamotTexts(params, true));
   if (!alone) return translatedWord(params, "bergamot");
   const translation: TWordTranslation = {
     source: params.source,
@@ -222,31 +218,43 @@ async function bergamotWord(params: TWordParams): Promise<TWordTranslation> {
   };
 }
 
+// The word's meanings in the Wiktionary dictionary of the pair, null when it lacks the word
+async function dictionaryWord(params: TWordParams): Promise<TWordTranslation | null> {
+  const response = await chrome.runtime.sendMessage({
+    type: "dictionaryLookup",
+    from: params.sourceLanguage,
+    to: params.language,
+    text: params.source,
+  });
+  if (response?.error) console.warn("The Wiktionary dictionary failed:", response.error);
+  return response?.answer
+    ? dictionaryTranslation(response.answer as TDictionaryAnswer, params.source, params.language)
+    : null;
+}
+
+// Wiktionary's meanings with Bergamot's translation of the word in its line on top, unless it only repeats the first
+// meaning; a word the dictionary lacks is translated by Bergamot alone and in its line. Both are asked at once.
+async function dictionaryAndBergamotWord(params: TWordParams): Promise<TWordTranslation> {
+  const [translation, texts] = await Promise.all([dictionaryWord(params), bergamotTexts(params, true)]);
+  if (!translation) return bergamotWord(params, texts);
+  const { inLine } = texts;
+  const [first] = translation.translations;
+  if (!inLine || (first && repeatsTranslation(inLine, [first.word, ...first.synonyms]))) return translation;
+  return { ...translation, inLine, context: params.context ?? undefined };
+}
+
 async function lookUpWord(params: TWordParams): Promise<TWordTranslation> {
-  const { source, language, sourceLanguage, dictionary } = params;
+  const { source, language, dictionary } = params;
   switch (dictionary) {
     case "wiktionary": {
-      const response = await chrome.runtime.sendMessage({
-        type: "dictionaryLookup",
-        from: sourceLanguage,
-        to: language,
-        text: source,
-      });
-      if (response?.answer) {
-        const translation = dictionaryTranslation(response.answer as TDictionaryAnswer, source, language);
-        // With Bergamot as the translation service, the meanings come with the word's translation in the line,
-        // unless it only repeats the first meaning
-        const inLine = params.service === "bergamot" ? await wordInLine(params) : null;
-        const [first] = translation.translations;
-        if (!inLine || (first && repeatsTranslation(inLine, [first.word, ...first.synonyms]))) return translation;
-        return { ...translation, inLine, context: params.context ?? undefined };
-      }
-      if (response?.error) console.warn("The Wiktionary dictionary failed:", response.error);
+      const translation = await dictionaryWord(params);
+      if (translation) return translation;
       // A word the dictionary doesn't have: Google's dictionary when Google is the translation service, the word
       // translated as text by the translation service otherwise
-      if (params.service === "bergamot") return bergamotWord(params);
       return params.service === "google" ? googleWord(source, language) : translatedWord(params, params.service);
     }
+    case "wiktionary-bergamot":
+      return dictionaryAndBergamotWord(params);
     case "bergamot":
       return bergamotWord(params);
     case "chatgpt":

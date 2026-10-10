@@ -96,9 +96,19 @@ export type TAnkiContext = { sentence: boolean; translation: boolean; picture: b
 export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt" | "chrome" | "bergamot" | "ollama";
 
 // Where hovered words are looked up: Google's dictionary, a Wiktionary dictionary on the device (src/utils/dictionary),
-// ChatGPT or the user's Ollama give a word's meanings; the translators give one translation (src/utils/dictionaries.ts)
+// alone or with Bergamot's translation of the word in its line, ChatGPT or the user's Ollama give a word's meanings;
+// the translators give one translation (src/utils/dictionaries.ts)
 export type TDictionaryService =
-  "google" | "wiktionary" | "chatgpt" | "ollama" | "deepl" | "bing" | "yandex" | "chrome" | "bergamot";
+  | "google"
+  | "wiktionary"
+  | "wiktionary-bergamot"
+  | "chatgpt"
+  | "ollama"
+  | "deepl"
+  | "bing"
+  | "yandex"
+  | "chrome"
+  | "bergamot";
 
 export type TTtsService = "google" | "youdao" | "wiktionary" | "chatgpt" | "browser";
 
@@ -243,8 +253,10 @@ export type TExpressionMatch = {
   indexes: number[];
 };
 
-// An expression's translation: the main one and others, with their part of speech when the service gives one
+// An expression's translation: the main one and others, with their part of speech when the service gives one, and
+// whether it's Bergamot's translation of it in its cue
 export type TExpressionTranslation = {
   main: string;
   alternatives: { text: string; partOfSpeech?: TPartOfSpeach }[];
+  inLine?: boolean;
 };

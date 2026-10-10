@@ -5,7 +5,7 @@ import type { FormatOptionLabelMeta } from "react-select";
 import { $dictionaryService, dictionaryServiceChanged } from "@src/models/settings";
 import type { TDictionaryService } from "@src/models/types";
 import { isChromeTranslatorSupported } from "@src/utils/chromeTranslator";
-import { DICTIONARY_DETAILS, DICTIONARY_TITLES } from "@src/utils/dictionaries";
+import { DICTIONARY_DETAILS, DICTIONARY_TITLES, usesDictionary } from "@src/utils/dictionaries";
 import { Select } from "../ui/Select";
 import { OllamaStatus, OnDeviceStatus } from "./OnDeviceStatus";
 
@@ -43,6 +43,10 @@ const formatOption = (option: TOption, { context }: FormatOptionLabelMeta<TOptio
 
 const NOTES: Partial<Record<TDictionaryService, string>> = {
   google: "Meanings with parts of speech and transcription.",
+  wiktionary: "Meanings with parts of speech. Words it lacks go to the translation service.",
+  "wiktionary-bergamot":
+    "Wiktionary's meanings, with Bergamot's translation of the word in its line on top when it differs. Bergamot " +
+    "translates the words Wiktionary lacks.",
   chatgpt: "Meanings with parts of speech, and the word as it's used in its line, from your ChatGPT API key.",
   ollama: "Meanings with parts of speech, and the word as it's used in its line.",
   bergamot: "One translation of the word, and how it's translated in its line when that differs.",
@@ -68,8 +72,10 @@ export const DictionaryService: FC = () => {
         </div>
       </div>
       {note && <p className="es-settings-content__status">{note}</p>}
-      {service === "wiktionary" && <OnDeviceStatus kind="dictionary" />}
-      {service === "bergamot" && <OnDeviceStatus kind="bergamot" />}
+      {usesDictionary(service) && (
+        <OnDeviceStatus kind="dictionary" fallback={service === "wiktionary" ? undefined : "Bergamot"} />
+      )}
+      {(service === "bergamot" || service === "wiktionary-bergamot") && <OnDeviceStatus kind="bergamot" />}
       {service === "ollama" && <OllamaStatus />}
     </>
   );

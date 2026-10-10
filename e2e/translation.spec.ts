@@ -426,12 +426,13 @@ test.describe("on-device translation", () => {
     await playground.openSettings("General");
     await playground.settingsRow("Dictionary").locator(".es-select").click();
 
-    // The picked one has a checkmark before its name
-    for (const name of ["Google Translate", "Wiktionary (on device)", "ChatGPT", "Ollama"]) {
-      await expect(page.getByRole("option", { name })).toContainText("Meanings");
+    // The picked one, Google, has a checkmark before its name
+    const option = (name: string) => page.getByRole("option", { name, exact: name !== "Google Translate" });
+    for (const name of ["Google Translate", "Wiktionary (on device)", "Wiktionary + Bergamot", "ChatGPT", "Ollama"]) {
+      await expect(option(name)).toContainText("Meanings");
     }
     for (const name of ["DeepL", "Bing Translator", "Yandex Translate", "Chrome (on device)", "Bergamot (on device)"]) {
-      await expect(page.getByRole("option", { name })).toContainText("One translation");
+      await expect(option(name)).toContainText("One translation");
     }
   });
 
@@ -472,6 +473,30 @@ test.describe("on-device translation", () => {
           texts: ["Almost. I just need to <b>pick</b> <b>up</b> my keys."],
           html: true,
         }),
+      }),
+    );
+  });
+
+  test("shows Wiktionary's meanings under Bergamot's translation of the word in its line", async ({ playground }) => {
+    await playground.openSettings("General");
+    await playground.choose("Dictionary", "Wiktionary + Bergamot");
+    await expect(playground.settingsPanel).toContainText("The English → Russian dictionary is on this device.");
+    await expect(playground.settingsPanel).toContainText("English → Russian translates on this device.");
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(`↳${enRu.words.keys.main}`);
+    await expect(playground.wordPopover.locator(".es-title .es-badge")).toHaveText("In this line");
+    await expect(playground.wordPopover.locator(".es-alt-word").first()).toHaveText(enRu.words.keys.main);
+    // An expression Wiktionary has comes from it alone
+    await playground.word("pick").hover();
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verb");
+    await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText(enRu.words["pick up"].main);
+
+    expect(await playground.messages("dictionaryLookup")).toContainEqual(expect.objectContaining({ text: "keys" }));
+    expect(await playground.messages("bergamot")).toContainEqual(
+      expect.objectContaining({
+        request: expect.objectContaining({ texts: ["Almost. I just need to pick up my <b>keys</b>.", "keys"] }),
       }),
     );
   });

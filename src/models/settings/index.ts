@@ -82,7 +82,8 @@ export const $translationService = createSetting<TTranslationService>("translati
 export const translationServiceChanged = createEvent<TTranslationService>();
 export const translationServiceChangeFx = createEffect<TTranslationService, TTranslationService>((value) => value);
 
-// Where hovered words are looked up; words a Wiktionary dictionary lacks go to the translation service
+// Where hovered words are looked up; words the Wiktionary dictionary lacks go to the translation service, or to
+// Bergamot with "wiktionary-bergamot"
 export const $dictionaryService = createSetting<TDictionaryService>("dictionaryService", "google");
 export const dictionaryServiceChanged = createEvent<TDictionaryService>();
 

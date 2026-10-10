@@ -27,12 +27,12 @@ async function fetchStatus(kind: TOnDeviceKind, from: string, to: string): Promi
   return status;
 }
 
-function describe(kind: TOnDeviceKind, status: TOnDeviceStatus, pair: string): string {
+function describe(kind: TOnDeviceKind, status: TOnDeviceStatus, pair: string, fallback: string): string {
   const what = kind === "dictionary" ? `The ${pair} dictionary` : `${pair}`;
   switch (status.state) {
     case "unavailable":
       return kind === "dictionary"
-        ? `Wiktionary has no ${pair} dictionary yet: words go to the translation service.`
+        ? `Wiktionary has no ${pair} dictionary yet: words go to ${fallback}.`
         : `Mozilla has no model for ${pair}: Google translates instead.`;
     case "missing":
       return kind === "dictionary"
@@ -49,8 +49,13 @@ function describe(kind: TOnDeviceKind, status: TOnDeviceStatus, pair: string): s
   }
 }
 
-// `language` is what's translated into when it isn't the translation language: the second line's
-export const OnDeviceStatus: FC<{ kind: TOnDeviceKind; language?: string }> = ({ kind, language }) => {
+// `language` is what's translated into when it isn't the translation language: the second line's; `fallback` is who
+// translates words without the dictionary
+export const OnDeviceStatus: FC<{ kind: TOnDeviceKind; language?: string; fallback?: string }> = ({
+  kind,
+  language,
+  fallback = "the translation service",
+}) => {
   const [from, translateLanguage] = useUnit([$subsLanguage, $translateLanguage]);
   const to = language ?? translateLanguage;
   // With the pair it's for, so another pair's doesn't show while the new one is asked for
@@ -85,7 +90,7 @@ export const OnDeviceStatus: FC<{ kind: TOnDeviceKind; language?: string }> = ({
   const text = waiting
     ? "Shows what's on this device once the subtitles' language is known."
     : status
-      ? describe(kind, status, `${languageName(from)} → ${languageName(to)}`)
+      ? describe(kind, status, `${languageName(from)} → ${languageName(to)}`, fallback)
       : "…";
   return (
     <p

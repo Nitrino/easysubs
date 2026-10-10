@@ -8,7 +8,7 @@ import { parseGoogleWordAnswer } from "@src/utils/googleWordAnswer";
 import { chromeTranslate } from "@src/utils/chromeTranslator";
 import { dictionaryTranslation, type TDictionaryAnswer } from "@src/utils/dictionary/lookup";
 import { translateLine } from "../translations";
-import { isWordTranslator } from "@src/utils/dictionaries";
+import { isWordTranslator, usesDictionary } from "@src/utils/dictionaries";
 import { markedTranslation } from "@src/utils/wordInLine";
 
 // Phrasal verbs, idioms and other expressions in the subtitles (src/utils/expressions): looked up by the background
@@ -63,8 +63,9 @@ export const expressionTranslator = (
 };
 // ChatGPT and Ollama translate all the expressions of a cue in one request, as they're used in it
 const batched = (translator: TExpressionTranslator) => translator === "chatgpt" || translator === "ollama";
-// Bergamot translates the expression in its cue too (src/utils/wordInLine.ts)
-const inContext = (translator: TExpressionTranslator) => batched(translator) || translator === "bergamot";
+// Bergamot translates the expression in its cue too (src/utils/wordInLine.ts), with Wiktionary those it lacks
+const inContext = (translator: TExpressionTranslator) =>
+  batched(translator) || translator === "bergamot" || translator === "wiktionary-bergamot";
 
 // ChatGPT, Ollama and Bergamot translate an expression as it's used in its cue, the others the same everywhere
 export const expressionTranslationKey = (
@@ -164,15 +165,22 @@ export const translateExpressionFx = createEffect<TTranslateExpressionParams, Re
         ]),
       );
     }
-    if (params.translator === "wiktionary") {
+    // Idioms are where Bergamot is the least reliable ("get wasted" → "выкинуть"), so Wiktionary's translation of
+    // one goes first with Bergamot too
+    if (usesDictionary(params.translator)) {
       const found = await translateWithDictionary(params).catch((error) => {
         console.warn("The Wiktionary dictionary failed:", error);
         return null;
       });
       if (found) return { [key]: found };
     }
-    // A translator, also for what the dictionary doesn't have: the translation service then
-    const translator = params.translator === "wiktionary" ? params.service : params.translator;
+    // A translator, also for what the dictionary doesn't have: the translation service with Wiktionary alone
+    const translator =
+      params.translator === "wiktionary"
+        ? params.service
+        : params.translator === "wiktionary-bergamot"
+          ? "bergamot"
+          : params.translator;
     if (translator === "chrome") {
       try {
         const main = await chromeTranslate(params.expression, params.sourceLanguage, params.language);
@@ -181,7 +189,8 @@ export const translateExpressionFx = createEffect<TTranslateExpressionParams, Re
         console.warn("Chrome's translator failed, using Google:", error);
       }
     }
-    if (params.translator === "bergamot" && params.marked) {
+    // In the cue only where translations are kept per cue (expressionTranslationKey)
+    if (translator === "bergamot" && inContext(params.translator) && params.marked) {
       const answer = await chrome.runtime
         .sendMessage({
           type: "bergamot",
@@ -195,7 +204,7 @@ export const translateExpressionFx = createEffect<TTranslateExpressionParams, Re
         })
         .catch(() => null);
       const main = Array.isArray(answer?.result) ? markedTranslation(answer.result[0] ?? "") : null;
-      if (main) return { [key]: { main, alternatives: [] } };
+      if (main) return { [key]: { main, alternatives: [], inLine: true } };
     }
     if (isWordTranslator(translator) && translator !== "chrome") {
       try {
@@ -232,11 +241,13 @@ export const $currentExpressionTranslation = combine(
     if (!expression) return null;
     const translator = expressionTranslator(service, dictionary);
     const key = expressionTranslationKey(translator, language, expression.expression, expression.cue);
+    const translation = translations[key] ?? null;
     return {
-      translation: translations[key] ?? null,
+      translation,
       pending: Boolean(pendings[key]),
       error: errors[key] ?? null,
-      inContext: inContext(translator),
+      // ChatGPT and Ollama always translate in the cue, Bergamot when the expression's words could be marked in it
+      inContext: batched(translator) || Boolean(translation?.inLine),
     };
   },
 );

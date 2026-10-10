@@ -5,6 +5,7 @@ import type { TDictionaryService } from "@src/models/types";
 export const DICTIONARY_DETAILS: Record<TDictionaryService, boolean> = {
   google: true,
   wiktionary: true,
+  "wiktionary-bergamot": true,
   chatgpt: true,
   ollama: true,
   deepl: false,
@@ -17,6 +18,7 @@ export const DICTIONARY_DETAILS: Record<TDictionaryService, boolean> = {
 export const DICTIONARY_TITLES: Record<TDictionaryService, string> = {
   google: "Google Translate",
   wiktionary: "Wiktionary (on device)",
+  "wiktionary-bergamot": "Wiktionary + Bergamot",
   chatgpt: "ChatGPT",
   ollama: "Ollama",
   deepl: "DeepL",
@@ -30,3 +32,6 @@ export const DICTIONARY_TITLES: Record<TDictionaryService, string> = {
 export type TWordTranslator = "deepl" | "bing" | "yandex" | "chrome" | "bergamot";
 export const isWordTranslator = (service: string): service is TWordTranslator =>
   service in DICTIONARY_DETAILS && !DICTIONARY_DETAILS[service as TDictionaryService];
+
+// The Wiktionary dictionary looks words up for both Wiktionary services
+export const usesDictionary = (service: string) => service === "wiktionary" || service === "wiktionary-bergamot";
