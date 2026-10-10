@@ -58,9 +58,18 @@ const googleWordAnswer = (
   ],
 ];
 
+// Google's dictionary for words; Wiktionary is the default
+const googleScope = () =>
+  fork({
+    values: [
+      [$translateLanguage, "ru"],
+      [$dictionaryService, "google"],
+    ],
+  });
+
 describe("word translation", () => {
   it("translates a word into the chosen language", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
 
     await allSettled(requestWordTranslation, { scope, params: "Keys" });
 
@@ -78,7 +87,7 @@ describe("word translation", () => {
   });
 
   it("lists the five most common translations with three synonyms at most", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
     chromeMock.runtime.sendMessage.mockResolvedValueOnce(
       googleWordAnswer("брать", [
         [
@@ -114,7 +123,7 @@ describe("word translation", () => {
   });
 
   it("shows a word without alternative translations", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
     chromeMock.runtime.sendMessage.mockResolvedValueOnce([[null], [[[null, null, null, null, null, [["Сэм"]]]]], "en"]);
 
     await allSettled(requestWordTranslation, { scope, params: "Sam" });
@@ -123,7 +132,7 @@ describe("word translation", () => {
   });
 
   it("translates each word once", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
 
     await allSettled(requestWordTranslation, { scope, params: "keys" });
     await allSettled(requestWordTranslation, { scope, params: "cat" });
@@ -134,7 +143,7 @@ describe("word translation", () => {
   });
 
   it("marks the word as pending until the translation arrives", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
 
     const translated = allSettled(requestWordTranslation, { scope, params: "keys" });
     expect(scope.getState($wordTranslationsPendings)).toEqual({ keys: true });
@@ -144,7 +153,7 @@ describe("word translation", () => {
   });
 
   it("translates the hovered word and forgets it when the pointer leaves", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
 
     await allSettled(WordTranslationsGate.open, { scope, params: "keys" });
     expect(scope.getState($currentWordTranslation).source).toBe("keys");
@@ -154,7 +163,7 @@ describe("word translation", () => {
   });
 
   it("translates the open word again into a newly chosen language", async () => {
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
     await allSettled(requestWordTranslation, { scope, params: "keys" });
 
     await allSettled(translateLanguageChanged, { scope, params: "de" });
@@ -166,7 +175,7 @@ describe("word translation", () => {
 
   it("changes the language without errors when no word is open", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
-    const scope = fork({ values: [[$translateLanguage, "ru"]] });
+    const scope = googleScope();
 
     await allSettled(translateLanguageChanged, { scope, params: "de" });
 
@@ -198,7 +207,7 @@ describe("word lookup in another dictionary", () => {
     expect(scope.getState($currentWordTranslation)).toMatchObject({
       source: "keys",
       mainTranslation: enRu.words.keys.main,
-      translations: [{ word: enRu.words.keys.main, partOfSpeech: "noun" }],
+      translations: (enRu.words.keys.noun as string[]).map((word) => ({ word, partOfSpeech: "noun" })),
     });
   });
 

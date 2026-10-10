@@ -42,7 +42,6 @@ const formatOption = (option: TOption, { context }: FormatOptionLabelMeta<TOptio
   );
 
 const NOTES: Partial<Record<TDictionaryService, string>> = {
-  google: "Meanings with parts of speech and transcription.",
   wiktionary: "Meanings with parts of speech. Words it lacks go to the translation service.",
   "wiktionary-bergamot":
     "Wiktionary's meanings, with Bergamot's translation of the word in its line on top when it differs. Bergamot " +

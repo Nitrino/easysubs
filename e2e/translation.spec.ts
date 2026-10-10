@@ -15,8 +15,9 @@ test.describe("translation", () => {
 
     const popover = playground.wordPopover;
     await expect(popover.locator(".es-title")).toHaveText(enRu.words.keys.main);
-    expect(await playground.messages("translateWordFull")).toContainEqual(
-      expect.objectContaining({ text: "keys", language: "ru" }),
+    // In the Wiktionary dictionary by default
+    expect(await playground.messages("dictionaryLookup")).toContainEqual(
+      expect.objectContaining({ text: "keys", from: "en", to: "ru" }),
     );
   });
 
@@ -38,10 +39,10 @@ test.describe("translation", () => {
     const [main, ...alternatives] = enRu.words["pick up"].verb as string[];
     await expect(popover.locator(".es-pv-item")).toHaveText([main, ...alternatives.map((text) => `${text}verb`)]);
     await expect(popover.locator(".es-pv-word")).toHaveText(`pick${enRu.words.pick.main}`);
-    expect(await playground.messages("translateWordFull")).toEqual(
+    expect(await playground.messages("dictionaryLookup")).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ text: "pick up", language: "ru" }),
-        expect.objectContaining({ text: "pick", language: "ru" }),
+        expect.objectContaining({ text: "pick up", to: "ru" }),
+        expect.objectContaining({ text: "pick", to: "ru" }),
       ]),
     );
   });
@@ -146,7 +147,7 @@ test.describe("translation", () => {
     await playground.word("keys").hover();
     await expect(playground.wordPopover.locator(".es-title")).toHaveText(enRu.words.keys.main);
 
-    expect(await playground.messages("translateWordFull")).toHaveLength(1);
+    expect(await playground.messages("dictionaryLookup")).toHaveLength(1);
   });
 
   test("translates into the language chosen in the settings", async ({ playground }) => {
@@ -155,8 +156,8 @@ test.describe("translation", () => {
     await playground.word("keys").hover();
 
     await expect(playground.wordPopover.locator(".es-title")).toHaveText(offlineTranslations("en-de").words.keys.main);
-    expect(await playground.messages("translateWordFull")).toEqual([
-      expect.objectContaining({ text: "keys", language: "de" }),
+    expect(await playground.messages("dictionaryLookup")).toEqual([
+      expect.objectContaining({ text: "keys", to: "de" }),
     ]);
   });
 
@@ -364,7 +365,11 @@ test.describe("Chrome's built-in translator", () => {
     await playground.stubChromeTranslator();
     await playground.open();
     await playground.seek(5);
-    await playground.changeSettings("General", () => playground.choose("Translation service", "Chrome (on device)"));
+    // Expressions follow the Dictionary row; with Google there, Chrome translates them
+    await playground.changeSettings("General", async () => {
+      await playground.choose("Translation service", "Chrome (on device)");
+      await playground.choose("Dictionary", "Google Translate");
+    });
 
     await playground.word("need").click();
     await expect(playground.linePopover).toHaveText("[chrome:ru] Almost. I just need to pick up my keys.");
@@ -407,9 +412,9 @@ test.describe("on-device translation", () => {
     await playground.seek(5);
   });
 
-  test("looks words up in the Wiktionary dictionary of the pair", async ({ playground }) => {
+  test("looks words up in the Wiktionary dictionary of the pair by default", async ({ playground }) => {
     await playground.openSettings("General");
-    await playground.choose("Dictionary", "Wiktionary (on device)");
+    await expect(playground.settingsRow("Dictionary")).toContainText("Wiktionary (on device)");
     await expect(playground.settingsPanel).toContainText("The English → Russian dictionary is on this device.");
     await playground.closeSettings();
 
@@ -426,12 +431,19 @@ test.describe("on-device translation", () => {
     await playground.openSettings("General");
     await playground.settingsRow("Dictionary").locator(".es-select").click();
 
-    // The picked one, Google, has a checkmark before its name
-    const option = (name: string) => page.getByRole("option", { name, exact: name !== "Google Translate" });
-    for (const name of ["Google Translate", "Wiktionary (on device)", "Wiktionary + Bergamot", "ChatGPT", "Ollama"]) {
+    // The picked one, Wiktionary, has a checkmark before its name
+    const option = (name: string) => page.getByRole("option", { name, exact: name !== "Wiktionary (on device)" });
+    for (const name of ["Wiktionary (on device)", "Wiktionary + Bergamot", "ChatGPT", "Ollama"]) {
       await expect(option(name)).toContainText("Meanings");
     }
-    for (const name of ["DeepL", "Bing Translator", "Yandex Translate", "Chrome (on device)", "Bergamot (on device)"]) {
+    for (const name of [
+      "Google Translate",
+      "DeepL",
+      "Bing Translator",
+      "Yandex Translate",
+      "Chrome (on device)",
+      "Bergamot (on device)",
+    ]) {
       await expect(option(name)).toContainText("One translation");
     }
   });

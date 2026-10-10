@@ -133,7 +133,7 @@ const findExpressionsInCues = createExpressionFinder(async (language) => {
   return load();
 });
 
-// The Wiktionary dictionary's answer, from the words of the fixtures: a meaning per part of speech
+// The Wiktionary dictionary's answer, from the words of the fixtures: a meaning per translation, like Google's rows
 function dictionaryAnswer(text: string, target: string) {
   const found = findWord(text.toLowerCase(), target);
   if (!found) return null;
@@ -142,7 +142,7 @@ function dictionaryAnswer(text: string, target: string) {
     transcription: "",
     entries: partsOfSpeech(found.translation).map(([partOfSpeech, variants]) => [
       DICTIONARY_POS[partOfSpeech] ?? partOfSpeech,
-      [[variants]],
+      variants.map((variant) => [[variant]]),
     ]),
   };
 }

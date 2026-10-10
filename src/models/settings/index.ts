@@ -84,7 +84,7 @@ export const translationServiceChangeFx = createEffect<TTranslationService, TTra
 
 // Where hovered words are looked up; words the Wiktionary dictionary lacks go to the translation service, or to
 // Bergamot with "wiktionary-bergamot"
-export const $dictionaryService = createSetting<TDictionaryService>("dictionaryService", "google");
+export const $dictionaryService = createSetting<TDictionaryService>("dictionaryService", "wiktionary");
 export const dictionaryServiceChanged = createEvent<TDictionaryService>();
 
 // The user's Ollama: its address and the model that translates

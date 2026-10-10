@@ -1,9 +1,10 @@
 import type { TDictionaryService } from "@src/models/types";
 
-// What each service of the Dictionary row gives a hovered word: several meanings with parts of speech (Google's
-// dictionary, Wiktionary, ChatGPT, Ollama) or one translation, like a translator does with any text
+// What each service of the Dictionary row gives a hovered word: several meanings with parts of speech (Wiktionary,
+// ChatGPT, Ollama) or one translation, like a translator does with any text (Google's endpoint answers without its
+// dictionary now)
 export const DICTIONARY_DETAILS: Record<TDictionaryService, boolean> = {
-  google: true,
+  google: false,
   wiktionary: true,
   "wiktionary-bergamot": true,
   chatgpt: true,
@@ -15,12 +16,13 @@ export const DICTIONARY_DETAILS: Record<TDictionaryService, boolean> = {
   bergamot: false,
 };
 
+// In the menu's order: those with meanings first
 export const DICTIONARY_TITLES: Record<TDictionaryService, string> = {
-  google: "Google Translate",
   wiktionary: "Wiktionary (on device)",
   "wiktionary-bergamot": "Wiktionary + Bergamot",
   chatgpt: "ChatGPT",
   ollama: "Ollama",
+  google: "Google Translate",
   deepl: "DeepL",
   bing: "Bing Translator",
   yandex: "Yandex Translate",
@@ -28,10 +30,10 @@ export const DICTIONARY_TITLES: Record<TDictionaryService, string> = {
   bergamot: "Bergamot (on device)",
 };
 
-// The translators among them, which translate a word as text
+// The translators among them, which translate a word as text; Google has a request of its own for words
 export type TWordTranslator = "deepl" | "bing" | "yandex" | "chrome" | "bergamot";
 export const isWordTranslator = (service: string): service is TWordTranslator =>
-  service in DICTIONARY_DETAILS && !DICTIONARY_DETAILS[service as TDictionaryService];
+  service !== "google" && service in DICTIONARY_DETAILS && !DICTIONARY_DETAILS[service as TDictionaryService];
 
 // The Wiktionary dictionary looks words up for both Wiktionary services
 export const usesDictionary = (service: string) => service === "wiktionary" || service === "wiktionary-bergamot";
