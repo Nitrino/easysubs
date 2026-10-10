@@ -56,6 +56,12 @@ export function createDictionaries() {
       const pair = dictionaryPair(from, to);
       if (pair) load(pair).catch(() => {});
     },
+    // Drops a pair whose file was deleted from the device: the next word downloads it again
+    forget(pair: string) {
+      loaded.delete(pair);
+      ready.delete(pair);
+      errors.delete(pair);
+    },
     async status(from: string, to: string): Promise<TOnDeviceStatus> {
       const pair = dictionaryPair(from, to);
       if (!pair) return { state: "unavailable" };

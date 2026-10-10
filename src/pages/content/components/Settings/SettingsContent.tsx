@@ -28,7 +28,9 @@ import { createPortal } from "react-dom";
 import { $streaming } from "@src/models/streamings";
 import { CloseIcon } from "./assets/CloseIcon";
 import { $sheet } from "@src/models/foundSubs";
+import { $downloadsOpen } from "@src/models/downloads";
 import { FoundSubsSheet } from "../FoundSubs/FoundSubsSheet";
+import { DownloadsRow, DownloadsSheet } from "./Downloads";
 import {
   SecondarySubsBackground,
   SecondarySubsColor,
@@ -62,12 +64,14 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming, sheet] = useUnit([
+  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming, foundSheet, downloadsOpen] = useUnit([
     $activeSettingsTab,
     activeSettingsTabChanged,
     $streaming,
     $sheet,
+    $downloadsOpen,
   ]);
+  const sheet = foundSheet || downloadsOpen;
   const contentRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(contentRef, onClose);
@@ -79,8 +83,10 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         ref={contentRef}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* The search for subtitles online opens in place of the tabs */}
-        {sheet ? (
+        {/* The search for subtitles online and the list of downloads open in place of the tabs */}
+        {downloadsOpen ? (
+          <DownloadsSheet onClose={onClose} />
+        ) : foundSheet ? (
           <FoundSubsSheet onClose={onClose} />
         ) : (
           <>
@@ -158,6 +164,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                     <LearningService />
                   </div>
                   <AnkiContext />
+                  <div className="es-settings-content__item">
+                    <DownloadsRow />
+                  </div>
                 </>
               )}
               {activeSettingsTab === 1 && (

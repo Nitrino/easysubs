@@ -10,6 +10,8 @@ import { createExpressionFinder } from "@src/utils/expressions/lookup";
 import { ANKI_MODEL_FIELDS } from "@src/learning-service/ankiNote";
 import type { TLexicon } from "@src/utils/expressions/lexicon";
 import type { TExpressionTranslation } from "@src/models/types";
+import type { TKeptFile } from "@src/utils/onDeviceFiles";
+import { groupDownloads } from "@src/utils/downloads";
 import { TRANSLATION_PAIRS, type TranslationFixture, type WordTranslation } from "./translationPairs";
 import {
   downloadSubtitle,
@@ -39,6 +41,22 @@ const PART_OF_SPEECH_NUMBERS = new Map(
 let subtitlesLanguage: string | null = null;
 
 export const mockTranslate = (text: string, language: string) => `[${language}] ${text}`;
+
+// What the on-device translators keep on the device: the en-ru dictionary, Bergamot's en-ru model used today and its
+// es-en one 12 days ago, with their real sizes
+const DAY_MS = 24 * 60 * 60 * 1000;
+const RELEASES = "https://github.com/Nitrino/easysubs/releases/download";
+const modelFiles = (pair: string, sizes: number[], used: number): TKeptFile[] =>
+  ["model.bin", "lex.bin", "vocab.spm"].map((name, index) => ({
+    url: `${RELEASES}/bergamot-models-1/${pair}.${name}`,
+    size: sizes[index],
+    used,
+  }));
+let keptFiles: TKeptFile[] = [
+  { url: `${RELEASES}/dictionaries-1/en-ru.json.gz`, size: 4969946, used: Date.now() },
+  ...modelFiles("en-ru", [42992955, 2768468, 904455], Date.now()),
+  ...modelFiles("es-en", [31561787, 4636248, 816054], Date.now() - 12 * DAY_MS),
+];
 
 let tone: string | undefined;
 
@@ -263,6 +281,15 @@ function handle(message: Message): unknown {
       return { answer: dictionaryAnswer(text, String(message.to ?? "")) };
     case "dictionaryStatus":
       return { state: "ready" };
+    case "downloads":
+      return { downloads: groupDownloads(keptFiles) };
+    case "deleteDownloads": {
+      const urls = groupDownloads(keptFiles)
+        .filter((download) => ((message.ids as string[]) ?? []).includes(download.id))
+        .flatMap((download) => download.urls);
+      keptFiles = keptFiles.filter((file) => !urls.includes(file.url));
+      return { downloads: groupDownloads(keptFiles) };
+    }
     case "bergamot":
       return bergamotAnswer(message.request as { type: string });
     case "ollamaModels":

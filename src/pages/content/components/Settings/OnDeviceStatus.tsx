@@ -5,6 +5,8 @@ import { $subsLanguage } from "@src/models/subs";
 import { $ollamaModel, $ollamaUrl, $translateLanguage, ollamaModalOpened } from "@src/models/settings";
 import { isSameLanguage, languageName } from "@src/utils/languages";
 import type { TOnDeviceStatus } from "@src/utils/onDeviceFiles";
+import { megabytes } from "@src/utils/downloads";
+import { downloadsOpened } from "@src/models/downloads";
 
 // What an on-device translator has for the subtitles' language and the translation language, under its row in the
 // settings: the Wiktionary dictionary of the pair or Bergamot's models. Showing it starts the download, as the
@@ -13,8 +15,6 @@ import type { TOnDeviceStatus } from "@src/utils/onDeviceFiles";
 export type TOnDeviceKind = "dictionary" | "bergamot";
 
 const POLL_MS = 1000;
-
-const megabytes = (bytes: number) => `${(bytes / 1e6).toFixed(bytes < 1e7 ? 1 : 0)} MB`;
 
 async function fetchStatus(kind: TOnDeviceKind, from: string, to: string): Promise<TOnDeviceStatus> {
   if (kind === "dictionary") return chrome.runtime.sendMessage({ type: "dictionaryStatus", from, to, prepare: true });
@@ -96,7 +96,13 @@ export const OnDeviceStatus: FC<{ kind: TOnDeviceKind; language?: string; fallba
     <p
       className={`es-settings-content__status${status?.state === "error" ? " es-settings-content__status--warning" : ""}`}
     >
-      {text}
+      <span>{text}</span>
+      {/* What's downloaded can be deleted in the Downloaded sheet */}
+      {status?.state === "ready" && (
+        <button type="button" className="es-found__link" onClick={() => downloadsOpened()}>
+          Manage
+        </button>
+      )}
     </p>
   );
 };

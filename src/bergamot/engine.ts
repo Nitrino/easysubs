@@ -34,13 +34,16 @@ export type TBergamotRequest =
   | { type: "translate"; texts: string[]; from: string; to: string; html?: boolean }
   | { type: "status"; from: string; to: string }
   // Downloads and loads the models of the pair ahead of the first line
-  | { type: "prepare"; from: string; to: string };
+  | { type: "prepare"; from: string; to: string }
+  // Lets the worker go, after its models were deleted from the device: the next translation downloads them again
+  | { type: "reset" };
 
 type TCall = (name: string, args: unknown[], transfer?: Transferable[]) => Promise<unknown>;
+type TWorker = { call: TCall; terminate: () => void };
 
 // The worker's protocol: { id, name, args } calls a method of its BergamotTranslatorWorker, { id, result | error }
 // answers
-async function startWorker(url: string): Promise<TCall> {
+async function startWorker(url: string): Promise<TWorker> {
   const worker = new Worker(url);
   let nextId = 1;
   const pending = new Map<number, { resolve: (value: unknown) => void; reject: (error: Error) => void }>();
@@ -62,11 +65,16 @@ async function startWorker(url: string): Promise<TCall> {
     });
   // The WebAssembly does the matrix maths itself, unless Firefox offers its faster builtin
   await call("initialize", [{ cacheSize: 0, useNativeIntGemm: true }]);
-  return call;
+  const terminate = () => {
+    worker.terminate();
+    pending.forEach(({ reject }) => reject(new Error("Bergamot's models were deleted")));
+    pending.clear();
+  };
+  return { call, terminate };
 }
 
 export function createBergamotEngine(workerUrl: string) {
-  let worker: Promise<TCall> | null = null;
+  let worker: Promise<TWorker> | null = null;
   let list: { at: number; models: Promise<Map<string, TPairModel>> } | null = null;
   // Models in the worker, the most recently used last
   const loaded: string[] = [];
@@ -79,7 +87,7 @@ export function createBergamotEngine(workerUrl: string) {
   const startedWorker = () => {
     worker ??= startWorker(workerUrl);
     worker.catch(() => (worker = null));
-    return worker;
+    return worker.then(({ call }) => call);
   };
 
   function models(): Promise<Map<string, TPairModel>> {
@@ -182,6 +190,14 @@ export function createBergamotEngine(workerUrl: string) {
       return prepare(from, to).then(() => {});
     },
 
+    async reset(): Promise<void> {
+      const running = worker;
+      worker = null;
+      loaded.length = 0;
+      errors.clear();
+      (await running?.catch(() => null))?.terminate();
+    },
+
     async status(from: string, to: string): Promise<TOnDeviceStatus> {
       const key = pairKey(from, to);
       const download = downloads.get(key);
@@ -211,5 +227,7 @@ export function runBergamotRequest(engine: TBergamotEngine, request: TBergamotRe
       return engine.prepare(request.from, request.to);
     case "status":
       return engine.status(request.from, request.to);
+    case "reset":
+      return engine.reset();
   }
 }

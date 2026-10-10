@@ -513,6 +513,44 @@ test.describe("on-device translation", () => {
     );
   });
 
+  test("lists what's downloaded and deletes it", async ({ playground }) => {
+    await playground.openSettings("General");
+    const row = playground.settingsRow("Downloaded");
+    await expect(row).toContainText("89 MB");
+
+    await row.getByRole("button").click();
+    const sheet = playground.settingsPanel;
+    await expect(sheet.locator(".es-found__title")).toHaveText("Downloaded");
+    await expect(sheet.getByRole("region", { name: "Dictionaries" })).toContainText(
+      "English → RussianIn useWiktionary · used today5.0 MB",
+    );
+    await expect(sheet.getByRole("region", { name: "Bergamot models" })).toContainText(
+      "Spanish → Englishused 12 days ago",
+    );
+
+    await sheet.getByRole("button", { name: "Delete Spanish → English model" }).click();
+    await expect(sheet.getByRole("region", { name: "Bergamot models" })).not.toContainText("Spanish");
+    expect(await playground.messages("deleteDownloads")).toEqual([
+      { type: "deleteDownloads", ids: ["bergamot:es-en"] },
+    ]);
+
+    // Everything, asked once more
+    await sheet.getByRole("button", { name: "Delete all" }).click();
+    await sheet.getByRole("button", { name: "Delete 52 MB" }).click();
+    await expect(sheet).toContainText("Nothing is downloaded.");
+    await sheet.getByRole("button", { name: "Settings" }).click();
+    await expect(row).toContainText("Nothing");
+  });
+
+  test("opens what's downloaded from an on-device translator's status", async ({ playground }) => {
+    await playground.openSettings("General");
+    // Under the dictionary's status, the only on-device translator picked
+    await expect(playground.settingsPanel).toContainText("The English → Russian dictionary is on this device.");
+    await playground.settingsPanel.getByRole("button", { name: "Manage" }).click();
+
+    await expect(playground.settingsPanel.locator(".es-found__title")).toHaveText("Downloaded");
+  });
+
   test("translates lines with Bergamot, telling it the subtitles' language", async ({ playground }) => {
     await playground.openSettings("General");
     await playground.choose("Translation service", "Bergamot (on device)");

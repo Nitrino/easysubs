@@ -23,5 +23,14 @@ export async function bergamot(request: TBergamotRequest): Promise<unknown> {
   return runBergamotRequest(local, request);
 }
 
+// After its models were deleted: only where Bergamot runs, as a new worker starts without them anyway
+export async function resetBergamot(): Promise<void> {
+  if (typeof Worker === "undefined" && chrome.offscreen) {
+    const open = await chrome.runtime.getContexts({ contextTypes: [chrome.runtime.ContextType.OFFSCREEN_DOCUMENT] });
+    if (open.length === 0) return;
+  } else if (!local) return;
+  await bergamot({ type: "reset" });
+}
+
 export const bergamotTranslate = (texts: string[], from: string, to: string) =>
   bergamot({ type: "translate", texts, from, to }) as Promise<string[]>;

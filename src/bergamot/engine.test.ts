@@ -2,16 +2,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createBergamotEngine } from "./engine";
 import { BERGAMOT_MODELS_URL, type TModelsIndex } from "./registry";
 import { json, stubFetch } from "@root/test/fetch";
+import { stubCaches } from "@root/test/caches";
 
 // Bergamot's worker as the engine talks to it: { id, name, args } in, { id, result | error } out. It "translates" by
 // naming the models a text went through.
 type TCall = { name: string; args: unknown[] };
 let calls: TCall[] = [];
 
+let terminated = 0;
+
 class FakeWorker {
   onmessage: ((event: MessageEvent) => void) | null = null;
   onerror: ((event: ErrorEvent) => void) | null = null;
   constructor(public url: string) {}
+  terminate() {
+    terminated++;
+  }
   postMessage({ id, name, args }: { id: number } & TCall) {
     calls.push({ name, args });
     let result: unknown = null;
@@ -23,17 +29,6 @@ class FakeWorker {
     }
     queueMicrotask(() => this.onmessage?.({ data: { id, result } } as MessageEvent));
   }
-}
-
-// The Cache API, which jsdom lacks
-function stubCaches() {
-  const kept = new Map<string, Response>();
-  vi.stubGlobal("caches", {
-    open: async () => ({
-      match: async (url: string) => kept.get(url)?.clone(),
-      put: async (url: string, response: Response) => void kept.set(url, response),
-    }),
-  });
 }
 
 // The mirror's list (scripts/bergamot-models/mirror.ts) with 4-byte files
@@ -63,6 +58,7 @@ const fileRequests = (fetchMock: ReturnType<typeof stubFetch>) =>
 
 beforeEach(() => {
   calls = [];
+  terminated = 0;
   vi.stubGlobal("Worker", FakeWorker);
   stubCaches();
 });
@@ -100,6 +96,23 @@ describe("createBergamotEngine", () => {
     expect(calls.filter((call) => call.name === "freeTranslationModel").map((call) => call.args[0])).toEqual([
       { from: "en", to: "de" },
     ]);
+  });
+
+  it("lets the worker go when its models were deleted, and downloads them again for the next line", async () => {
+    const fetchMock = stubMirror();
+    const engine = createBergamotEngine("worker.js");
+    await engine.translate(["Hi"], "en", "ru");
+
+    await engine.reset();
+    await caches.open("easysubs-on-device").then(async (cache) => {
+      for (const request of await cache.keys()) await cache.delete(request);
+    });
+
+    expect(terminated).toBe(1);
+    expect(await engine.status("en", "ru")).toEqual({ state: "missing", size: 12 });
+    expect(await engine.translate(["Hi"], "en", "ru")).toEqual(["Hi (en>ru)"]);
+    expect(calls.filter((call) => call.name === "initialize")).toHaveLength(2);
+    expect(fileRequests(fetchMock)).toHaveLength(6);
   });
 
   it("tells what a pair needs: nothing for pairs without models, the size before the download", async () => {

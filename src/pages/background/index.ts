@@ -19,7 +19,9 @@ import {
 import { createExpressionFinder } from "@src/utils/expressions/lookup";
 import { translateExpressionsWithChatGPT, translateExpressionsWithOllama } from "@src/utils/chatGPTExpressions";
 import { createDictionaries } from "@src/utils/dictionary";
-import { bergamot, bergamotTranslate } from "@src/bergamot/client";
+import { bergamot, bergamotTranslate, resetBergamot } from "@src/bergamot/client";
+import { deleteKeptFiles, keptFiles } from "@src/utils/onDeviceFiles";
+import { groupDownloads } from "@src/utils/downloads";
 import { ollamaModels, ollamaTranslate, ollamaWord } from "@src/utils/ollama";
 import { chatGPTWord } from "@src/utils/chatGPTWord";
 import { yandexWordTimes } from "@src/utils/yandexWordTimes";
@@ -49,6 +51,17 @@ chrome.runtime.onInstalled.addListener(function (object) {
 
 const findExpressionsInCues = createExpressionFinder();
 const dictionaries = createDictionaries();
+
+// Deletes downloads by their ids and forgets what's loaded from them; the downloads that are left
+async function deleteDownloads(ids: string[]) {
+  const deleted = groupDownloads(await keptFiles()).filter((download) => ids.includes(download.id));
+  await deleteKeptFiles(deleted.flatMap((download) => download.urls));
+  for (const download of deleted) {
+    if (download.kind === "dictionary") dictionaries.forget(`${download.from}-${download.to}`);
+  }
+  if (deleted.some((download) => download.kind === "bergamot")) await resetBergamot().catch(() => {});
+  return groupDownloads(await keptFiles());
+}
 
 class LinguaLeoAuthError extends Error {}
 
@@ -213,6 +226,17 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .status(message.from, message.to)
       .then((status) => sendResponse(status))
       .catch((error: Error) => sendResponse({ state: "error", error: error.message }));
+  }
+  // What the on-device translators and the speech models keep on the device, and deleting it (src/utils/downloads.ts)
+  if (message.type === "downloads") {
+    keptFiles()
+      .then((files) => sendResponse({ downloads: groupDownloads(files) }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "deleteDownloads") {
+    deleteDownloads(message.ids)
+      .then((downloads) => sendResponse({ downloads }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
   }
   // Bergamot, the engine of Firefox Translations, on the device (src/bergamot)
   if (message.type === "bergamot") {
