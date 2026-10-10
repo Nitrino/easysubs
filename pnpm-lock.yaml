@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@browsermt/bergamot-translator':
+        specifier: 0.4.9
+        version: 0.4.9
       '@huggingface/transformers':
         specifier: 4.3.0
         version: 4.3.0(@types/node@26.6.4)
@@ -238,6 +241,9 @@ packages:
   '@bramus/specificity@2.4.3':
     resolution: {integrity: sha512-0GEz8qJWokkUVYQYRukmkSHIFNoBH8QTreeHrAFbvz1XFYc3Y+puhMs8PQ5x8GNugiC2l5jvDBXKLbBIByeSBw==}
     hasBin: true
+
+  '@browsermt/bergamot-translator@0.4.9':
+    resolution: {integrity: sha512-bNuuCwM/JnsIYQCKXcYKFT4Qc5vLMoB8Nbvz8ReIgs7xzebK8Sa+R8iEK8mLvNBe/WaZ6zrPaUQilLsRT/ea8Q==}
 
   '@bufbuild/protobuf@2.16.0':
     resolution: {integrity: sha512-FWa0sPlqYGJgpTs6OxBRcL/AW4JT0OIO+W1ajerluoTVh8CV0B7XM1qsNCRgnkSCkRCgOICKHRQlY17jrsm0+Q==}
@@ -3265,6 +3271,8 @@ snapshots:
   '@bramus/specificity@2.4.3':
     dependencies:
       css-tree: 3.2.1
+
+  '@browsermt/bergamot-translator@0.4.9': {}
 
   '@bufbuild/protobuf@2.16.0': {}
 

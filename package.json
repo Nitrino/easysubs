@@ -20,6 +20,8 @@
     "playground:movies": "node playground/scripts/download-movies.ts",
     "playground:translations": "node playground/scripts/translation-keys.ts",
     "expressions": "node scripts/expressions/build.ts",
+    "dictionaries": "node --max-old-space-size=8192 scripts/dictionaries/build.ts",
+    "bergamot-models": "node scripts/bergamot-models/mirror.ts",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
@@ -31,6 +33,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@browsermt/bergamot-translator": "0.4.9",
     "@huggingface/transformers": "4.3.0",
     "@ifyour/deeplx": "^0.1.17",
     "@vot.js/core": "3.1.5",

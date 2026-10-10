@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";
 import { sheetClosed } from "@src/models/foundSubs";
+import { downloadsClosed } from "@src/models/downloads";
 
 import { useUnit } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
@@ -37,11 +38,15 @@ export const Settings: FC<TSettingsProps> = () => {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (showSettings) sheetClosed();
+    if (showSettings) {
+      sheetClosed();
+      downloadsClosed();
+    }
     setShowSettings(!showSettings);
   };
   const close = () => {
     sheetClosed();
+    downloadsClosed();
     setShowSettings(false);
   };
   return (

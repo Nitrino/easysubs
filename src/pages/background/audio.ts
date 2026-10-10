@@ -1,25 +1,9 @@
-// The offscreen document of the spoken-word experiment (src/pages/offscreen): the speech models and tab capture need a
-// page, which a service worker isn't. Chrome only; Firefox has no offscreen documents.
+import { openOffscreenDocument } from "./offscreen";
 
-const OFFSCREEN_URL = "src/pages/offscreen/index.html";
-let opening: Promise<void> | null = null;
-
+// The speech models of the spoken-word experiment run in the offscreen document; Chrome only
 export async function openAudioWorker(): Promise<void> {
   if (!chrome.offscreen) throw new Error("The speech models need Chrome");
-  const existing = await chrome.runtime.getContexts({
-    contextTypes: [chrome.runtime.ContextType.OFFSCREEN_DOCUMENT],
-  });
-  if (existing.length > 0) return;
-  opening ??= chrome.offscreen
-    .createDocument({
-      url: OFFSCREEN_URL,
-      reasons: [chrome.offscreen.Reason.WORKERS, chrome.offscreen.Reason.USER_MEDIA],
-      justification: "Speech models and the tab's audio for highlighting the word being said",
-    })
-    .finally(() => {
-      opening = null;
-    });
-  await opening;
+  await openOffscreenDocument();
 }
 
 // After the user clicked "Listen to this tab" in the popup: that click lets chrome.tabCapture take the tab

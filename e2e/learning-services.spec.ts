@@ -35,6 +35,26 @@ test.describe("learning services", () => {
     await expect(playground.wordPopover.locator(".es-addable")).toHaveCount(0);
   });
 
+  test("adds the dictionary translation when the popover shows the word's in its line", async ({
+    playground,
+    page,
+  }) => {
+    await playground.openSettings("General");
+    await playground.choose("Dictionary", "ChatGPT");
+    const modal = page.locator(".es-modal-content");
+    await modal.getByLabel("API Key:").fill("test-chatgpt-key");
+    await modal.getByRole("button", { name: "Save" }).click();
+    await playground.choose("Learning service", "Anki");
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+    await expect(playground.wordPopover.locator(".es-title")).toContainText("↳");
+    await playground.wordPopover.locator(".es-title.es-addable").click();
+
+    await expect(playground.toast).toHaveText("Word added to Anki");
+    expect(await addedAnkiNote(playground)).toMatchObject({ Word: "keys", Translation: enRu.words.keys.main });
+  });
+
   test("adds a word to Anki", async ({ playground }) => {
     await chooseService(playground, "Anki");
 

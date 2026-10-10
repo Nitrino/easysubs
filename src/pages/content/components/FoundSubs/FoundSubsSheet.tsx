@@ -66,6 +66,7 @@ import { serviceTitle } from "@src/utils/secondarySubsOptions";
 import { Select } from "../ui/Select";
 import { Spinner } from "../ui/Spinner";
 import { Toggle } from "../ui/Toggle";
+import { ChevronLeft } from "../Settings/assets/ChevronLeft";
 import { CloseIcon } from "../Settings/assets/CloseIcon";
 import { MinusIcon } from "../Settings/assets/MinusIcon";
 import { PlusIcon } from "../Settings/assets/PlusIcon";
@@ -128,19 +129,6 @@ const SourcesIcon = () => (
     <path d="M2 4h10M2 10h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     <circle cx="5" cy="4" r="1.7" fill="var(--es-hud-strong)" stroke="currentColor" strokeWidth="1.4" />
     <circle cx="9" cy="10" r="1.7" fill="var(--es-hud-strong)" stroke="currentColor" strokeWidth="1.4" />
-  </svg>
-);
-
-const ChevronLeft = () => (
-  <svg viewBox="0 0 12 12" aria-hidden="true">
-    <path
-      d="M7.5 2.5 4 6l3.5 3.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
   </svg>
 );
 

@@ -15,8 +15,9 @@ test.describe("translation", () => {
 
     const popover = playground.wordPopover;
     await expect(popover.locator(".es-title")).toHaveText(enRu.words.keys.main);
-    expect(await playground.messages("translateWordFull")).toContainEqual(
-      expect.objectContaining({ text: "keys", language: "ru" }),
+    // In the Wiktionary dictionary by default
+    expect(await playground.messages("dictionaryLookup")).toContainEqual(
+      expect.objectContaining({ text: "keys", from: "en", to: "ru" }),
     );
   });
 
@@ -38,10 +39,10 @@ test.describe("translation", () => {
     const [main, ...alternatives] = enRu.words["pick up"].verb as string[];
     await expect(popover.locator(".es-pv-item")).toHaveText([main, ...alternatives.map((text) => `${text}verb`)]);
     await expect(popover.locator(".es-pv-word")).toHaveText(`pick${enRu.words.pick.main}`);
-    expect(await playground.messages("translateWordFull")).toEqual(
+    expect(await playground.messages("dictionaryLookup")).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ text: "pick up", language: "ru" }),
-        expect.objectContaining({ text: "pick", language: "ru" }),
+        expect.objectContaining({ text: "pick up", to: "ru" }),
+        expect.objectContaining({ text: "pick", to: "ru" }),
       ]),
     );
   });
@@ -146,7 +147,7 @@ test.describe("translation", () => {
     await playground.word("keys").hover();
     await expect(playground.wordPopover.locator(".es-title")).toHaveText(enRu.words.keys.main);
 
-    expect(await playground.messages("translateWordFull")).toHaveLength(1);
+    expect(await playground.messages("dictionaryLookup")).toHaveLength(1);
   });
 
   test("translates into the language chosen in the settings", async ({ playground }) => {
@@ -155,8 +156,8 @@ test.describe("translation", () => {
     await playground.word("keys").hover();
 
     await expect(playground.wordPopover.locator(".es-title")).toHaveText(offlineTranslations("en-de").words.keys.main);
-    expect(await playground.messages("translateWordFull")).toEqual([
-      expect.objectContaining({ text: "keys", language: "de" }),
+    expect(await playground.messages("dictionaryLookup")).toEqual([
+      expect.objectContaining({ text: "keys", to: "de" }),
     ]);
   });
 
@@ -347,7 +348,7 @@ test.describe("line translation services", () => {
     await expect(playground.subs).toContainText("What if we run out of time");
 
     await playground.word("run").hover();
-    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verb, in this line");
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verbIn this line");
     await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText(enRu.words["run out"].main);
     await playground.word("time").hover();
     await expect(playground.wordPopover.locator(".es-title")).toHaveText("out of time");
@@ -364,7 +365,11 @@ test.describe("Chrome's built-in translator", () => {
     await playground.stubChromeTranslator();
     await playground.open();
     await playground.seek(5);
-    await playground.changeSettings("General", () => playground.choose("Translation service", "Chrome (on device)"));
+    // Expressions follow the Dictionary row; with Google there, Chrome translates them
+    await playground.changeSettings("General", async () => {
+      await playground.choose("Translation service", "Chrome (on device)");
+      await playground.choose("Dictionary", "Google Translate");
+    });
 
     await playground.word("need").click();
     await expect(playground.linePopover).toHaveText("[chrome:ru] Almost. I just need to pick up my keys.");
@@ -398,6 +403,210 @@ test.describe("Chrome's built-in translator", () => {
 
     await expect(page.getByRole("option", { name: "ChatGPT", exact: true })).toBeVisible();
     await expect(page.getByRole("option", { name: "Chrome (on device)" })).toHaveCount(0);
+  });
+});
+
+test.describe("on-device translation", () => {
+  test.beforeEach(async ({ playground }) => {
+    await playground.open();
+    await playground.seek(5);
+  });
+
+  test("looks words up in the Wiktionary dictionary of the pair by default", async ({ playground }) => {
+    await playground.openSettings("General");
+    await expect(playground.settingsRow("Dictionary")).toContainText("Wiktionary (on device)");
+    await expect(playground.settingsPanel).toContainText("The English → Russian dictionary is on this device.");
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(enRu.words.keys.main);
+    expect(await playground.messages("dictionaryLookup")).toEqual([
+      expect.objectContaining({ from: "en", to: "ru", text: "keys" }),
+    ]);
+    expect(await playground.messages("translateWordFull")).toEqual([]);
+  });
+
+  test("offers every service for words, telling which give meanings", async ({ playground, page }) => {
+    await playground.openSettings("General");
+    await playground.settingsRow("Dictionary").locator(".es-select").click();
+
+    // The picked one, Wiktionary, has a checkmark before its name
+    const option = (name: string) => page.getByRole("option", { name, exact: name !== "Wiktionary (on device)" });
+    for (const name of ["Wiktionary (on device)", "Wiktionary + Bergamot", "ChatGPT", "Ollama"]) {
+      await expect(option(name)).toContainText("Meanings");
+    }
+    for (const name of [
+      "Google Translate",
+      "DeepL",
+      "Bing Translator",
+      "Yandex Translate",
+      "Chrome (on device)",
+      "Bergamot (on device)",
+    ]) {
+      await expect(option(name)).toContainText("One translation");
+    }
+  });
+
+  test("asks for the DeepL key when DeepL translates words", async ({ playground, page }) => {
+    await playground.openSettings("General");
+    await playground.choose("Dictionary", "DeepL");
+
+    const modal = page.locator(".es-modal-content");
+    await modal.getByLabel("API Key:").fill("test-deepl-key:fx");
+    await modal.getByRole("button", { name: "Save" }).click();
+    await expect(playground.settingsPanel).toContainText("One translation of the word");
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(enRu.words.keys.main);
+    expect(await playground.messages("translateFullText")).toContainEqual(
+      expect.objectContaining({ text: "keys", translationService: "deepl", deeplApiKey: "test-deepl-key:fx" }),
+    );
+    expect(await playground.messages("translateWordFull")).toEqual([]);
+  });
+
+  test("translates a word and an expression with Bergamot as they're used in the line", async ({ playground }) => {
+    await playground.changeSettings("General", () => playground.choose("Dictionary", "Bergamot (on device)"));
+
+    // The word alone translates differently from the line: the line's on top, the word's below
+    await playground.word("keys").hover();
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(`↳${enRu.words.keys.main}`);
+    await expect(playground.wordPopover.locator(".es-title .es-badge")).toHaveText("In this line");
+    await expect(playground.wordPopover.locator(".es-alt-word")).toHaveText([enRu.words.keys.main]);
+    await playground.word("pick").hover();
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verbIn this line");
+    await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText(`↳${enRu.words["pick up"].main}`);
+
+    expect(await playground.messages("bergamot")).toContainEqual(
+      expect.objectContaining({
+        request: expect.objectContaining({
+          texts: ["Almost. I just need to <b>pick</b> <b>up</b> my keys."],
+          html: true,
+        }),
+      }),
+    );
+  });
+
+  test("shows Wiktionary's meanings under Bergamot's translation of the word in its line", async ({ playground }) => {
+    await playground.openSettings("General");
+    await playground.choose("Dictionary", "Wiktionary + Bergamot");
+    await expect(playground.settingsPanel).toContainText("The English → Russian dictionary is on this device.");
+    await expect(playground.settingsPanel).toContainText("English → Russian translates on this device.");
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(`↳${enRu.words.keys.main}`);
+    await expect(playground.wordPopover.locator(".es-title .es-badge")).toHaveText("In this line");
+    await expect(playground.wordPopover.locator(".es-alt-word").first()).toHaveText(enRu.words.keys.main);
+    // An expression Wiktionary has comes from it alone
+    await playground.word("pick").hover();
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verb");
+    await expect(playground.wordPopover.locator(".es-pv-main")).toHaveText(enRu.words["pick up"].main);
+
+    expect(await playground.messages("dictionaryLookup")).toContainEqual(expect.objectContaining({ text: "keys" }));
+    expect(await playground.messages("bergamot")).toContainEqual(
+      expect.objectContaining({
+        request: expect.objectContaining({ texts: ["Almost. I just need to pick up my <b>keys</b>.", "keys"] }),
+      }),
+    );
+  });
+
+  test("lists what's downloaded and deletes it", async ({ playground }) => {
+    await playground.openSettings("General");
+    const row = playground.settingsRow("Downloaded");
+    await expect(row).toContainText("89 MB");
+
+    await row.getByRole("button").click();
+    const sheet = playground.settingsPanel;
+    await expect(sheet.locator(".es-found__title")).toHaveText("Downloaded");
+    await expect(sheet.getByRole("region", { name: "Dictionaries" })).toContainText(
+      "English → RussianIn useWiktionary · used today5.0 MB",
+    );
+    await expect(sheet.getByRole("region", { name: "Bergamot models" })).toContainText(
+      "Spanish → Englishused 12 days ago",
+    );
+
+    await sheet.getByRole("button", { name: "Delete Spanish → English model" }).click();
+    await expect(sheet.getByRole("region", { name: "Bergamot models" })).not.toContainText("Spanish");
+    expect(await playground.messages("deleteDownloads")).toEqual([
+      { type: "deleteDownloads", ids: ["bergamot:es-en"] },
+    ]);
+
+    // Everything, asked once more
+    await sheet.getByRole("button", { name: "Delete all" }).click();
+    await sheet.getByRole("button", { name: "Delete 52 MB" }).click();
+    await expect(sheet).toContainText("Nothing is downloaded.");
+    await sheet.getByRole("button", { name: "Settings" }).click();
+    await expect(row).toContainText("Nothing");
+  });
+
+  test("opens what's downloaded from an on-device translator's status", async ({ playground }) => {
+    await playground.openSettings("General");
+    // Under the dictionary's status, the only on-device translator picked
+    await expect(playground.settingsPanel).toContainText("The English → Russian dictionary is on this device.");
+    await playground.settingsPanel.getByRole("button", { name: "Manage" }).click();
+
+    await expect(playground.settingsPanel.locator(".es-found__title")).toHaveText("Downloaded");
+  });
+
+  test("translates lines with Bergamot, telling it the subtitles' language", async ({ playground }) => {
+    await playground.openSettings("General");
+    await playground.choose("Translation service", "Bergamot (on device)");
+    await expect(playground.settingsPanel).toContainText("English → Russian translates on this device.");
+    await playground.closeSettings();
+
+    await playground.word("need").click();
+
+    await expect(playground.linePopover).toHaveText(enRu.lines["Almost. I just need to pick up my keys."]);
+    // The hovered word's expression ("need to") goes to Bergamot too
+    expect(await playground.messages("translateFullText")).toContainEqual(
+      expect.objectContaining({
+        text: "Almost. I just need to pick up my keys.",
+        translationService: "bergamot",
+        sourceLanguage: "en",
+        language: "ru",
+      }),
+    );
+  });
+
+  test("shows ChatGPT's translation of the word in its line over its meanings", async ({ playground, page }) => {
+    await playground.openSettings("General");
+    await playground.choose("Dictionary", "ChatGPT");
+    const modal = page.locator(".es-modal-content");
+    await modal.getByLabel("API Key:").fill("test-chatgpt-key");
+    await modal.getByRole("button", { name: "Save" }).click();
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(`↳${enRu.words.keys.main}`);
+    await expect(playground.wordPopover.locator(".es-title .es-badge")).toHaveText("In this line");
+    await expect(playground.wordPopover.locator(".es-alt-word")).toHaveText([enRu.words.keys.main]);
+    expect(await playground.messages("chatGPTWord")).toEqual([
+      expect.objectContaining({ text: "keys", line: "Almost. I just need to pick up my keys." }),
+    ]);
+  });
+
+  test("asks which Ollama model translates and looks words up with it", async ({ playground, page }) => {
+    await playground.openSettings("General");
+    await playground.choose("Dictionary", "Ollama");
+
+    const modal = page.locator(".es-modal-content");
+    await expect(modal.getByRole("heading")).toHaveText("Ollama");
+    await expect(modal).toContainText("Ollama has 2 models: translategemma:4b, gemma3:4b.");
+    await expect(modal.getByLabel("Model:")).toHaveValue("translategemma:4b");
+    await modal.getByRole("button", { name: "Save" }).click();
+    await expect(playground.settingsPanel).toContainText("translategemma:4b at http://localhost:11434");
+    await playground.closeSettings();
+
+    await playground.word("keys").hover();
+
+    await expect(playground.wordPopover.locator(".es-title")).toContainText(enRu.words.keys.main);
+    expect(await playground.messages("ollamaWord")).toEqual([
+      expect.objectContaining({ text: "keys", ollamaModel: "translategemma:4b", ollamaUrl: "http://localhost:11434" }),
+    ]);
   });
 });
 

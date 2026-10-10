@@ -14,6 +14,7 @@ import { addWordFx } from "@src/models/learning";
 import { PlusIcon } from "./assets/PlusIcon";
 import { Popover } from "../ui/Popover";
 import { Spinner } from "../ui/Spinner";
+import { InLineBadge } from "./InLineBadge";
 
 // The popover of a hovered word that belongs to a phrasal verb, an idiom or another expression: the expression, its
 // translations, and the word's own translation in case the expression isn't meant here
@@ -54,7 +55,10 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
       <div className="es-title" dir="auto">
         {expression.expression}
       </div>
-      <div className="es-label">{current?.inContext ? `${expression.kind}, in this line` : expression.kind}</div>
+      <div className="es-label">
+        {expression.kind}
+        {current?.inContext && <InLineBadge />}
+      </div>
       <div className="es-sep" />
       {current?.pending && (
         <div className="es-loading">

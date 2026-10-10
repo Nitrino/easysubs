@@ -2,6 +2,8 @@ import type { TSecondaryTranslator } from "@src/models/types";
 import { googleTranslateSingleFetcher } from "./googleTranslateSingleFetcher";
 import { deeplTranslateFetcher, SUPPORTED_LANGUAGES as DEEPL_LANGUAGES } from "./deeplTranslateFetcher";
 import { chatGPTTranslateFetcher, SUPPORTED_LANGUAGES as CHATGPT_LANGUAGES } from "./chatGPTTranslateFetcher";
+import { ollamaTranslateBatch } from "./ollama";
+import { bergamotTranslate } from "@src/bergamot/client";
 
 export type TTranslateBatchRequest = {
   texts: string[];
@@ -10,6 +12,10 @@ export type TTranslateBatchRequest = {
   deeplApiKey?: string;
   chatGPTApiKey?: string;
   chatGPTModel?: string;
+  ollamaUrl?: string;
+  ollamaModel?: string;
+  // The lines' language, for Bergamot, which can't detect it
+  sourceLanguage?: string;
 };
 
 // How many lines are translated at once when a batch has to be retried line by line
@@ -74,6 +80,10 @@ export async function translateBatch(request: TTranslateBatchRequest): Promise<s
         texts,
         lang: request.language as (typeof CHATGPT_LANGUAGES)[number],
       });
+    case "ollama":
+      return ollamaTranslateBatch(texts, request.language, request);
+    case "bergamot":
+      return bergamotTranslate(texts, request.sourceLanguage ?? "", request.language);
     default:
       return translateWithGoogle(texts, request.language);
   }

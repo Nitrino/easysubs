@@ -6,6 +6,8 @@ import { TranslationService } from "./TranslationService";
 import { TtsService } from "./TtsService";
 import { DeepLApiKeyModal } from "./DeepLApiKeyModal";
 import { ChatGPTApiKeyModal } from "./ChatGPTApiKeyModal";
+import { OllamaModal } from "./OllamaModal";
+import { DictionaryService } from "./DictionaryService";
 import { AnkiContext, LearningService } from "./LearningService";
 import { SubsDelay } from "./SubsDelay";
 import { SubsFontSize } from "./SubsFontSize";
@@ -26,7 +28,9 @@ import { createPortal } from "react-dom";
 import { $streaming } from "@src/models/streamings";
 import { CloseIcon } from "./assets/CloseIcon";
 import { $sheet } from "@src/models/foundSubs";
+import { $downloadsOpen } from "@src/models/downloads";
 import { FoundSubsSheet } from "../FoundSubs/FoundSubsSheet";
+import { DownloadsRow, DownloadsSheet } from "./Downloads";
 import {
   SecondarySubsBackground,
   SecondarySubsColor,
@@ -60,12 +64,14 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming, sheet] = useUnit([
+  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming, foundSheet, downloadsOpen] = useUnit([
     $activeSettingsTab,
     activeSettingsTabChanged,
     $streaming,
     $sheet,
+    $downloadsOpen,
   ]);
+  const sheet = foundSheet || downloadsOpen;
   const contentRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(contentRef, onClose);
@@ -77,8 +83,10 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         ref={contentRef}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* The search for subtitles online opens in place of the tabs */}
-        {sheet ? (
+        {/* The search for subtitles online and the list of downloads open in place of the tabs */}
+        {downloadsOpen ? (
+          <DownloadsSheet onClose={onClose} />
+        ) : foundSheet ? (
           <FoundSubsSheet onClose={onClose} />
         ) : (
           <>
@@ -147,12 +155,18 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                     <TranslationService />
                   </div>
                   <div className="es-settings-content__item">
+                    <DictionaryService />
+                  </div>
+                  <div className="es-settings-content__item">
                     <TtsService />
                   </div>
                   <div className="es-settings-content__item">
                     <LearningService />
                   </div>
                   <AnkiContext />
+                  <div className="es-settings-content__item">
+                    <DownloadsRow />
+                  </div>
                 </>
               )}
               {activeSettingsTab === 1 && (
@@ -221,6 +235,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
       </div>
       {createPortal(<DeepLApiKeyModal />, document.querySelector("body"))}
       {createPortal(<ChatGPTApiKeyModal />, document.querySelector("body"))}
+      {createPortal(<OllamaModal />, document.querySelector("body"))}
     </>
   );
 };

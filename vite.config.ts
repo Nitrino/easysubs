@@ -7,6 +7,7 @@ import addHmr from "./utils/plugins/add-hmr.ts";
 import watchRebuild from "./utils/plugins/watch-rebuild.ts";
 import inlineVitePreloadScript from "./utils/plugins/inline-vite-preload-script.ts";
 import copyOnnxRuntime from "./utils/plugins/copy-onnx-runtime.ts";
+import copyBergamot from "./utils/plugins/copy-bergamot.ts";
 
 const rootDir = resolve(import.meta.dirname);
 const srcDir = resolve(rootDir, "src");
@@ -43,6 +44,7 @@ export default defineConfig({
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
     inlineVitePreloadScript(),
     copyOnnxRuntime(outDir),
+    copyBergamot(outDir),
   ],
   publicDir,
   build: {

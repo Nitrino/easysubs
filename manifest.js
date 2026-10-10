@@ -57,9 +57,17 @@ const manifest = {
       world: "MAIN",
     },
   ],
-  // unlimitedStorage: found subtitle files and translations are kept on the device
-  // offscreen: the speech models of the spoken-word experiment (src/pages/offscreen)
-  permissions: ["scripting", "storage", "unlimitedStorage", "activeTab", "offscreen"],
+  // unlimitedStorage: found subtitle files, translations, dictionaries and translation models are kept on the device
+  // offscreen: the speech models of the spoken-word experiment and Bergamot's worker (src/pages/offscreen)
+  // declarativeNetRequestWithHostAccess: requests to Ollama get its own origin (src/utils/ollama.ts)
+  permissions: [
+    "scripting",
+    "storage",
+    "unlimitedStorage",
+    "activeTab",
+    "offscreen",
+    "declarativeNetRequestWithHostAccess",
+  ],
   optional_host_permissions: ["*://*/*"],
   // tabCapture: "Listen to this tab" in the popup, asked for on first use, as it warns of reading all websites
   optional_permissions: ["tabCapture"],
@@ -92,9 +100,15 @@ const manifest = {
     // and Yandex's subtitle files
     "https://vot-worker.eu.cc/*",
     "https://brosubs.s3-private.mds.yandex.net/*",
+    // On-device translation: Bergamot's models (src/bergamot) and the Wiktionary dictionaries (src/utils/dictionary),
+    // attached to GitHub releases, and the user's Ollama (src/utils/ollama.ts)
+    "https://github.com/*",
+    "https://release-assets.githubusercontent.com/*",
+    "https://objects.githubusercontent.com/*",
+    "http://localhost:11434/*",
   ],
   content_security_policy: {
-    // WebAssembly for ONNX Runtime in the offscreen document
+    // WebAssembly for ONNX Runtime and Bergamot
     extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
   },
   web_accessible_resources: [

@@ -15,6 +15,10 @@ setupPlayer();
 setupInspector();
 setupScreenshots();
 setupAudioWorker();
+// The live background downloads the dictionaries and models the dev server has from pnpm dictionaries and
+// pnpm bergamot-models (playground/vite.config.ts) instead of the GitHub releases
+globalThis.easysubsDictionariesUrl = `${location.origin}/dictionaries/`;
+globalThis.easysubsBergamotModelsUrl = `${location.origin}/bergamot-models/`;
 
 // Replaces the hostname-based detection of src/utils/getCurrentService.ts
 fetchCurrentStreamingFx.use(() => new Playground());

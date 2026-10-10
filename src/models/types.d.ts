@@ -55,6 +55,9 @@ export type TPartOfSpeach =
   | "numeral"
   | "auxiliary verb"
   | "particle"
+  | "determiner"
+  | "phrase"
+  | "name"
   | "unknown";
 
 return `unknown number ${val}`;
@@ -64,6 +67,8 @@ export type TWordTranslationItem = {
   partOfSpeech: TPartOfSpeach;
   synonyms: string[];
   popularity: number;
+  // Which meaning it is, from a dictionary that tells: "To collect a passenger."
+  note?: string;
 };
 
 export type TWordTranslation = {
@@ -72,6 +77,14 @@ export type TWordTranslation = {
   targetLanguage: string;
   translations: TWordTranslationItem[];
   transcription: string;
+  // The dictionary form the meanings are of, when the word is an inflected form of it: "go" for "went"
+  lemma?: string;
+  // Why there's no translation, shown in its place
+  error?: string;
+  // The word's translation in the line it was hovered in, from Bergamot (src/utils/wordInLine.ts), besides the meanings
+  inLine?: string;
+  // "cueId:index" of the line and word a translation in the line is for: it isn't the word's translation elsewhere
+  context?: string;
 };
 
 export type TGoogleTranslation = unknown;
@@ -80,7 +93,22 @@ export type TLearningService = "anki" | "lingualeo" | "puzzle-english" | "disabl
 // What Anki cards get from the subtitle line a word was added from
 export type TAnkiContext = { sentence: boolean; translation: boolean; picture: boolean; audio: boolean };
 
-export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt" | "chrome";
+export type TTranslationService = "google" | "deepl" | "bing" | "yandex" | "chatgpt" | "chrome" | "bergamot" | "ollama";
+
+// Where hovered words are looked up: Google's dictionary, a Wiktionary dictionary on the device (src/utils/dictionary),
+// alone or with Bergamot's translation of the word in its line, ChatGPT or the user's Ollama give a word's meanings;
+// the translators give one translation (src/utils/dictionaries.ts)
+export type TDictionaryService =
+  | "google"
+  | "wiktionary"
+  | "wiktionary-bergamot"
+  | "chatgpt"
+  | "ollama"
+  | "deepl"
+  | "bing"
+  | "yandex"
+  | "chrome"
+  | "bergamot";
 
 export type TTtsService = "google" | "youdao" | "wiktionary" | "chatgpt" | "browser";
 
@@ -124,7 +152,7 @@ export type TSubsTrack = {
 // translated even where the video has a track in it
 export type TSecondaryChoice = { language: string; kind?: TSubsTrackKind; translate?: boolean };
 
-export type TSecondaryTranslator = "google" | "deepl" | "chatgpt" | "chrome";
+export type TSecondaryTranslator = "google" | "deepl" | "chatgpt" | "chrome" | "bergamot" | "ollama";
 export type TSecondaryPosition = "below" | "above" | "top";
 export type TSecondaryReveal = "always" | "hover" | "paused";
 
@@ -225,8 +253,10 @@ export type TExpressionMatch = {
   indexes: number[];
 };
 
-// An expression's translation: the main one and others, with their part of speech when the service gives one
+// An expression's translation: the main one and others, with their part of speech when the service gives one, and
+// whether it's Bergamot's translation of it in its cue
 export type TExpressionTranslation = {
   main: string;
   alternatives: { text: string; partOfSpeech?: TPartOfSpeach }[];
+  inLine?: boolean;
 };

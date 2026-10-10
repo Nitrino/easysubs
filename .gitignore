@@ -16,3 +16,7 @@ coverage
 test-results
 playwright-report
 blob-report
+
+# Dictionaries built by pnpm dictionaries and models mirrored by pnpm bergamot-models, attached to GitHub releases
+/dictionaries
+/bergamot-models

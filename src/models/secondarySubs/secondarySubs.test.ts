@@ -14,12 +14,18 @@ import {
 import { esSubsChanged, rawSubsAdded, subsDelayButtonPressed, subsReloadRequested } from "../subs";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
-import { $secondarySubs, $secondarySubsTranslator, $translateLanguage, secondarySubsChanged } from "../settings";
+import {
+  $ollamaModel,
+  $secondarySubs,
+  $secondarySubsTranslator,
+  $translateLanguage,
+  secondarySubsChanged,
+} from "../settings";
 import type { Captions, TSecondaryChoice, TSubsTrack } from "../types";
 import { captions, offlineTranslations, playgroundCaptions } from "@root/test/fixtures";
 import { createService } from "@root/test/service";
 import { createVideo } from "@root/test/video";
-import { chromeMock, sentMessages } from "@root/test/chrome";
+import { answerNextMessage, chromeMock, sentMessages } from "@root/test/chrome";
 import { stubChromeTranslator } from "@root/test/chromeTranslator";
 import type Service from "@src/streamings/service";
 
@@ -199,6 +205,53 @@ describe("second line translated as the video plays", () => {
     expect(scope.getState($currentSecondarySubs)).toEqual([
       { text: russian("Almost. I just need to pick up my keys."), pending: false },
     ]);
+  });
+
+  it("translates with Bergamot on the device, telling it the subtitles' language", async () => {
+    const { scope, showEnglish } = setup({ choice: { language: "ru" } });
+    await allSettled($secondarySubsTranslator, { scope, params: "bergamot" });
+
+    await showEnglish();
+
+    expect(batches()).toEqual([
+      expect.objectContaining({ translator: "bergamot", sourceLanguage: "en", language: "ru" }),
+    ]);
+    expect(batches()[0]).not.toHaveProperty("ollamaModel");
+    expect(scope.getState($currentSecondarySubs)).toEqual([
+      { text: russian("Almost. I just need to pick up my keys."), pending: false },
+    ]);
+  });
+
+  it("translates with Google where Bergamot can't", async () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    answerNextMessage("translateBatch", { error: "There's no model for en → ru" });
+    const { scope, showEnglish } = setup({ choice: { language: "ru" } });
+    await allSettled($secondarySubsTranslator, { scope, params: "bergamot" });
+
+    await showEnglish();
+
+    expect(batches()).toEqual([
+      expect.objectContaining({ translator: "bergamot" }),
+      expect.objectContaining({ translator: "google" }),
+    ]);
+    expect(scope.getState($currentSecondarySubs)).toEqual([
+      { text: russian("Almost. I just need to pick up my keys."), pending: false },
+    ]);
+  });
+
+  it("sends Ollama's address and model with its batches", async () => {
+    const { scope, showEnglish } = setup({ choice: { language: "ru" } });
+    await allSettled($ollamaModel, { scope, params: "translategemma:4b" });
+    await allSettled($secondarySubsTranslator, { scope, params: "ollama" });
+
+    await showEnglish();
+
+    expect(batches()[0]).toMatchObject({
+      translator: "ollama",
+      ollamaUrl: "http://localhost:11434",
+      ollamaModel: "translategemma:4b",
+    });
+    expect(batches()[0]).not.toHaveProperty("sourceLanguage");
   });
 
   it("asks for the next window when the playhead nears its end", async () => {

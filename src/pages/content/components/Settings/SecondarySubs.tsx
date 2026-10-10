@@ -29,6 +29,7 @@ import { $streaming } from "@src/models/streamings";
 import type { TSecondaryPosition, TSecondaryReveal, TSecondaryTranslator } from "@src/models/types";
 import { languageName } from "@src/utils/languages";
 import { isChromeTranslatorSupported } from "@src/utils/chromeTranslator";
+import { OllamaStatus, OnDeviceStatus } from "./OnDeviceStatus";
 import {
   FILE_OPTION,
   FIND_OPTION,
@@ -170,6 +171,8 @@ const TRANSLATOR_OPTIONS: { label: string; value: TSecondaryTranslator }[] = [
   { label: TRANSLATOR_TITLES.deepl, value: "deepl" },
   { label: TRANSLATOR_TITLES.chatgpt, value: "chatgpt" },
   { label: TRANSLATOR_TITLES.chrome, value: "chrome" },
+  { label: TRANSLATOR_TITLES.bergamot, value: "bergamot" },
+  { label: TRANSLATOR_TITLES.ollama, value: "ollama" },
 ];
 const translatorOptions = (translator: TSecondaryTranslator) =>
   TRANSLATOR_OPTIONS.filter(
@@ -187,6 +190,10 @@ const TRANSLATOR_NOTES: Record<TSecondaryTranslator, { text: string; warning?: b
   chrome: {
     text: "Translates on this device, free and without limits. Chrome downloads each language pair once; Google translates where it can't.",
   },
+  bergamot: {
+    text: "Translates on this device with the models of Firefox Translations, free and without limits. Each language pair downloads once from Mozilla; Google translates pairs it has no model for.",
+  },
+  ollama: { text: "Translates with the model you run in Ollama on your computer." },
 };
 
 // Google unless DeepL or ChatGPT is picked here. It stays editable while the line comes from a track: it's what
@@ -212,6 +219,10 @@ export const SecondarySubsTranslator: FC = () => {
       <p className={cn("es-settings-content__status", { "es-settings-content__status--warning": note.warning })}>
         {note.text}
       </p>
+      {translator === "bergamot" && source.type === "translate" && (
+        <OnDeviceStatus kind="bergamot" language={source.language} />
+      )}
+      {translator === "ollama" && <OllamaStatus />}
     </>
   );
 };

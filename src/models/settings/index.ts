@@ -19,7 +19,9 @@ import {
   TSpokenWordSource,
   TTranslationService,
   TTtsService,
+  TDictionaryService,
 } from "../types";
+import { DEFAULT_OLLAMA_URL } from "@src/utils/ollamaUrl";
 import { fetchCurrentStreamingFx } from "../streamings";
 
 // Settings are saved under their names. Up to v3.1.3 they were saved under the ids effector gave the stores
@@ -79,6 +81,20 @@ export const ankiContextChanged = createEvent<Partial<TAnkiContext>>();
 export const $translationService = createSetting<TTranslationService>("translationService", "google", 320);
 export const translationServiceChanged = createEvent<TTranslationService>();
 export const translationServiceChangeFx = createEffect<TTranslationService, TTranslationService>((value) => value);
+
+// Where hovered words are looked up; words the Wiktionary dictionary lacks go to the translation service, or to
+// Bergamot with "wiktionary-bergamot"
+export const $dictionaryService = createSetting<TDictionaryService>("dictionaryService", "wiktionary");
+export const dictionaryServiceChanged = createEvent<TDictionaryService>();
+
+// The user's Ollama: its address and the model that translates
+export const $ollamaUrl = createSetting("ollamaUrl", DEFAULT_OLLAMA_URL);
+export const ollamaUrlChanged = createEvent<string>();
+export const $ollamaModel = createSetting("ollamaModel", "");
+export const ollamaModelChanged = createEvent<string>();
+export const $ollamaModalOpen = createStore<boolean>(false);
+export const ollamaModalOpened = createEvent();
+export const ollamaModalClosed = createEvent();
 
 export const $deeplApiKey = createSetting("deeplApiKey", "", 338);
 export const deeplApiKeyChanged = createEvent<string>();
@@ -316,6 +332,11 @@ $translateLanguage.on(translateLanguageChangeFx.doneData, (_, language) => langu
 $learningService.on(learningServiceChangeFx.doneData, (_, service) => service);
 $ankiContext.on(ankiContextChanged, (context, change) => ({ ...context, ...change }));
 $translationService.on(translationServiceChangeFx.doneData, (_, service) => service);
+$dictionaryService.on(dictionaryServiceChanged, (_, service) => service);
+$ollamaUrl.on(ollamaUrlChanged, (_, url) => url.trim() || DEFAULT_OLLAMA_URL);
+$ollamaModel.on(ollamaModelChanged, (_, model) => model.trim());
+$ollamaModalOpen.on(ollamaModalOpened, () => true);
+$ollamaModalOpen.on(ollamaModalClosed, () => false);
 $ttsService.on(ttsServiceChangeFx.doneData, (_, service) => service);
 $deeplApiKey.on(deeplApiKeyChangeFx.doneData, (_, key) => key);
 $deeplApiKeyModalOpen.on(deeplApiKeyModalOpened, () => true);
@@ -373,6 +394,29 @@ sample({
   source: $chatGPTApiKey,
   filter: (apiKey, translator) => translator === "chatgpt" && !apiKey,
   target: chatGPTApiKeyModalOpened,
+});
+
+// Picking a paid service for hovered words asks for its key when there's none yet, like for the second line
+sample({
+  clock: dictionaryServiceChanged,
+  source: $deeplApiKey,
+  filter: (apiKey, service) => service === "deepl" && !apiKey,
+  target: deeplApiKeyModalOpened,
+});
+
+sample({
+  clock: dictionaryServiceChanged,
+  source: $chatGPTApiKey,
+  filter: (apiKey, service) => service === "chatgpt" && !apiKey,
+  target: chatGPTApiKeyModalOpened,
+});
+
+// Picking Ollama anywhere asks for its model when there's none yet
+sample({
+  clock: [translationServiceChanged, secondarySubsTranslatorChanged, dictionaryServiceChanged],
+  source: $ollamaModel,
+  filter: (model, service) => service === "ollama" && !model,
+  target: ollamaModalOpened,
 });
 
 $enabled.watch((isEnabled) => {

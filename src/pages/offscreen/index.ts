@@ -2,10 +2,12 @@ import { runAudioJob, setRuntimePath } from "@src/audio/models";
 import type { TAudioJob, TAudioWorkerEvent } from "@src/audio/jobs";
 import { createJobQueue } from "@src/audio/queue";
 import { startTabCapture, stopTabCapture } from "./tabCapture";
+import { BERGAMOT_WORKER, createBergamotEngine, runBergamotRequest, type TBergamotEngine } from "@src/bergamot/engine";
 
-// The offscreen document of the spoken-word experiment (Chrome): it runs the speech models for the content scripts,
-// which reach it through a port named "es-audio", and captures a tab's sound when the popup asks for it. The
-// background opens it (src/pages/background, "audioWorkerOpen").
+// The offscreen document (Chrome): it runs the speech models of the spoken-word experiment for the content scripts,
+// which reach it through a port named "es-audio", captures a tab's sound when the popup asks for it, and runs
+// Bergamot's worker for the background (src/bergamot/client.ts). The background opens it
+// (src/pages/background/offscreen.ts).
 
 setRuntimePath(chrome.runtime.getURL("assets/ort/"));
 
@@ -32,8 +34,17 @@ chrome.runtime.onConnect.addListener((port) => {
   });
 });
 
+let bergamot: TBergamotEngine | null = null;
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.target !== "offscreen") return;
+  if (message.type === "bergamot") {
+    bergamot ??= createBergamotEngine(chrome.runtime.getURL(BERGAMOT_WORKER));
+    runBergamotRequest(bergamot, message.request)
+      .then((result) => sendResponse({ result }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+    return true;
+  }
   if (message.type === "tabCaptureStart") {
     startTabCapture(message.tabId, message.streamId, (chunk) =>
       ports.get(message.tabId)?.postMessage({ type: "tabAudio", ...chunk }),

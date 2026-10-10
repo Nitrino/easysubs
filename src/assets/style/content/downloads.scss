@@ -1,0 +1,112 @@
+// The settings' Downloaded sheet (Downloads.tsx): the files kept on the device in inset groups by kind, each with its
+// size and a delete button, in the search sheet's material (found-subs.scss)
+
+// The Downloaded row's total, a link to the sheet
+.es-downloads__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--es-secondary);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+
+  span {
+    color: var(--es-tertiary);
+    font-size: 15px;
+  }
+
+  &:hover,
+  &:hover span {
+    color: var(--es-primary);
+  }
+}
+
+.es-downloads {
+  &__summary {
+    margin: 2px 10px 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  &__group {
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+
+    & + & {
+      border-top: 0.5px solid var(--es-separator);
+    }
+  }
+
+  &__name {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+
+    > span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  &__details {
+    color: var(--es-secondary);
+    font-size: 11.5px;
+    line-height: 14px;
+  }
+
+  &__size {
+    color: var(--es-secondary);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &__delete {
+    width: 24px;
+    height: 24px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  &__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 12px 4px 0;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  // Deleting everything, confirmed: in the system red
+  &__confirm,
+  &__confirm:hover:not(:disabled) {
+    background: #ff453a;
+    color: #fff;
+  }
+}

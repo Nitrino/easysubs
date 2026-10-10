@@ -17,7 +17,13 @@ import {
   searchSubtitles,
 } from "@src/subsSources";
 import { createExpressionFinder } from "@src/utils/expressions/lookup";
-import { translateExpressionsWithChatGPT } from "@src/utils/chatGPTExpressions";
+import { translateExpressionsWithChatGPT, translateExpressionsWithOllama } from "@src/utils/chatGPTExpressions";
+import { createDictionaries } from "@src/utils/dictionary";
+import { bergamot, bergamotTranslate, resetBergamot } from "@src/bergamot/client";
+import { deleteKeptFiles, keptFiles } from "@src/utils/onDeviceFiles";
+import { groupDownloads } from "@src/utils/downloads";
+import { ollamaModels, ollamaTranslate, ollamaWord } from "@src/utils/ollama";
+import { chatGPTWord } from "@src/utils/chatGPTWord";
 import { yandexWordTimes } from "@src/utils/yandexWordTimes";
 import { openAudioWorker, startTabCapture, stopTabCapture } from "./audio";
 
@@ -44,6 +50,18 @@ chrome.runtime.onInstalled.addListener(function (object) {
 });
 
 const findExpressionsInCues = createExpressionFinder();
+const dictionaries = createDictionaries();
+
+// Deletes downloads by their ids and forgets what's loaded from them; the downloads that are left
+async function deleteDownloads(ids: string[]) {
+  const deleted = groupDownloads(await keptFiles()).filter((download) => ids.includes(download.id));
+  await deleteKeptFiles(deleted.flatMap((download) => download.urls));
+  for (const download of deleted) {
+    if (download.kind === "dictionary") dictionaries.forget(`${download.from}-${download.to}`);
+  }
+  if (deleted.some((download) => download.kind === "bergamot")) await resetBergamot().catch(() => {});
+  return groupDownloads(await keptFiles());
+}
 
 class LinguaLeoAuthError extends Error {}
 
@@ -133,6 +151,14 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
         .getFullTextTranslation({ text: message.text, lang: message.language })
         .then((respData: string) => sendResponse(respData))
         .catch((error: Error) => sendResponse({ error: error.message }));
+    } else if (translationService === "ollama") {
+      ollamaTranslate(message.text, message.language, message)
+        .then((respData: string) => sendResponse(respData))
+        .catch((error: Error) => sendResponse({ error: error.message }));
+    } else if (translationService === "bergamot") {
+      bergamotTranslate([message.text], message.sourceLanguage, message.language)
+        .then(([translation]) => sendResponse(translation))
+        .catch((error: Error) => sendResponse({ error: error.message }));
     } else {
       googleTranslateSingleFetcher
         .getFullTextTranslation({ text: message.text, lang: message.language })
@@ -178,10 +204,60 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
       .then((expressions) => sendResponse(expressions))
       .catch((error: Error) => sendResponse({ error: error.message }));
   }
-  // The expressions of a cue translated by ChatGPT in one request, as they're used in the cue
+  // The expressions of a cue translated by ChatGPT or Ollama in one request, as they're used in the cue
   if (message.type === "translateExpressions") {
-    translateExpressionsWithChatGPT(message)
+    (message.translator === "ollama"
+      ? translateExpressionsWithOllama(message)
+      : translateExpressionsWithChatGPT(message)
+    )
       .then((translations) => sendResponse(translations))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // A hovered word in the Wiktionary dictionary of the pair, downloaded on first use (src/utils/dictionary)
+  if (message.type === "dictionaryLookup") {
+    dictionaries
+      .lookUp(message.from, message.to, message.text)
+      .then((answer) => sendResponse({ answer }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "dictionaryStatus") {
+    if (message.prepare) dictionaries.prepare(message.from, message.to);
+    dictionaries
+      .status(message.from, message.to)
+      .then((status) => sendResponse(status))
+      .catch((error: Error) => sendResponse({ state: "error", error: error.message }));
+  }
+  // What the on-device translators and the speech models keep on the device, and deleting it (src/utils/downloads.ts)
+  if (message.type === "downloads") {
+    keptFiles()
+      .then((files) => sendResponse({ downloads: groupDownloads(files) }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "deleteDownloads") {
+    deleteDownloads(message.ids)
+      .then((downloads) => sendResponse({ downloads }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // Bergamot, the engine of Firefox Translations, on the device (src/bergamot)
+  if (message.type === "bergamot") {
+    bergamot(message.request)
+      .then((result) => sendResponse({ result }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // The user's Ollama (src/utils/ollama.ts)
+  if (message.type === "ollamaModels") {
+    ollamaModels(message.url)
+      .then((models) => sendResponse({ models }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "chatGPTWord") {
+    chatGPTWord(message, message)
+      .then((translation) => sendResponse({ translation }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "ollamaWord") {
+    ollamaWord(message, message)
+      .then((translation) => sendResponse({ translation }))
       .catch((error: Error) => sendResponse({ error: error.message }));
   }
   // Yandex's recognition of the video with every word timed, for the spoken-word experiment

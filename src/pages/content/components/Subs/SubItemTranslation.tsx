@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { useGate, useUnit } from "effector-react";
 import { $learningService, $translateLanguage } from "@src/models/settings";
 
@@ -17,6 +17,7 @@ import { getLearningService } from "@src/utils/getLearningService";
 import { TranslateSelect } from "../ui/TranslateSelect";
 import { Popover } from "../ui/Popover";
 import { Spinner } from "../ui/Spinner";
+import { InLineBadge } from "./InLineBadge";
 
 const DICTIONARIES: [string, (word: string) => string][] = [
   ["Cambridge", (word) => `https://dictionary.cambridge.org/dictionary/english/${word}`],
@@ -27,7 +28,9 @@ const DICTIONARIES: [string, (word: string) => string][] = [
 
 // The popover of a hovered word: `cueId` and `index` say where it is, for the line Anki keeps with the word
 export const SubItemTranslation: FC<{ text: string; cueId: number; index: number }> = ({ text, cueId, index }) => {
-  useGate(WordTranslationsGate, text);
+  // Where the word is, for Bergamot's translation of it in its line
+  const place = useMemo(() => ({ text, cueId, index }), [text, cueId, index]);
+  useGate(WordTranslationsGate, place);
   const [
     currentWordTranslation,
     learningService,
@@ -101,7 +104,23 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
 
   const handlePlaySound = () => pronounceWord(currentWordTranslation.source);
 
-  const { transcription } = currentWordTranslation;
+  if (currentWordTranslation.error) {
+    return (
+      <Popover variant="word">
+        <div className="es-title es-title-small">{text}</div>
+        <div className="es-note">{currentWordTranslation.error}</div>
+      </Popover>
+    );
+  }
+
+  const { transcription, inLine, lemma, translations } = currentWordTranslation;
+  // Cards get the dictionary forms: "key — ключ" when "keys" was hovered and the line says "ключи"; the line itself
+  // goes to Anki as the card's context
+  const cardWord = lemma ?? currentWordTranslation.source;
+  const titleTranslation: TWordTranslationItem =
+    inLine && translations[0]
+      ? translations[0]
+      : { word: currentWordTranslation.mainTranslation, partOfSpeech: "unknown", popularity: 0, synonyms: [] };
   const showTranscription =
     typeof transcription === "string" && transcription && transcription.toLowerCase() !== source;
 
@@ -109,21 +128,16 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
     <Popover variant="word">
       <div
         className={service ? "es-title es-addable" : "es-title"}
-        onClick={() =>
-          handleAddWord(currentWordTranslation.source, {
-            word: currentWordTranslation.mainTranslation,
-            partOfSpeech: "unknown",
-            popularity: 0,
-            synonyms: [],
-          })
-        }
+        onClick={() => handleAddWord(cardWord, titleTranslation)}
       >
         {service && (
           <span className="es-add">
             <PlusIcon />
           </span>
         )}
-        <span dir="auto">{currentWordTranslation.mainTranslation}</span>
+        {/* The word as it's used in the line on top, its dictionary meanings below */}
+        <span dir="auto">{inLine ?? currentWordTranslation.mainTranslation}</span>
+        {inLine && <InLineBadge />}
       </div>
       <div className="es-src">
         <button className="es-speak" title="Pronounce" onClick={handlePlaySound}>
@@ -133,6 +147,11 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
           {source}
         </span>
         {showTranscription && <span className="es-translit">[{transcription}]</span>}
+        {currentWordTranslation.lemma && (
+          <span className="es-lemma" dir="auto">
+            → {currentWordTranslation.lemma}
+          </span>
+        )}
       </div>
       {currentWordTranslation.translations.length > 0 && (
         <>
@@ -143,7 +162,7 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
                 <span
                   className={service ? "es-alt-word es-addable" : "es-alt-word"}
                   dir="auto"
-                  onClick={() => handleAddWord(currentWordTranslation.source, translation)}
+                  onClick={() => handleAddWord(cardWord, translation)}
                 >
                   {service && (
                     <span className="es-add">
@@ -152,9 +171,16 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
                   )}
                   {translation.word}
                 </span>
-                <span className="es-alt-pos">{translation.partOfSpeech}</span>
+                <span className="es-alt-pos">
+                  {translation.partOfSpeech === "unknown" ? "" : translation.partOfSpeech}
+                </span>
                 <span className="es-alt-back" dir="auto">
                   {joinTranslations(translation.synonyms)}
+                  {translation.note && (
+                    <span className="es-alt-note" title={translation.note}>
+                      {translation.note}
+                    </span>
+                  )}
                 </span>
               </Fragment>
             ))}
