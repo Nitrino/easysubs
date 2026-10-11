@@ -33,6 +33,7 @@ import { DelayNotice } from "./DelayNotice";
 import { useHoverPause } from "./useHoverPause";
 import { NextEpisodePrompt } from "../FoundSubs/NextEpisodePrompt";
 import { SpokenWordCompare } from "./SpokenWordCompare";
+import { AiSubsProgress } from "./AiSubsProgress";
 
 // The subtitles over the player; the second line goes under or above each cue, or into its own block in
 // `topContainer` at the top of the player
@@ -69,6 +70,7 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
           <SecondaryNotice />
           <DelayNotice />
           <NextEpisodePrompt />
+          {currentSubs.length === 0 && <AiSubsProgress />}
           {currentSubs.map((sub, index) => (
             <Fragment key={index}>
               {secondaryPosition === "above" && <SecondaryLine line={secondarySubs[index]} />}

@@ -5,6 +5,7 @@ import { captureElementAudio } from "./elementCapture";
 import type { TAudioWorker } from "./jobs";
 import { decodePcm, encodePcm, samplesToMs } from "./pcm";
 import { tapBufferedAudio } from "./readAhead";
+import { decodeFileAudio, type TFileAudio } from "./fileAudio";
 import { PcmTimeline } from "./timeline";
 import { EnergyDetector, SILERO_FRAME, speechIntervals, ENERGY_FRAME, frameMs } from "./vad";
 import { connectAudioWorker } from "./worker";
@@ -18,6 +19,8 @@ export type TAudioSessionOptions = {
   detector: TSpeechDetector;
   whisper: boolean;
   aligner: boolean;
+  // The name the buffered audio is tapped under: sessions running at once each need their own (AI subtitles)
+  consumer?: string;
 };
 
 export type TAudioSessionCallbacks = {
@@ -29,7 +32,7 @@ export type TAudioSessionCallbacks = {
   language(): string;
 };
 
-type TSourceName = "element" | "ahead" | "tab";
+type TSourceName = "element" | "ahead" | "tab" | "file";
 
 // Silero VAD gets audio in blocks of about a second, each with half a second before it to settle its state on: it
 // starts every block afresh and misses the first words otherwise
@@ -39,6 +42,10 @@ const VAD_WARMUP_FRAMES = 16;
 const BEHIND_MS = 30_000;
 const AHEAD_MS = 150_000;
 const WHISPER_WINDOW_MS = 20_000;
+// Whisper hears this much on each side of a window, so a word cut by its edge comes whole from the window it starts in
+const WHISPER_PAD_MS = 1000;
+// The audio ends a little before the video's duration says
+const END_SLACK_MS = 300;
 // Speech a little before and after a cue still belongs to it
 const CUE_PAD_MS = 300;
 // While the tab's audio comes in, the element's is left out
@@ -53,11 +60,14 @@ export class AudioSession {
     { energy: EnergyDetector; end: number; block: Float32Array[]; blockStart: number }
   >();
   private aligned = new Set<string>();
-  private recognized = new Set<number>();
+  // Each window recognized, with where its audio started: one heard from the middle (playback started there) is
+  // recognized again once more of it is heard
+  private recognized = new Map<number, number>();
   private busy = { aligner: false, whisper: false };
   private silero = false;
   private lastTabChunk = 0;
   private stopped = false;
+  private file: TFileAudio | null = null;
   // The speech found, for debug()
   private found: TInterval[] = [];
 
@@ -72,7 +82,7 @@ export class AudioSession {
     return {
       covered: this.timeline.covered(),
       aligned: [...this.aligned],
-      recognized: [...this.recognized],
+      recognized: [...this.recognized.keys()],
       speech: this.found.map((interval) => `${Math.round(interval.start)}–${Math.round(interval.end)}`),
       busy: { ...this.busy },
       silero: this.silero,
@@ -93,8 +103,16 @@ export class AudioSession {
         tapBufferedAudio(
           (start, samples) => this.chunk("ahead", start, samples),
           (reason) => this.callbacks.status("speech", reason),
+          this.options.consumer,
         ),
       );
+      // A plain file has nothing buffered through MSE: it's read whole instead
+      this.file = decodeFileAudio(
+        this.video,
+        (start, samples) => this.chunk("file", start, samples),
+        (start, end) => this.timeline.covers(start, end),
+      );
+      this.stops.push(() => this.file?.stop());
     }
 
     const timer = setInterval(() => this.tick(), 500);
@@ -203,6 +221,7 @@ export class AudioSession {
     if (this.stopped) return;
     const now = this.video.currentTime * 1000;
     this.timeline.prune(now);
+    this.file?.refill(now);
     if (this.options.aligner && this.worker && !this.busy.aligner) this.alignNext(now);
     if (this.options.whisper && this.worker && !this.busy.whisper) this.recognizeNext(now);
   }
@@ -244,7 +263,20 @@ export class AudioSession {
       .finally(() => (this.busy.aligner = false));
   }
 
-  // 20 s windows of the video, the one with the playhead first, then the ones ahead
+  // 20 s windows of the video, the one with the playhead first, then the ones ahead. The last ends with the video.
+  // Audio from where playback started in the middle of a window is enough for its rest.
+  private whisperWindow(index: number) {
+    const duration = this.video.duration * 1000;
+    const end = Number.isFinite(duration) && duration > 0 ? duration - END_SLACK_MS : Infinity;
+    const from = index * WHISPER_WINDOW_MS;
+    const to = Math.min(from + WHISPER_WINDOW_MS, end);
+    if (index < 0 || to <= from) return null;
+    const readTo = Math.min(to + WHISPER_PAD_MS, end);
+    const heard = this.timeline.covered().find((interval) => interval.start < to - 1000 && interval.end >= readTo);
+    if (!heard) return null;
+    return { from: Math.max(from, heard.start), to, readFrom: Math.max(0, from - WHISPER_PAD_MS, heard.start), readTo };
+  }
+
   private recognizeNext(now: number) {
     const current = Math.floor(now / WHISPER_WINDOW_MS);
     const order = [
@@ -253,23 +285,26 @@ export class AudioSession {
       current - 1,
     ];
     const index = order.find((candidate) => {
-      if (candidate < 0 || this.recognized.has(candidate)) return false;
-      return this.timeline.covers(candidate * WHISPER_WINDOW_MS, (candidate + 1) * WHISPER_WINDOW_MS);
+      const window = this.whisperWindow(candidate);
+      const done = this.recognized.get(candidate);
+      return window !== null && (done === undefined || window.from < done);
     });
     if (index === undefined) return;
 
-    const from = index * WHISPER_WINDOW_MS;
-    const to = from + WHISPER_WINDOW_MS;
-    const samples = this.timeline.read(from, to);
+    const { from, to, readFrom, readTo } = this.whisperWindow(index);
+    const samples = this.timeline.read(readFrom, readTo);
     if (!samples) return;
-    this.recognized.add(index);
+    this.recognized.set(index, from);
     this.busy.whisper = true;
     this.callbacks.status("whisper", "recognizing");
     this.worker
       .request({ type: "whisper", pcm: encodePcm(samples), language: this.callbacks.language() })
       .then((words) => {
         if (this.stopped) return;
-        const shifted = words.map((word) => ({ ...word, start: word.start + from, end: word.end + from }));
+        // Words of the padding belong to the windows next to this one
+        const shifted = words
+          .map((word) => ({ ...word, start: word.start + readFrom, end: word.end + readFrom }))
+          .filter((word) => word.start >= from && word.start < to);
         this.callbacks.wordsRecognized({ from, to, words: shifted });
         this.callbacks.status("whisper", "ready");
       })

@@ -234,6 +234,8 @@ export const $spokenWordWhisper = createSetting("spokenWordWhisper", false);
 export const spokenWordWhisperChanged = createEvent<boolean>();
 export const $spokenWordAligner = createSetting("spokenWordAligner", false);
 export const spokenWordAlignerChanged = createEvent<boolean>();
+// The language spoken in videos that get AI subtitles (src/models/aiSubs): Whisper needs to be told
+export const $aiSubsLanguage = createSetting("aiSubsLanguage", "en");
 
 export const esRenderSetings = createEvent();
 
