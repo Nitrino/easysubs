@@ -46,7 +46,7 @@ test.describe("known words", () => {
     await expect(words).toHaveCount(42);
     for (let index = 0; index < 10; index++) await words.nth(index).click();
     await expect(playground.settingsPanel.locator(".es-downloads__foot")).toContainText("10 words known");
-    await playground.settingsPanel.getByRole("button", { name: "Done" }).click();
+    await playground.settingsPanel.getByRole("button", { name: "Done", exact: true }).click();
 
     await expect(playground.settingsPanel.locator(".es-words-level__result")).toContainText(
       /You know about [\d,]+ words/,
