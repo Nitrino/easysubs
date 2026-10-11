@@ -9,6 +9,7 @@ import {
   resetSubs,
   subsDelayButtonPressed,
   subsDelayChangeFx,
+  subsDelayKeyPressed,
   subsRequested,
   subsResyncFx,
   updateCurrentSubsFx,
@@ -77,6 +78,13 @@ sample({
     }
   },
   target: autoPauseFx,
+});
+
+sample({
+  clock: subsDelayKeyPressed,
+  source: $subsDelay,
+  fn: (subsDelay, step) => subsDelay + step,
+  target: subsDelayButtonPressed,
 });
 
 sample({

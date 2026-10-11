@@ -29,6 +29,7 @@ import { SubItemTranslation } from "./SubItemTranslation";
 import { ExpressionTranslation } from "./ExpressionTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
 import { SecondaryLine, SecondaryNotice, SecondarySubsTop } from "./SecondarySubs";
+import { DelayNotice } from "./DelayNotice";
 import { useHoverPause } from "./useHoverPause";
 import { NextEpisodePrompt } from "../FoundSubs/NextEpisodePrompt";
 import { SpokenWordCompare } from "./SpokenWordCompare";
@@ -66,6 +67,7 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
           style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
         >
           <SecondaryNotice />
+          <DelayNotice />
           <NextEpisodePrompt />
           {currentSubs.map((sub, index) => (
             <Fragment key={index}>

@@ -154,4 +154,19 @@ test.describe("settings", () => {
     await playground.seek(6.9);
     await expect(playground.subs).toContainText("pick up my keys");
   });
+
+  test("shifts the subtitles with the G and H keys", async ({ playground, page }) => {
+    await playground.seek(4.2);
+    await expect(playground.subs).toContainText("pick up my keys");
+
+    await page.keyboard.press("Shift+KeyH");
+    await page.keyboard.press("KeyG");
+    await expect(playground.subs.locator(".es-secondary-notice")).toHaveText("Subtitles delay +0.75s");
+
+    // Cue 2 is 4.0-6.8 s; now 4.75-7.55 s
+    await playground.seek(4.2);
+    await expect(playground.subs).not.toContainText("pick up my keys");
+    await playground.seek(7.3);
+    await expect(playground.subs).toContainText("pick up my keys");
+  });
 });

@@ -11,6 +11,7 @@ import { ProgressBar } from "./components/ProgressBar";
 import { Transcript } from "./components/Transcript/Transcript";
 import { removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { addSecondarySubsKeyListeners } from "@src/utils/secondarySubsKeys";
+import { addSubsDelayKeyListeners } from "@src/utils/subsDelayKeys";
 import { addSubtitleDropListeners } from "@src/utils/subtitleDrop";
 import { addTranscriptKeyListeners } from "@src/utils/transcriptKeys";
 
@@ -38,6 +39,7 @@ $streaming.watch((streaming) => {
   detectionRetries = 0;
   document.body.classList.add("es-" + streaming.name);
   addSecondarySubsKeyListeners();
+  addSubsDelayKeyListeners();
   addSubtitleDropListeners();
   addTranscriptKeyListeners();
 

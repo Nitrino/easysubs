@@ -122,6 +122,8 @@ Click the progress bar to rewind the video to the desired point.
 
 The extension allows you to customise the appearance, position and delay of subtitles.
 
+If the subtitles are out of sync, press `G` to show them earlier or `H` to show them later by 0.25 seconds. Hold `Shift` to move them by a whole second.
+
 You can also upload your own subtitles if they are not available on the video service. ` SRT`` and  `VTT`` formats are supported.
 
 ![word translation](screenshots/subtitles-settings.webp)
