@@ -100,6 +100,10 @@ describe("describeAiProgress", () => {
       percent: 40,
     });
     expect(describeAiProgress({ whisper: "recognizing", audio: "listening" })).toEqual({ text: "Making subtitles…" });
+    // The model loaded from the cache
+    expect(describeAiProgress({ whisper: "downloading 100%", audio: "listening" })).toEqual({
+      text: "Making subtitles…",
+    });
     expect(describeAiProgress({ whisper: "", audio: "" })).toEqual({ text: "Making subtitles…" });
   });
 

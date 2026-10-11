@@ -27,8 +27,11 @@ export function describeAiProgress(status: { whisper: string; audio: string }): 
   percent?: number;
   problem?: boolean;
 } {
+  // Loading the model from the browser's cache reports 100% at once: nothing to show for that
   const downloading = /^downloading (\d+)%/.exec(status.whisper);
-  if (downloading) return { text: "Downloading the speech model…", percent: Number(downloading[1]) };
+  if (downloading && Number(downloading[1]) < 100) {
+    return { text: "Downloading the speech model…", percent: Number(downloading[1]) };
+  }
   const problem =
     status.whisper.startsWith("no speech models") ||
     status.whisper.startsWith("failed") ||
