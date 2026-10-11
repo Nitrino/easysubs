@@ -42,6 +42,28 @@ test.describe("keyboard navigation by subtitles", () => {
     await expect(playground.subs).toHaveText("Almost. I just need to pick up my keys.");
   });
 
+  test("shows only the next cue when it starts as the previous one ends", async ({ playground, page }) => {
+    await playground.loadSubtitles(
+      "1\n00:00:02,000 --> 00:00:04,000\nThe first line.\n\n" +
+        "2\n00:00:04,000 --> 00:00:06,000\nThe second line.\n\n" +
+        "3\n00:00:06,000 --> 00:00:08,000\nThe third line.\n",
+    );
+    await playground.seek(3);
+    await expect(playground.subs).toHaveText("The first line.");
+
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(() => playground.currentTime()).toBeCloseTo(4);
+    await expect(playground.subs).toHaveText("The second line.");
+
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(() => playground.currentTime()).toBeCloseTo(6);
+    await expect(playground.subs).toHaveText("The third line.");
+
+    await page.keyboard.press("ArrowLeft");
+    await expect.poll(() => playground.currentTime()).toBeCloseTo(4);
+    await expect(playground.subs).toHaveText("The second line.");
+  });
+
   test("leaves the arrows to the player when disabled", async ({ playground, page }) => {
     await playground.openSettings("General");
     await playground.settingsRow("Move by subs").locator(".es-switch").click();
