@@ -169,6 +169,13 @@ describe("AI subtitles", () => {
     await allSettled(aiStatusChanged, { scope, params: { source: "speech", status: "no audio from the video: EME" } });
     expect(scope.getState($aiStatus)).toEqual({ whisper: "downloading 30%", audio: "no audio from the video: EME" });
 
+    // The model loading while the first window is transcribed
+    await allSettled(aiStatusChanged, { scope, params: { source: "whisper", status: "recognizing" } });
+    await allSettled(aiStatusChanged, { scope, params: { source: "whisper", status: "ready" } });
+    expect(scope.getState($aiStatus).whisper).toBe("recognizing");
+    await allSettled(aiWordsRecognized, { scope, params: { from: 0, to: 20_000, words: said("Hola", 1000) } });
+    expect(scope.getState($aiStatus).whisper).toBe("ready");
+
     await allSettled(aiStatusChanged, { scope, params: { source: "speech", status: "listening" } });
     expect(scope.getState($aiStatus).audio).toBe("listening");
   });

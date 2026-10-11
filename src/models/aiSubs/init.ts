@@ -112,8 +112,11 @@ $aiWords.on(aiWordsRecognized, (words, { from, to, words: recognized }) =>
   [...words.filter((word) => word.start < from || word.start >= to), ...recognized].sort((a, b) => a.start - b.start),
 );
 $aiWindows.on(aiWordsRecognized, (count) => count + 1);
+$aiStatus.on(aiWordsRecognized, (status) => ({ ...status, whisper: "ready" }));
 $aiStatus.on(aiStatusChanged, (status, { source, status: value }) => {
-  if (source === "whisper") return { ...status, whisper: value };
+  // The model saying it loaded while it transcribes its first window isn't the window's end
+  if (source === "whisper")
+    return value === "ready" && status.whisper === "recognizing" ? status : { ...status, whisper: value };
   // Hearing the video ("listening"), or why not
   if (source === "speech") return { ...status, audio: value };
   return status;
