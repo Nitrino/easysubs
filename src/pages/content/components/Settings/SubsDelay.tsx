@@ -19,12 +19,14 @@ export const SubsDelay: FC = () => {
         <div className="es-stepper">
           <button
             className="es-stepper__button"
+            title="Earlier by 1s (Shift+G)"
             onClick={() => handleSubsDelayButtonPressed(subsDelay - SUBS_DELAY_LARGE_STEP)}
           >
             <ArrowBackDouble />
           </button>
           <button
             className="es-stepper__button"
+            title="Earlier by 0.25s (G)"
             onClick={() => handleSubsDelayButtonPressed(subsDelay - SUBS_DELAY_SMALL_STEP)}
           >
             <ArrowBack />
@@ -32,12 +34,14 @@ export const SubsDelay: FC = () => {
           <div className="es-stepper__value">{subsDelay}s</div>
           <button
             className="es-stepper__button"
+            title="Later by 0.25s (H)"
             onClick={() => handleSubsDelayButtonPressed(subsDelay + SUBS_DELAY_SMALL_STEP)}
           >
             <ArrowForward />
           </button>
           <button
             className="es-stepper__button"
+            title="Later by 1s (Shift+H)"
             onClick={() => handleSubsDelayButtonPressed(subsDelay + SUBS_DELAY_LARGE_STEP)}
           >
             <ArrowForwardDouble />

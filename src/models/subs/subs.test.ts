@@ -13,6 +13,7 @@ import {
   esSubsChanged,
   rawSubsAdded,
   subsDelayButtonPressed,
+  subsDelayKeyPressed,
   subsReloadRequested,
   updateCustomSubsFx,
 } from ".";
@@ -154,6 +155,16 @@ describe("subtitles delay", () => {
 
     expect(scope.getState($subsDelay)).toBe(-0.5);
     expect(scope.getState($subs)[1]).toMatchObject({ start: 3500, end: 6300 });
+  });
+
+  it("adds the step of the delay keys to the delay", async () => {
+    const { scope } = setup({ rawSubs: playgroundCaptions("en") });
+
+    await allSettled(subsDelayKeyPressed, { scope, params: 1 });
+    await allSettled(subsDelayKeyPressed, { scope, params: -0.25 });
+
+    expect(scope.getState($subsDelay)).toBe(0.75);
+    expect(scope.getState($subs)[1]).toMatchObject({ start: 4750, end: 7550 });
   });
 });
 
