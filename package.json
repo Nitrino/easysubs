@@ -22,6 +22,7 @@
     "expressions": "node scripts/expressions/build.ts",
     "dictionaries": "node --max-old-space-size=8192 scripts/dictionaries/build.ts",
     "bergamot-models": "node scripts/bergamot-models/mirror.ts",
+    "frequency": "node scripts/frequency/build.ts",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",

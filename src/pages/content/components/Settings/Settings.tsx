@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { $streaming } from "@src/models/streamings";
 import { sheetClosed } from "@src/models/foundSubs";
 import { downloadsClosed } from "@src/models/downloads";
-import { savedWordsClosed } from "@src/models/words";
+import { levelSetupClosed, savedWordsClosed } from "@src/models/words";
 
 import { useUnit } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
@@ -43,6 +43,7 @@ export const Settings: FC<TSettingsProps> = () => {
       sheetClosed();
       downloadsClosed();
       savedWordsClosed();
+      levelSetupClosed();
     }
     setShowSettings(!showSettings);
   };
@@ -50,6 +51,7 @@ export const Settings: FC<TSettingsProps> = () => {
     sheetClosed();
     downloadsClosed();
     savedWordsClosed();
+    levelSetupClosed();
     setShowSettings(false);
   };
   return (

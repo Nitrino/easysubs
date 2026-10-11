@@ -32,8 +32,8 @@ import { $sheet } from "@src/models/foundSubs";
 import { $downloadsOpen } from "@src/models/downloads";
 import { FoundSubsSheet } from "../FoundSubs/FoundSubsSheet";
 import { DownloadsRow, DownloadsSheet } from "./Downloads";
-import { SavedWordsSheet, WordsTab } from "./Words";
-import { $savedWordsOpen } from "@src/models/words";
+import { LevelSheet, SavedWordsSheet, WordsTab } from "./Words";
+import { $levelSetupOpen, $savedWordsOpen } from "@src/models/words";
 import {
   SecondarySubsBackground,
   SecondarySubsColor,
@@ -68,9 +68,24 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming, foundSheet, downloadsOpen, savedWordsOpen] =
-    useUnit([$activeSettingsTab, activeSettingsTabChanged, $streaming, $sheet, $downloadsOpen, $savedWordsOpen]);
-  const sheet = foundSheet || downloadsOpen || savedWordsOpen;
+  const [
+    activeSettingsTab,
+    handleActiveSettingsTabChanged,
+    streaming,
+    foundSheet,
+    downloadsOpen,
+    savedWordsOpen,
+    levelSetupOpen,
+  ] = useUnit([
+    $activeSettingsTab,
+    activeSettingsTabChanged,
+    $streaming,
+    $sheet,
+    $downloadsOpen,
+    $savedWordsOpen,
+    $levelSetupOpen,
+  ]);
+  const sheet = foundSheet || downloadsOpen || savedWordsOpen || levelSetupOpen;
   const contentRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(contentRef, onClose);
@@ -82,8 +97,11 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         ref={contentRef}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* The search for subtitles online, the list of downloads and the saved words open in place of the tabs */}
-        {savedWordsOpen ? (
+        {/* The search for subtitles online, the list of downloads, the level check and the saved words open in place of
+            the tabs */}
+        {levelSetupOpen ? (
+          <LevelSheet onClose={onClose} />
+        ) : savedWordsOpen ? (
           <SavedWordsSheet onClose={onClose} />
         ) : downloadsOpen ? (
           <DownloadsSheet onClose={onClose} />

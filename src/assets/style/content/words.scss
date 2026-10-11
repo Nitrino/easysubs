@@ -207,3 +207,95 @@
     gap: 6px;
   }
 }
+
+// Before the level is set: the question with its button in place of the score
+.es-words-level-prompt {
+  grid-template-columns: 1fr auto;
+}
+
+.es-words__note {
+  color: var(--es-secondary);
+  font-size: 12px;
+}
+
+// The level check: CEFR levels in a grid, the words to tap as chips
+.es-words-level {
+  &__hint {
+    margin: 0 0 10px;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &__levels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  &__level {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 8px 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--es-primary);
+    font: inherit;
+    cursor: pointer;
+
+    b {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    span {
+      color: var(--es-secondary);
+      font-size: 11px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &--current {
+      border-color: var(--es-accent);
+      background: rgba(10, 132, 255, 0.18);
+    }
+  }
+
+  &__words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  &__word {
+    padding: 4px 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--es-primary);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+    &--known {
+      border-color: #30d158;
+      background: rgba(48, 209, 88, 0.2);
+      color: #fff;
+    }
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+}

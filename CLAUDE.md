@@ -20,6 +20,7 @@ EasySubs is a browser extension that helps users learn languages by watching mov
 - `pnpm prettier` - Format code with Prettier
 - `pnpm expressions [language...] [--cache <dir>]` - Rebuild the phrasal verb and idiom lists in `public/expressions` from Wiktionary (see Expressions below)
 - `pnpm dictionaries [pair...] [--cache <dir>]` - Build the Wiktionary dictionaries for hovered words into `dictionaries/` (see On-Device Translation below)
+- `pnpm frequency [language...] [--cache <dir>]` - Rebuild the word frequency lists in `public/frequency` (see Known Words below)
 - `pnpm bergamot-models [language...]` - Mirror Mozilla's Firefox Translations models into `bergamot-models/` (see On-Device Translation below)
 
 ## Testing
@@ -166,11 +167,14 @@ The word stays what a card teaches; the subtitle line it was added from comes wi
 
 ### Known Words
 
-Every word of the subtitles is new, learning or known to the user, and the Words tab of the settings shows "You know 87% of this episode":
+Every word of the subtitles is new, learning, known or rare to the user, by the user's level and their own marks, and the Words tab of the settings shows "You know 87% of this episode":
 
-- `src/models/words` keeps the words on the device (`$words`, saved as `persist:words`, synced between tabs through `chrome.storage.onChanged`), keyed by the subtitles' base language and the lowercased word without the punctuation around it (`wordKey`, `normalizeWord` in `src/utils/words.ts`). A word of the popover is marked with the New / Learning / Known buttons at its foot (`WordStatusPicker.tsx`); "+" saves it as learning with its translation and the line it's from, and also adds it to the learning service when one is picked. Forms aren't matched to the dictionary form: "keys" and "key" are separate words
-- The subtitles color learning words orange and underline new ones (`$wordColoring`: Off / Learning / New and learning); known ones stay as they are. `$episodeScore` counts every word as often as it's said; "New ones are known" marks the episode's remaining new words known, like finishing a LingQ lesson
-- The Saved words sheet (`Words.tsx`, in place of the settings panel like the Downloaded one) lists the words with their lines linked back to the moment, reviews the due learning words as flashcards (`reviewWord`: 1, 3, 7, 16 and 35 days, known after the last), exports a CSV file and imports one, or a plain list of words as known in the subtitles' language
+- `public/frequency/<language>.json` (en, ru, es, de, fr, it, pt, nl) is built by `scripts/frequency/build.ts` (`pnpm frequency`) from hermitdave/FrequencyWords' OpenSubtitles 2018 counts (CC BY-SA 4.0) and the forms of the Wiktionary dictionaries (the release files of On-Device Translation): dictionary forms ordered by the counts of all their forms, and each form's dictionary form ("went" → "go", "keys" → "key"). The background's `wordRanks` message answers a track's words with their dictionary form and rank (`src/utils/frequency/lookup.ts`, contractions by their rarer part), `frequencySample` with words of each band for the level check
+- The level is a rank per language (`$wordLevels`): words said more often are known, the next ones (`newWordsUpTo`) new, rarer ones and names rare and left alone. It's set in the level sheet (`LevelSheet` in `Words.tsx`, in place of the settings panel): a CEFR level (`CEFR_LEVELS`), a check that estimates it from the words tapped as known (`estimateLevel`), or "I'll mark words myself" (0). New words are colored only once it's set (`$newWordsColored`), at once in languages without a list
+- `src/models/words` keeps the user's marks on the device (`$words`, saved as `persist:words`, synced between tabs through `chrome.storage.onChanged`), keyed by the subtitles' base language and the dictionary form (`wordKey`, `viewWord` in `src/utils/words.ts`); a mark wins over the level. The popover's foot (`WordStatus.tsx`) shows the status with the rank's badge and "+ Learn" / "✓ Know"; Learn and "+" save the word as learning with the meaning on top, its part of speech and up to 3 lines it was said in, and "+" also adds it to the learning service when one is picked. Nothing turns known on its own
+- The subtitles color learning words orange and underline new ones (`$wordColoring`: Off / Learning / New and learning). `$episodeScore` counts every ranked word as often as it's said; "All are known" marks the episode's remaining words known, like finishing a LingQ lesson
+- With Anki as the learning service, "Read from Anki" reads the Easysubs cards back (`readWords`, `syncAnkiFx`): a card Anki shows 21 days apart or more is a known word, others learning, and Anki does the reviews
+- The Saved words sheet (`Words.tsx`) lists the words with their lines linked back to the moment, reviews the due learning words as flashcards (`reviewWord`: 1, 3, 7, 16 and 35 days, known after the last), exports a CSV file and imports one, or a plain list of words as known in the subtitles' language
 
 ### Expressions
 

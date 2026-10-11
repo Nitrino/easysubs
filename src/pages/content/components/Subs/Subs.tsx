@@ -24,8 +24,8 @@ import {
   wordSelected,
 } from "@src/models/expressions";
 import { $spokenWord } from "@src/models/spokenWord";
-import { $wordColoring, $words, $wordsLanguage } from "@src/models/words";
-import { wordStatus } from "@src/utils/words";
+import { $newWordsColored, $wordColoring, $wordsState } from "@src/models/words";
+import { viewWord } from "@src/utils/words";
 import type { TWordStatus } from "@src/models/types";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
@@ -93,20 +93,20 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
 
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
-  const [subsBackground, subsBackgroundOpacity, spokenWord, words, wordsLanguage, wordColoring] = useUnit([
+  const [subsBackground, subsBackgroundOpacity, spokenWord, wordsState, newWordsColored, wordColoring] = useUnit([
     $subsBackground,
     $subsBackgroundOpacity,
     $spokenWord,
-    $words,
-    $wordsLanguage,
+    $wordsState,
+    $newWordsColored,
     $wordColoring,
   ]);
   const spokenIndex = spokenWord?.cueId === sub.id ? spokenWord.index : -1;
-  // Words colored by what the user knows (src/models/words); known ones stay as they are
+  // Words colored by what the user knows (src/models/words); known and rare ones stay as they are
   const statusOf = (item: TSubItem): TWordStatus | null => {
-    if (wordColoring === "off" || !wordsLanguage) return null;
-    const status = wordStatus(words, wordsLanguage, item.text);
-    return status === "learning" || (status === "new" && wordColoring === "all") ? status : null;
+    if (wordColoring === "off" || !wordsState) return null;
+    const status = viewWord(wordsState, item.text)?.status;
+    return status === "learning" || (status === "new" && newWordsColored) ? status : null;
   };
 
   const handleOnClick = (event: React.MouseEvent<HTMLElement>) => {

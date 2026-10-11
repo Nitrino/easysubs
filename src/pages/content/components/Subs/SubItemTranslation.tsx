@@ -18,7 +18,7 @@ import { TranslateSelect } from "../ui/TranslateSelect";
 import { Popover } from "../ui/Popover";
 import { Spinner } from "../ui/Spinner";
 import { InLineBadge } from "./InLineBadge";
-import { WordStatusPicker } from "./WordStatusPicker";
+import { WordStatus } from "./WordStatus";
 import { wordStatusChanged } from "@src/models/words";
 
 const DICTIONARIES: [string, (word: string) => string][] = [
@@ -89,9 +89,15 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
   // "+" saves the word as learning with the line it's from (src/models/words), and adds it to the learning service
   // when one is picked
   const handleAddWord = (word: string, translation: TWordTranslationItem) => {
-    wordStatusChanged({ text, status: "learning", translation: translation.word, cueId });
+    wordStatusChanged({
+      text,
+      status: "learning",
+      translation: translation.word,
+      ...(translation.partOfSpeech !== "unknown" && { partOfSpeech: translation.partOfSpeech }),
+      cueId,
+    });
     if (!service) {
-      toast.success(`Saved “${text.toLowerCase()}”`);
+      toast.success(`Saved “${word.toLowerCase()}”`);
     } else {
       addWord({
         word: word.toLowerCase(),
@@ -116,7 +122,7 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
       <Popover variant="word">
         <div className="es-title es-title-small">{text}</div>
         <div className="es-note">{currentWordTranslation.error}</div>
-        <WordStatusPicker text={text} cueId={cueId} />
+        <WordStatus text={text} cueId={cueId} onLearn={() => wordStatusChanged({ text, status: "learning", cueId })} />
       </Popover>
     );
   }
@@ -188,7 +194,7 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
           </div>
         </>
       )}
-      <WordStatusPicker text={text} cueId={cueId} translation={titleTranslation.word} />
+      <WordStatus text={text} cueId={cueId} onLearn={() => handleAddWord(cardWord, titleTranslation)} />
       {subsLanguage === "en" && (
         <>
           <div className="es-sep" />

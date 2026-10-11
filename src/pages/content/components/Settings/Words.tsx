@@ -4,13 +4,22 @@ import cn from "classnames";
 import toast from "react-hot-toast";
 
 import {
+  $ankiReviews,
   $episodeScore,
   $wordColoring,
+  $wordLevel,
+  $wordRanks,
   $words,
   $wordsLanguage,
+  $wordsState,
   episodeWordsMarkedKnown,
+  levelSampleFx,
+  levelSet,
+  levelSetupClosed,
+  levelSetupOpened,
   savedWordsClosed,
   savedWordsOpened,
+  syncAnkiFx,
   wordColoringChanged,
   wordReviewed,
   wordsImported,
@@ -18,15 +27,27 @@ import {
   wordStatusChanged,
 } from "@src/models/words";
 import type { TSavedWord, TWordColoring } from "@src/models/types";
-import { isDue, normalizeWord, parseWordsFile, wordKey, wordsToCsv, type TReviewGrade } from "@src/utils/words";
+import {
+  CEFR_LEVELS,
+  estimateLevel,
+  isDue,
+  normalizeWord,
+  parseWordsFile,
+  wordKey,
+  wordsToCsv,
+  type TReviewGrade,
+} from "@src/utils/words";
+import { LEVEL_BANDS } from "@src/utils/frequency/lookup";
 import { Select } from "../ui/Select";
+import { Spinner } from "../ui/Spinner";
 import { Segmented } from "../FoundSubs/FoundSubsSheet";
 import { ChevronLeft } from "./assets/ChevronLeft";
 import { CloseIcon } from "./assets/CloseIcon";
 import { TrashIcon } from "./assets/TrashIcon";
 
-// The settings' Words tab: how much of the episode the user knows, how the subtitles color words, and the Saved words
-// sheet in place of the settings panel with the list, its review and the CSV file (src/models/words)
+// The settings' Words tab: the user's level, how much of the episode they know, how the subtitles color words, the
+// Anki cards read back, and two sheets in place of the settings panel: the level check and the saved words with their
+// review and CSV file (src/models/words)
 
 const Row: FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <div className="es-settings-content__element">
@@ -41,7 +62,22 @@ const COLORING_OPTIONS: { value: TWordColoring; label: string }[] = [
   { value: "off", label: "Off" },
 ];
 
-const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? "" : "s"}`;
+const plural = (count: number, word: string) => `${count.toLocaleString("en")} ${word}${count === 1 ? "" : "s"}`;
+
+const languageName = (language: string) => {
+  try {
+    return new Intl.DisplayNames(["en"], { type: "language" }).of(language) ?? language;
+  } catch {
+    return language;
+  }
+};
+
+// "B1 · 2,000 words" for a level, "Marking words myself" for none
+export const levelLabel = (rank: number) => {
+  if (rank === 0) return "Marking words myself";
+  const cefr = [...CEFR_LEVELS].reverse().find((level) => rank >= level.rank)?.level;
+  return `${cefr ? `${cefr} · ` : ""}${plural(rank, "word")}`;
+};
 
 export const EpisodeScore: FC = () => {
   const score = useUnit($episodeScore);
@@ -76,81 +112,299 @@ export const EpisodeScore: FC = () => {
   );
 };
 
+// Before the level is set: what it's for and the way to the check
+const LevelPrompt: FC<{ language: string }> = ({ language }) => {
+  const open = useUnit(levelSetupOpened);
+  return (
+    <div className="es-words-score es-words-level-prompt">
+      <div className="es-words-score__text">
+        <span>What's your level in {languageName(language)}?</span>
+        <span className="es-words-score__details">
+          EasySubs counts the words you know from it and colors only the ones worth learning.
+        </span>
+      </div>
+      <button type="button" className="es-found__button es-found__button--primary" onClick={() => open()}>
+        Set level
+      </button>
+    </div>
+  );
+};
+
+const AnkiRow: FC = () => {
+  const [sync, syncing] = useUnit([syncAnkiFx, syncAnkiFx.pending]);
+  const read = () =>
+    sync()
+      .then(({ cards, changed }) =>
+        toast.success(cards ? `Read ${plural(cards, "card")}: ${changed} changed` : "No Easysubs cards in Anki yet"),
+      )
+      .catch((error) => toast.error(String(error)));
+  return (
+    <div className="es-settings-content__item">
+      <Row label="Anki cards">
+        <button type="button" className="es-found__button" disabled={syncing} onClick={read}>
+          {syncing ? "Reading…" : "Read from Anki"}
+        </button>
+      </Row>
+      <p className="es-settings-content__status">
+        Words of your Easysubs cards are learning, and known once Anki shows them three weeks apart.
+      </p>
+    </div>
+  );
+};
+
 export const WordsTab: FC = () => {
-  const [coloring, coloringChanged, words, score, open, markKnown] = useUnit([
-    $wordColoring,
-    wordColoringChanged,
-    $words,
-    $episodeScore,
-    savedWordsOpened,
-    episodeWordsMarkedKnown,
-  ]);
+  const [coloring, coloringChanged, words, score, state, level, openSaved, openLevel, markKnown, ankiReviews] = useUnit(
+    [
+      $wordColoring,
+      wordColoringChanged,
+      $words,
+      $episodeScore,
+      $wordsState,
+      $wordLevel,
+      savedWordsOpened,
+      levelSetupOpened,
+      episodeWordsMarkedKnown,
+      $ankiReviews,
+    ],
+  );
   const [confirming, setConfirming] = useState(false);
   const learning = Object.values(words).filter((word) => word.status === "learning").length;
-  const newCount = score?.newWords.length ?? 0;
+  const unknownCount = score?.unknown.length ?? 0;
+  // Languages with a frequency list need the level first
+  const needsLevel = Boolean(state?.ranks) && level === null;
 
   return (
     <>
-      <EpisodeScore />
+      {needsLevel ? <LevelPrompt language={state!.language} /> : <EpisodeScore />}
+      {state?.ranks && level !== null && (
+        <div className="es-settings-content__item">
+          <Row label={`Level in ${languageName(state.language)}`}>
+            <button type="button" className="es-downloads__open" onClick={() => openLevel()}>
+              {levelLabel(level)}
+              <span aria-hidden="true">›</span>
+            </button>
+          </Row>
+        </div>
+      )}
       <div className="es-settings-content__item">
         <Row label="Color words">
           <Select
             options={COLORING_OPTIONS}
             value={COLORING_OPTIONS.find((option) => option.value === coloring)}
-            onChange={(option: (typeof COLORING_OPTIONS)[number]) => coloringChanged(option.value)}
+            onChange={(option: (typeof COLORING_OPTIONS)[number]) => {
+              coloringChanged(option.value);
+              // Coloring starts from the level
+              if (option.value !== "off" && needsLevel) openLevel();
+            }}
           />
         </Row>
       </div>
       <div className="es-settings-content__item">
         <Row label="Saved words">
-          <button type="button" className="es-downloads__open" onClick={() => open()}>
+          <button type="button" className="es-downloads__open" onClick={() => openSaved()}>
             {learning > 0 ? `${learning} learning` : "None"}
             <span aria-hidden="true">›</span>
           </button>
         </Row>
       </div>
-      <div className="es-settings-content__item">
-        <Row label="Words of this episode">
-          {confirming ? (
-            <button
-              type="button"
-              className="es-found__button es-found__button--primary"
-              onClick={() => {
-                setConfirming(false);
-                markKnown();
-              }}
-            >
-              Mark {plural(newCount, "word")} known
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="es-found__button"
-              disabled={newCount === 0}
-              onClick={() => setConfirming(true)}
-            >
-              New ones are known
-            </button>
-          )}
-        </Row>
-        <p className="es-settings-content__status">
-          Every word you haven't saved becomes known: worth it once an episode is finished.
-        </p>
-      </div>
+      {ankiReviews && <AnkiRow />}
+      {!needsLevel && (
+        <div className="es-settings-content__item">
+          <Row label="Words of this episode">
+            {confirming ? (
+              <button
+                type="button"
+                className="es-found__button es-found__button--primary"
+                onClick={() => {
+                  setConfirming(false);
+                  markKnown();
+                }}
+              >
+                Mark {plural(unknownCount, "word")} known
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="es-found__button"
+                disabled={unknownCount === 0}
+                onClick={() => setConfirming(true)}
+              >
+                All are known
+              </button>
+            )}
+          </Row>
+          <p className="es-settings-content__status">
+            Every word you aren't learning becomes known: worth it once an episode is finished.
+          </p>
+        </div>
+      )}
     </>
+  );
+};
+
+// ---- The level check ----
+
+type TCheckWord = { word: string; rank: number };
+
+// The level by CEFR, or in a minute by the words the user knows among some of each frequency band
+export const LevelSheet: FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [language, level, close, set, loadSample, loading] = useUnit([
+    $wordsLanguage,
+    $wordLevel,
+    levelSetupClosed,
+    levelSet,
+    levelSampleFx,
+    levelSampleFx.pending,
+  ]);
+  const [check, setCheck] = useState<TCheckWord[] | null>(null);
+  const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [estimate, setEstimate] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const start = () => {
+    if (!language) return;
+    setError(null);
+    loadSample(language)
+      .then((words) => {
+        setCheck([...words].sort(() => Math.random() - 0.5));
+        setPicked(new Set());
+      })
+      .catch((reason) => setError(String(reason?.message ?? reason)));
+  };
+  const finish = () =>
+    setEstimate(
+      estimateLevel(
+        check!.map(({ word, rank }) => ({ rank, known: picked.has(word) })),
+        LEVEL_BANDS,
+      ),
+    );
+  const toggle = (word: string) => {
+    const next = new Set(picked);
+    if (next.has(word)) next.delete(word);
+    else next.add(word);
+    setPicked(next);
+  };
+  const choose = (rank: number) => language && set({ language, rank });
+
+  return (
+    <div className="es-found">
+      <div className="es-found__header">
+        <button type="button" className="es-found__back" onClick={() => close()}>
+          <ChevronLeft />
+          Settings
+        </button>
+        <div className="es-found__title">Your level</div>
+        <div className="es-found__actions">
+          <button className="es-settings-content__close" aria-label="Close" onClick={onClose}>
+            <CloseIcon />
+          </button>
+        </div>
+      </div>
+      <div className="es-found__body">
+        {!language ? (
+          <p className="es-found__empty">The level is set for the subtitles' language once it's known.</p>
+        ) : estimate !== null ? (
+          <div className="es-words-level__result">
+            <div className="es-words-review__word">{plural(estimate, "word")}</div>
+            <p className="es-found__empty">
+              You know about {plural(estimate, "word")} of {languageName(language)}
+              {estimate > 0 && `, ${levelLabel(estimate).split(" · ")[0]}`}. The words said more often count as known;
+              you can mark any of them otherwise.
+            </p>
+            <div className="es-words-review__grades">
+              <button type="button" className="es-found__button" onClick={() => setEstimate(null)}>
+                Back
+              </button>
+              <button
+                type="button"
+                className="es-found__button es-found__button--primary"
+                onClick={() => choose(estimate)}
+              >
+                Use this level
+              </button>
+            </div>
+          </div>
+        ) : check ? (
+          <>
+            <p className="es-words-level__hint">Tap the words you know. Leave the ones you aren't sure of.</p>
+            <div className="es-words-level__words" role="group" aria-label="Words to check">
+              {check.map(({ word }) => (
+                <button
+                  key={word}
+                  type="button"
+                  aria-pressed={picked.has(word)}
+                  className={cn("es-words-level__word", { "es-words-level__word--known": picked.has(word) })}
+                  onClick={() => toggle(word)}
+                >
+                  {word}
+                </button>
+              ))}
+            </div>
+            <div className="es-downloads__foot">
+              <span>{plural(picked.size, "word")} known</span>
+              <button type="button" className="es-found__button es-found__button--primary" onClick={finish}>
+                Done
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="es-words-level__hint">
+              Your level in {languageName(language)}
+              {level !== null && level > 0 ? ` is ${levelLabel(level)}` : ""}. Words said more often than its last word
+              count as known.
+            </p>
+            <div className="es-words-level__levels" role="group" aria-label="Levels">
+              {CEFR_LEVELS.map(({ level: name, rank }) => (
+                <button
+                  key={name}
+                  type="button"
+                  className={cn("es-words-level__level", { "es-words-level__level--current": level === rank })}
+                  onClick={() => choose(rank)}
+                >
+                  <b>{name}</b>
+                  <span>{plural(rank, "word")}</span>
+                </button>
+              ))}
+            </div>
+            {error && <p className="es-settings-content__status es-settings-content__status--warning">{error}</p>}
+            <div className="es-downloads__foot">
+              <button type="button" className="es-found__link" onClick={() => choose(0)}>
+                I'll mark words myself
+              </button>
+              <button
+                type="button"
+                className="es-found__button es-found__button--primary"
+                disabled={loading}
+                onClick={start}
+              >
+                {loading ? <Spinner /> : "Not sure? Check in a minute"}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
 // ---- Saved words ----
 
-// The line with the word in bold
-const ContextLine: FC<{ line: string; word: string }> = ({ line, word }) => (
-  <>
-    {line.split(/(\s+)/).map((part, index) => (
-      <Fragment key={index}>{normalizeWord(part) === word ? <b>{part}</b> : part}</Fragment>
-    ))}
-  </>
-);
+// The line with the word in bold, in any of its forms
+const ContextLine: FC<{ line: string; word: string; language: string }> = ({ line, word, language }) => {
+  const ranks = useUnit($wordRanks);
+  const isWord = (part: string) => {
+    const form = normalizeWord(part, language);
+    return form === word || (ranks.language === language && ranks.ranks[form ?? ""]?.[0] === word);
+  };
+  return (
+    <>
+      {line.split(/(\s+)/).map((part, index) => (
+        <Fragment key={index}>{isWord(part) ? <b>{part}</b> : part}</Fragment>
+      ))}
+    </>
+  );
+};
 
 // The list shows the latest words; search finds the others
 const LIST_LIMIT = 200;
@@ -172,6 +426,7 @@ function downloadCsv(words: TSavedWord[]) {
 const SavedWordRow: FC<{ word: TSavedWord; showLanguage: boolean }> = ({ word, showLanguage }) => {
   const [removed] = useUnit([wordsRemoved]);
   const key = wordKey(word.language, word.word);
+  const line = word.lines?.[0];
   return (
     <div className="es-words__row">
       <div className="es-words__main">
@@ -184,14 +439,14 @@ const SavedWordRow: FC<{ word: TSavedWord; showLanguage: boolean }> = ({ word, s
           )}
           {showLanguage && <span className="es-tag es-tag--quiet">{word.language}</span>}
         </span>
-        {word.context && (
+        {line && (
           <span className="es-words__context" dir="auto">
-            {word.context.url ? (
-              <a href={word.context.url} target="_blank" rel="noreferrer" title={word.context.source}>
-                <ContextLine line={word.context.line} word={word.word} />
+            {line.url ? (
+              <a href={line.url} target="_blank" rel="noreferrer" title={line.source}>
+                <ContextLine line={line.line} word={word.word} language={word.language} />
               </a>
             ) : (
-              <ContextLine line={word.context.line} word={word.word} />
+              <ContextLine line={line.line} word={word.word} language={word.language} />
             )}
           </span>
         )}
@@ -262,9 +517,9 @@ const Review: FC<{ queue: string[]; onDone: () => void }> = ({ queue: initial, o
       <div className="es-words-review__word" dir="auto">
         {word.word}
       </div>
-      {word.context && (
+      {word.lines?.[0] && (
         <p className="es-words-review__context" dir="auto">
-          <ContextLine line={word.context.line} word={word.word} />
+          <ContextLine line={word.lines[0].line} word={word.word} language={word.language} />
         </p>
       )}
       {revealed ? (
@@ -295,7 +550,13 @@ const Review: FC<{ queue: string[]; onDone: () => void }> = ({ queue: initial, o
 };
 
 export const SavedWordsSheet: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [words, language, close, imported] = useUnit([$words, $wordsLanguage, savedWordsClosed, wordsImported]);
+  const [words, language, close, imported, ankiReviews] = useUnit([
+    $words,
+    $wordsLanguage,
+    savedWordsClosed,
+    wordsImported,
+    $ankiReviews,
+  ]);
   const [filter, setFilter] = useState<TFilter>("learning");
   const [query, setQuery] = useState("");
   const [review, setReview] = useState<string[] | null>(null);
@@ -347,14 +608,18 @@ export const SavedWordsSheet: FC<{ onClose: () => void }> = ({ onClose }) => {
         ) : (
           <>
             <div className="es-words__toolbar">
-              <button
-                type="button"
-                className="es-found__button es-found__button--primary"
-                disabled={due.length === 0}
-                onClick={() => setReview(due.map((word) => wordKey(word.language, word.word)))}
-              >
-                {due.length ? `Review ${due.length}` : "Nothing to review"}
-              </button>
+              {ankiReviews ? (
+                <span className="es-words__note">Anki reviews your words</span>
+              ) : (
+                <button
+                  type="button"
+                  className="es-found__button es-found__button--primary"
+                  disabled={due.length === 0}
+                  onClick={() => setReview(due.map((word) => wordKey(word.language, word.word)))}
+                >
+                  {due.length ? `Review ${due.length}` : "Nothing to review"}
+                </button>
+              )}
               <span className="es-words__spacer" />
               <button
                 type="button"

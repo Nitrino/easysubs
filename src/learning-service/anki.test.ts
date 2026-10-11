@@ -329,4 +329,26 @@ describe("Anki", () => {
       },
     );
   });
+
+  it("reads the words of the Easysubs cards with Anki's interval", async () => {
+    answerAnki({
+      findCards: { result: [1, 2], error: null },
+      cardsInfo: {
+        result: [
+          { fields: { Word: { value: "<b>keys</b>" }, Translation: { value: "ключи" } }, interval: 30 },
+          { fields: { Word: { value: "" } }, interval: 1 },
+        ],
+        error: null,
+      },
+    });
+
+    expect(await new Anki().readWords()).toEqual([{ word: "keys", translation: "ключи", interval: 30 }]);
+    expect(params("findCards")).toEqual({ query: '"note:Easysubs"' });
+    expect(params("cardsInfo")).toEqual({ cards: [1, 2] });
+  });
+
+  it("asks to start Anki to read the cards", async () => {
+    answerAnki({ findCards: { result: null, error: "connection error" } });
+    await expect(new Anki().readWords()).rejects.toBe("Start Anki with AnkiConnect to read your cards");
+  });
 });

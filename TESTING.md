@@ -144,6 +144,15 @@ a machine translation.
   verb to Anki; the word alone with the line off; the line's settings for Anki only; a new line for a word in Anki;
   Anki duplicates and errors; LinguaLeo and its login hint; Puzzle English; no add buttons when disabled
 
+**Known words**
+
+- Unit: frequency lists (dictionary forms by their forms' counts, contractions by their parts, loading once, the
+  level check's sample), a word's status by the level and the user's marks, rank badges, the episode's score (names
+  left out unless marked), estimating the level, saving a word by its dictionary form with its lines, coloring new
+  words once the level is set, reading Anki's cards (mature ones known), review intervals, CSV export and import
+- E2E: the level asked before new words are colored, a CEFR level and the check, Learn and Know in the popover by
+  the dictionary form, the score and "All are known", coloring off, the saved words with review and CSV export
+
 **Settings and pausing**
 
 - Unit: defaults, services, size, background opacity limits, API key dialogs, the `es-*` page classes, saving to

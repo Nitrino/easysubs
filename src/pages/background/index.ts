@@ -16,6 +16,7 @@ import {
   opensubtitlesSignOut,
   searchSubtitles,
 } from "@src/subsSources";
+import { createFrequencyLookup } from "@src/utils/frequency/lookup";
 import { createExpressionFinder } from "@src/utils/expressions/lookup";
 import { translateExpressionsWithChatGPT, translateExpressionsWithOllama } from "@src/utils/chatGPTExpressions";
 import { createDictionaries } from "@src/utils/dictionary";
@@ -50,6 +51,7 @@ chrome.runtime.onInstalled.addListener(function (object) {
 });
 
 const findExpressionsInCues = createExpressionFinder();
+const frequency = createFrequencyLookup();
 const dictionaries = createDictionaries();
 
 // Deletes downloads by their ids and forgets what's loaded from them; the downloads that are left
@@ -202,6 +204,20 @@ chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   if (message.type === "findExpressions") {
     findExpressionsInCues(message.language, message.cues)
       .then((expressions) => sendResponse(expressions))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  // The dictionary forms and ranks of the subtitles' words, and words of each frequency band for the level check
+  // (src/utils/frequency)
+  if (message.type === "wordRanks") {
+    frequency
+      .ranks(message.language, message.words)
+      .then((ranks) => sendResponse({ ranks }))
+      .catch((error: Error) => sendResponse({ error: error.message }));
+  }
+  if (message.type === "frequencySample") {
+    frequency
+      .sample(message.language, message.perBand)
+      .then((words) => sendResponse({ words }))
       .catch((error: Error) => sendResponse({ error: error.message }));
   }
   // The expressions of a cue translated by ChatGPT or Ollama in one request, as they're used in the cue

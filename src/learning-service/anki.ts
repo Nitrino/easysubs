@@ -20,6 +20,7 @@ const ANKI_URL = "http://localhost:8765";
 const ALREADY_EXISTS = "Word already exists in Anki";
 
 type TAnkiAnswer<T = unknown> = { result?: T; error?: string | null };
+type TCardInfo = { interval?: number; fields?: Record<string, { value: string; order: number }> };
 type TNoteInfo = { noteId: number; fields: Record<string, { value: string; order: number }> };
 
 // Anki's search treats * and _ as wildcards
@@ -104,6 +105,25 @@ export class Anki implements ILearningService {
     if (!note?.fields) return null;
     const fields = Object.fromEntries(Object.entries(note.fields).map(([name, field]) => [name, field.value]));
     return { id: note.noteId, fields };
+  }
+
+  // The words of the Easysubs cards with their translations and how many days Anki waits between their reviews, for
+  // the known words (src/models/words)
+  public async readWords(): Promise<{ word: string; translation: string; interval: number }[]> {
+    const found = await this.request<number[]>("findCards", { query: `"note:${ANKI_MODEL}"` });
+    if (found.error === "connection error") throw "Start Anki with AnkiConnect to read your cards";
+    if (found.error) throw found.error;
+    if (!found.result?.length) return [];
+    const info = await this.request<TCardInfo[]>("cardsInfo", { cards: found.result });
+    if (info.error) throw info.error;
+    const text = (html = "") => html.replace(/<[^>]*>/g, "").trim();
+    return (info.result ?? [])
+      .map((card) => ({
+        word: text(card.fields?.Word?.value),
+        translation: text(card.fields?.Translation?.value),
+        interval: card.interval ?? 0,
+      }))
+      .filter((card) => card.word);
   }
 
   // The picture and the sound go into Anki's media folder, the note refers to them by name

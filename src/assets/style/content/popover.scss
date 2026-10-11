@@ -443,50 +443,76 @@ $es-gap: 8px; // how far the arrow sticks out of the body
   }
 }
 
-// New, learning or known at the foot of a word's popover (WordStatusPicker.tsx), in the colors the subtitles give them
+// What the word is to the user at the foot of its popover (WordStatus.tsx): its status in the color the subtitles give
+// it, how often it's said, and Learn and Know
 .es-popover .es-word-status {
   display: flex;
-  gap: 0.25em;
+  align-items: center;
+  gap: 0.4em;
   margin-top: 0.15em;
   font-size: 0.73em;
+  white-space: nowrap;
 
-  &__item {
-    flex: 1 1 0;
+  &__label {
+    color: var(--es-secondary);
+    font-weight: 500;
+
+    &--new {
+      color: var(--es-hl);
+    }
+
+    &--learning {
+      color: var(--es-word-learning);
+    }
+
+    &--known {
+      color: #30d158;
+    }
+  }
+
+  &__rank {
+    padding: 0 0.45em;
+    border-radius: 999px;
+    background: var(--es-fill);
+    color: var(--es-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.25em;
+    margin-left: auto;
+  }
+
+  &__button {
     margin: 0;
-    padding: 0.2em 0.5em;
+    padding: 0.2em 0.6em;
     border: 0;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.07);
     color: var(--es-secondary);
     font: inherit;
     line-height: 1.25;
-    white-space: nowrap;
     cursor: pointer;
     appearance: none;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: var(--es-fill-hover);
       color: var(--es-primary);
     }
 
-    &--selected,
-    &--selected:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      font-weight: 500;
+    &:disabled {
+      cursor: default;
     }
 
-    &--new.es-word-status__item--selected {
-      background: rgba(100, 210, 255, 0.2);
-      color: var(--es-hl);
-    }
-
-    &--learning.es-word-status__item--selected {
+    &--learning,
+    &--learning:hover:not(:disabled) {
       background: rgba(255, 159, 10, 0.2);
       color: var(--es-word-learning);
     }
 
-    &--known.es-word-status__item--selected {
+    &--known,
+    &--known:hover:not(:disabled) {
       background: rgba(48, 209, 88, 0.2);
       color: #30d158;
     }
