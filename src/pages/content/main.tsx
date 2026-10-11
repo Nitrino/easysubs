@@ -8,9 +8,11 @@ import { $video, getCurrentVideoFx, videoTimeUpdate } from "@src/models/videos";
 import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
 import { ProgressBar } from "./components/ProgressBar";
+import { Transcript } from "./components/Transcript/Transcript";
 import { removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { addSecondarySubsKeyListeners } from "@src/utils/secondarySubsKeys";
 import { addSubtitleDropListeners } from "@src/utils/subtitleDrop";
+import { addTranscriptKeyListeners } from "@src/utils/transcriptKeys";
 
 refreshOnUpdate("pages/content");
 
@@ -37,6 +39,7 @@ $streaming.watch((streaming) => {
   document.body.classList.add("es-" + streaming.name);
   addSecondarySubsKeyListeners();
   addSubtitleDropListeners();
+  addTranscriptKeyListeners();
 
   esRenderSetings.watch(() => {
     console.log("Event:", "esRenderSetings");
@@ -64,7 +67,7 @@ esSubsChanged.watch((language) => {
   console.log("Event:", "esSubsChanged");
   console.log("Language:", language);
   removeKeyboardEventsListeners();
-  document.querySelectorAll("#es, #es-top").forEach((e) => e.remove());
+  document.querySelectorAll("#es, #es-top, #es-transcript").forEach((e) => e.remove());
   const subsContainer = $streaming.getState().getSubsContainer();
   const subsNode = document.createElement("div");
   subsNode.id = "es";
@@ -74,6 +77,11 @@ esSubsChanged.watch((language) => {
   topNode.id = "es-top";
   subsContainer?.appendChild(topNode);
   createRoot(subsNode).render(<Subs topContainer={topNode} />);
+  // Every line, to jump to and search, see src/models/transcript
+  const transcriptNode = document.createElement("div");
+  transcriptNode.id = "es-transcript";
+  subsContainer?.appendChild(transcriptNode);
+  createRoot(transcriptNode).render(<Transcript />);
 
   if (!$streaming.getState().isOnFlight()) {
     document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());

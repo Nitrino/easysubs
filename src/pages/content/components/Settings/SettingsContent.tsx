@@ -15,6 +15,7 @@ import { SubsBackground } from "./SubsBackground";
 import { SubsBackgroundOpacity } from "./SubsBackgroundOpacity";
 import { SubsSource } from "./SubsSource";
 import { EnableProgressBar } from "./EnableProgressBar";
+import { TranscriptToggle } from "./TranscriptToggle";
 import { MoveBySubs } from "./MoveBySubs";
 import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
@@ -144,6 +145,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                   </div>
                   <div className="es-settings-content__item">
                     <EnableProgressBar />
+                  </div>
+                  <div className="es-settings-content__item">
+                    <TranscriptToggle />
                   </div>
                   <div className="es-settings-content__item">
                     <MoveBySubs />
