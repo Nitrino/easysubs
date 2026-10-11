@@ -25,7 +25,7 @@ test.describe("AI subtitles", () => {
     await page.getByRole("option", { name: /^AI subtitles/ }).click();
 
     const card = playground.settingsPanel.locator(".es-ai-subs");
-    await expect(card).toContainText("Waiting for the video's audio");
+    await expect(card).toContainText("Listening to the video…");
     await expect(playground.settingsRow("Subtitles from")).toContainText("AI subtitles");
 
     await page.evaluate(() =>

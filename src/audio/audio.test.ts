@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { decodePcm, encodePcm, SAMPLE_RATE, toMono16k } from "./pcm";
 import { PcmTimeline } from "./timeline";
@@ -265,5 +265,133 @@ describe("AudioSession's Whisper windows", () => {
       { from: 0, to: 20_000, words: ["before", "edge"] },
       { from: 20_000, to: 29_700, words: ["edge"] },
     ]);
+  });
+});
+
+describe("AudioSession's Whisper windows from where playback started", () => {
+  it("recognizes the rest of the window playback started in, and all of it once heard", async () => {
+    const { AudioSession } = await import("./session");
+    const { createVideo } = await import("@root/test/video");
+    const requests: number[] = [];
+    window.easysubsAudioWorker = () => ({
+      request: (async (job: TAudioJob) => {
+        requests.push(decodePcm((job as { pcm: string }).pcm).length / SAMPLE_RATE);
+        return [{ text: "word", start: 500, end: 900 }];
+      }) as never,
+      onEvent: () => {},
+      close: () => {},
+    });
+    const video = createVideo({ currentTime: 25 });
+    Object.defineProperty(video, "duration", { value: 600 });
+    const recognized: { from: number; to: number; words: number[] }[] = [];
+    const session = new AudioSession(
+      video,
+      { audio: "element", detector: "energy", whisper: true, aligner: false },
+      {
+        speechHeard: () => {},
+        cueAligned: () => {},
+        wordsRecognized: ({ from, to, words }) => recognized.push({ from, to, words: words.map((word) => word.start) }),
+        status: () => {},
+        subs: () => [],
+        language: () => "en",
+      },
+    );
+    await session.start();
+    const internals = session as unknown as {
+      chunk: (source: string, start: number, samples: Float32Array) => void;
+      tick: () => void;
+    };
+    const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Played from 25 s to 41 s: the 20–40 s window from 25 s on
+    internals.chunk("element", 25_000, new Float32Array(16 * SAMPLE_RATE));
+    internals.tick();
+    await settle();
+    // Then 0–25 s, heard after a seek back: the window again, whole
+    internals.chunk("element", 0, new Float32Array(25 * SAMPLE_RATE));
+    internals.tick();
+    await settle();
+    internals.tick();
+    await settle();
+    session.stop();
+    delete window.easysubsAudioWorker;
+
+    expect(requests).toEqual([16, 22, 21]);
+    expect(recognized).toEqual([
+      { from: 25_000, to: 40_000, words: [25_500] },
+      { from: 20_000, to: 40_000, words: [] },
+      { from: 0, to: 20_000, words: [500] },
+    ]);
+  });
+});
+
+describe("decodeFileAudio", () => {
+  it("reads a plain file ahead and passes on its sound around the playhead, again once dropped", async () => {
+    const { decodeFileAudio } = await import("./fileAudio");
+    const { createVideo } = await import("@root/test/video");
+    // 10 minutes of sound at 16 kHz
+    const decoded = new Float32Array(600 * SAMPLE_RATE);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(new ArrayBuffer(8))),
+    );
+    vi.stubGlobal(
+      "OfflineAudioContext",
+      class {
+        async decodeAudioData() {
+          return { numberOfChannels: 1, sampleRate: SAMPLE_RATE, getChannelData: () => decoded };
+        }
+      },
+    );
+    const video = createVideo({ currentTime: 60 });
+    Object.defineProperty(video, "currentSrc", { value: "http://localhost/movie.mp4", configurable: true });
+    const covered: number[] = [];
+    const file = decodeFileAudio(
+      video,
+      (start) => covered.push(start / 1000),
+      (start) => covered.includes(start / 1000),
+    );
+    await vi.waitFor(() => expect(covered.length).toBeGreaterThan(0));
+
+    // From 30 s behind the playhead to 5 minutes ahead, in 30 s pieces
+    expect(covered).toEqual([0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360]);
+
+    // What the timeline has isn't passed on again
+    file.refill(60_000);
+    expect(covered).toHaveLength(13);
+    // What the timeline dropped comes again
+    const dropped: number[] = [];
+    const again = decodeFileAudio(
+      video,
+      (start) => dropped.push(start / 1000),
+      () => false,
+    );
+    await vi.waitFor(() => expect(dropped.length).toBe(13));
+    again.refill(60_000);
+    expect(dropped).toHaveLength(26);
+
+    // Another video in the element: nothing more of this one
+    Object.defineProperty(video, "currentSrc", { value: "http://localhost/other.mp4" });
+    again.refill(60_000);
+    expect(dropped).toHaveLength(26);
+    file.stop();
+    again.stop();
+  });
+
+  it("leaves streamed video to the buffered audio", async () => {
+    const { decodeFileAudio } = await import("./fileAudio");
+    const { createVideo } = await import("@root/test/video");
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+    const video = createVideo();
+    Object.defineProperty(video, "currentSrc", { value: "blob:https://www.youtube.com/1234" });
+
+    decodeFileAudio(
+      video,
+      () => {},
+      () => false,
+    ).stop();
+
+    expect(fetch).not.toHaveBeenCalled();
   });
 });

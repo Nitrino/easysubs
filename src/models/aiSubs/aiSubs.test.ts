@@ -170,6 +170,6 @@ describe("AI subtitles", () => {
     expect(scope.getState($aiStatus)).toEqual({ whisper: "downloading 30%", audio: "no audio from the video: EME" });
 
     await allSettled(aiStatusChanged, { scope, params: { source: "speech", status: "listening" } });
-    expect(scope.getState($aiStatus).audio).toBe("");
+    expect(scope.getState($aiStatus).audio).toBe("listening");
   });
 });

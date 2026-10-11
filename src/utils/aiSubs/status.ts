@@ -16,6 +16,7 @@ export function describeAiStatus(status: { whisper: string; audio: string }, lin
   if (whisper === "recognizing") return lines > 0 ? `${plural(lines)}, transcribing more…` : "Transcribing…";
   if (lines > 0) return `${plural(lines)} so far, more as the video plays`;
   if (whisper === "ready") return "No speech heard yet";
+  if (audio === "listening") return "Listening to the video…";
   return "Waiting for the video's audio: play it";
 }
 

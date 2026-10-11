@@ -5,6 +5,7 @@ import { captureElementAudio } from "./elementCapture";
 import type { TAudioWorker } from "./jobs";
 import { decodePcm, encodePcm, samplesToMs } from "./pcm";
 import { tapBufferedAudio } from "./readAhead";
+import { decodeFileAudio, type TFileAudio } from "./fileAudio";
 import { PcmTimeline } from "./timeline";
 import { EnergyDetector, SILERO_FRAME, speechIntervals, ENERGY_FRAME, frameMs } from "./vad";
 import { connectAudioWorker } from "./worker";
@@ -31,7 +32,7 @@ export type TAudioSessionCallbacks = {
   language(): string;
 };
 
-type TSourceName = "element" | "ahead" | "tab";
+type TSourceName = "element" | "ahead" | "tab" | "file";
 
 // Silero VAD gets audio in blocks of about a second, each with half a second before it to settle its state on: it
 // starts every block afresh and misses the first words otherwise
@@ -59,11 +60,14 @@ export class AudioSession {
     { energy: EnergyDetector; end: number; block: Float32Array[]; blockStart: number }
   >();
   private aligned = new Set<string>();
-  private recognized = new Set<number>();
+  // Each window recognized, with where its audio started: one heard from the middle (playback started there) is
+  // recognized again once more of it is heard
+  private recognized = new Map<number, number>();
   private busy = { aligner: false, whisper: false };
   private silero = false;
   private lastTabChunk = 0;
   private stopped = false;
+  private file: TFileAudio | null = null;
   // The speech found, for debug()
   private found: TInterval[] = [];
 
@@ -78,7 +82,7 @@ export class AudioSession {
     return {
       covered: this.timeline.covered(),
       aligned: [...this.aligned],
-      recognized: [...this.recognized],
+      recognized: [...this.recognized.keys()],
       speech: this.found.map((interval) => `${Math.round(interval.start)}–${Math.round(interval.end)}`),
       busy: { ...this.busy },
       silero: this.silero,
@@ -102,6 +106,13 @@ export class AudioSession {
           this.options.consumer,
         ),
       );
+      // A plain file has nothing buffered through MSE: it's read whole instead
+      this.file = decodeFileAudio(
+        this.video,
+        (start, samples) => this.chunk("file", start, samples),
+        (start, end) => this.timeline.covers(start, end),
+      );
+      this.stops.push(() => this.file?.stop());
     }
 
     const timer = setInterval(() => this.tick(), 500);
@@ -210,6 +221,7 @@ export class AudioSession {
     if (this.stopped) return;
     const now = this.video.currentTime * 1000;
     this.timeline.prune(now);
+    this.file?.refill(now);
     if (this.options.aligner && this.worker && !this.busy.aligner) this.alignNext(now);
     if (this.options.whisper && this.worker && !this.busy.whisper) this.recognizeNext(now);
   }
@@ -252,13 +264,17 @@ export class AudioSession {
   }
 
   // 20 s windows of the video, the one with the playhead first, then the ones ahead. The last ends with the video.
+  // Audio from where playback started in the middle of a window is enough for its rest.
   private whisperWindow(index: number) {
     const duration = this.video.duration * 1000;
     const end = Number.isFinite(duration) && duration > 0 ? duration - END_SLACK_MS : Infinity;
     const from = index * WHISPER_WINDOW_MS;
     const to = Math.min(from + WHISPER_WINDOW_MS, end);
     if (index < 0 || to <= from) return null;
-    return { from, to, readFrom: Math.max(0, from - WHISPER_PAD_MS), readTo: Math.min(to + WHISPER_PAD_MS, end) };
+    const readTo = Math.min(to + WHISPER_PAD_MS, end);
+    const heard = this.timeline.covered().find((interval) => interval.start < to - 1000 && interval.end >= readTo);
+    if (!heard) return null;
+    return { from: Math.max(from, heard.start), to, readFrom: Math.max(0, from - WHISPER_PAD_MS, heard.start), readTo };
   }
 
   private recognizeNext(now: number) {
@@ -270,15 +286,15 @@ export class AudioSession {
     ];
     const index = order.find((candidate) => {
       const window = this.whisperWindow(candidate);
-      if (!window || this.recognized.has(candidate)) return false;
-      return this.timeline.covers(window.readFrom, window.readTo);
+      const done = this.recognized.get(candidate);
+      return window !== null && (done === undefined || window.from < done);
     });
     if (index === undefined) return;
 
     const { from, to, readFrom, readTo } = this.whisperWindow(index);
     const samples = this.timeline.read(readFrom, readTo);
     if (!samples) return;
-    this.recognized.add(index);
+    this.recognized.set(index, from);
     this.busy.whisper = true;
     this.callbacks.status("whisper", "recognizing");
     this.worker

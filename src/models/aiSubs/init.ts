@@ -114,8 +114,8 @@ $aiWords.on(aiWordsRecognized, (words, { from, to, words: recognized }) =>
 $aiWindows.on(aiWordsRecognized, (count) => count + 1);
 $aiStatus.on(aiStatusChanged, (status, { source, status: value }) => {
   if (source === "whisper") return { ...status, whisper: value };
-  // Hearing the video: "listening" clears an earlier problem
-  if (source === "speech") return { ...status, audio: value === "listening" ? "" : value };
+  // Hearing the video ("listening"), or why not
+  if (source === "speech") return { ...status, audio: value };
   return status;
 });
 

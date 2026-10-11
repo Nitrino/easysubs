@@ -67,6 +67,7 @@ describe("wordsToCues", () => {
 describe("describeAiStatus", () => {
   it("tells the download, then the lines as they come", () => {
     expect(describeAiStatus({ whisper: "", audio: "" }, 0)).toMatch(/play it/);
+    expect(describeAiStatus({ whisper: "", audio: "listening" }, 0)).toBe("Listening to the video…");
     expect(describeAiStatus({ whisper: "downloading 40%", audio: "" }, 0)).toMatch(/speech model.*40%/);
     expect(describeAiStatus({ whisper: "recognizing", audio: "" }, 0)).toBe("Transcribing…");
     expect(describeAiStatus({ whisper: "ready", audio: "" }, 12)).toBe("12 lines so far, more as the video plays");
