@@ -1,6 +1,7 @@
 import { combine, createEffect, createEvent, createStore } from "effector";
 
 import type { TTimedWord } from "../types";
+import type { TInterval } from "@src/utils/wordTiming/speech";
 import { $subsDelay } from "../subs";
 import { wordsToCues } from "@src/utils/aiSubs/wordsToCues";
 
@@ -14,8 +15,8 @@ import { wordsToCues } from "@src/utils/aiSubs/wordsToCues";
 export const $aiSubs = createStore<{ page: string; language: string } | null>(null);
 // Whisper's words so far, by video time
 export const $aiWords = createStore<TTimedWord[]>([]);
-// The windows Whisper went through, for the progress
-export const $aiWindows = createStore<number>(0);
+// The stretches of the video Whisper went through, by video time, for the progress
+export const $aiTranscribed = createStore<TInterval[]>([]);
 // The model's last word ("downloading 40%", "recognizing", "ready", "failed: …") and a problem hearing the video
 export const $aiStatus = createStore<{ whisper: string; audio: string }>({ whisper: "", audio: "" });
 
@@ -40,3 +41,11 @@ export const $aiCaptions = combine($aiWords, $aiSubs, $subsDelay, (words, ai, de
     end: Number(cue.end) + delay * 1000,
   })),
 );
+
+// Whisper went through the moment `at` (ms)
+export const isTranscribed = (transcribed: TInterval[], at: number) =>
+  transcribed.some((interval) => interval.start <= at && at < interval.end);
+
+// Where the transcribed stretch around `at` ends, null when `at` isn't transcribed yet
+export const transcribedUntil = (transcribed: TInterval[], at: number) =>
+  transcribed.find((interval) => interval.start <= at && at < interval.end)?.end ?? null;

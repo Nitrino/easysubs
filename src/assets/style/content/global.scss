@@ -103,6 +103,46 @@
     pointer-events: none;
   }
 
+  // AI subtitles on their way, where the subtitles go
+  .es-ai-progress {
+    display: inline-grid;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 0.5px solid var(--es-hud-border);
+    border-radius: 12px;
+    background: var(--es-hud-strong);
+    color: var(--es-primary);
+    font-size: 13px;
+    line-height: 18px;
+    text-shadow: none;
+    pointer-events: none;
+
+    &__row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    &__percent {
+      color: var(--es-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    &__bar {
+      height: 3px;
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--es-fill);
+
+      > div {
+        height: 100%;
+        background: var(--es-accent);
+        transition: width 200ms ease-out;
+      }
+    }
+  }
+
   .es-sub-item {
     display: inline;
     position: relative;

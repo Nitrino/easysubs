@@ -36,6 +36,20 @@ test.describe("AI subtitles", () => {
       }),
     );
     await expect(card).toContainText("Downloading the speech model (77 MB, once): 40%");
+    // Where the subtitles go too, with the settings closed
+    await playground.closeSettings();
+    const progress = playground.subs.locator(".es-ai-progress");
+    await expect(progress).toContainText("Downloading the speech model…40%");
+    await expect(progress.locator(".es-ai-progress__bar > div")).toHaveAttribute("style", "width: 40%;");
+    await page.evaluate(() =>
+      (window as unknown as { aiWorkerEvent: (event: unknown) => void }).aiWorkerEvent({
+        type: "status",
+        model: "whisper",
+        status: "ready",
+      }),
+    );
+    await expect(progress).toHaveText("Making subtitles…");
+    await playground.openSettings("Subtitles");
 
     await card.locator(".es-select").click();
     await page.getByRole("option", { name: "Spanish", exact: true }).click();
@@ -43,6 +57,7 @@ test.describe("AI subtitles", () => {
 
     await card.getByRole("button", { name: "Remove" }).click();
     await expect(card).toBeHidden();
+    await expect(playground.subs.locator(".es-ai-progress")).toHaveCount(0);
     await expect(playground.settingsRow("Subtitles from")).toContainText("From the playground");
   });
 });

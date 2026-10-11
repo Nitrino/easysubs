@@ -4,6 +4,9 @@ import "@src/models/init";
 import "@root/playground/src/mockBackground";
 import {
   $aiStatus,
+  $aiTranscribed,
+  isTranscribed,
+  transcribedUntil,
   $aiSubs,
   aiLanguagePicked,
   aiStatusChanged,
@@ -87,6 +90,12 @@ describe("AI subtitles", () => {
       [1100, "Hola, ¿qué tal?"],
       [21_000, "Muy bien."],
     ]);
+    // What Whisper went through, for the progress
+    const transcribed = scope.getState($aiTranscribed);
+    expect(transcribed).toEqual([{ start: 0, end: 40_000 }]);
+    expect(isTranscribed(transcribed, 39_000)).toBe(true);
+    expect(isTranscribed(transcribed, 40_000)).toBe(false);
+    expect(transcribedUntil(transcribed, 5000)).toBe(40_000);
   });
 
   it("keeps its lines when the service announces its track again", async () => {

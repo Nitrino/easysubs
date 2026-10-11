@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { TTimedWord } from "@src/models/types";
 import { wordsToCues } from "./wordsToCues";
-import { describeAiStatus } from "./status";
+import { describeAiProgress, describeAiStatus, formatTime } from "./status";
 import { AI_SUBS_LANGUAGES } from "./languages";
 
 // Words said one after another, `gap` ms apart, each 300 ms long
@@ -90,5 +90,32 @@ describe("AI_SUBS_LANGUAGES", () => {
     expect(codes).toEqual(expect.arrayContaining(["en", "ru", "es", "zh", "jw"]));
     expect(codes).not.toContain("zh-CN");
     expect(codes).not.toContain("ceb");
+  });
+});
+
+describe("describeAiProgress", () => {
+  it("shows the model's download with its percentage, then that subtitles are coming", () => {
+    expect(describeAiProgress({ whisper: "downloading 40%", audio: "listening" })).toEqual({
+      text: "Downloading the speech model…",
+      percent: 40,
+    });
+    expect(describeAiProgress({ whisper: "recognizing", audio: "listening" })).toEqual({ text: "Making subtitles…" });
+    expect(describeAiProgress({ whisper: "", audio: "" })).toEqual({ text: "Making subtitles…" });
+  });
+
+  it("says why nothing comes", () => {
+    expect(describeAiProgress({ whisper: "failed: out of memory", audio: "listening" })).toEqual({
+      text: "Transcribing failed: out of memory",
+      problem: true,
+    });
+    expect(describeAiProgress({ whisper: "", audio: "no audio from the video: EME" })).toMatchObject({ problem: true });
+  });
+});
+
+describe("formatTime", () => {
+  it("writes a time the way players do", () => {
+    expect(formatTime(200_400)).toBe("3:20");
+    expect(formatTime(5_000)).toBe("0:05");
+    expect(formatTime(3_725_000)).toBe("1:02:05");
   });
 });

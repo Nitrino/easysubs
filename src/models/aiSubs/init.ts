@@ -5,7 +5,7 @@ import {
   $aiCaptions,
   $aiStatus,
   $aiSubs,
-  $aiWindows,
+  $aiTranscribed,
   $aiWords,
   aiLanguagePicked,
   aiStatusChanged,
@@ -30,6 +30,7 @@ import { $video, videoTimeUpdate } from "../videos";
 import { $aiSubsLanguage } from "../settings";
 import { AudioSession } from "@src/audio/session";
 import { currentVideoPage } from "@src/utils/videoKey";
+import { addInterval } from "@src/utils/wordTiming/speech";
 
 // ---- The session ---------------------------------------------------------------------------------
 
@@ -83,7 +84,7 @@ const stoppedHere = sample({ clock: aiSubsStopped, source: $aiSubs, filter: Bool
 const stopped = sample({ clock: [stoppedHere, sample({ clock: aiSubsReplaced, source: $aiSubs, filter: Boolean })] });
 $aiSubs.reset(stopped);
 $aiWords.reset(started, relanguaged, stopped);
-$aiWindows.reset(started, relanguaged, stopped);
+$aiTranscribed.reset(started, relanguaged, stopped);
 $aiStatus.reset(started, relanguaged, stopped);
 sample({ clock: stopped, target: stopAiSessionFx });
 
@@ -111,7 +112,8 @@ sample({ clock: started, fn: () => AI_SUBS_LABEL, target: esSubsChanged });
 $aiWords.on(aiWordsRecognized, (words, { from, to, words: recognized }) =>
   [...words.filter((word) => word.start < from || word.start >= to), ...recognized].sort((a, b) => a.start - b.start),
 );
-$aiWindows.on(aiWordsRecognized, (count) => count + 1);
+// Windows next to each other join into one stretch
+$aiTranscribed.on(aiWordsRecognized, (transcribed, { from, to }) => addInterval(transcribed, { start: from, end: to }));
 $aiStatus.on(aiWordsRecognized, (status) => ({ ...status, whisper: "ready" }));
 $aiStatus.on(aiStatusChanged, (status, { source, status: value }) => {
   // The model saying it loaded while it transcribes its first window isn't the window's end

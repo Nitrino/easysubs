@@ -7,10 +7,20 @@ import { $streaming } from "@src/models/streamings";
 import { describeTiming, FOUND_SOURCE_TITLES, foundName } from "@src/utils/foundSubsText";
 import { serviceTitle } from "@src/utils/secondarySubsOptions";
 import { pickSubtitleFile } from "@src/utils/subtitleFiles";
-import { $aiCaptions, $aiStatus, $aiSubs, aiLanguagePicked, aiSubsRequested, aiSubsStopped } from "@src/models/aiSubs";
+import {
+  $aiCaptions,
+  $aiStatus,
+  $aiSubs,
+  $aiTranscribed,
+  aiLanguagePicked,
+  aiSubsRequested,
+  aiSubsStopped,
+  transcribedUntil,
+} from "@src/models/aiSubs";
+import { $video } from "@src/models/videos";
 import { $aiSubsLanguage } from "@src/models/settings";
 import { AI_SUBS_LANGUAGES } from "@src/utils/aiSubs/languages";
-import { describeAiStatus } from "@src/utils/aiSubs/status";
+import { describeAiStatus, formatTime } from "@src/utils/aiSubs/status";
 import { Select } from "../ui/Select";
 
 type TSourceOption = { value: string; label: string; hint?: string; tag?: string };
@@ -112,8 +122,15 @@ export const SubsSource: FC = () => {
 
 // Made from the video's audio: the language spoken, which Whisper is told, and how far it got
 const AiSubsCard: FC = () => {
-  const [language, status, captions] = useUnit([$aiSubsLanguage, $aiStatus, $aiCaptions]);
+  const [language, status, captions, transcribed, video] = useUnit([
+    $aiSubsLanguage,
+    $aiStatus,
+    $aiCaptions,
+    $aiTranscribed,
+    $video,
+  ]);
   const languages = AI_SUBS_LANGUAGES;
+  const until = video ? transcribedUntil(transcribed, video.currentTime * 1000) : null;
 
   return (
     <div className="es-source-card es-ai-subs" aria-live="polite">
@@ -133,6 +150,9 @@ const AiSubsCard: FC = () => {
         />
       </div>
       <div className="es-source-card__timing es-ai-subs__status">{describeAiStatus(status, captions.length)}</div>
+      {until !== null && (
+        <div className="es-source-card__timing es-ai-subs__until">Transcribed up to {formatTime(until)}</div>
+      )}
     </div>
   );
 };

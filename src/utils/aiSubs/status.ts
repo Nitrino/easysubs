@@ -20,5 +20,31 @@ export function describeAiStatus(status: { whisper: string; audio: string }, lin
   return "Waiting for the video's audio: play it";
 }
 
+// Over the player while the moment playing isn't transcribed yet: the model's download with its percentage, then a
+// spinner while Whisper works, or why nothing comes
+export function describeAiProgress(status: { whisper: string; audio: string }): {
+  text: string;
+  percent?: number;
+  problem?: boolean;
+} {
+  const downloading = /^downloading (\d+)%/.exec(status.whisper);
+  if (downloading) return { text: "Downloading the speech model…", percent: Number(downloading[1]) };
+  const problem =
+    status.whisper.startsWith("no speech models") ||
+    status.whisper.startsWith("failed") ||
+    (status.audio !== "" && status.audio !== "listening");
+  if (problem) return { text: describeAiStatus(status, 0), problem: true };
+  return { text: "Making subtitles…" };
+}
+
+// "3:20", "1:02:05"
+export function formatTime(ms: number): string {
+  const seconds = Math.floor(ms / 1000);
+  const parts = [Math.floor(seconds / 3600), Math.floor(seconds / 60) % 60, seconds % 60];
+  const [hours, minutes, rest] = parts;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return hours > 0 ? `${hours}:${pad(minutes)}:${pad(rest)}` : `${minutes}:${pad(rest)}`;
+}
+
 const afterColon = (text: string) => text.slice(text.indexOf(":") + 1).trim();
 const plural = (lines: number) => `${lines} ${lines === 1 ? "line" : "lines"}`;
