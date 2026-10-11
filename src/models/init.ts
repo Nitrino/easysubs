@@ -8,3 +8,4 @@ import "./secondarySubs/init";
 import "./foundSubs/init";
 import "./spokenWord/init";
 import "./aiSubs/init";
+import "./transcript/init";

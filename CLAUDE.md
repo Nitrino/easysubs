@@ -47,6 +47,7 @@ Uses Effector for state management with these main models:
 - `src/models/spokenWord/` - Highlighting the word being said, an experiment (see below)
 - `src/models/aiSubs/` - AI subtitles made on the device from the video's audio (see below)
 - `src/models/learning/` - Adding a word to the learning service, with its line for Anki (see Anki Cards below)
+- `src/models/transcript/` - The transcript sidebar: every line with its second language, click to play from it, search in both languages. Opened with Shift+T or the Transcript row of the General tab. The second language is the second line's (track, found file or its translations) or, with the second line off, the translation language, translated for the lines in view through the second line's translator
 
 ### Browser Extension Structure
 
@@ -169,6 +170,7 @@ Phrasal verbs, idioms, set phrases and German and Dutch separable verbs, in any 
 - `public/expressions/<language>.json` is built by `scripts/expressions/build.ts` (`pnpm expressions`) from kaikki.org's Wiktextract dumps of Wiktionary (CC BY-SA 4.0): each expression with its kind and inflected forms, and the forms of verbs that start expressions without forms of their own ("бить баклуши" → "бьёт баклуши", `src/utils/expressions/verbHeads.ts`). The pure transforms are in `scripts/expressions/wiktextract.ts`
 - `src/utils/expressions/findExpressions.ts` indexes every form by its first word and matches a cue's words with per-language rules: an English object before the particle ("pick the box up"), a German or Dutch verb with its particle at the end of the clause ("rufe dich morgen an"), placeholders like `one's` and `someone`. `normalize.ts` is shared with the build
 - The background's `findExpressions` message loads a language's list once and answers for a batch of cues; `src/models/expressions` sends the whole track once its language is detected, then only new cues
+- Shift+click picks words of a cue to translate together, next to each other or not (a German verb and its particle, a phrase the lists lack): `$selectedWords` in `src/models/expressions`, kind `selection`. From two words they're the expression of a hovered picked word, over what the lists found; a picked word again leaves it, a plain click or another cue starts over, and they go when the cue leaves the screen
 - Hovering a word of an expression shows it in `ExpressionTranslation.tsx` with the hovered word's own translation under it. Expressions are translated like hovered words, by the Dictionary row's service (`expressionTranslator`): the Wiktionary dictionary by default, Google's `translateWordFull` on the dictionary form with Google there, or Chrome's translator when it's the translation service; and by ChatGPT or Ollama when it's the translation service: one `translateExpressions` request per cue for all its expressions, in context (`src/utils/chatGPTExpressions.ts`)
 
 ### Build System

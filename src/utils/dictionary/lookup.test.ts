@@ -13,7 +13,8 @@ const enRu: TDictionary = {
     see: ["see", "siː", [["verb", [[["видеть"], "To perceive."]]]]],
     "pick up": ["pick up", "", [["verb", [[["забрать", "подобрать"], "To collect a passenger."]]]]],
   },
-  forms: { went: ["go"], saw: ["see"], "picked up": ["pick up"] },
+  forms: { went: ["go"], saw: ["see"], "picked up": ["pick up"], goes: ["go"] },
+  transcriptions: { went: "wɛnt" },
 };
 
 describe("dictionaryPair", () => {
@@ -35,12 +36,17 @@ describe("lookUpWord", () => {
   it("finds an inflected form's dictionary form, its meanings before the form's own", () => {
     expect(lookUpWord(enRu, "went")).toEqual({
       word: "went",
-      transcription: "ɡəʊ",
+      transcription: "wɛnt",
       lemma: "go",
       entries: enRu.words.go[2],
     });
     expect(lookUpWord(enRu, "saw")?.entries).toEqual([...enRu.words.see[2], ...enRu.words.saw[2]]);
     expect(lookUpWord(enRu, "Picked  up")?.lemma).toBe("pick up");
+  });
+
+  it("gives a form its own transcription, not its dictionary form's", () => {
+    expect(lookUpWord(enRu, "saw")?.transcription).toBe("sɔː");
+    expect(lookUpWord(enRu, "goes")?.transcription).toBe("");
   });
 });
 
@@ -52,7 +58,7 @@ describe("dictionaryTranslation", () => {
       source: "went",
       mainTranslation: "идти",
       targetLanguage: "ru",
-      transcription: "ɡəʊ",
+      transcription: "wɛnt",
       lemma: "go",
       translations: [{ word: "идти", partOfSpeech: "verb", synonyms: ["ходить"], popularity: 0, note: "To move." }],
     });

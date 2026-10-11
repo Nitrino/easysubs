@@ -84,7 +84,7 @@
     position: relative;
   }
 
-  // What V did, above the subtitles
+  // What V, G or H did, above the subtitles
   .es-secondary-notice {
     position: absolute;
     bottom: 100%;
@@ -159,6 +159,15 @@
 
     &-highlighted {
       color: var(--es-hl);
+    }
+
+    // Words picked with Shift+click to translate together, marked while the pointer is elsewhere
+    &-selected {
+      color: var(--es-hl);
+      text-decoration: underline;
+      text-decoration-color: var(--es-hl);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.2em;
     }
 
     // The word being said (src/models/spokenWord): lit at once, fading back as the next word starts

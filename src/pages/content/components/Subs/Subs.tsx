@@ -15,13 +15,21 @@ import {
   $translateLanguage,
 } from "@src/models/settings";
 import { $currentSecondarySubs } from "@src/models/secondarySubs";
-import { $currentExpression, wordHovered, wordLeft } from "@src/models/expressions";
+import {
+  $currentExpression,
+  $selectedWords,
+  selectionCleared,
+  wordHovered,
+  wordLeft,
+  wordSelected,
+} from "@src/models/expressions";
 import { $spokenWord } from "@src/models/spokenWord";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
 import { ExpressionTranslation } from "./ExpressionTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
 import { SecondaryLine, SecondaryNotice, SecondarySubsTop } from "./SecondarySubs";
+import { DelayNotice } from "./DelayNotice";
 import { useHoverPause } from "./useHoverPause";
 import { NextEpisodePrompt } from "../FoundSubs/NextEpisodePrompt";
 import { SpokenWordCompare } from "./SpokenWordCompare";
@@ -60,6 +68,7 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
           style={{ fontSize: `${((video.clientWidth / 100) * subsFontSize) / 43}px` }}
         >
           <SecondaryNotice />
+          <DelayNotice />
           <NextEpisodePrompt />
           {currentSubs.length === 0 && <AiSubsProgress />}
           {currentSubs.map((sub, index) => (
@@ -119,10 +128,22 @@ type TSubItemProps = {
 };
 
 const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
-  const [currentExpression, handleWordHovered, handleWordLeft, subsLanguage, translateLanguage] = useUnit([
+  const [
+    currentExpression,
+    selectedWords,
+    handleWordHovered,
+    handleWordLeft,
+    handleWordSelected,
+    handleSelectionCleared,
+    subsLanguage,
+    translateLanguage,
+  ] = useUnit([
     $currentExpression,
+    $selectedWords,
     wordHovered,
     wordLeft,
+    wordSelected,
+    selectionCleared,
     $subsLanguage,
     $translateLanguage,
   ]);
@@ -138,13 +159,27 @@ const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
     handleWordHovered({ id: sub.id, cue: sub.text, index });
   };
 
-  const handleClick = () => {
+  // Shift+click picks words to translate together, keeping the popover open on the picked words; a plain click
+  // translates the line and drops the picked words
+  const handleMouseDown = (event: React.MouseEvent<HTMLElement>) => {
+    // Shift+click would select the page's text otherwise
+    if (event.shiftKey) event.preventDefault();
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (event.shiftKey) {
+      event.stopPropagation();
+      handleWordSelected({ id: sub.id, cue: sub.text, index, word: subItem.cleanedText });
+      return;
+    }
     setShowTranslation(false);
     handleWordLeft();
+    handleSelectionCleared();
   };
 
   // The expression of the hovered word, highlighted in its own cue only
   const inExpression = currentExpression?.id === sub.id && currentExpression.indexes.includes(index);
+  const selected = selectedWords?.id === sub.id && selectedWords.words.some((word) => word.index === index);
   // Subtitles already in the translation language get the word popover, which asks for another language
   const showExpression = inExpression && subsLanguage !== translateLanguage;
 
@@ -153,7 +188,8 @@ const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
       <pre
         onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}
-        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""} ${spoken ? "es-sub-item-spoken" : ""}`}
+        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""} ${selected ? "es-sub-item-selected" : ""} ${spoken ? "es-sub-item-spoken" : ""}`}
+        onMouseDown={handleMouseDown}
         onClick={handleClick}
       >
         {subItem.text}

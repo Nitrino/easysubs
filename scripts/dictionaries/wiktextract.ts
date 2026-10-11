@@ -253,6 +253,14 @@ export function formsOf(
     .map((form) => [form, key, false]);
 }
 
+// The transcription of an inflected form's own entry, by its key: "went" is said otherwise than "go"
+export function formTranscription(record: TWiktextractRecord, language: string): [form: string, ipa: string] | null {
+  if (record.lang_code !== language || !isFormOf(record)) return null;
+  const key = dictionaryKey(record.word, language);
+  const ipa = transcription(record);
+  return key && ipa ? [key, ipa] : null;
+}
+
 // Parts of speech hardly anyone hovers a word for: "I" is the pronoun before it's the letter
 const MINOR_POS = new Set(["character", "symbol", "letter", "name", "prefix", "suffix", "infix", "abbrev", "punct"]);
 const isMinor = ([partOfSpeech, senses]: TDictionaryEntry) =>
@@ -282,12 +290,14 @@ export function mergeWords(words: TDictionaryWord[]): TDictionaryWord {
 }
 
 // The dictionary with the forms of its words only: a form of a word it doesn't have finds nothing anyway. A word with
-// meanings of its own keeps only the forms its own entry declares ("saw" of "see"), see formsOf().
+// meanings of its own keeps only the forms its own entry declares ("saw" of "see"), see formsOf(). The forms keep the
+// transcriptions of their own entries (formTranscription).
 export function buildDictionary(
   meta: Pick<TDictionary, "from" | "to" | "source" | "license">,
   words: Map<string, TDictionaryWord[]>,
   forms: Map<string, Set<string>>,
   declared: Map<string, Set<string>> = new Map(),
+  formTranscriptions: Map<string, string> = new Map(),
 ): TDictionary {
   const merged: TDictionary["words"] = {};
   for (const [key, list] of words) merged[key] = mergeWords(list);
@@ -297,5 +307,10 @@ export function buildDictionary(
     const lemmas = [...candidates].filter((word) => word in merged && word !== form);
     if (lemmas.length > 0 && of.size <= MAX_LEMMAS) known[form] = lemmas;
   }
-  return { ...meta, words: merged, forms: known };
+  // For the forms looked up as forms, which don't have a transcription as words of their own
+  const transcriptions: TDictionary["transcriptions"] = {};
+  for (const [form, ipa] of formTranscriptions) {
+    if (form in known && !merged[form]?.[1]) transcriptions[form] = ipa;
+  }
+  return { ...meta, words: merged, forms: known, transcriptions };
 }

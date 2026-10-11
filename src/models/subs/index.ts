@@ -63,6 +63,8 @@ export const $serviceRawSubs = createStore<Captions>([]);
 
 export const $subsDelay = createStore<number>(0);
 export const subsDelayButtonPressed = createEvent<number>();
+// G and H move the subtitles by a step from the keyboard, in seconds
+export const subsDelayKeyPressed = createEvent<number>();
 export const subsDelayChangeFx = createEffect<number, number>((value) => value);
 export const subsResyncFx = createEffect<
   { rawSubs: Captions; subsDelay: StoreValue<typeof $subsDelay>; delay: number },

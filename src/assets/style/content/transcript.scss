@@ -1,0 +1,197 @@
+// The transcript sidebar (src/pages/content/components/Transcript): every line of the subtitles over the right side
+// of the player, in the HUD material of the settings panel
+
+#es-transcript {
+  display: none;
+}
+
+.es-enabled #es-transcript {
+  display: block;
+}
+
+.es-transcript {
+  all: revert;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  bottom: 72px;
+  z-index: 70;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  max-width: calc(45% - 12px);
+  min-height: 160px;
+  overflow: hidden;
+  border: 0.5px solid var(--es-hud-border);
+  border-radius: 14px;
+  background: var(--es-hud-strong);
+  -webkit-backdrop-filter: var(--es-hud-blur);
+  backdrop-filter: var(--es-hud-blur);
+  box-shadow: var(--es-glass-edge), var(--es-hud-shadow);
+  color: var(--es-primary);
+  font-family: var(--es-font);
+  font-size: 14px;
+  line-height: 19px;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  animation: es-fade-in 150ms ease-out;
+  cursor: default;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px 6px 14px;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &__close {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--es-fill);
+    color: var(--es-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--es-fill-hover);
+      color: var(--es-primary);
+    }
+
+    svg {
+      width: 9px;
+      height: 9px;
+    }
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px 8px;
+  }
+
+  &__input {
+    all: unset;
+    flex: 1;
+    min-width: 0;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 8px;
+    background: var(--es-fill);
+    color: var(--es-primary);
+    font: inherit;
+    font-size: 13px;
+
+    &::placeholder {
+      color: var(--es-tertiary);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px var(--es-focus-ring);
+    }
+  }
+
+  &__count {
+    flex: none;
+    color: var(--es-secondary);
+    font-size: 12px;
+  }
+
+  &__error {
+    padding: 0 14px 8px;
+    color: #ff9f0a;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &__list {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0 6px 8px;
+    border-top: 0.5px solid var(--es-separator);
+    scrollbar-width: thin;
+    scrollbar-color: var(--es-fill-active) transparent;
+  }
+
+  &__line {
+    display: flex;
+    gap: 10px;
+    margin-top: 2px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      background: var(--es-fill);
+    }
+
+    &:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--es-focus-ring);
+    }
+
+    &--current {
+      background: var(--es-fill-hover);
+
+      .es-transcript__time {
+        color: var(--es-hl);
+      }
+    }
+  }
+
+  &__time {
+    flex: none;
+    width: 44px;
+    padding-top: 1px;
+    color: var(--es-tertiary);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__texts {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+  }
+
+  &__second {
+    margin-top: 2px;
+    color: var(--es-secondary);
+    font-size: 13px;
+    line-height: 17px;
+
+    &--pending {
+      color: var(--es-tertiary);
+    }
+  }
+
+  &__empty {
+    padding: 16px 14px;
+    color: var(--es-secondary);
+    font-size: 13px;
+  }
+
+  mark {
+    border-radius: 3px;
+    background: rgba(100, 210, 255, 0.28);
+    color: inherit;
+  }
+}
