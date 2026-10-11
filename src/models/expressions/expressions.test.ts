@@ -6,10 +6,13 @@ import {
   $currentExpression,
   $currentExpressionTranslation,
   $expressions,
+  $selectedWords,
   ExpressionTranslationGate,
   expressionTranslationRequested,
+  selectionCleared,
   wordHovered,
   wordLeft,
+  wordSelected,
   expressionTranslator,
 } from ".";
 import {
@@ -19,7 +22,7 @@ import {
   $translationService,
   translateLanguageChanged,
 } from "../settings";
-import { $rawSubs, $subs, $subsLanguage, rawSubsAdded } from "../subs";
+import { $currentSubs, $rawSubs, $subs, $subsLanguage, rawSubsAdded } from "../subs";
 import type { TDictionaryService, TTranslationService } from "../types";
 import { answerNextMessage, sentMessages } from "@root/test/chrome";
 import { captions, offlineTranslations, playgroundCaptions } from "@root/test/fixtures";
@@ -155,6 +158,92 @@ describe("hovering an expression", () => {
     await hover(scope, CUE, 8);
 
     expect(scope.getState($currentExpression)).toBe(null);
+  });
+});
+
+// Shift+clicks the words at `indexes` of the cue that starts with `text`
+async function pick(scope: Scope, text: string, ...indexes: number[]) {
+  const sub = subStartingWith(scope, text);
+  for (const index of indexes) {
+    const word = sub.items[index].cleanedText;
+    await allSettled(wordSelected, { scope, params: { id: sub.id, cue: sub.text, index, word } });
+  }
+  return sub;
+}
+
+describe("picking words", () => {
+  it("shows the picked words as one expression over a picked word, in the order of the line", async () => {
+    const scope = await loadSubtitles();
+
+    const sub = await pick(scope, CUE, 8, 3);
+    await hover(scope, CUE, 8);
+
+    expect(scope.getState($currentExpression)).toEqual({
+      expression: "need keys",
+      kind: "selection",
+      indexes: [3, 8],
+      id: sub.id,
+      cue: sub.text,
+    });
+  });
+
+  it("keeps the expressions found for the other words", async () => {
+    const scope = await loadSubtitles();
+
+    await pick(scope, CUE, 3, 8);
+    await hover(scope, CUE, 6);
+
+    expect(scope.getState($currentExpression)).toMatchObject({ expression: "pick up", kind: "phrasal verb" });
+  });
+
+  it("takes over a found expression when its words are picked", async () => {
+    const scope = await loadSubtitles();
+
+    await pick(scope, CUE, 6, 7, 8);
+    await hover(scope, CUE, 6);
+
+    expect(scope.getState($currentExpression)).toMatchObject({ expression: "up my keys", indexes: [6, 7, 8] });
+  });
+
+  it("shows a single picked word as a word", async () => {
+    const scope = await loadSubtitles();
+
+    await pick(scope, CUE, 2, 8, 8);
+    await hover(scope, CUE, 2);
+
+    expect(scope.getState($selectedWords).words).toEqual([{ index: 2, word: "just" }]);
+    expect(scope.getState($currentExpression)).toBe(null);
+  });
+
+  it("starts over in another cue, on a plain click and when the cue leaves the screen", async () => {
+    const scope = await loadSubtitles();
+    const sub = await pick(scope, CUE, 3, 8);
+
+    const other = await pick(scope, TWO_EXPRESSIONS, 0);
+    expect(scope.getState($selectedWords)).toMatchObject({ id: other.id, words: [{ index: 0 }] });
+
+    await allSettled(selectionCleared, { scope });
+    expect(scope.getState($selectedWords)).toBe(null);
+
+    await pick(scope, CUE, 3, 8);
+    await allSettled($currentSubs, { scope, params: [sub] });
+    expect(scope.getState($selectedWords)).not.toBe(null);
+    await allSettled($currentSubs, { scope, params: [other] });
+    expect(scope.getState($selectedWords)).toBe(null);
+  });
+
+  it("translates the picked words in their line with Wiktionary + Bergamot", async () => {
+    const scope = await loadSubtitles({ dictionary: "wiktionary-bergamot" });
+    answerNextMessage("dictionaryLookup", { answer: null });
+    await pick(scope, CUE, 3, 8);
+
+    await openExpression(scope, CUE, 8);
+
+    expect(sentMessages("bergamot")).toEqual([
+      expect.objectContaining({
+        request: expect.objectContaining({ texts: ["Almost. I just <b>need</b> to pick up my <b>keys</b>."] }),
+      }),
+    ]);
   });
 });
 

@@ -9,6 +9,7 @@ import {
   $expressionLookups,
   $expressions,
   $hoveredWord,
+  $selectedWords,
   ExpressionTranslationGate,
   MAX_CUES_PER_LOOKUP,
   expressionTranslationKey,
@@ -17,13 +18,15 @@ import {
   findExpressionsFx,
   lookupKey,
   requestedKeys,
+  selectionCleared,
   translateExpressionFx,
   wordHovered,
   wordLeft,
+  wordSelected,
   type TFoundExpressions,
   type TTranslateExpressionParams,
 } from ".";
-import { $subs, $subsLanguage } from "../subs";
+import { $currentSubs, $subs, $subsLanguage } from "../subs";
 import { markedLine } from "@src/utils/wordInLine";
 import {
   $chatGPTApiKey,
@@ -113,6 +116,25 @@ sample({
 
 $hoveredWord.on(wordHovered, (_, word) => word);
 $hoveredWord.reset(wordLeft);
+
+// ---- Picking words -------------------------------------------------------------------------------
+
+$selectedWords.on(wordSelected, (selection, { id, cue, index, word }) => {
+  const words = selection?.id === id ? selection.words : [];
+  const next = words.some((picked) => picked.index === index)
+    ? words.filter((picked) => picked.index !== index)
+    : [...words, { index, word }].sort((a, b) => a.index - b.index);
+  return next.length > 0 ? { id, cue, words: next } : null;
+});
+$selectedWords.reset(selectionCleared);
+// The picked words go when their cue leaves the screen
+sample({
+  clock: $currentSubs,
+  source: $selectedWords,
+  filter: (selection, subs) => selection !== null && !subs.some((sub) => sub.id === selection.id),
+  fn: () => null,
+  target: $selectedWords,
+});
 
 // ---- Translation ---------------------------------------------------------------------------------
 
@@ -207,4 +229,4 @@ $expressionTranslationErrors.on(translateExpressionFx, (errors, params) =>
   Object.fromEntries(Object.entries(errors).filter(([key]) => !requestedKeys(params).includes(key))),
 );
 
-debug($expressions, $currentExpression, translateExpressionFx.doneData, translateExpressionFx.failData);
+debug($expressions, $selectedWords, $currentExpression, translateExpressionFx.doneData, translateExpressionFx.failData);
