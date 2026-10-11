@@ -11,6 +11,7 @@ const enRu: TDictionary = {
   license: "test",
   words: { keys: ["keys", "kiːz", [["noun", [[["ключи"]]]]]] },
   forms: {},
+  transcriptions: {},
 };
 
 const gzipped = (dictionary: TDictionary) =>

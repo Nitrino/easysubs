@@ -6,6 +6,7 @@ import {
   dictionaryKey,
   dictionaryWord,
   formsOf,
+  formTranscription,
   glossedSenses,
   mergeWords,
   transcription,
@@ -148,6 +149,21 @@ describe("dictionaryWord", () => {
   });
 });
 
+describe("formTranscription", () => {
+  it("reads the transcription of an inflected form's own entry", () => {
+    const went = record({
+      word: "went",
+      sounds: [{ ipa: "/wɛnt/" }],
+      senses: [{ glosses: ["past of go"], form_of: [{ word: "go" }], tags: ["form-of"] }],
+    });
+
+    expect(formTranscription(went, "en")).toEqual(["went", "wɛnt"]);
+    expect(formTranscription({ ...went, sounds: [] }, "en")).toBeNull();
+    expect(formTranscription(record({ word: "go", sounds: [{ ipa: "/ɡəʊ/" }] }), "en")).toBeNull();
+    expect(formTranscription(went, "de")).toBeNull();
+  });
+});
+
 describe("formsOf", () => {
   it("takes the inflections a word lists, not its other spellings or rare forms", () => {
     const go = record({
@@ -240,5 +256,33 @@ describe("mergeWords and buildDictionary", () => {
     );
 
     expect(dictionary.forms).toEqual({ saw: ["see"] });
+  });
+
+  it("keeps the transcriptions of the forms it keeps, unless they're words with one of their own", () => {
+    const words = new Map([
+      ["go", [["go", "ɡəʊ", [["verb", [[["идти"]]]]]] as never]],
+      ["see", [["see", "siː", [["verb", [[["видеть"]]]]]] as never]],
+      ["saw", [["saw", "sɔː", [["noun", [[["пила"]]]]]] as never]],
+    ]);
+    const forms = new Map([
+      ["went", new Set(["go"])],
+      ["saw", new Set(["see"])],
+      ["wended", new Set(["wend"])],
+    ]);
+    const transcriptions = new Map([
+      ["went", "wɛnt"],
+      ["saw", "sɔː"],
+      ["wended", "ˈwɛndɪd"],
+    ]);
+
+    const dictionary = buildDictionary(
+      { from: "en", to: "ru", source: "test", license: "test" },
+      words,
+      forms,
+      new Map([["saw", new Set(["see"])]]),
+      transcriptions,
+    );
+
+    expect(dictionary.transcriptions).toEqual({ went: "wɛnt" });
   });
 });

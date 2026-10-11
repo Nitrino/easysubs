@@ -24,6 +24,7 @@ import {
   dictionaryKey,
   dictionaryWord,
   formsOf,
+  formTranscription,
   type TBackTranslations,
   type TWiktextractRecord,
 } from "./wiktextract.ts";
@@ -98,17 +99,21 @@ const LICENSE = "CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)"
 
 type TWords = Map<string, TDictionaryWord[]>;
 type TForms = Map<string, Set<string>>;
-// All the forms, and those declared by their own entries (formsOf)
-type TFormSets = { all: TForms; declared: TForms };
+// All the forms, those declared by their own entries (formsOf) and the transcriptions of those entries, the first one
+// of a form
+type TFormSets = { all: TForms; declared: TForms; transcriptions: Map<string, string> };
 const addForm = ({ all, declared }: TFormSets, [form, word, isDeclared]: [string, string, boolean]) => {
   all.set(form, (all.get(form) ?? new Set()).add(word));
   if (isDeclared) declared.set(form, (declared.get(form) ?? new Set()).add(word));
 };
-const formSets = (): TFormSets => ({ all: new Map(), declared: new Map() });
+const addFormTranscription = ({ transcriptions }: TFormSets, sound: [string, string] | null) => {
+  if (sound && !transcriptions.has(sound[0])) transcriptions.set(...sound);
+};
+const formSets = (): TFormSets => ({ all: new Map(), declared: new Map(), transcriptions: new Map() });
 
 function write(from: string, to: string, words: TWords, forms: TFormSets, records: number) {
   const meta = { from, to, source: SOURCE(DUMPS[from]), license: LICENSE };
-  const dictionary = buildDictionary(meta, words, forms.all, forms.declared);
+  const dictionary = buildDictionary(meta, words, forms.all, forms.declared, forms.transcriptions);
   mkdirSync(outDir, { recursive: true });
   const file = resolve(outDir, dictionaryFile(from, to));
   const data = gzipSync(JSON.stringify(dictionary), { level: 9 });
@@ -135,6 +140,7 @@ async function readLanguage(language: string, glossed: boolean): Promise<TBackTr
     back.push(...backTranslations(record, language));
     if (!glossed) continue;
     for (const form of formsOf(record, language)) addForm(forms, form);
+    addFormTranscription(forms, formTranscription(record, language));
     const word = dictionaryWord(record, language, "en");
     if (word) addWord(words, dictionaryKey(record.word, language), word);
   }
@@ -151,6 +157,7 @@ async function readEnglish(targets: string[], back: Map<string, TBackTranslation
     records++;
     if (record.lang_code !== "en") continue;
     for (const form of formsOf(record, "en")) addForm(forms, form);
+    addFormTranscription(forms, formTranscription(record, "en"));
     const key = dictionaryKey(record.word, "en");
     for (const to of targets) {
       const word = dictionaryWord(record, "en", to, back.get(to));
