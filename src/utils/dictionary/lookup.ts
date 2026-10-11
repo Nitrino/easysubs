@@ -40,7 +40,8 @@ export function lookUpWord(dictionary: TDictionary, text: string): TDictionaryAn
   if (!own && !lemma) return null;
   return {
     word: own?.[0] ?? text,
-    transcription: own?.[1] || lemma?.[1] || "",
+    // A form is said otherwise than its word ("went", "go"): its own transcription or none
+    transcription: own?.[1] || (lemma ? (dictionary.transcriptions[key] ?? "") : ""),
     ...(lemma && { lemma: lemma[0] }),
     entries: [...(lemma?.[2] ?? []), ...(own?.[2] ?? [])],
   };

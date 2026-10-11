@@ -20,6 +20,8 @@ export type TDictionary = {
   words: Record<string, TDictionaryWord>;
   // Inflected forms, normalized, and the words they're forms of: "went" → ["go"], "left" → ["leave"]
   forms: Record<string, string[]>;
+  // The transcriptions of those forms from their own entries, which their words' transcriptions aren't: "went" → "wɛnt"
+  transcriptions: Record<string, string>;
 };
 
 // The pairs there are files for. English Wiktionary translates English words into other languages in its
@@ -33,6 +35,6 @@ export const DICTIONARY_PAIRS = [
 ];
 
 // Bumped when the format changes, with a new release: extensions already out keep reading the files they know
-export const DICTIONARIES_RELEASE = "dictionaries-1";
+export const DICTIONARIES_RELEASE = "dictionaries-2";
 export const DICTIONARIES_URL = `https://github.com/Nitrino/easysubs/releases/download/${DICTIONARIES_RELEASE}/`;
 export const dictionaryFile = (from: string, to: string) => `${from}-${to}.json.gz`;
