@@ -95,6 +95,16 @@ describe("moving by subtitles", () => {
     expect(video.currentTime).toBe(1);
   });
 
+  it("jumps to the cue just before from the start of a cue that begins as it ends", async () => {
+    const { scope, video, press } = setup(3, captions([1, 3, "First."], [3, 5, "Second."], [5, 7, "Third."]));
+
+    expect(scope.getState($currentSubs).map((sub) => sub.text)).toEqual(["Second."]);
+
+    await press("prev");
+
+    expect(video.currentTime).toBe(1);
+  });
+
   it("replays the current cue", async () => {
     const { video, press } = setup(6);
 
