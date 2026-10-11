@@ -46,6 +46,7 @@ Uses Effector for state management with these main models:
 - `src/models/foundSubs/` - Subtitles found online or opened from a file (see below)
 - `src/models/spokenWord/` - Highlighting the word being said, an experiment (see below)
 - `src/models/learning/` - Adding a word to the learning service, with its line for Anki (see Anki Cards below)
+- `src/models/transcript/` - The transcript sidebar: every line with its second language, click to play from it, search in both languages. Opened with Shift+T or the Transcript row of the General tab. The second language is the second line's (track, found file or its translations) or, with the second line off, the translation language, translated for the lines in view through the second line's translator
 
 ### Browser Extension Structure
 
