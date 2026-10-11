@@ -18,6 +18,8 @@ export type TAudioSessionOptions = {
   detector: TSpeechDetector;
   whisper: boolean;
   aligner: boolean;
+  // The name the buffered audio is tapped under: sessions running at once each need their own (AI subtitles)
+  consumer?: string;
 };
 
 export type TAudioSessionCallbacks = {
@@ -39,6 +41,10 @@ const VAD_WARMUP_FRAMES = 16;
 const BEHIND_MS = 30_000;
 const AHEAD_MS = 150_000;
 const WHISPER_WINDOW_MS = 20_000;
+// Whisper hears this much on each side of a window, so a word cut by its edge comes whole from the window it starts in
+const WHISPER_PAD_MS = 1000;
+// The audio ends a little before the video's duration says
+const END_SLACK_MS = 300;
 // Speech a little before and after a cue still belongs to it
 const CUE_PAD_MS = 300;
 // While the tab's audio comes in, the element's is left out
@@ -93,6 +99,7 @@ export class AudioSession {
         tapBufferedAudio(
           (start, samples) => this.chunk("ahead", start, samples),
           (reason) => this.callbacks.status("speech", reason),
+          this.options.consumer,
         ),
       );
     }
@@ -244,7 +251,16 @@ export class AudioSession {
       .finally(() => (this.busy.aligner = false));
   }
 
-  // 20 s windows of the video, the one with the playhead first, then the ones ahead
+  // 20 s windows of the video, the one with the playhead first, then the ones ahead. The last ends with the video.
+  private whisperWindow(index: number) {
+    const duration = this.video.duration * 1000;
+    const end = Number.isFinite(duration) && duration > 0 ? duration - END_SLACK_MS : Infinity;
+    const from = index * WHISPER_WINDOW_MS;
+    const to = Math.min(from + WHISPER_WINDOW_MS, end);
+    if (index < 0 || to <= from) return null;
+    return { from, to, readFrom: Math.max(0, from - WHISPER_PAD_MS), readTo: Math.min(to + WHISPER_PAD_MS, end) };
+  }
+
   private recognizeNext(now: number) {
     const current = Math.floor(now / WHISPER_WINDOW_MS);
     const order = [
@@ -253,14 +269,14 @@ export class AudioSession {
       current - 1,
     ];
     const index = order.find((candidate) => {
-      if (candidate < 0 || this.recognized.has(candidate)) return false;
-      return this.timeline.covers(candidate * WHISPER_WINDOW_MS, (candidate + 1) * WHISPER_WINDOW_MS);
+      const window = this.whisperWindow(candidate);
+      if (!window || this.recognized.has(candidate)) return false;
+      return this.timeline.covers(window.readFrom, window.readTo);
     });
     if (index === undefined) return;
 
-    const from = index * WHISPER_WINDOW_MS;
-    const to = from + WHISPER_WINDOW_MS;
-    const samples = this.timeline.read(from, to);
+    const { from, to, readFrom, readTo } = this.whisperWindow(index);
+    const samples = this.timeline.read(readFrom, readTo);
     if (!samples) return;
     this.recognized.add(index);
     this.busy.whisper = true;
@@ -269,7 +285,10 @@ export class AudioSession {
       .request({ type: "whisper", pcm: encodePcm(samples), language: this.callbacks.language() })
       .then((words) => {
         if (this.stopped) return;
-        const shifted = words.map((word) => ({ ...word, start: word.start + from, end: word.end + from }));
+        // Words of the padding belong to the windows next to this one
+        const shifted = words
+          .map((word) => ({ ...word, start: word.start + readFrom, end: word.end + readFrom }))
+          .filter((word) => word.start >= from && word.start < to);
         this.callbacks.wordsRecognized({ from, to, words: shifted });
         this.callbacks.status("whisper", "ready");
       })

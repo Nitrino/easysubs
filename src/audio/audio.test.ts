@@ -209,3 +209,61 @@ describe("createJobQueue", () => {
     expect(order).toEqual(["whisper", "vad", "align"]);
   });
 });
+
+describe("AudioSession's Whisper windows", () => {
+  it("hears a second past each edge and keeps the words that start in the window, the last ending with the video", async () => {
+    const { AudioSession } = await import("./session");
+    const { createVideo } = await import("@root/test/video");
+    const requests: { seconds: number }[] = [];
+    window.easysubsAudioWorker = () => ({
+      request: (async (job: TAudioJob) => {
+        const seconds = decodePcm((job as { pcm: string }).pcm).length / SAMPLE_RATE;
+        requests.push({ seconds });
+        // A word at the very start (the padding before) and one a second before the window's end
+        return [
+          { text: "before", start: 0.2 * 1000, end: 0.6 * 1000 },
+          { text: "edge", start: (seconds - 2.2) * 1000, end: (seconds - 1.5) * 1000 },
+        ];
+      }) as never,
+      onEvent: () => {},
+      close: () => {},
+    });
+    const video = createVideo({ currentTime: 10 });
+    Object.defineProperty(video, "duration", { value: 30 });
+    const recognized: { from: number; to: number; words: string[] }[] = [];
+    const session = new AudioSession(
+      video,
+      { audio: "element", detector: "energy", whisper: true, aligner: false },
+      {
+        speechHeard: () => {},
+        cueAligned: () => {},
+        wordsRecognized: ({ from, to, words }) => recognized.push({ from, to, words: words.map((word) => word.text) }),
+        status: () => {},
+        subs: () => [],
+        language: () => "en",
+      },
+    );
+    await session.start();
+    (session as unknown as { chunk: (source: string, start: number, samples: Float32Array) => void }).chunk(
+      "ahead",
+      0,
+      new Float32Array(30 * SAMPLE_RATE),
+    );
+
+    const tick = () => (session as unknown as { tick: () => void }).tick();
+    const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+    tick();
+    await settle();
+    tick();
+    await settle();
+    session.stop();
+    delete window.easysubsAudioWorker;
+
+    // 0–20 s heard to 21 s; 20–29.7 s heard from 19 s to the end
+    expect(requests.map((request) => Math.round(request.seconds * 10) / 10)).toEqual([21, 10.7]);
+    expect(recognized).toEqual([
+      { from: 0, to: 20_000, words: ["before", "edge"] },
+      { from: 20_000, to: 29_700, words: ["edge"] },
+    ]);
+  });
+});

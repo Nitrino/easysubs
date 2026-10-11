@@ -11,8 +11,11 @@ import { $autoPause } from "../settings";
 export const ES_CUSTOM_SUB_LABEL = "custom";
 // The label of a found file on the main line: "found:opensubtitles:123"
 export const FOUND_SUBS_PREFIX = "found:";
-// Subtitles that don't come from the service: a file opened in the settings, a found file
-export const isOwnSubsLabel = (label: string) => label === ES_CUSTOM_SUB_LABEL || label.startsWith(FOUND_SUBS_PREFIX);
+// Subtitles made on the device from the video's audio (src/models/aiSubs)
+export const AI_SUBS_LABEL = "ai:whisper";
+// Subtitles that don't come from the service: a file opened in the settings, a found file, AI subtitles
+export const isOwnSubsLabel = (label: string) =>
+  label === ES_CUSTOM_SUB_LABEL || label === AI_SUBS_LABEL || label.startsWith(FOUND_SUBS_PREFIX);
 
 export const $rawSubs = createStore<Captions>([]);
 export const $subs = $rawSubs.map((subtitle) => convertRawSubs(subtitle));

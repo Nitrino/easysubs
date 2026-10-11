@@ -16,7 +16,7 @@ export type TTapMessage = {
   to?: string;
 };
 
-const CONSUMER = "readAhead";
+const DEFAULT_CONSUMER = "readAhead";
 
 // Segments that fail in a row before the tap gives up (encrypted audio)
 const MAX_FAILURES = 4;
@@ -34,6 +34,7 @@ async function decode(init: Uint8Array, segment: Uint8Array): Promise<Float32Arr
 export function tapBufferedAudio(
   onChunk: (start: number, samples: Float32Array) => void,
   onFailure: (reason: string) => void,
+  consumer = DEFAULT_CONSUMER,
 ): () => void {
   const inits = new Map<number, { bytes: Uint8Array; info: TInitInfo; splitter: SegmentSplitter }>();
   let failures = 0;
@@ -42,7 +43,7 @@ export function tapBufferedAudio(
 
   const listener = (event: MessageEvent<TTapMessage>) => {
     if (event.source !== window || event.data?.source !== "es-mse") return;
-    if (event.data.to && event.data.to !== CONSUMER) return;
+    if (event.data.to && event.data.to !== consumer) return;
     const { id, init, data, timestampOffset } = event.data;
     const bytes = new Uint8Array(data);
     if (init) {
@@ -70,10 +71,10 @@ export function tapBufferedAudio(
   };
 
   window.addEventListener("message", listener);
-  window.postMessage({ source: "es-mse-control", consumer: CONSUMER, enabled: true }, "*");
+  window.postMessage({ source: "es-mse-control", consumer, enabled: true }, "*");
   return () => {
     stopped = true;
     window.removeEventListener("message", listener);
-    window.postMessage({ source: "es-mse-control", consumer: CONSUMER, enabled: false }, "*");
+    window.postMessage({ source: "es-mse-control", consumer, enabled: false }, "*");
   };
 }

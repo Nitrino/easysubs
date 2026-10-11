@@ -7,3 +7,4 @@ import "./expressions/init";
 import "./secondarySubs/init";
 import "./foundSubs/init";
 import "./spokenWord/init";
+import "./aiSubs/init";

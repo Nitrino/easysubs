@@ -523,6 +523,14 @@
   }
 }
 
+// AI subtitles on the main line: the language spoken and how far Whisper got
+.es-ai-subs {
+  .es-source-card__row > span:not(.es-tag) {
+    color: var(--es-secondary);
+    font-size: 12px;
+  }
+}
+
 // Two or three choices in one capsule
 .es-segmented {
   display: inline-flex;

@@ -45,6 +45,7 @@ Uses Effector for state management with these main models:
 - `src/models/secondarySubs/` - The second subtitle line (see below)
 - `src/models/foundSubs/` - Subtitles found online or opened from a file (see below)
 - `src/models/spokenWord/` - Highlighting the word being said, an experiment (see below)
+- `src/models/aiSubs/` - AI subtitles made on the device from the video's audio (see below)
 - `src/models/learning/` - Adding a word to the learning service, with its line for Anki (see Anki Cards below)
 
 ### Browser Extension Structure
@@ -100,6 +101,15 @@ The word being said lights up in the subtitles. Off by default; everything is in
 - Audio (`src/audio/session.ts`): the `<video>` element's `captureStream()` (refused for DRM), audio players buffered ahead copied from Media Source Extensions by the MAIN-world `public/assets/js/mseTap.js` and decoded with their container times (`containers.ts`, `readAhead.ts`), or the tab from the popup's "Listen to this tab" (`chrome.tabCapture`, an optional permission). All go onto one timeline by video time; live chunks are timed by the audio clock
 - Speech detection by loudness in the page or Silero VAD; wav2vec2 alignment of each cue's audio (English, `ctcAlign.ts`) and Whisper word timestamps for 20 s windows run in the offscreen document with transformers.js (`src/audio/models.ts`), models downloaded from Hugging Face on first use, ONNX Runtime's WebAssembly shipped in `assets/ort` (`utils/plugins/copy-onnx-runtime.ts`). In the playground they run in a Web Worker (`playground/src/audioWorker.ts`)
 - `window.easysubsAudioSession.debug()` shows what the audio analysis covered and did
+
+### AI Subtitles
+
+The main line made from the video's audio by Whisper on the device, for videos without subtitles. Picked in the Subtitles tab's "Subtitles from" row (Made on this device → AI subtitles), with the spoken language in its card (`$aiSubsLanguage`: transformers.js doesn't detect the language, `src/utils/aiSubs/languages.ts`):
+
+- `src/models/aiSubs` runs an `AudioSession` of the spoken-word experiment with Whisper only, on what plays and what the player buffered ahead (its own `aiSubs` consumer of `mseTap.js`, so it runs beside the experiment). Each 20 s window is heard with a second of padding on each side and keeps the words that start in it; the last window ends with the video
+- `src/utils/aiSubs/wordsToCues.ts` makes lines of the words: a new one after a 700 ms pause, after a sentence, or past 84 characters or 6 s; Whisper's loops on music and silence are dropped. The words stay on the cues with their times, so the spoken-word highlight takes them as the file's own
+- The lines go to the main line through `ownSubsLoaded` under `AI_SUBS_LABEL` and are pinned like a found file; the delay buttons move them. Another video or a file on the main line stops them; "From <service>" or Remove brings the service's track back
+- DRM video can't be captured from the element or decoded from its buffer: the card points to the popup's "Listen to this tab"
 
 ### Playground and Integration Tests
 
