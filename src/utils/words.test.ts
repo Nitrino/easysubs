@@ -10,6 +10,7 @@ import {
   normalizeWord,
   parseCsv,
   parseWordsFile,
+  learningExpressionWords,
   rankBadge,
   reviewWord,
   viewWord,
@@ -97,11 +98,25 @@ describe("viewWord", () => {
   });
 });
 
+describe("expressions", () => {
+  it("are new until marked and color their words while learned", () => {
+    expect(viewWord(state(), "pick up")).toMatchObject({ lemma: "pick up", status: "new", marked: false });
+    const learning = state({ "en:pick up": saved("pick up", "learning") });
+    expect(viewWord(learning, "pick up")?.status).toBe("learning");
+    const matches = [
+      { expression: "pick up", kind: "phrasal verb" as const, indexes: [4, 6] },
+      { expression: "turn off", kind: "phrasal verb" as const, indexes: [1, 2] },
+    ];
+    expect([...learningExpressionWords(learning, matches)]).toEqual([4, 6]);
+  });
+});
+
 describe("rankBadge", () => {
-  it("rounds the rank up to a top", () => {
-    expect(rankBadge(60)).toBe("Top 100");
-    expect(rankBadge(400)).toBe("Top 500");
-    expect(rankBadge(2500)).toBe("Top 3k");
+  it("tells the level whose words cover the rank", () => {
+    expect(rankBadge(60)).toBe("A1 · Top 500");
+    expect(rankBadge(614)).toBe("A2 · Top 1k");
+    expect(rankBadge(2500)).toBe("B2 · Top 4k");
+    expect(rankBadge(16000)).toBe("C2 · Top 16k");
     expect(rankBadge(40000)).toBe("Rare");
     expect(rankBadge(null)).toBeNull();
   });

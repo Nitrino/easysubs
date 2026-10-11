@@ -390,12 +390,14 @@ export const LevelSheet: FC<{ onClose: () => void }> = ({ onClose }) => {
 
 // ---- Saved words ----
 
-// The line with the word in bold, in any of its forms
+// The line with the word, or each word of an expression, in bold, in any of its forms
 const ContextLine: FC<{ line: string; word: string; language: string }> = ({ line, word, language }) => {
   const ranks = useUnit($wordRanks);
+  const words = new Set(word.split(/\s+/));
   const isWord = (part: string) => {
     const form = normalizeWord(part, language);
-    return form === word || (ranks.language === language && ranks.ranks[form ?? ""]?.[0] === word);
+    if (!form) return false;
+    return words.has(form) || (ranks.language === language && words.has(ranks.ranks[form]?.[0] ?? ""));
   };
   return (
     <>
@@ -436,6 +438,9 @@ const SavedWordRow: FC<{ word: TSavedWord; showLanguage: boolean }> = ({ word, s
             <span className="es-words__translation" dir="auto">
               {word.translation}
             </span>
+          )}
+          {/\s/.test(word.word) && word.partOfSpeech && (
+            <span className="es-tag es-tag--quiet">{word.partOfSpeech}</span>
           )}
           {showLanguage && <span className="es-tag es-tag--quiet">{word.language}</span>}
         </span>

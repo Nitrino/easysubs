@@ -476,6 +476,12 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     background: var(--es-fill);
     color: var(--es-secondary);
     font-variant-numeric: tabular-nums;
+
+    // Past the user's level, in the color of new words
+    &--above {
+      background: color-mix(in srgb, var(--es-hl) 18%, transparent);
+      color: var(--es-hl);
+    }
   }
 
   &__actions {

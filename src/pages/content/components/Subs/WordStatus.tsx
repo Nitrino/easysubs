@@ -31,7 +31,16 @@ export const WordStatus: FC<{ text: string; cueId: number; onLearn: () => void }
         <span className={`es-word-status__label es-word-status__label--${view.status}`}>
           {byLevel ? "Known by your level" : LABELS[view.status]}
         </span>
-        {badge && view.status !== "rare" && <span className="es-word-status__rank">{badge}</span>}
+        {badge && view.status !== "rare" && (
+          <span
+            className={cn("es-word-status__rank", {
+              // Past the user's level: why the word is new
+              "es-word-status__rank--above": state?.level != null && view.rank !== null && view.rank > state.level,
+            })}
+          >
+            {badge}
+          </span>
+        )}
         <span className="es-word-status__actions">
           <button
             type="button"

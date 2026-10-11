@@ -25,7 +25,8 @@ import {
 } from "@src/models/expressions";
 import { $spokenWord } from "@src/models/spokenWord";
 import { $newWordsColored, $wordColoring, $wordsState } from "@src/models/words";
-import { viewWord } from "@src/utils/words";
+import { learningExpressionWords, viewWord } from "@src/utils/words";
+import { $expressions } from "@src/models/expressions";
 import type { TWordStatus } from "@src/models/types";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
@@ -93,18 +94,25 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
 
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
-  const [subsBackground, subsBackgroundOpacity, spokenWord, wordsState, newWordsColored, wordColoring] = useUnit([
-    $subsBackground,
-    $subsBackgroundOpacity,
-    $spokenWord,
-    $wordsState,
-    $newWordsColored,
-    $wordColoring,
-  ]);
+  const [subsBackground, subsBackgroundOpacity, spokenWord, wordsState, newWordsColored, wordColoring, expressions] =
+    useUnit([
+      $subsBackground,
+      $subsBackgroundOpacity,
+      $spokenWord,
+      $wordsState,
+      $newWordsColored,
+      $wordColoring,
+      $expressions,
+    ]);
   const spokenIndex = spokenWord?.cueId === sub.id ? spokenWord.index : -1;
   // Words colored by what the user knows (src/models/words); known and rare ones stay as they are
-  const statusOf = (item: TSubItem): TWordStatus | null => {
+  const learningExpressions =
+    wordColoring !== "off" && wordsState
+      ? learningExpressionWords(wordsState, expressions.cues[sub.text] ?? [])
+      : new Set<number>();
+  const statusOf = (item: TSubItem, index: number): TWordStatus | null => {
     if (wordColoring === "off" || !wordsState) return null;
+    if (learningExpressions.has(index)) return "learning";
     const status = viewWord(wordsState, item.text)?.status;
     return status === "learning" || (status === "new" && newWordsColored) ? status : null;
   };
@@ -130,7 +138,7 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
           subItem={item}
           index={index}
           spoken={index === spokenIndex}
-          status={statusOf(item)}
+          status={statusOf(item, index)}
         />
       ))}
       {showTranslation && <SubFullTranslation text={sub.cleanedText} />}

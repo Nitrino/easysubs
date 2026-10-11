@@ -66,7 +66,7 @@ test.describe("known words", () => {
 
     await playground.word("keys").hover();
     await expect(status).toContainText("New");
-    await expect(status.locator(".es-word-status__rank")).toHaveText("Top 1k");
+    await expect(status.locator(".es-word-status__rank")).toHaveText("A2 · Top 1k");
     await status.getByRole("button", { name: "+ Learn" }).click();
     await page.mouse.move(0, 0);
     await expect(playground.word("keys")).toHaveClass(/es-sub-item-learning/);
@@ -139,5 +139,30 @@ test.describe("known words", () => {
     await expect(sheet.locator(".es-words__row")).toHaveCount(0);
     await sheet.getByRole("radio", { name: "Known 1" }).click();
     await expect(sheet.locator(".es-words__row")).toHaveCount(1);
+  });
+
+  test("saves a phrasal verb and colors its words while it's learned", async ({ playground, page }) => {
+    await playground.word("pick").hover();
+    await expect(playground.wordPopover.locator(".es-label")).toHaveText("phrasal verb");
+    const status = playground.wordPopover.locator(".es-word-status");
+    await expect(status).toContainText("New");
+    await playground.wordPopover.locator(".es-pv-main").click();
+    await expect(playground.toast).toContainText("Saved “pick up”");
+    await page.mouse.move(0, 0);
+    await expect(playground.word("pick")).toHaveClass(/es-sub-item-learning/);
+    await expect(playground.word("up")).toHaveClass(/es-sub-item-learning/);
+
+    await playground.openSettings("Words");
+    await playground.settingsRow("Saved words").getByRole("button").click();
+    const row = playground.settingsPanel.locator(".es-words__row");
+    await expect(row.locator(".es-words__word")).toContainText("pick up");
+    await expect(row.locator(".es-words__word")).toContainText("phrasal verb");
+    await expect(row.locator(".es-words__context b")).toHaveText(["pick", "up"]);
+    await playground.closeSettings();
+
+    await playground.word("pick").hover();
+    await status.getByRole("button", { name: "✓ Know" }).click();
+    await page.mouse.move(0, 0);
+    await expect(playground.word("pick")).not.toHaveClass(/es-sub-item-learning/);
   });
 });

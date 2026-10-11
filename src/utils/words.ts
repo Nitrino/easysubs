@@ -1,4 +1,4 @@
-import type { TSavedWord, TSub, TWordLine, TWordStatus } from "@src/models/types";
+import type { TExpressionMatch, TSavedWord, TSub, TWordLine, TWordStatus } from "@src/models/types";
 import { normalizeWord as normalizeInLanguage } from "./expressions/normalize";
 import type { TWordRank } from "./frequency/lookup";
 
@@ -61,20 +61,33 @@ export function viewWord(state: TWordsState, text: string): TWordView | null {
   const rank = found?.[1] ?? null;
   const saved = state.words[wordKey(state.language, lemma)] ?? state.words[wordKey(state.language, word)];
   if (saved) return { word, lemma, rank, status: saved.status, marked: true };
-  if (!state.ranks) return { word, lemma, rank, status: "new", marked: false };
+  // Phrasal verbs, idioms and picked words aren't in the frequency lists: new until they're marked
+  if (!state.ranks || /\s/.test(word)) return { word, lemma, rank, status: "new", marked: false };
   const level = state.level ?? 0;
   if (rank !== null && rank <= level) return { word, lemma, rank, status: "known", marked: false };
   if (rank !== null && rank <= newWordsUpTo(level)) return { word, lemma, rank, status: "new", marked: false };
   return { word, lemma, rank, status: "rare", marked: false };
 }
 
-// "Top 2k" for a word among the 2000 most said
+// The words of the cue's expressions the user learns, by their indexes, colored like learning words
+export function learningExpressionWords(state: TWordsState, matches: TExpressionMatch[]): Set<number> {
+  const indexes = new Set<number>();
+  for (const match of matches) {
+    const expression = normalizeWord(match.expression, state.language);
+    if (expression && state.words[wordKey(state.language, expression)]?.status === "learning") {
+      for (const index of match.indexes) indexes.add(index);
+    }
+  }
+  return indexes;
+}
+
+// "B1 · Top 2k" for a word among the 2000 most said: the first level whose words cover it, by CEFR_LEVELS
 export function rankBadge(rank: number | null): string | null {
   if (rank === null) return null;
-  for (const top of [100, 500, 1000, 2000, 3000, 5000, 10000, 20000]) {
-    if (rank <= top) return top < 1000 ? `Top ${top}` : `Top ${top / 1000}k`;
-  }
-  return "Rare";
+  const level = CEFR_LEVELS.find((cefr) => rank <= cefr.rank);
+  if (!level) return "Rare";
+  const top = level.rank < 1000 ? `${level.rank}` : `${level.rank / 1000}k`;
+  return `${level.level} · Top ${top}`;
 }
 
 export type TEpisodeScore = {
