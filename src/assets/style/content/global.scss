@@ -157,6 +157,18 @@
       cursor: pointer;
     }
 
+    // What the user knows (src/models/words): words they learn in orange, new ones underlined; known ones as they are.
+    // Before the hovered, expression and spoken colors, which win over them
+    &-learning {
+      color: var(--es-word-learning);
+    }
+
+    &-new {
+      text-decoration: underline dotted var(--es-word-new);
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.2em;
+    }
+
     &-highlighted {
       color: var(--es-hl);
     }

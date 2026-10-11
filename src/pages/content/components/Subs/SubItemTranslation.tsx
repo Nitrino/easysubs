@@ -18,6 +18,8 @@ import { TranslateSelect } from "../ui/TranslateSelect";
 import { Popover } from "../ui/Popover";
 import { Spinner } from "../ui/Spinner";
 import { InLineBadge } from "./InLineBadge";
+import { WordStatus } from "./WordStatus";
+import { wordStatusChanged } from "@src/models/words";
 
 const DICTIONARIES: [string, (word: string) => string][] = [
   ["Cambridge", (word) => `https://dictionary.cambridge.org/dictionary/english/${word}`],
@@ -84,8 +86,19 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
     );
   }
 
+  // "+" saves the word as learning with the line it's from (src/models/words), and adds it to the learning service
+  // when one is picked
   const handleAddWord = (word: string, translation: TWordTranslationItem) => {
-    if (service) {
+    wordStatusChanged({
+      text,
+      status: "learning",
+      translation: translation.word,
+      ...(translation.partOfSpeech !== "unknown" && { partOfSpeech: translation.partOfSpeech }),
+      cueId,
+    });
+    if (!service) {
+      toast.success(`Saved “${word.toLowerCase()}”`);
+    } else {
       addWord({
         word: word.toLowerCase(),
         translation: translation.word,
@@ -109,6 +122,7 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
       <Popover variant="word">
         <div className="es-title es-title-small">{text}</div>
         <div className="es-note">{currentWordTranslation.error}</div>
+        <WordStatus text={text} cueId={cueId} onLearn={() => wordStatusChanged({ text, status: "learning", cueId })} />
       </Popover>
     );
   }
@@ -126,15 +140,10 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
 
   return (
     <Popover variant="word">
-      <div
-        className={service ? "es-title es-addable" : "es-title"}
-        onClick={() => handleAddWord(cardWord, titleTranslation)}
-      >
-        {service && (
-          <span className="es-add">
-            <PlusIcon />
-          </span>
-        )}
+      <div className="es-title es-addable" onClick={() => handleAddWord(cardWord, titleTranslation)}>
+        <span className="es-add">
+          <PlusIcon />
+        </span>
         {/* The word as it's used in the line on top, its dictionary meanings below */}
         <span dir="auto">{inLine ?? currentWordTranslation.mainTranslation}</span>
         {inLine && <InLineBadge />}
@@ -160,15 +169,13 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
             {currentWordTranslation.translations.map((translation) => (
               <Fragment key={`${translation.partOfSpeech}-${translation.word}`}>
                 <span
-                  className={service ? "es-alt-word es-addable" : "es-alt-word"}
+                  className="es-alt-word es-addable"
                   dir="auto"
                   onClick={() => handleAddWord(cardWord, translation)}
                 >
-                  {service && (
-                    <span className="es-add">
-                      <PlusIcon />
-                    </span>
-                  )}
+                  <span className="es-add">
+                    <PlusIcon />
+                  </span>
                   {translation.word}
                 </span>
                 <span className="es-alt-pos">
@@ -187,6 +194,7 @@ export const SubItemTranslation: FC<{ text: string; cueId: number; index: number
           </div>
         </>
       )}
+      <WordStatus text={text} cueId={cueId} onLearn={() => handleAddWord(cardWord, titleTranslation)} />
       {subsLanguage === "en" && (
         <>
           <div className="es-sep" />

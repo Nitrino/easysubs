@@ -11,10 +11,12 @@ import {
 import { $currentWordTranslation, $wordTranslationsPendings, WordTranslationsGate } from "@src/models/translations";
 import { getLearningService } from "@src/utils/getLearningService";
 import { addWordFx } from "@src/models/learning";
+import { wordStatusChanged } from "@src/models/words";
 import { PlusIcon } from "./assets/PlusIcon";
 import { Popover } from "../ui/Popover";
 import { Spinner } from "../ui/Spinner";
 import { InLineBadge } from "./InLineBadge";
+import { WordStatus } from "./WordStatus";
 
 // The popover of a hovered word that belongs to a phrasal verb, an idiom or another expression: the expression, its
 // translations, and the word's own translation in case the expression isn't meant here
@@ -29,8 +31,21 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
 
   const service = useMemo(() => getLearningService(learningService), [learningService]);
 
-  const handleAdd = (translation: string) => {
-    if (!service) return;
+  const label = expression.kind === "selection" ? "selected words" : expression.kind;
+  // Saved to the user's words like a single word, and to the learning service when one is picked
+  const handleAdd = (translation?: string) => {
+    wordStatusChanged({
+      text: expression.expression,
+      status: "learning",
+      translation,
+      partOfSpeech: label,
+      cueId: expression.id,
+    });
+    if (!service) {
+      toast.success(`Saved “${expression.expression.toLowerCase()}”`);
+      return;
+    }
+    if (!translation) return;
     addWord({
       word: expression.expression.toLowerCase(),
       translation,
@@ -56,7 +71,7 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
         {expression.expression}
       </div>
       <div className="es-label">
-        {expression.kind === "selection" ? "selected words" : expression.kind}
+        {label}
         {current?.inContext && <InLineBadge />}
       </div>
       <div className="es-sep" />
@@ -72,15 +87,13 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
           {items.map((item, index) => (
             <div
               key={item.text}
-              className={["es-pv-item", index === 0 && "es-pv-main", service && "es-addable"].filter(Boolean).join(" ")}
+              className={["es-pv-item", index === 0 && "es-pv-main", "es-addable"].filter(Boolean).join(" ")}
               dir="auto"
               onClick={() => handleAdd(item.text)}
             >
-              {service && (
-                <span className="es-add">
-                  <PlusIcon />
-                </span>
-              )}
+              <span className="es-add">
+                <PlusIcon />
+              </span>
               {item.text}
               {"partOfSpeech" in item && item.partOfSpeech && item.partOfSpeech !== "unknown" && (
                 <span className="es-alt-pos">{item.partOfSpeech}</span>
@@ -90,6 +103,7 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
         </div>
       )}
       <ExpressionWord word={word} />
+      <WordStatus text={expression.expression} cueId={expression.id} onLearn={() => handleAdd(items[0]?.text)} />
       {expression.kind === "selection" && (
         <>
           <div className="es-sep" />

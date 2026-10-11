@@ -226,7 +226,7 @@ export class Playground {
   }
 }
 
-type SettingsTab = "General" | "Subtitles" | "Second line" | "Experiments";
+type SettingsTab = "General" | "Subtitles" | "Second line" | "Words" | "Experiments";
 
 export const test = base.extend<{ playground: Playground }>({
   playground: async ({ page }, use) => {

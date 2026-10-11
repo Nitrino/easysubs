@@ -90,7 +90,7 @@ const Row: FC<{ label: ReactNode; children: ReactNode; htmlFor?: string }> = ({ 
   </div>
 );
 
-const Segmented = <T extends string>({
+export const Segmented = <T extends string>({
   options,
   value,
   onChange,

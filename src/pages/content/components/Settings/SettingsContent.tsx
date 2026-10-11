@@ -32,6 +32,8 @@ import { $sheet } from "@src/models/foundSubs";
 import { $downloadsOpen } from "@src/models/downloads";
 import { FoundSubsSheet } from "../FoundSubs/FoundSubsSheet";
 import { DownloadsRow, DownloadsSheet } from "./Downloads";
+import { LevelSheet, SavedWordsSheet, WordsTab } from "./Words";
+import { $levelSetupOpen, $savedWordsOpen } from "@src/models/words";
 import {
   SecondarySubsBackground,
   SecondarySubsColor,
@@ -44,6 +46,7 @@ import {
 
 // Tab ids are saved, so a new tab takes the next id wherever it's shown
 const SECOND_LINE_TAB = 3;
+const WORDS_TAB = 4;
 
 interface TabProps {
   isActive: boolean;
@@ -65,14 +68,24 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [activeSettingsTab, handleActiveSettingsTabChanged, streaming, foundSheet, downloadsOpen] = useUnit([
+  const [
+    activeSettingsTab,
+    handleActiveSettingsTabChanged,
+    streaming,
+    foundSheet,
+    downloadsOpen,
+    savedWordsOpen,
+    levelSetupOpen,
+  ] = useUnit([
     $activeSettingsTab,
     activeSettingsTabChanged,
     $streaming,
     $sheet,
     $downloadsOpen,
+    $savedWordsOpen,
+    $levelSetupOpen,
   ]);
-  const sheet = foundSheet || downloadsOpen;
+  const sheet = foundSheet || downloadsOpen || savedWordsOpen || levelSetupOpen;
   const contentRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(contentRef, onClose);
@@ -84,8 +97,13 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
         ref={contentRef}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* The search for subtitles online and the list of downloads open in place of the tabs */}
-        {downloadsOpen ? (
+        {/* The search for subtitles online, the list of downloads, the level check and the saved words open in place of
+            the tabs */}
+        {levelSetupOpen ? (
+          <LevelSheet onClose={onClose} />
+        ) : savedWordsOpen ? (
+          <SavedWordsSheet onClose={onClose} />
+        ) : downloadsOpen ? (
           <DownloadsSheet onClose={onClose} />
         ) : foundSheet ? (
           <FoundSubsSheet onClose={onClose} />
@@ -119,6 +137,15 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                   }}
                 >
                   Second line
+                </Tab>
+                <Tab
+                  isActive={activeSettingsTab === WORDS_TAB}
+                  tabId={WORDS_TAB}
+                  onClick={() => {
+                    handleActiveSettingsTabChanged(WORDS_TAB);
+                  }}
+                >
+                  Words
                 </Tab>
                 <Tab
                   isActive={activeSettingsTab === 2}
@@ -222,6 +249,7 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
                   </div>
                 </>
               )}
+              {activeSettingsTab === WORDS_TAB && <WordsTab />}
               {activeSettingsTab === 2 && (
                 <>
                   {/* <div className="es-settings-content__item">

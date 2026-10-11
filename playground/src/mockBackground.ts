@@ -6,6 +6,8 @@
  */
 
 import { googleNumberToPartOfSpeach } from "@src/utils/googleNumberToPartOfSpeach";
+import { createFrequencyLookup } from "@src/utils/frequency/lookup";
+import type { TFrequency } from "@src/utils/frequency/format";
 import { createExpressionFinder } from "@src/utils/expressions/lookup";
 import { ANKI_MODEL_FIELDS } from "@src/learning-service/ankiNote";
 import type { TLexicon } from "@src/utils/expressions/lexicon";
@@ -151,6 +153,14 @@ const findExpressionsInCues = createExpressionFinder(async (language) => {
   return load();
 });
 
+// The extension's own frequency lists: the known words' ranks and the level check work offline as in the extension
+const frequencyLists = import.meta.glob<TFrequency>("../../public/frequency/*.json", { import: "default" });
+const frequency = createFrequencyLookup(async (language) => {
+  const load = frequencyLists[`../../public/frequency/${language}.json`];
+  if (!load) throw new Error(`Mock background: no frequency list for "${language}"`);
+  return load();
+});
+
 // The Wiktionary dictionary's answer, from the words of the fixtures: a meaning per translation, like Google's rows
 function dictionaryAnswer(text: string, target: string) {
   const found = findWord(text.toLowerCase(), target);
@@ -275,6 +285,10 @@ function handle(message: Message): unknown {
       return subtitlesLanguage;
     case "findExpressions":
       return findExpressionsInCues(language, (message.cues as string[][]) ?? []);
+    case "wordRanks":
+      return frequency.ranks(language, (message.words as string[]) ?? []).then((ranks) => ({ ranks }));
+    case "frequencySample":
+      return frequency.sample(language, Number(message.perBand) || 5).then((words) => ({ words }));
     case "translateExpressions":
       return expressionTranslations((message.expressions as string[]) ?? [], language);
     case "dictionaryLookup":

@@ -24,6 +24,10 @@ import {
   wordSelected,
 } from "@src/models/expressions";
 import { $spokenWord } from "@src/models/spokenWord";
+import { $newWordsColored, $wordColoring, $wordsState } from "@src/models/words";
+import { learningExpressionWords, viewWord } from "@src/utils/words";
+import { $expressions } from "@src/models/expressions";
+import type { TWordStatus } from "@src/models/types";
 import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
 import { ExpressionTranslation } from "./ExpressionTranslation";
@@ -90,12 +94,28 @@ export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
 
 const Sub: FC<{ sub: TSub }> = ({ sub }) => {
   const [showTranslation, setShowTranslation] = useState(false);
-  const [subsBackground, subsBackgroundOpacity, spokenWord] = useUnit([
-    $subsBackground,
-    $subsBackgroundOpacity,
-    $spokenWord,
-  ]);
+  const [subsBackground, subsBackgroundOpacity, spokenWord, wordsState, newWordsColored, wordColoring, expressions] =
+    useUnit([
+      $subsBackground,
+      $subsBackgroundOpacity,
+      $spokenWord,
+      $wordsState,
+      $newWordsColored,
+      $wordColoring,
+      $expressions,
+    ]);
   const spokenIndex = spokenWord?.cueId === sub.id ? spokenWord.index : -1;
+  // Words colored by what the user knows (src/models/words); known and rare ones stay as they are
+  const learningExpressions =
+    wordColoring !== "off" && wordsState
+      ? learningExpressionWords(wordsState, expressions.cues[sub.text] ?? [])
+      : new Set<number>();
+  const statusOf = (item: TSubItem, index: number): TWordStatus | null => {
+    if (wordColoring === "off" || !wordsState) return null;
+    if (learningExpressions.has(index)) return "learning";
+    const status = viewWord(wordsState, item.text)?.status;
+    return status === "learning" || (status === "new" && newWordsColored) ? status : null;
+  };
 
   const handleOnClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -112,7 +132,14 @@ const Sub: FC<{ sub: TSub }> = ({ sub }) => {
       }}
     >
       {sub.items.map((item, index) => (
-        <SubItem key={index} sub={sub} subItem={item} index={index} spoken={index === spokenIndex} />
+        <SubItem
+          key={index}
+          sub={sub}
+          subItem={item}
+          index={index}
+          spoken={index === spokenIndex}
+          status={statusOf(item, index)}
+        />
       ))}
       {showTranslation && <SubFullTranslation text={sub.cleanedText} />}
     </div>
@@ -125,9 +152,11 @@ type TSubItemProps = {
   index: number;
   // The word being said, see src/models/spokenWord
   spoken: boolean;
+  // How the word is colored: new or learning, none for known words and with coloring off
+  status: TWordStatus | null;
 };
 
-const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
+const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken, status }) => {
   const [
     currentExpression,
     selectedWords,
@@ -188,7 +217,7 @@ const SubItem: FC<TSubItemProps> = ({ sub, subItem, index, spoken }) => {
       <pre
         onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}
-        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""} ${selected ? "es-sub-item-selected" : ""} ${spoken ? "es-sub-item-spoken" : ""}`}
+        className={`es-sub-item ${subItem.tag} ${inExpression ? "es-sub-item-highlighted" : ""} ${selected ? "es-sub-item-selected" : ""} ${spoken ? "es-sub-item-spoken" : ""} ${status ? `es-sub-item-${status}` : ""}`}
         onMouseDown={handleMouseDown}
         onClick={handleClick}
       >
