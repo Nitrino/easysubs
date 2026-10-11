@@ -28,11 +28,16 @@ test.describe("learning services", () => {
   const chooseService = (playground: Playground, service: string) =>
     playground.changeSettings("General", () => playground.choose("Learning service", service));
 
-  test("offers no words to add when disabled", async ({ playground }) => {
+  test("saves the word to the saved words when disabled", async ({ playground, page }) => {
     await playground.word("keys").hover();
 
     await expect(playground.wordPopover.locator(".es-title")).toHaveText(enRu.words.keys.main);
-    await expect(playground.wordPopover.locator(".es-addable")).toHaveCount(0);
+    await playground.wordPopover.locator(".es-title.es-addable").click();
+
+    await expect(playground.toast).toContainText("Saved “keys”");
+    expect(await ankiRequests(playground)).toEqual([]);
+    await page.mouse.move(0, 0);
+    await expect(playground.word("keys")).toHaveClass(/es-sub-item-learning/);
   });
 
   test("adds the dictionary translation when the popover shows the word's in its line", async ({

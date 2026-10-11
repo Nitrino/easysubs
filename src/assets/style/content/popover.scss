@@ -442,3 +442,53 @@ $es-gap: 8px; // how far the arrow sticks out of the body
     animation: none;
   }
 }
+
+// New, learning or known at the foot of a word's popover (WordStatusPicker.tsx), in the colors the subtitles give them
+.es-popover .es-word-status {
+  display: flex;
+  gap: 0.25em;
+  margin-top: 0.15em;
+  font-size: 0.73em;
+
+  &__item {
+    flex: 1 1 0;
+    margin: 0;
+    padding: 0.2em 0.5em;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--es-secondary);
+    font: inherit;
+    line-height: 1.25;
+    white-space: nowrap;
+    cursor: pointer;
+    appearance: none;
+
+    &:hover {
+      background: var(--es-fill-hover);
+      color: var(--es-primary);
+    }
+
+    &--selected,
+    &--selected:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    &--new.es-word-status__item--selected {
+      background: rgba(100, 210, 255, 0.2);
+      color: var(--es-hl);
+    }
+
+    &--learning.es-word-status__item--selected {
+      background: rgba(255, 159, 10, 0.2);
+      color: var(--es-word-learning);
+    }
+
+    &--known.es-word-status__item--selected {
+      background: rgba(48, 209, 88, 0.2);
+      color: #30d158;
+    }
+  }
+}

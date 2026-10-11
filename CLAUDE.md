@@ -48,6 +48,7 @@ Uses Effector for state management with these main models:
 - `src/models/aiSubs/` - AI subtitles made on the device from the video's audio (see below)
 - `src/models/learning/` - Adding a word to the learning service, with its line for Anki (see Anki Cards below)
 - `src/models/transcript/` - The transcript sidebar: every line with its second language, click to play from it, search in both languages. Opened with Shift+T or the Transcript row of the General tab. The second language is the second line's (track, found file or its translations) or, with the second line off, the translation language, translated for the lines in view through the second line's translator
+- `src/models/words/` - The words the user knows and learns: colored subtitles, the episode's score, saved words (see Known Words below)
 
 ### Browser Extension Structure
 
@@ -162,6 +163,14 @@ The word stays what a card teaches; the subtitle line it was added from comes wi
 - The sound is cut from the audio the player buffered: `public/assets/js/mseTap.js` copies what players append to Media Source Extensions to consumers by name (`clips`, `readAhead`), keeping the latest 2 MB for one that starts late; `src/audio/bufferedAudio.ts` puts the pieces back into segments (`SegmentSplitter` in `containers.ts`: YouTube appends whole clusters at first, then any piece), keeps them around the playhead and decodes the line ±250 ms into a 22.05 kHz WAV. Players that don't stream through MSE (the playground) and DRM audio give no sound
 - `src/learning-service/ankiNote.ts` is the Easysubs note type (Word, Translation, Part of Speech, Context, Context Translation, Picture, Audio, Source, Examples) and its templates. Picture and sound go to Anki's media with `storeMediaFile`. A note type of the first version gets the new fields with `modelFieldAdd` and the new templates (a schema change: Anki asks for a full sync once)
 - Adding a word that's in Anki puts the new line on the front of its card and the one before among the examples on the back, up to 3 lines; the examples' sounds are `<audio>` players, as Anki plays every `[sound:]` of a side. A line the card has already isn't added again
+
+### Known Words
+
+Every word of the subtitles is new, learning or known to the user, and the Words tab of the settings shows "You know 87% of this episode":
+
+- `src/models/words` keeps the words on the device (`$words`, saved as `persist:words`, synced between tabs through `chrome.storage.onChanged`), keyed by the subtitles' base language and the lowercased word without the punctuation around it (`wordKey`, `normalizeWord` in `src/utils/words.ts`). A word of the popover is marked with the New / Learning / Known buttons at its foot (`WordStatusPicker.tsx`); "+" saves it as learning with its translation and the line it's from, and also adds it to the learning service when one is picked. Forms aren't matched to the dictionary form: "keys" and "key" are separate words
+- The subtitles color learning words orange and underline new ones (`$wordColoring`: Off / Learning / New and learning); known ones stay as they are. `$episodeScore` counts every word as often as it's said; "New ones are known" marks the episode's remaining new words known, like finishing a LingQ lesson
+- The Saved words sheet (`Words.tsx`, in place of the settings panel like the Downloaded one) lists the words with their lines linked back to the moment, reviews the due learning words as flashcards (`reviewWord`: 1, 3, 7, 16 and 35 days, known after the last), exports a CSV file and imports one, or a plain list of words as known in the subtitles' language
 
 ### Expressions
 

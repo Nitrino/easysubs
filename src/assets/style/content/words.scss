@@ -1,0 +1,209 @@
+// The settings' Words tab and the Saved words sheet (Words.tsx): the episode's score, the list of words in an inset
+// group like the downloads (downloads.scss) and the review's flashcard, in the search sheet's material (found-subs.scss)
+
+.es-words-score {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 2px 0 10px;
+  padding: 10px 12px;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+
+  &--empty {
+    display: block;
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  &__percent {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 30px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    color: var(--es-primary);
+    font-size: 13px;
+    line-height: 17px;
+  }
+
+  &__details {
+    color: var(--es-secondary);
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  // Known words in green, learning ones in the subtitles' orange
+  &__meter {
+    display: flex;
+    grid-column: 1 / -1;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--es-fill);
+  }
+
+  &__known {
+    background: #30d158;
+  }
+
+  &__learning {
+    background: var(--es-word-learning);
+  }
+}
+
+.es-words {
+  &__toolbar,
+  &__filters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  &__spacer {
+    flex: 1;
+  }
+
+  &__search {
+    flex: 1;
+    min-width: 0;
+    height: 24px;
+    margin: 0;
+    padding: 0 9px;
+    border: 0;
+    border-radius: 7px;
+    outline: none;
+    background: var(--es-fill);
+    color: var(--es-primary);
+    font: 400 12px/16px var(--es-font);
+    appearance: none;
+
+    &:focus {
+      box-shadow: 0 0 0 2px var(--es-focus-ring);
+    }
+
+    &::placeholder {
+      color: var(--es-tertiary);
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+
+    & + & {
+      border-top: 0.5px solid var(--es-separator);
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  &__word {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  &__translation {
+    color: var(--es-secondary);
+    font-weight: 400;
+    font-size: 12px;
+  }
+
+  &__context {
+    overflow: hidden;
+    color: var(--es-secondary);
+    font-size: 11.5px;
+    line-height: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--es-primary);
+        text-decoration: underline;
+      }
+    }
+
+    b {
+      color: var(--es-primary);
+      font-weight: 600;
+    }
+  }
+
+  &__status {
+    min-width: 0;
+    height: 22px;
+    padding: 0 9px;
+    font-size: 11.5px;
+  }
+}
+
+// One word at a time: the word, its line, the translation on demand and the answers
+.es-words-review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 8px 8px;
+  text-align: center;
+
+  &__progress {
+    color: var(--es-tertiary);
+    font-size: 11.5px;
+  }
+
+  &__word {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  &__context {
+    margin: 0;
+    color: var(--es-secondary);
+    font-size: 13px;
+    line-height: 18px;
+
+    b {
+      color: var(--es-word-learning);
+      font-weight: 600;
+    }
+  }
+
+  &__translation {
+    color: var(--es-primary);
+    font-size: 16px;
+    line-height: 21px;
+  }
+
+  &__grades {
+    display: flex;
+    gap: 6px;
+  }
+}

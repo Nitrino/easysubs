@@ -12,6 +12,9 @@
   --es-hl: #64d2ff;
   // The word being said, see src/models/spokenWord
   --es-spoken: #ffd60a;
+  // Words of the subtitles the user learns and hasn't met, see src/models/words
+  --es-word-learning: #ff9f0a;
+  --es-word-new: rgba(100, 210, 255, 0.6);
   --es-accent: #0a84ff;
   --es-accent-hover: #2b95ff;
   --es-link: #409cff;

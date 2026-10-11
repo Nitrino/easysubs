@@ -261,3 +261,21 @@ export type TExpressionTranslation = {
   alternatives: { text: string; partOfSpeech?: TPartOfSpeach }[];
   inLine?: boolean;
 };
+
+// A word of the subtitles to the user (src/models/words): new until it's saved as learning or marked known
+export type TWordStatus = "new" | "learning" | "known";
+// A word the user learns or knows, kept on the device under its language and lowercased form
+export type TSavedWord = {
+  word: string;
+  language: string;
+  status: Exclude<TWordStatus, "new">;
+  translation?: string;
+  // The line it was saved from, where that's from and a link back to the moment (YouTube's has the time)
+  context?: { line: string; source?: string; url?: string; time?: number };
+  added: number;
+  // The review schedule of a learning word (src/utils/words.ts, reviewWord): the step of REVIEW_INTERVALS and when
+  // it's due; none until it's first reviewed
+  review?: { step: number; due: number };
+};
+// Which words the subtitles color: none, the learning ones, or new ones too
+export type TWordColoring = "off" | "learning" | "all";
