@@ -41,13 +41,40 @@ export const wordHovered = createEvent<THoveredWord>();
 export const wordLeft = createEvent();
 export const $hoveredWord = createStore<THoveredWord | null>(null);
 
-// The expression of the hovered word, with the cue it's in
+// Words the user picked with Shift+click to translate together (a German verb and its particle, a phrase the lists
+// don't have), in one cue; a picked word again leaves it, a plain click or another cue starts over
+export type TSelectedWord = THoveredWord & { word: string };
+export type TSelectedWords = { id: number; cue: string; words: { index: number; word: string }[] };
+export const wordSelected = createEvent<TSelectedWord>();
+export const selectionCleared = createEvent();
+export const $selectedWords = createStore<TSelectedWords | null>(null);
+
+// The picked words as an expression: in the order of the line, from two words
+export const selectedExpression = (selection: TSelectedWords | null): TExpressionMatch | null =>
+  selection && selection.words.length > 1
+    ? {
+        expression: selection.words.map(({ word }) => word).join(" "),
+        kind: "selection",
+        indexes: selection.words.map(({ index }) => index),
+      }
+    : null;
+
+// The expression of the hovered word, with the cue it's in: the picked words when it's one of them, else the
+// expression the lists found
 export type TCurrentExpression = TExpressionMatch & { id: number; cue: string };
-export const $currentExpression = combine($expressions, $hoveredWord, (expressions, hovered) => {
-  if (!hovered) return null;
-  const match = expressionAt(expressions.cues[hovered.cue] ?? [], hovered.index);
-  return match ? { ...match, id: hovered.id, cue: hovered.cue } : null;
-});
+export const $currentExpression = combine(
+  $expressions,
+  $hoveredWord,
+  $selectedWords,
+  (expressions, hovered, selection): TCurrentExpression | null => {
+    if (!hovered) return null;
+    const selected = selection?.id === hovered.id ? selectedExpression(selection) : null;
+    const match = selected?.indexes.includes(hovered.index)
+      ? selected
+      : expressionAt(expressions.cues[hovered.cue] ?? [], hovered.index);
+    return match ? { ...match, id: hovered.id, cue: hovered.cue } : null;
+  },
+);
 
 // Who translates expressions: ChatGPT and Ollama as they're used in the line when they're the translation service,
 // then the service of the Dictionary row, like single words, when it isn't Google, then Chrome or Bergamot when

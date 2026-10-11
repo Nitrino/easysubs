@@ -244,7 +244,8 @@ export type TFoundShow = {
 };
 
 // A multi-word expression found in a cue, see src/utils/expressions
-export type TExpressionKind = "phrasal verb" | "idiom" | "separable verb" | "expression";
+// "selection" is words the user picked to translate together, see $selectedWords in src/models/expressions
+export type TExpressionKind = "phrasal verb" | "idiom" | "separable verb" | "expression" | "selection";
 export type TExpressionMatch = {
   // The expression as the dictionary writes it: "pick up" for "picked it up", "anrufen" for "rief … an"
   expression: string;

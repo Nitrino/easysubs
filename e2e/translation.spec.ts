@@ -47,6 +47,29 @@ test.describe("translation", () => {
     );
   });
 
+  test("translates words picked with Shift+click together", async ({ playground, page }) => {
+    const selected = playground.subs.locator(".es-sub-item-selected");
+    await playground.word("need").click({ modifiers: ["Shift"] });
+    await playground.word("keys").click({ modifiers: ["Shift"] });
+
+    const popover = playground.wordPopover;
+    await expect(popover.locator(".es-title")).toHaveText("need keys");
+    await expect(popover.locator(".es-label")).toHaveText("selected words");
+    // Not the line's translation, which a plain click opens, nor the page's text selected
+    await expect(playground.linePopover).toHaveCount(0);
+    expect(await page.evaluate(() => window.getSelection()?.toString())).toBe("");
+
+    // Marked while another word is hovered
+    await playground.word("I").hover();
+    await expect(selected).toHaveText(["need", "keys."]);
+
+    await playground.word("keys").click({ modifiers: ["Shift"] });
+    await playground.word("I").hover();
+    await expect(selected).toHaveText(["need"]);
+    await playground.word("need").click();
+    await expect(selected).toHaveCount(0);
+  });
+
   test("looks up the expressions of the whole track in one message", async ({ playground }) => {
     expect(await playground.messages("findExpressions")).toEqual([
       expect.objectContaining({

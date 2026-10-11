@@ -56,7 +56,7 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
         {expression.expression}
       </div>
       <div className="es-label">
-        {expression.kind}
+        {expression.kind === "selection" ? "selected words" : expression.kind}
         {current?.inContext && <InLineBadge />}
       </div>
       <div className="es-sep" />
@@ -90,6 +90,12 @@ export const ExpressionTranslation: FC<{ expression: TCurrentExpression; word: s
         </div>
       )}
       <ExpressionWord word={word} />
+      {expression.kind === "selection" && (
+        <>
+          <div className="es-sep" />
+          <div className="es-note">Shift+click to add or remove words</div>
+        </>
+      )}
     </Popover>
   );
 };
