@@ -26,6 +26,18 @@ describe("moveVideoToTime", () => {
     expect(video.currentTime).toBe(20);
     vi.useRealTimers();
   });
+
+  it("knows Netflix by its service name, as the release build renames classes", () => {
+    const video = createVideo({ currentTime: 20 });
+    const seek = vi.fn();
+    window.addEventListener("esNetflixSeek", (event: CustomEvent) => seek(event.detail), { once: true });
+    const Minified = class extends Netflix {};
+
+    moveVideoToTime(video, new Minified(), 4000);
+
+    expect(seek).toHaveBeenCalledWith(4000);
+    expect(video.currentTime).toBe(20);
+  });
 });
 
 describe("getCurrentVideoTime", () => {
