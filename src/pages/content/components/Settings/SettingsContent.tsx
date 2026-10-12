@@ -19,6 +19,7 @@ import { TranscriptToggle } from "./TranscriptToggle";
 import { MoveBySubs } from "./MoveBySubs";
 import { AutoPauseBySubs } from "./AutoPauseBySubs";
 import { useClickOutside } from "@src/hooks/useClickOutside";
+import { usePortalTarget } from "@src/hooks/usePortalTarget";
 import { useUnit } from "effector-react";
 import { $activeSettingsTab, activeSettingsTabChanged } from "@src/models/settings";
 // import { EnableNetflixOnFlight } from "./EnableNetflixOnFlight";
@@ -68,6 +69,7 @@ const Tab: FC<PropsWithChildren<TabProps>> = ({ children, isActive, onClick }) =
 };
 
 export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
+  const portalTarget = usePortalTarget();
   const [
     activeSettingsTab,
     handleActiveSettingsTabChanged,
@@ -265,9 +267,9 @@ export const SettingsContent: FC<{ onClose: () => void }> = ({ onClose }) => {
           </>
         )}
       </div>
-      {createPortal(<DeepLApiKeyModal />, document.querySelector("body"))}
-      {createPortal(<ChatGPTApiKeyModal />, document.querySelector("body"))}
-      {createPortal(<OllamaModal />, document.querySelector("body"))}
+      {createPortal(<DeepLApiKeyModal />, portalTarget)}
+      {createPortal(<ChatGPTApiKeyModal />, portalTarget)}
+      {createPortal(<OllamaModal />, portalTarget)}
     </>
   );
 };

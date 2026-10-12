@@ -1,4 +1,5 @@
 import { FC, useMemo } from "react";
+import { usePortalTarget } from "@src/hooks/usePortalTarget";
 
 import { default as ReactSelect, components, DropdownIndicatorProps, Props, StylesConfig, Theme } from "react-select";
 
@@ -124,6 +125,7 @@ type SelectProps = Props & {
 };
 
 export const Select: FC<SelectProps> = ({ menuWidth, ...props }) => {
+  const portalTarget = usePortalTarget();
   const styles = useMemo<StylesConfig>(
     () =>
       menuWidth
@@ -143,7 +145,7 @@ export const Select: FC<SelectProps> = ({ menuWidth, ...props }) => {
         styles={styles}
         theme={theme}
         components={{ DropdownIndicator, ...props.components }}
-        menuPortalTarget={document.body}
+        menuPortalTarget={portalTarget}
         menuPosition="fixed"
         menuPlacement="auto"
       />

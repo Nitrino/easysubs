@@ -457,6 +457,15 @@
   min-width: 140px;
 }
 
+// ---- Fullscreen portal ---------------------------------------------------------------------------
+
+// Menus, modals and toasts in fullscreen (src/hooks/usePortalTarget.ts): above the panel and the player's controls,
+// whatever stacking the player gives them
+.es-portal {
+  position: relative;
+  z-index: 2147483647;
+}
+
 // ---- Modals --------------------------------------------------------------------------------------
 
 .es-modal-overlay {
