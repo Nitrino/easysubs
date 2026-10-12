@@ -30,7 +30,7 @@ import {
 import { currentVideoPage } from "@src/utils/videoKey";
 import { $streaming } from "../streamings";
 import { $video, videoTimeUpdate } from "../videos";
-import { $autoPause } from "../settings";
+import { $autoPause, $enabled } from "../settings";
 import { debug } from "patronum";
 
 split({
@@ -69,12 +69,12 @@ sample({
 });
 sample({
   clock: videoTimeUpdate,
-  source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause },
+  source: { currentSubs: $currentSubs, video: $video, autoPause: $autoPause, enabled: $enabled },
   fn: ({ currentSubs, video, autoPause }, _) => ({ currentSubs, video, autoPause }),
-  filter: ({ currentSubs, video, autoPause }) => {
+  filter: ({ currentSubs, video, autoPause, enabled }) => {
     if (currentSubs[0]) {
       const timeDiff = currentSubs[0].end - video.currentTime * 1000;
-      return autoPause && timeDiff < 250 && timeDiff > 0;
+      return enabled && autoPause && timeDiff < 250 && timeDiff > 0;
     }
   },
   target: autoPauseFx,

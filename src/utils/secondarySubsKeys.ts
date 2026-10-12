@@ -1,4 +1,4 @@
-import { $secondarySubs } from "@src/models/settings";
+import { $enabled, $secondarySubs } from "@src/models/settings";
 import { secondaryLineToggled, secondaryRevealHeld } from "@src/models/secondarySubs";
 
 const keyboardEvents = ["keydown", "keyup", "keypress"] as const;
@@ -13,7 +13,7 @@ const isTyping = (target: EventTarget | null) =>
 export const secondarySubsKeyHandler = (event: KeyboardEvent) => {
   if (event.code !== "KeyV" && event.code !== "KeyR") return;
   if (event.ctrlKey || event.altKey || event.metaKey || isTyping(event.target)) return;
-  if ($secondarySubs.getState().language === "off") return;
+  if (!$enabled.getState() || $secondarySubs.getState().language === "off") return;
 
   event.stopPropagation();
   if (event.code === "KeyV" && event.type === "keydown" && !event.repeat) secondaryLineToggled();
