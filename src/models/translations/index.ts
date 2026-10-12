@@ -13,7 +13,7 @@ import {
   $ollamaModel,
 } from "../settings";
 import { createGate } from "effector-react";
-import { $subs, $subsLanguage } from "../subs";
+import { $subs, $subsLanguage, $subsTitle } from "../subs";
 import { parseGoogleWordAnswer } from "@src/utils/googleWordAnswer";
 import { chromeTranslate } from "@src/utils/chromeTranslator";
 import { dictionaryTranslation, type TDictionaryAnswer } from "@src/utils/dictionary/lookup";
@@ -344,12 +344,20 @@ sample({
   },
 });
 
+// A word looked up in the subtitles' previous language isn't this one's: Spanish "a" isn't the English article
+const wordTranslationFetched = sample({
+  clock: fetchWordTranslationFx.done,
+  source: $subsLanguage,
+  filter: (subsLanguage, { params }) => params.sourceLanguage === subsLanguage,
+  fn: (_, { result }) => result,
+});
+
 $currentWordTranslation.on(
-  [fetchWordTranslationFx.doneData, updateCurrentWordTranslationFx.doneData],
+  [wordTranslationFetched, updateCurrentWordTranslationFx.doneData],
   (_, translation) => translation,
 );
 $currentWordTranslation.reset(WordTranslationsGate.close);
-$wordTranslations.on(fetchWordTranslationFx.doneData, (allTranslation, translation) =>
+$wordTranslations.on(wordTranslationFetched, (allTranslation, translation) =>
   translation.error ? allTranslation : [...allTranslation, translation],
 );
 
@@ -402,7 +410,8 @@ sample({
   target: requestSubTranslation,
 });
 
-$wordTranslations.reset([$translateLanguage, $dictionaryService, $translationService]);
+// Cached by the word alone, and by its cue for a translation in its line, so another language or track starts over
+$wordTranslations.reset([$translateLanguage, $dictionaryService, $translationService, $subsLanguage, $subsTitle]);
 
 sample({
   clock: $translateLanguage,

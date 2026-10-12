@@ -142,6 +142,23 @@ describe("word translation", () => {
     expect(scope.getState($currentWordTranslation).mainTranslation).toBe(enRu.words.keys.main);
   });
 
+  it("looks a word up again in another subtitle language", async () => {
+    const scope = fork({
+      values: [
+        [$translateLanguage, "ru"],
+        [$dictionaryService, "google"],
+        [$subsLanguage, "en"],
+      ],
+    });
+
+    await allSettled(requestWordTranslation, { scope, params: "a" });
+    await allSettled($subsLanguage, { scope, params: "es" });
+    await allSettled(requestWordTranslation, { scope, params: "a" });
+
+    expect(sentMessages("translateWordFull")).toHaveLength(2);
+    expect(scope.getState($wordTranslations)).toHaveLength(1);
+  });
+
   it("marks the word as pending until the translation arrives", async () => {
     const scope = googleScope();
 

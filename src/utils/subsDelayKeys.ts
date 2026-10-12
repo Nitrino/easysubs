@@ -1,5 +1,6 @@
 import { $streaming } from "@src/models/streamings";
 import { $rawSubs, subsDelayKeyPressed } from "@src/models/subs";
+import { $enabled } from "@src/models/settings";
 
 const keyboardEvents = ["keydown", "keyup", "keypress"] as const;
 
@@ -16,7 +17,7 @@ const isTyping = (target: EventTarget | null) =>
 export const subsDelayKeyHandler = (event: KeyboardEvent) => {
   if (event.code !== "KeyG" && event.code !== "KeyH") return;
   if (event.ctrlKey || event.altKey || event.metaKey || isTyping(event.target)) return;
-  if ($streaming.getState().isOnFlight() || $rawSubs.getState().length === 0) return;
+  if (!$enabled.getState() || $streaming.getState().isOnFlight() || $rawSubs.getState().length === 0) return;
 
   event.stopPropagation();
   if (event.type !== "keydown") return;

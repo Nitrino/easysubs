@@ -1,4 +1,5 @@
 import { $streaming } from "@src/models/streamings";
+import { $enabled } from "@src/models/settings";
 import { isSubtitleFileName, openSubtitleFile } from "./subtitleFiles";
 
 // Dropping a subtitle file on the player loads it as the main line, or as the second line with Shift held. A drop
@@ -10,6 +11,8 @@ let overlay: HTMLDivElement | null = null;
 const draggingFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes("Files");
 
 function playerContainer(): HTMLElement | null {
+  // With EasySubs off the player gets its drops
+  if (!$enabled.getState()) return null;
   try {
     return $streaming.getState().getSubsContainer();
   } catch {

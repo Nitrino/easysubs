@@ -10,6 +10,7 @@ import { useUnit } from "effector-react";
 import { SettingsContent } from "./SettingsContent";
 import { MonoLogo } from "./assets/MonoLogo";
 import { Toaster, ToasterProps } from "react-hot-toast";
+import { usePortalTarget } from "@src/hooks/usePortalTarget";
 
 // Toasts in the HUD material, with the system green/red for the result icons.
 const TOAST_OPTIONS: ToasterProps["toastOptions"] = {
@@ -36,6 +37,7 @@ type TSettingsProps = {
 export const Settings: FC<TSettingsProps> = () => {
   const [showSettings, setShowSettings] = useState(false);
   const streaming = useUnit($streaming);
+  const portalTarget = usePortalTarget();
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -64,7 +66,7 @@ export const Settings: FC<TSettingsProps> = () => {
         <div className="es-toast">
           <Toaster toastOptions={TOAST_OPTIONS} />
         </div>,
-        document.querySelector("body"),
+        portalTarget,
       )}
     </>
   );

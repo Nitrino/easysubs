@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useUnit } from "effector-react";
 import Draggable from "react-draggable";
@@ -7,7 +7,6 @@ import { $currentSubs, $subsLanguage } from "@src/models/subs";
 import { $video } from "@src/models/videos";
 import { TSub, TSubItem } from "@src/models/types";
 import {
-  $moveBySubsEnabled,
   $secondarySubsPosition,
   $subsBackground,
   $subsBackgroundOpacity,
@@ -28,7 +27,6 @@ import { $newWordsColored, $wordColoring, $wordsState } from "@src/models/words"
 import { learningExpressionWords, viewWord } from "@src/utils/words";
 import { $expressions } from "@src/models/expressions";
 import type { TWordStatus } from "@src/models/types";
-import { addKeyboardEventsListeners, removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { SubItemTranslation } from "./SubItemTranslation";
 import { ExpressionTranslation } from "./ExpressionTranslation";
 import { SubFullTranslation } from "./SubFullTranslation";
@@ -42,25 +40,15 @@ import { AiSubsProgress } from "./AiSubsProgress";
 // The subtitles over the player; the second line goes under or above each cue, or into its own block in
 // `topContainer` at the top of the player
 export const Subs: FC<{ topContainer?: HTMLElement }> = ({ topContainer }) => {
-  const [video, currentSubs, subsFontSize, moveBySubsEnabled, secondarySubs, secondaryPosition] = useUnit([
+  const [video, currentSubs, subsFontSize, secondarySubs, secondaryPosition] = useUnit([
     $video,
     $currentSubs,
     $subsFontSize,
-    $moveBySubsEnabled,
     $currentSecondarySubs,
     $secondarySubsPosition,
   ]);
   const draggableRef = useRef<HTMLDivElement>(null);
   const hoverPause = useHoverPause();
-
-  useEffect(() => {
-    if (moveBySubsEnabled) {
-      addKeyboardEventsListeners();
-    }
-    return () => {
-      removeKeyboardEventsListeners();
-    };
-  }, []);
 
   return (
     <>
