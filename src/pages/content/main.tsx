@@ -1,4 +1,5 @@
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
+import type { ReactNode } from "react";
 import refreshOnUpdate from "virtual:reload-on-update-in-view";
 
 import { $streaming, fetchCurrentStreamingFx } from "@src/models/streamings";
@@ -9,7 +10,7 @@ import { Settings } from "@src/pages/content/components/Settings";
 import { Subs } from "./components/Subs";
 import { ProgressBar } from "./components/ProgressBar";
 import { Transcript } from "./components/Transcript/Transcript";
-import { removeKeyboardEventsListeners } from "@src/utils/keyboardHandler";
+import { addKeyboardEventsListeners } from "@src/utils/keyboardHandler";
 import { addSecondarySubsKeyListeners } from "@src/utils/secondarySubsKeys";
 import { addSubsDelayKeyListeners } from "@src/utils/subsDelayKeys";
 import { addSubtitleDropListeners } from "@src/utils/subtitleDrop";
@@ -25,6 +26,41 @@ const handleTimeUpdate = () => {
 
 let detectionRetries = 0;
 
+// The React roots EasySubs renders into the page. A removed node's root has to be unmounted too: a detached tree keeps
+// its store subscriptions, listeners and the progress bar's animation loop running.
+const roots = new Map<Element, Root>();
+
+const unmountRoot = (node: Element) => {
+  const root = roots.get(node);
+  if (!root) return;
+  roots.delete(node);
+  // Deferred: these events can fire while React is rendering, and a root can't unmount synchronously then
+  queueMicrotask(() => root.unmount());
+};
+
+const removeNodes = (selector: string) =>
+  document.querySelectorAll(selector).forEach((node) => {
+    unmountRoot(node);
+    node.remove();
+  });
+
+const renderRoot = (node: Element, element: ReactNode) => {
+  // Players that rebuild their controls remove our nodes themselves
+  roots.forEach((_, mounted) => !mounted.isConnected && unmountRoot(mounted));
+  const root = createRoot(node);
+  roots.set(node, root);
+  root.render(element);
+};
+
+let listenedVideo: HTMLVideoElement | null = null;
+$video.watch((video) => {
+  listenedVideo?.removeEventListener("timeupdate", handleTimeUpdate);
+  video?.addEventListener("timeupdate", handleTimeUpdate);
+  listenedVideo = video;
+});
+
+let unwatchRenderSettings: (() => void) | undefined;
+
 $streaming.watch((streaming) => {
   console.log("streaming changed", streaming);
 
@@ -38,14 +74,16 @@ $streaming.watch((streaming) => {
 
   detectionRetries = 0;
   document.body.classList.add("es-" + streaming.name);
+  addKeyboardEventsListeners();
   addSecondarySubsKeyListeners();
   addSubsDelayKeyListeners();
   addSubtitleDropListeners();
   addTranscriptKeyListeners();
 
-  esRenderSetings.watch(() => {
+  unwatchRenderSettings?.();
+  unwatchRenderSettings = esRenderSetings.watch(() => {
     console.log("Event:", "esRenderSetings");
-    document.querySelectorAll(".es-settings").forEach((e) => e.remove());
+    removeNodes(".es-settings");
     const buttonContainer = streaming.getSettingsButtonContainer();
     const contentContainer = streaming.getSettingsContentContainer();
 
@@ -55,11 +93,7 @@ $streaming.watch((streaming) => {
     parentNode?.insertBefore(settingNode, buttonContainer);
 
     getCurrentVideoFx();
-    $video.watch((video) => {
-      video?.removeEventListener("timeupdate", handleTimeUpdate as EventListener);
-      video?.addEventListener("timeupdate", handleTimeUpdate as EventListener);
-    });
-    createRoot(settingNode).render(<Settings contentContainer={contentContainer} />);
+    renderRoot(settingNode, <Settings contentContainer={contentContainer} />);
   });
 
   streaming.init();
@@ -68,8 +102,7 @@ $streaming.watch((streaming) => {
 esSubsChanged.watch((language) => {
   console.log("Event:", "esSubsChanged");
   console.log("Language:", language);
-  removeKeyboardEventsListeners();
-  document.querySelectorAll("#es, #es-top, #es-transcript").forEach((e) => e.remove());
+  removeNodes("#es, #es-top, #es-transcript");
   const subsContainer = $streaming.getState().getSubsContainer();
   const subsNode = document.createElement("div");
   subsNode.id = "es";
@@ -78,18 +111,18 @@ esSubsChanged.watch((language) => {
   const topNode = document.createElement("div");
   topNode.id = "es-top";
   subsContainer?.appendChild(topNode);
-  createRoot(subsNode).render(<Subs topContainer={topNode} />);
+  renderRoot(subsNode, <Subs topContainer={topNode} />);
   // Every line, to jump to and search, see src/models/transcript
   const transcriptNode = document.createElement("div");
   transcriptNode.id = "es-transcript";
   subsContainer?.appendChild(transcriptNode);
-  createRoot(transcriptNode).render(<Transcript />);
+  renderRoot(transcriptNode, <Transcript />);
 
   if (!$streaming.getState().isOnFlight()) {
-    document.querySelectorAll(".es-progress-bar").forEach((e) => e.remove());
+    removeNodes(".es-progress-bar");
     const progressBarNode = document.createElement("div");
     progressBarNode.classList.add("es-progress-bar");
     subsContainer?.appendChild(progressBarNode);
-    createRoot(progressBarNode).render(<ProgressBar />);
+    renderRoot(progressBarNode, <ProgressBar />);
   }
 });
