@@ -488,18 +488,37 @@
     }
   }
 
-  .video-main-player-container {
+  [data-testid="playerContainer"] {
     position: relative;
   }
 }
 
 .es-coursera.es-enabled {
+  // Over the player's controls, which show while the pointer is over the video and would cover the words being
+  // hovered; above the control bar with its progress bar, below the settings panel
+  #es,
+  #es-top {
+    z-index: 1001;
+  }
+
   #es {
-    bottom: 7vh;
+    bottom: max(7vh, 96px);
+  }
+
+  // Coursera's own captions, and the browser's (Chrome, then Firefox)
+  [data-testid="customCaptions"],
+  [aria-label="customCaptions"] {
+    display: none;
   }
 
   video::-webkit-media-text-track-container {
     display: none;
+  }
+
+  video::cue {
+    visibility: hidden;
+    color: transparent;
+    background: transparent;
   }
 }
 
