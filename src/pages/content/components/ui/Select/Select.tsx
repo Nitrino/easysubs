@@ -1,7 +1,15 @@
-import { FC, useMemo } from "react";
+import { FC, MouseEvent, useEffect, useMemo, useRef } from "react";
 import { usePortalTarget } from "@src/hooks/usePortalTarget";
 
-import { default as ReactSelect, components, DropdownIndicatorProps, Props, StylesConfig, Theme } from "react-select";
+import {
+  default as ReactSelect,
+  components,
+  DropdownIndicatorProps,
+  Props,
+  SelectInstance,
+  StylesConfig,
+  Theme,
+} from "react-select";
 
 const FONT = "var(--es-font)";
 
@@ -119,6 +127,23 @@ const DropdownIndicator: FC<DropdownIndicatorProps> = (props) => (
 // Long lists (languages) stay type-to-search; short ones behave like a plain pop-up button.
 const SEARCHABLE_MIN_OPTIONS = 10;
 
+// A mousedown on a menu option moves the focus out of the field, which closes the menu before the click picks the
+// option; react-select prevents that in its own mousedown handler. Pages that stop mousedown on the way down (Coursera
+// stops it for the whole document) keep it from there, so it's prevented here first: window's capture listeners run
+// before any of the page's.
+// EasySubs' menus only, by the class prefix every Select gives react-select, not the page's own react-selects
+const CLASS_PREFIX = "es-select";
+const keepFocusInMenu = (event: globalThis.MouseEvent) => {
+  const target = event.target as Element | null;
+  if (target?.closest?.(`.${CLASS_PREFIX}__menu`)) event.preventDefault();
+};
+let menuFocusKept = false;
+const keepFocusInMenus = () => {
+  if (menuFocusKept) return;
+  menuFocusKept = true;
+  window.addEventListener("mousedown", keepFocusInMenu, true);
+};
+
 type SelectProps = Props & {
   // A menu wider than the button, aligned to its right edge: for options with tags (the second line's languages)
   menuWidth?: number;
@@ -137,9 +162,48 @@ export const Select: FC<SelectProps> = ({ menuWidth, ...props }) => {
     [menuWidth],
   );
 
+  // react-select opens on mousedown, which a page may stop on its way to the panel (on Coursera something stops it
+  // above the player, while pointerdown and click get through): a click on the field that came without a mousedown
+  // opens or closes the menu itself
+  const selectRef = useRef<SelectInstance>(null);
+  useEffect(keepFocusInMenus, []);
+  const mouseDownSeenRef = useRef(false);
+  // Whether the menu was open when the press began: without the mousedown the field loses the focus to the page,
+  // which closes the menu before the click, and a click meant to close it would open it again
+  const openAtPressRef = useRef(false);
+  const handlePointerDown = () => {
+    mouseDownSeenRef.current = false;
+    openAtPressRef.current = Boolean(selectRef.current?.props.menuIsOpen);
+  };
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    const selectInstance = selectRef.current;
+    // The menu is portaled out of the field, its clicks come here through React
+    if (
+      mouseDownSeenRef.current ||
+      !selectInstance ||
+      props.isDisabled ||
+      !event.currentTarget.contains(event.target as Node)
+    ) {
+      return;
+    }
+    if (openAtPressRef.current) {
+      if (selectInstance.props.menuIsOpen) selectInstance.onMenuClose();
+    } else {
+      selectInstance.focus();
+      selectInstance.openMenu("first");
+    }
+  };
+
   return (
-    <div className="es-select">
+    <div
+      className="es-select"
+      onPointerDown={handlePointerDown}
+      onMouseDownCapture={() => (mouseDownSeenRef.current = true)}
+      onClick={handleClick}
+    >
       <ReactSelect
+        ref={selectRef}
+        classNamePrefix={CLASS_PREFIX}
         isSearchable={(props.options?.length ?? 0) > SEARCHABLE_MIN_OPTIONS}
         {...props}
         styles={styles}

@@ -142,6 +142,33 @@ test.describe("settings", () => {
     await expect(playground.settingsPanel).toBeVisible();
   });
 
+  test("opens its pop-up menus where the player stops mousedown", async ({ playground, page }) => {
+    // Like Coursera: something above the player stops mousedown on its way down, pointerdown and click get through
+    await page.evaluate(() =>
+      document
+        .querySelector(".pg-player")!
+        .parentElement!.addEventListener("mousedown", (event) => event.stopPropagation(), true),
+    );
+    await playground.openSettings("General");
+
+    await playground.choose("Translate to", "German");
+
+    await expect(playground.settingsRow("Translate to")).toContainText("German");
+    await expect(playground.settingsPanel).toBeVisible();
+  });
+
+  test("closes a pop-up menu with a second click where the page stops mousedown", async ({ playground, page }) => {
+    // Like Coursera, for the whole document: the field loses the focus to the page before each click
+    await page.evaluate(() => document.addEventListener("mousedown", (event) => event.stopPropagation(), true));
+    await playground.openSettings("General");
+    const field = playground.settingsRow("Translate to").locator(".es-select");
+
+    await field.click();
+    await expect(page.getByRole("listbox")).toBeVisible();
+    await field.click();
+    await expect(page.getByRole("listbox")).toHaveCount(0);
+  });
+
   test("shifts the subtitles by the delay", async ({ playground }) => {
     await playground.openSettings("Subtitles");
     const delayRow = playground.settingsRow("Subtitles delay");
