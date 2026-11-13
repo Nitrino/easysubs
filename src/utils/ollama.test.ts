@@ -82,14 +82,8 @@ describe("allowOllamaOrigin", () => {
 
   it("gives the extension's requests to Ollama Ollama's own origin, not the pages' requests", async () => {
     const updateSessionRules = vi.fn(() => Promise.resolve());
-    Object.assign(chromeMock, {
-      declarativeNetRequest: {
-        updateSessionRules,
-        RuleActionType: { MODIFY_HEADERS: "modifyHeaders" },
-        HeaderOperation: { SET: "set" },
-        ResourceType: { XMLHTTPREQUEST: "xmlhttprequest" },
-      },
-    });
+    // Without the enums, like Firefox
+    Object.assign(chromeMock, { declarativeNetRequest: { updateSessionRules } });
 
     await allowOllamaOrigin("http://127.0.0.1:8080/");
     await allowOllamaOrigin("http://127.0.0.1:8080");
