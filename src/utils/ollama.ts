@@ -30,15 +30,16 @@ export async function allowOllamaOrigin(url: string) {
           id: ORIGIN_RULE_ID,
           priority: 1,
           action: {
-            type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
+            // Plain values, not chrome.declarativeNetRequest's enums: Firefox doesn't have those
+            type: "modifyHeaders" as chrome.declarativeNetRequest.RuleActionType,
             requestHeaders: [
-              { header: "origin", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: server },
+              { header: "origin", operation: "set" as chrome.declarativeNetRequest.HeaderOperation, value: server },
             ],
           },
           condition: {
             urlFilter: `|${server}/`,
             tabIds: [chrome.tabs?.TAB_ID_NONE ?? -1],
-            resourceTypes: [chrome.declarativeNetRequest.ResourceType.XMLHTTPREQUEST],
+            resourceTypes: ["xmlhttprequest" as chrome.declarativeNetRequest.ResourceType],
           },
         },
       ],

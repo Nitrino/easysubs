@@ -28,6 +28,11 @@ class ManifestParser {
       extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
     };
     delete manifestCopy.options_page;
+    // Chrome only: Firefox's background page runs the models itself and has no tab capture
+    manifestCopy.permissions = manifest.permissions?.filter((permission) => permission !== "offscreen");
+    const optionalPermissions = manifest.optional_permissions?.filter((permission) => permission !== "tabCapture");
+    if (optionalPermissions?.length) manifestCopy.optional_permissions = optionalPermissions;
+    else delete manifestCopy.optional_permissions;
     return manifestCopy as Manifest;
   }
 }

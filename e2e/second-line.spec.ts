@@ -65,6 +65,18 @@ test.describe("second subtitle line", () => {
     expect(await playground.messages("translateBatch")).toHaveLength(1);
   });
 
+  test("is picked where the page stops mousedown", async ({ playground, page }) => {
+    // Like Coursera: the page stops mousedown on its way down for the whole document, pointerdown and click get
+    // through; the field's and the menu's
+    await page.evaluate(() => document.addEventListener("mousedown", (event) => event.stopPropagation(), true));
+    await playground.openSettings("Second line");
+    await playground.chooseSecondLine("Russian");
+
+    await expect(playground.settingsRow("Second line")).toContainText("Russian");
+    await playground.closeSettings();
+    await expect(playground.secondLine).toHaveText(russian(ALMOST));
+  });
+
   test("translates into a language the video has a track in, when picked to be translated", async ({ playground }) => {
     await playground.openSettings("Second line");
     await playground.chooseSecondLine("Spanish", "Google");

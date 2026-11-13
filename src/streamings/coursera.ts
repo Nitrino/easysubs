@@ -2,43 +2,70 @@ import { esRenderSetings } from "@src/models/settings";
 import Service from "./service";
 import { parse } from "subtitle";
 import { esSubsChanged } from "@src/models/subs";
-import type { TSubsTrack } from "@src/models/types";
+import type { Captions, TSubsTrack } from "@src/models/types";
+
+// Coursera's player is its own React player now (video.js before): its parts are found by their data-testid, as their
+// class names are generated
+const PLAYER = "[data-testid='playerContainer']";
+const SETTINGS_BUTTON = "[data-testid='videoSettingsMenuButton']";
+const POLL_MS = 500;
 
 class Coursera implements Service {
   name = "coursera";
 
-  private subsName: string | undefined;
-  private playerId: string | undefined;
+  // What's on the page now: the player's settings button and the subtitles playing, to tell when they change
+  private settingsButton: Element | null = null;
+  private subsKey: string | null = null;
 
   constructor() {
-    this.handleCourseraRenderSettings = this.handleCourseraRenderSettings.bind(this);
-    this.handleCourseraSubtitlesChanged = this.handleCourseraSubtitlesChanged.bind(this);
+    this.check = this.check.bind(this);
   }
 
+  // The player comes and goes as the course's items are opened, and its tracks change with the language picked in it:
+  // checked on the page itself, it needs no script in the page
   public init() {
-    // setTimeout(() => {
-    //   console.log("Coursera init IBJECT SCRIPT");
-
-    this.injectScript();
-    // }, 4000);
-    window.addEventListener("esCourseraRenderSettings", this.handleCourseraRenderSettings as EventListener);
-    window.addEventListener("esCourseraSubtitlesChanged", this.handleCourseraSubtitlesChanged as EventListener);
+    window.setInterval(this.check, POLL_MS);
+    this.check();
   }
 
-  public async getSubs(language: string) {
-    if (!language) return parse("");
-    const track: HTMLTrackElement | null = document.querySelector(`track[srclang="${language}"]`);
+  private check() {
+    const button = document.querySelector(`${PLAYER} ${SETTINGS_BUTTON}`);
+    if (!button) {
+      this.settingsButton = null;
+      this.subsKey = null;
+      return;
+    }
+    // A new player, or the player rendered again without EasySubs' button
+    if (button !== this.settingsButton || !document.querySelector(".es-settings")) {
+      this.settingsButton = button;
+      esRenderSetings();
+    }
 
+    const video = document.querySelector<HTMLVideoElement>(`${PLAYER} video`);
+    const language = showingLanguage(video);
+    const key = `${language}|${video?.querySelector<HTMLTrackElement>(`track[srclang="${language}"]`)?.src ?? ""}`;
+    // Captions turned on or off, another language or another item, or the subtitles' node gone with a render
+    if (key !== this.subsKey || (language && !document.getElementById("es"))) {
+      this.subsKey = key;
+      esSubsChanged(language);
+    }
+  }
+
+  public async getSubs(language: string): Promise<Captions> {
+    if (!language) return parse("");
+    const track = document.querySelector<HTMLTrackElement>(`${PLAYER} track[srclang="${language}"]`);
     if (!track) {
-      console.error("Can't find track with lang=${language}");
+      console.error(`Can't find track with lang=${language}`);
       return [];
     }
 
-    const subUri: string = track.src;
-    const resp = await fetch(subUri);
-    const text = await resp.text();
+    // The cues the browser loaded for the track playing: no request, and Firefox's content scripts fetch without the
+    // page's own requests' cookies
+    const cues = track.track?.cues;
+    if (cues?.length) return cuesToCaptions(cues);
 
-    return parse(text);
+    const resp = await fetch(track.src, { credentials: "include" });
+    return parse(await resp.text());
   }
 
   // The player's <track> elements, one per language
@@ -54,51 +81,43 @@ class Coursera implements Service {
   }
 
   public getSettingsButtonContainer() {
-    const selector = document.querySelector(".rc-VideoSettingsMenu");
+    const selector = document.querySelector(`${PLAYER} ${SETTINGS_BUTTON}`);
     if (selector === null) throw new Error("Settings button container not found");
     return selector as HTMLElement;
   }
 
   public getSettingsContentContainer() {
-    const selector = document.querySelector(".video-main-player-container");
-    if (selector === null) throw new Error("Settings content container not found");
-    return selector as HTMLElement;
+    return this.getPlayer();
   }
 
+  // The player itself rather than its control bar, which hides when the mouse stops
   public getSubsContainer() {
-    const selector = document.querySelector(".rc-VideoControlsContainer");
-    if (selector === null) throw new Error("Subtitles container not found");
-    return selector as HTMLElement;
+    return this.getPlayer();
   }
 
   public isOnFlight() {
     return false;
   }
 
-  private handleCourseraRenderSettings() {
-    esRenderSetings();
+  private getPlayer() {
+    const selector = document.querySelector(PLAYER);
+    if (selector === null) throw new Error("Coursera player not found");
+    return selector as HTMLElement;
   }
+}
 
-  private handleCourseraSubtitlesChanged(event: CustomEvent) {
-    const { lang, id } = event.detail;
-    if (this.playerId == id && this.subsName == lang) {
-      return;
-    }
+// The language of the captions turned on in the player, "" when they're off
+export function showingLanguage(video: HTMLVideoElement | null): string {
+  const tracks = video ? [...video.textTracks] : [];
+  return tracks.find((track) => track.mode === "showing" && track.language)?.language ?? "";
+}
 
-    this.subsName = lang;
-    this.playerId = id;
-    esSubsChanged(this.subsName);
-    esRenderSetings();
-  }
-
-  private injectScript() {
-    console.log("injectScript");
-
-    const script = document.createElement("script");
-    script.src = chrome.runtime.getURL("assets/js/coursera.js");
-    script.type = "module";
-    document.head.prepend(script);
-  }
+export function cuesToCaptions(cues: TextTrackCueList): Captions {
+  return [...cues].map((cue) => ({
+    start: Math.round(cue.startTime * 1000),
+    end: Math.round(cue.endTime * 1000),
+    text: (cue as VTTCue).text ?? "",
+  }));
 }
 
 export default Coursera;

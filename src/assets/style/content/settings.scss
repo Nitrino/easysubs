@@ -25,6 +25,11 @@
 
 // ---- Panel ---------------------------------------------------------------------------------------
 
+// The panel's own node in the player (Settings.tsx): adds nothing to the player's layout
+.es-settings-portal {
+  display: contents;
+}
+
 .es-settings-content {
   all: revert;
   position: absolute;

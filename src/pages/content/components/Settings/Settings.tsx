@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { $streaming } from "@src/models/streamings";
@@ -30,6 +30,42 @@ const TOAST_OPTIONS: ToasterProps["toastOptions"] = {
   error: { iconTheme: { primary: "#ff453a", secondary: "#fff" } },
 };
 
+// Events of the panel that the player around it must not get. Players handle them for themselves: Coursera's takes
+// the focus back on a mousedown, so the panel's drop-downs never opened, and keys typed in the panel are the players'
+// shortcuts. React listens on the portal's own node, so the panel still gets them.
+const PANEL_EVENTS = [
+  "click",
+  "dblclick",
+  "mousedown",
+  "mouseup",
+  "pointerdown",
+  "pointerup",
+  "touchstart",
+  "touchend",
+  "wheel",
+  "keydown",
+  "keyup",
+  "keypress",
+  "focusin",
+  "focusout",
+] as const;
+
+// The panel's own node in the service's container while it's open
+const usePanelNode = (container: HTMLElement | null) => {
+  const [node] = useState(() => {
+    const panelNode = document.createElement("div");
+    panelNode.className = "es-settings-portal";
+    PANEL_EVENTS.forEach((type) => panelNode.addEventListener(type, (event) => event.stopPropagation()));
+    return panelNode;
+  });
+  useLayoutEffect(() => {
+    if (!container) return;
+    container.appendChild(node);
+    return () => node.remove();
+  }, [container, node]);
+  return node;
+};
+
 type TSettingsProps = {
   contentContainer: HTMLElement;
 };
@@ -38,6 +74,7 @@ export const Settings: FC<TSettingsProps> = () => {
   const [showSettings, setShowSettings] = useState(false);
   const streaming = useUnit($streaming);
   const portalTarget = usePortalTarget();
+  const panelNode = usePanelNode(showSettings ? streaming.getSettingsContentContainer() : null);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -61,7 +98,7 @@ export const Settings: FC<TSettingsProps> = () => {
       <div className="es-settings-icon" onClick={handleClick}>
         <MonoLogo />
       </div>
-      {showSettings && createPortal(<SettingsContent onClose={close} />, streaming.getSettingsContentContainer())}
+      {showSettings && createPortal(<SettingsContent onClose={close} />, panelNode)}
       {createPortal(
         <div className="es-toast">
           <Toaster toastOptions={TOAST_OPTIONS} />

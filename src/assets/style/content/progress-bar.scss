@@ -80,7 +80,7 @@
 }
 
 .es-coursera.es-enabled.es-progress-bar-enabled {
-  .rc-ControlBar {
+  [data-testid="video-control-bar"] {
     margin-bottom: 15px;
   }
 }
