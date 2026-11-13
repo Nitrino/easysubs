@@ -54,7 +54,12 @@ test.describe("transcript sidebar", () => {
     await search.press("ArrowLeft");
     await expect(page.locator(".es-transcript")).toBeVisible();
 
-    await search.fill(russian(KITCHEN).split(" ").at(-1)!.replace(/\p{P}+$/u, ""));
+    await search.fill(
+      russian(KITCHEN)
+        .split(" ")
+        .at(-1)!
+        .replace(/\p{P}+$/u, ""),
+    );
     await expect(lines).toHaveCount(1);
     await expect(lines).toContainText(KITCHEN);
 
